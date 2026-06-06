@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sodium Disorders — ICU Algorithm</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #060612;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  min-height: 100vh;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.container { width: 100%; max-width: 640px; }
+.header { text-align: center; margin-bottom: 20px; padding-top: 8px; }
+.header h1 { font-size: 1.2rem; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; }
+.header p { font-size: 0.65rem; color: #4b5563; letter-spacing: 0.2em; text-transform: uppercase; margin-top: 4px; }
+
+/* Tab selector */
+.tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.tab {
+  flex: 1; padding: 10px; border-radius: 8px; font-size: 0.8rem;
+  font-weight: 900; font-family: 'Courier New', monospace;
+  cursor: pointer; border: 2px solid; text-align: center;
+  transition: all 0.2s; letter-spacing: 0.05em; text-transform: uppercase;
+}
+.tab-hypo { border-color: #4fc3f7; color: #4fc3f7; background: transparent; }
+.tab-hypo.active { background: #4fc3f7; color: #000; }
+.tab-hyper { border-color: #f87171; color: #f87171; background: transparent; }
+.tab-hyper.active { background: #f87171; color: #000; }
+
+/* Cards */
+.card {
+  border-radius: 12px; padding: 18px; margin-bottom: 12px;
+  border: 2px solid; transition: all 0.3s;
+}
+.card h2 { font-size: 1.3rem; font-weight: 900; margin-bottom: 4px; }
+.card .subtitle { font-size: 0.72rem; color: #9ca3af; margin-bottom: 12px; }
+.badge {
+  display: inline-block; font-size: 0.58rem; font-weight: 900;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 4px; border: 1px solid; margin-bottom: 8px;
+}
+.section-label {
+  font-size: 0.6rem; font-weight: 900; letter-spacing: 0.15em;
+  text-transform: uppercase; margin-bottom: 8px; margin-top: 12px;
+}
+.list-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 0.78rem; margin-bottom: 5px; line-height: 1.4;
+}
+.step-num {
+  font-size: 0.65rem; font-weight: 900; padding: 1px 5px;
+  border-radius: 3px; flex-shrink: 0; margin-top: 1px;
+}
+.pearl {
+  border-radius: 8px; padding: 10px 12px; margin-top: 12px; border: 1px solid;
+}
+.pearl-label { font-size: 0.6rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+.pearl p { font-size: 0.76rem; color: #d1d5db; line-height: 1.5; }
+.options { margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px; }
+.opt-btn {
+  width: 100%; text-align: left; padding: 12px 16px; border-radius: 8px;
+  font-size: 0.76rem; font-weight: 700; font-family: 'Courier New', monospace;
+  cursor: pointer; border: 1px solid; transition: all 0.15s;
+  letter-spacing: 0.02em; line-height: 1.4;
+}
+.opt-btn:hover { transform: translateX(3px); }
+.btn-default { background: #1f2937; border-color: #4b5563; color: #e5e7eb; }
+.btn-default:hover { background: #374151; }
+.btn-blue { background: #0c1a2e; border-color: #4fc3f7; color: #bae6fd; }
+.btn-blue:hover { background: #1e3a5f; }
+.btn-red { background: #2e0a0a; border-color: #f87171; color: #fca5a5; }
+.btn-red:hover { background: #7f1d1d; }
+.btn-green { background: #052e16; border-color: #4ade80; color: #86efac; }
+.btn-green:hover { background: #14532d; }
+.btn-orange { background: #2e1a00; border-color: #fb923c; color: #fed7aa; }
+.btn-orange:hover { background: #7c2d12; }
+.nav { display: flex; gap: 10px; margin-top: 4px; }
+.nav-btn {
+  flex: 1; padding: 10px; border-radius: 8px; font-size: 0.78rem;
+  font-weight: 700; font-family: 'Courier New', monospace;
+  cursor: pointer; border: 1px solid; transition: all 0.15s;
+}
+.btn-back { background: #1f2937; border-color: #374151; color: #d1d5db; }
+.btn-back:hover { background: #374151; }
+.btn-restart { background: #111827; border-color: #1f2937; color: #6b7280; }
+.btn-restart:hover { color: #d1d5db; background: #1f2937; }
+.end-msg {
+  background: #111827; border: 1px solid #374151; border-radius: 8px;
+  padding: 16px; text-align: center; margin-bottom: 12px;
+}
+.footer { text-align: center; font-size: 0.58rem; color: #1f2937; letter-spacing: 0.2em; margin-top: 20px; margin-bottom: 8px; }
+
+/* Value badges */
+.val-box {
+  display: inline-block; padding: 3px 10px; border-radius: 6px;
+  font-size: 0.85rem; font-weight: 900; margin: 4px 2px;
+  border: 2px solid;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1 id="page-title">⚗ Sodium Disorders</h1>
+    <p>ICU Management Algorithm · FNB Exit 2026 · Dr. Wilson</p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab tab-hypo active" onclick="switchAlgo('hypo')">⬇ Hyponatraemia<br><span style="font-size:0.65rem;font-weight:400">Na⁺ &lt; 135</span></div>
+    <div class="tab tab-hyper" onclick="switchAlgo('hyper')">⬆ Hypernatraemia<br><span style="font-size:0.65rem;font-weight:400">Na⁺ &gt; 145</span></div>
+  </div>
+
+  <div id="app"></div>
+  <div class="footer">BASED ON CORE CONCEPTS IN CRITICAL CARE 2026 + BTF GUIDELINES</div>
+</div>
+
+<script>
+const hypoNodes = {
+  start: {
+    type: "start", text: "HYPONATRAEMIA",
+    subtitle: "Na⁺ < 135 mmol/L — systematic assessment",
+    content: [
+      {type:"val", items:["Mild: 130-135", "Moderate: 125-130", "Severe: <125"]},
+      {type:"label", text:"⚡ Symptoms by severity:"},
+      {type:"item", icon:"▸", color:"#fef3c7", text:"Mild: nausea, headache, lethargy"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Moderate: confusion, vomiting"},
+      {type:"item", icon:"▸", color:"#f87171", text:"Severe: seizures, coma, herniation"}
+    ],
+    options:[{label:"Begin Assessment →", next:"symptoms", color:"blue"}]
+  },
+  symptoms: {
+    type:"question", text:"SYMPTOMATIC?",
+    subtitle:"Active symptoms = seizures, coma, respiratory arrest, severe confusion",
+    options:[
+      {label:"YES — Severe symptoms (seizure/coma)", next:"emergency_hypo", color:"red"},
+      {label:"NO — Mild/moderate symptoms or asymptomatic", next:"duration"}
+    ]
+  },
+  emergency_hypo: {
+    type:"emergency", text:"⚠ EMERGENCY HYPONATRAEMIA",
+    subtitle:"Seizures or coma — act immediately",
+    content:[
+      {type:"label", text:"🚨 Immediate Treatment:"},
+      {type:"step", n:1, text:"3% NaCl (Hypertonic Saline) — 150ml IV over 20 minutes"},
+      {type:"step", n:2, text:"Repeat 150ml bolus if no improvement (max 3 doses)"},
+      {type:"step", n:3, text:"Target: raise Na⁺ by 5 mmol/L in first hour ONLY"},
+      {type:"step", n:4, text:"Recheck Na⁺ every 20-30 minutes during treatment"},
+      {type:"step", n:5, text:"Once symptoms resolve → switch to slow correction"},
+      {type:"label", text:"⚡ CRITICAL LIMITS:"},
+      {type:"item", icon:"▸", color:"#f87171", text:"MAX rise = 10 mmol/L in 24hrs"},
+      {type:"item", icon:"▸", color:"#f87171", text:"MAX rise = 18 mmol/L in 48hrs"},
+      {type:"item", icon:"▸", color:"#f87171", text:"Beyond this = OSMOTIC DEMYELINATION SYNDROME!"}
+    ],
+    pearl:"ODS (Central Pontine Myelinolysis): irreversible demyelination from too-rapid correction. Symptoms appear 2-6 days AFTER correction — dysarthria, dysphagia, quadriplegia. PREVENTION is the only treatment!",
+    options:[{label:"Symptoms resolved → Ongoing management →", next:"cause_hypo"}]
+  },
+  duration: {
+    type:"question", text:"ACUTE OR CHRONIC?",
+    subtitle:"Duration determines safe correction speed",
+    content:[
+      {type:"item", icon:"▸", color:"#bae6fd", text:"Acute: <48 hours onset"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Chronic: >48 hours or unknown duration"},
+      {type:"item", icon:"▸", color:"#f87171", text:"Unknown = treat as CHRONIC (safer!)"}
+    ],
+    options:[
+      {label:"Acute (<48hrs) — faster correction acceptable", next:"cause_hypo"},
+      {label:"Chronic (>48hrs or unknown) — slow correction only", next:"cause_hypo"}
+    ]
+  },
+  cause_hypo: {
+    type:"decision", text:"FIND THE CAUSE",
+    subtitle:"Assess volume status clinically + urine sodium + urine osmolality",
+    content:[
+      {type:"label", text:"⚡ Three Volume States:"},
+      {type:"item", icon:"▸", color:"#f87171", text:"HYPOVOLAEMIC — dry mucosa, low JVP, low BP"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"EUVOLAEMIC — no oedema, normal JVP"},
+      {type:"item", icon:"▸", color:"#4fc3f7", text:"HYPERVOLAEMIC — oedema, raised JVP, ascites"}
+    ],
+    options:[
+      {label:"HYPOVOLAEMIC — low volume", next:"hypovol_hypo", color:"red"},
+      {label:"EUVOLAEMIC — normal volume", next:"euvol_hypo"},
+      {label:"HYPERVOLAEMIC — fluid overloaded", next:"hypervol_hypo", color:"blue"}
+    ]
+  },
+  hypovol_hypo: {
+    type:"action", text:"HYPOVOLAEMIC HYPONATRAEMIA",
+    subtitle:"Fluid loss with proportionally more sodium lost",
+    content:[
+      {type:"label", text:"📋 Causes:"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"Vomiting, diarrhoea, burns, haemorrhage"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"Diuretics (especially thiazides)"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"Adrenal insufficiency"},
+      {type:"label", text:"📋 Urine findings:"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Urine Na⁺ <20 = extra-renal loss"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Urine Na⁺ >20 = renal loss (diuretics/Addisons)"},
+      {type:"label", text:"📋 Treatment:"},
+      {type:"step", n:1, text:"0.9% Normal saline — restore volume"},
+      {type:"step", n:2, text:"Correct underlying cause"},
+      {type:"step", n:3, text:"Monitor Na⁺ every 4-6 hours"},
+      {type:"step", n:4, text:"Target correction: max 10 mmol/L per 24hrs"}
+    ],
+    pearl:"Paradox: giving NS to hypovolaemic hyponatraemia → corrects volume → suppresses ADH → kidneys excrete free water → Na⁺ rises. Monitor closely — can overshoot correction!"
+  },
+  euvol_hypo: {
+    type:"action", text:"EUVOLAEMIC HYPONATRAEMIA",
+    subtitle:"Normal volume — think SIADH first!",
+    content:[
+      {type:"label", text:"📋 Causes:"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"SIADH — most common! (TBI, pneumonia, drugs)"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"Hypothyroidism"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"Adrenal insufficiency"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"Psychogenic polydipsia"},
+      {type:"label", text:"📋 SIADH Diagnosis:"},
+      {type:"item", icon:"▸", color:"#4fc3f7", text:"Urine osmolality >100 mOsm/kg"},
+      {type:"item", icon:"▸", color:"#4fc3f7", text:"Urine Na⁺ >30 mmol/L"},
+      {type:"item", icon:"▸", color:"#4fc3f7", text:"Euvolaemic clinically"},
+      {type:"item", icon:"▸", color:"#4fc3f7", text:"Normal thyroid + adrenal function"},
+      {type:"label", text:"📋 Treatment:"},
+      {type:"step", n:1, text:"Fluid restriction 500-1000ml/day — first line!"},
+      {type:"step", n:2, text:"Treat underlying cause"},
+      {type:"step", n:3, text:"Demeclocycline or Tolvaptan if refractory"},
+      {type:"step", n:4, text:"Urea 15-30g/day — osmotic agent, promotes water excretion"}
+    ],
+    pearl:"SIADH in TBI: trauma → ADH release → water retention → dilutional hyponatraemia. Fluid restriction is first line but be careful — TBI patients need adequate perfusion pressure! Balance is key."
+  },
+  hypervol_hypo: {
+    type:"action", text:"HYPERVOLAEMIC HYPONATRAEMIA",
+    subtitle:"Excess total body water AND sodium — dilutional",
+    content:[
+      {type:"label", text:"📋 Causes:"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"Heart failure"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"Cirrhosis + ascites"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"Nephrotic syndrome"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"Iatrogenic (excessive hypotonic fluids)"},
+      {type:"label", text:"📋 Treatment:"},
+      {type:"step", n:1, text:"Fluid restriction"},
+      {type:"step", n:2, text:"Frusemide — remove excess free water"},
+      {type:"step", n:3, text:"Treat underlying cause (ACE-i for HF, etc)"},
+      {type:"step", n:4, text:"Avoid NS — worsens oedema without fixing Na⁺"}
+    ],
+    pearl:"Key concept: these patients have LOW effective circulating volume despite being fluid overloaded. ADH is high because baroreceptors sense low perfusion. Treating the cause (cardiac output in HF) is more effective than fluid manipulation alone."
+  }
+};
+
+const hyperNodes = {
+  start: {
+    type:"start", text:"HYPERNATRAEMIA",
+    subtitle:"Na⁺ > 145 mmol/L — always means FREE WATER DEFICIT",
+    content:[
+      {type:"val", items:["Mild: 145-150", "Moderate: 150-160", "Severe: >160"]},
+      {type:"label", text:"⚡ Key concept:"},
+      {type:"item", icon:"▸", color:"#fef3c7", text:"Hypernatraemia = too little water relative to sodium"},
+      {type:"item", icon:"▸", color:"#fef3c7", text:"Calculate Free Water Deficit before treating!"},
+      {type:"label", text:"📋 Free Water Deficit Formula:"},
+      {type:"item", icon:"▸", color:"#fb923c", text:"FWD = TBW × [(Na⁺ actual / Na⁺ target) - 1]"},
+      {type:"item", icon:"▸", color:"#fb923c", text:"TBW = 0.6 × weight(kg) in males"},
+      {type:"item", icon:"▸", color:"#fb923c", text:"TBW = 0.5 × weight(kg) in females"}
+    ],
+    options:[{label:"Begin Assessment →", next:"symptoms_hyper", color:"red"}]
+  },
+  symptoms_hyper: {
+    type:"question", text:"SYMPTOMATIC?",
+    subtitle:"Neurons shrink in hypernatraemia — brain bleeds risk!",
+    content:[
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Mild: thirst, lethargy, weakness"},
+      {type:"item", icon:"▸", color:"#fb923c", text:"Moderate: confusion, irritability"},
+      {type:"item", icon:"▸", color:"#f87171", text:"Severe: seizures, coma, intracranial haemorrhage"}
+    ],
+    options:[
+      {label:"Severe symptoms — seizures/coma", next:"emergency_hyper", color:"red"},
+      {label:"Mild/moderate — proceed to cause", next:"cause_hyper"}
+    ]
+  },
+  emergency_hyper: {
+    type:"emergency", text:"⚠ SEVERE HYPERNATRAEMIA",
+    subtitle:"Na⁺ > 160 with neurological symptoms",
+    content:[
+      {type:"step", n:1, text:"5% Dextrose OR 0.45% NaCl IV"},
+      {type:"step", n:2, text:"Correct at max 0.5 mmol/L per HOUR"},
+      {type:"step", n:3, text:"Max correction: 10 mmol/L per 24 hours"},
+      {type:"step", n:4, text:"Recheck Na⁺ every 2-4 hours"},
+      {type:"step", n:5, text:"Monitor for cerebral oedema signs!"},
+      {type:"label", text:"⚡ WHY SLOW CORRECTION?"},
+      {type:"item", icon:"▸", color:"#f87171", text:"Brain adapts to high Na⁺ by generating idiogenic osmoles"},
+      {type:"item", icon:"▸", color:"#f87171", text:"Too rapid correction → cerebral oedema → herniation!"},
+      {type:"item", icon:"▸", color:"#f87171", color2:"green", text:"Opposite risk to hyponatraemia but equally dangerous!"}
+    ],
+    pearl:"Idiogenic osmoles (taurine, glutamine, myoinositol) accumulate in brain cells within 24-48hrs of hypernatraemia to prevent shrinkage. Rapid correction removes extracellular osmoles faster than cells can clear idiogenic osmoles → net osmotic gradient pulls water INTO brain → oedema!",
+    options:[{label:"Symptoms stabilised → find cause →", next:"cause_hyper"}]
+  },
+  cause_hyper: {
+    type:"decision", text:"FIND THE CAUSE",
+    subtitle:"Assess urine output + urine osmolality",
+    content:[
+      {type:"label", text:"⚡ Three mechanisms:"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Water loss (most common) — GI/skin/respiratory"},
+      {type:"item", icon:"▸", color:"#fb923c", text:"Diabetes Insipidus — massive dilute polyuria"},
+      {type:"item", icon:"▸", color:"#f87171", text:"Sodium gain — iatrogenic (3% NaCl, NaHCO₃)"}
+    ],
+    options:[
+      {label:"Polyuria >250ml/hr + dilute urine → Diabetes Insipidus", next:"di_workup", color:"red"},
+      {label:"Normal urine output + concentrated urine → water loss", next:"water_loss"},
+      {label:"Recent hypertonic sodium administration → iatrogenic", next:"iatrogenic"}
+    ]
+  },
+  di_workup: {
+    type:"action", text:"DIABETES INSIPIDUS WORKUP",
+    subtitle:"High urine output + dilute urine + hypernatraemia = DI until proven otherwise",
+    content:[
+      {type:"label", text:"📋 Diagnostic criteria:"},
+      {type:"item", icon:"▸", color:"#4fc3f7", text:"Urine osmolality < 300 mOsm/kg (dilute!)"},
+      {type:"item", icon:"▸", color:"#4fc3f7", text:"Serum osmolality > 295 mOsm/kg"},
+      {type:"item", icon:"▸", color:"#4fc3f7", text:"Urine:Serum osmolality ratio < 1"},
+      {type:"item", icon:"▸", color:"#4fc3f7", text:"Urine Na⁺ very LOW (washing out water not salt)"},
+      {type:"label", text:"📋 Central vs Nephrogenic DI:"},
+      {type:"item", icon:"▸", color:"#86efac", text:"Give DDAVP (desmopressin) 2mcg SC/IV"},
+      {type:"item", icon:"▸", color:"#86efac", text:"Central DI: urine osmolality RISES >50% ← responds!"},
+      {type:"item", icon:"▸", color:"#f87171", text:"Nephrogenic DI: NO response to DDAVP"},
+      {type:"label", text:"📋 Causes in TBI:"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Posterior pituitary damage"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Pituitary stalk injury"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Hypothalamic damage"}
+    ],
+    pearl:"TBI + DI = DANGEROUS combination. Patient loses massive free water → hypernatraemia → brain cell shrinkage → worsens TBI! Also: DI can be a sign of brain death — posterior pituitary is very sensitive to ischaemia.",
+    options:[
+      {label:"Central DI confirmed → Treatment", next:"central_di"},
+      {label:"Nephrogenic DI → Treatment", next:"nephro_di"}
+    ]
+  },
+  central_di: {
+    type:"action", text:"CENTRAL DI — TREATMENT",
+    subtitle:"ADH deficiency from posterior pituitary/hypothalamic damage",
+    content:[
+      {type:"step", n:1, text:"DDAVP (Desmopressin) 1-2mcg IV/SC every 8-12hrs"},
+      {type:"step", n:2, text:"Replace free water deficit with 5% Dextrose or oral water"},
+      {type:"step", n:3, text:"Target urine output 0.5-1ml/kg/hr (not 300ml/hr!)"},
+      {type:"step", n:4, text:"Recheck Na⁺ every 2 hours initially"},
+      {type:"step", n:5, text:"Correct Na⁺ at max 10 mmol/L per 24hrs"},
+      {type:"step", n:6, text:"Monitor for OVER-correction → hyponatraemia!"},
+      {type:"label", text:"⚡ DDAVP mechanism:"},
+      {type:"item", icon:"▸", color:"#86efac", text:"Synthetic ADH analogue"},
+      {type:"item", icon:"▸", color:"#86efac", text:"V2 receptor agonist → inserts aquaporin-2"},
+      {type:"item", icon:"▸", color:"#86efac", text:"Collecting duct becomes permeable to water"},
+      {type:"item", icon:"▸", color:"#86efac", text:"Urine concentrates → output drops dramatically"}
+    ],
+    pearl:"DDAVP overdose risk: can cause hyponatraemia if too much free water given simultaneously. Monitor Na⁺ closely. In TBI patients, aim for slightly high-normal Na⁺ (145-150) as it helps reduce cerebral oedema!"
+  },
+  nephro_di: {
+    type:"action", text:"NEPHROGENIC DI — TREATMENT",
+    subtitle:"Kidneys don't respond to ADH — different management!",
+    content:[
+      {type:"step", n:1, text:"FREE WATER REPLACEMENT — oral or IV 5% dextrose"},
+      {type:"step", n:2, text:"Low sodium diet + thiazide diuretics (paradoxical effect!)"},
+      {type:"step", n:3, text:"NSAIDs (indomethacin) — reduce GFR → less urine"},
+      {type:"step", n:4, text:"Treat underlying cause (lithium toxicity, hypercalcaemia)"},
+      {type:"label", text:"📋 Common causes:"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Lithium toxicity (most common drug cause)"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Hypercalcaemia"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Hypokalaemia"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Congenital (AVP receptor mutation)"}
+    ],
+    pearl:"Thiazide diuretic in nephrogenic DI seems counterintuitive! Mechanism: thiazide → mild volume depletion → proximal tubule reabsorption increases → less fluid reaches collecting duct → less dilute urine despite lack of ADH response!"
+  },
+  water_loss: {
+    type:"action", text:"INSENSIBLE WATER LOSS",
+    subtitle:"Concentrated urine + normal output = kidney conserving water",
+    content:[
+      {type:"label", text:"📋 Causes:"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"GI losses: vomiting, diarrhoea, fistula"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"Skin: burns, fever, excessive sweating"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"Respiratory: hyperventilation on ventilator"},
+      {type:"item", icon:"▸", color:"#e5e7eb", text:"Inadequate free water replacement in ICU"},
+      {type:"label", text:"📋 Treatment:"},
+      {type:"step", n:1, text:"Oral water if able to drink"},
+      {type:"step", n:2, text:"5% Dextrose IV if unable to drink"},
+      {type:"step", n:3, text:"Calculate and replace free water deficit"},
+      {type:"step", n:4, text:"Correct at max 10 mmol/L per 24hrs"},
+      {type:"step", n:5, text:"Treat underlying cause (antibiotics for fever, etc)"}
+    ],
+    pearl:"ICU patients on ventilators lose significant free water through humidified air circuits. Enteral feeding without sufficient free water flushes is a common iatrogenic cause of hypernatraemia in ICU!"
+  },
+  iatrogenic: {
+    type:"action", text:"IATROGENIC HYPERNATRAEMIA",
+    subtitle:"Sodium gain from medical treatment",
+    content:[
+      {type:"label", text:"📋 Common culprits:"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"3% NaCl (hypertonic saline for ICP)"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Sodium bicarbonate infusion"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Excessive normal saline"},
+      {type:"item", icon:"▸", color:"#fcd34d", text:"Hypertonic enteral feeds"},
+      {type:"label", text:"📋 Management:"},
+      {type:"step", n:1, text:"STOP the offending agent"},
+      {type:"step", n:2, text:"Replace free water deficit with 5% dextrose"},
+      {type:"step", n:3, text:"Frusemide to enhance sodium excretion"},
+      {type:"step", n:4, text:"Correct at max 10 mmol/L per 24hrs"},
+      {type:"step", n:5, text:"Review ALL infusions for hidden sodium content"}
+    ],
+    pearl:"In TBI patients receiving 3% NaCl for ICP control — aim for Na⁺ 145-155 mmol/L deliberately. Beyond Na⁺ 160 → risk outweighs benefit. Always document target Na⁺ range in the TBI management plan!"
+  }
+};
+
+let currentAlgo = 'hypo';
+let currentNode = 'start';
+let history = [];
+
+function switchAlgo(algo) {
+  currentAlgo = algo;
+  currentNode = 'start';
+  history = [];
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('.tab-' + algo).classList.add('active');
+  render();
+}
+
+function getNodes() {
+  return currentAlgo === 'hypo' ? hypoNodes : hyperNodes;
+}
+
+function getColor() {
+  return currentAlgo === 'hypo' ? '#4fc3f7' : '#f87171';
+}
+
+function getBtnClass() {
+  return currentAlgo === 'hypo' ? 'btn-blue' : 'btn-red';
+}
+
+const typeColors = {
+  start: {bg:'#0a0a1a', border: null},
+  question: {bg:'#0a0a1a', border: null},
+  decision: {bg:'#0a0a1a', border: null},
+  action: {bg:'#0a0a1a', border: null},
+  emergency: {bg:'#1a0000', border:'#f87171'},
+  final: {bg:'#0a0a1a', border: null}
+};
+
+const badges = {
+  start:'▶ START', question:'? DECISION', decision:'◈ ASSESS',
+  action:'→ TREATMENT', emergency:'⚠ EMERGENCY', final:'✓ COMPLETE'
+};
+
+function renderContent(items, accentColor) {
+  let html = '';
+  items.forEach(item => {
+    if (item.type === 'label') {
+      html += `<p class="section-label" style="color:${accentColor}">${item.text}</p>`;
+    } else if (item.type === 'item') {
+      html += `<div class="list-item"><span style="color:${item.color || accentColor}">${item.icon}</span><span style="color:${item.color || '#e5e7eb'}">${item.text}</span></div>`;
+    } else if (item.type === 'step') {
+      html += `<div class="list-item"><span class="step-num" style="background:${accentColor}22;color:${accentColor}">${item.n}</span><span style="color:#d1d5db">${item.text}</span></div>`;
+    } else if (item.type === 'val') {
+      html += '<div style="margin-bottom:10px">';
+      item.items.forEach(v => {
+        html += `<span class="val-box" style="border-color:${accentColor};color:${accentColor};background:${accentColor}11">${v}</span>`;
+      });
+      html += '</div>';
+    }
+  });
+  return html;
+}
+
+function render() {
+  const nodes = getNodes();
+  const node = nodes[currentNode];
+  const accentColor = getColor();
+  const app = document.getElementById('app');
+
+  const tc = typeColors[node.type] || typeColors.action;
+  const borderColor = tc.border || accentColor;
+  const bgColor = tc.bg;
+
+  // Breadcrumb
+  let bcHtml = '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px;min-height:18px">';
+  history.forEach(h => {
+    bcHtml += `<span style="font-size:0.62rem;color:#374151">${nodes[h].text.split(' ').slice(0,3).join(' ')} ›</span>`;
+  });
+  if (history.length > 0) bcHtml += `<span style="font-size:0.62rem;color:#6b7280">${node.text.split(' ').slice(0,3).join(' ')}</span>`;
+  bcHtml += '</div>';
+
+  let html = bcHtml;
+  html += `<div class="card" style="background:${bgColor};border-color:${borderColor}">`;
+  html += `<div class="badge" style="color:${borderColor};border-color:${borderColor}">${badges[node.type] || '→'}</div>`;
+  html += `<h2 style="color:${borderColor}">${node.text}</h2>`;
+  if (node.subtitle) html += `<p class="subtitle">${node.subtitle}</p>`;
+  if (node.content) html += renderContent(node.content, accentColor);
+  if (node.pearl) {
+    html += `<div class="pearl" style="border-color:${accentColor}55;background:${accentColor}08">`;
+    html += `<div class="pearl-label" style="color:${accentColor}">💡 Examiner Pearl:</div>`;
+    html += `<p>${node.pearl}</p></div>`;
+  }
+  html += '</div>';
+
+  if (node.options) {
+    html += '<div class="options">';
+    node.options.forEach(opt => {
+      const cls = opt.color === 'red' ? 'btn-red' : opt.color === 'blue' ? 'btn-blue' : opt.color === 'green' ? 'btn-green' : opt.color === 'orange' ? 'btn-orange' : 'btn-default';
+      html += `<button class="opt-btn ${cls}" onclick="go('${opt.next}')">${opt.label}</button>`;
+    });
+    html += '</div>';
+  } else {
+    html += '<div class="end-msg"><div style="color:#4ade80;font-weight:700;font-size:0.85rem">✓ End of pathway</div><div style="color:#6b7280;font-size:0.7rem;margin-top:4px">Review and restart for another scenario</div></div>';
+  }
+
+  html += '<div class="nav">';
+  if (history.length > 0) html += `<button class="nav-btn btn-back" onclick="goBack()">← Back</button>`;
+  html += `<button class="nav-btn btn-restart" onclick="restart()">↺ Restart</button>`;
+  html += '</div>';
+
+  app.innerHTML = html;
+  window.scrollTo(0,0);
+}
+
+function go(next) {
+  history.push(currentNode);
+  currentNode = next;
+  render();
+}
+
+function goBack() {
+  if (!history.length) return;
+  currentNode = history.pop();
+  render();
+}
+
+function restart() {
+  currentNode = 'start';
+  history = [];
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

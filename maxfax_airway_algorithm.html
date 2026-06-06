@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maxillofacial Trauma — Airway Algorithm</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #060612;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    min-height: 100vh;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .container { width: 100%; max-width: 640px; }
+
+  /* Header */
+  .header { text-align: center; margin-bottom: 24px; padding-top: 8px; }
+  .header h1 {
+    font-size: 1.2rem;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    color: #f87171;
+    text-transform: uppercase;
+  }
+  .header p {
+    font-size: 0.65rem;
+    color: #4b5563;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 12px;
+    min-height: 20px;
+  }
+  .breadcrumb span { font-size: 0.65rem; color: #374151; }
+  .breadcrumb .current { color: #6b7280; }
+
+  /* Main card */
+  .card {
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 12px;
+    border: 2px solid;
+    transition: border-color 0.3s;
+  }
+
+  /* Badge */
+  .badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+    margin-bottom: 10px;
+  }
+
+  /* Title */
+  .card h2 {
+    font-size: 1.4rem;
+    font-weight: 900;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  .card .subtitle {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+
+  /* Lists */
+  .section-label {
+    font-size: 0.6rem;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .list-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+  .list-arrow { flex-shrink: 0; margin-top: 1px; }
+
+  /* Step numbers */
+  .step-num {
+    font-size: 0.65rem;
+    font-weight: 900;
+    padding: 1px 5px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Pearl box */
+  .pearl {
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 14px;
+    border: 1px solid;
+  }
+  .pearl-label {
+    font-size: 0.6rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .pearl p { font-size: 0.78rem; color: #d1d5db; line-height: 1.5; }
+
+  /* Buttons */
+  .options { margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .opt-btn {
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+    border: 1px solid;
+    transition: all 0.15s;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+  }
+  .opt-btn:hover { transform: translateX(3px); }
+  .opt-btn:active { transform: translateX(1px); }
+
+  .btn-default { background: #1f2937; border-color: #4b5563; color: #e5e7eb; }
+  .btn-default:hover { background: #374151; }
+  .btn-red { background: #450a0a; border-color: #dc2626; color: #fca5a5; }
+  .btn-red:hover { background: #7f1d1d; }
+  .btn-green { background: #052e16; border-color: #16a34a; color: #86efac; }
+  .btn-green:hover { background: #14532d; }
+
+  /* End message */
+  .end-msg {
+    background: #111827;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .end-msg .end-title { color: #4ade80; font-weight: 700; font-size: 0.85rem; }
+  .end-msg .end-sub { color: #6b7280; font-size: 0.7rem; margin-top: 4px; }
+
+  /* Nav */
+  .nav { display: flex; gap: 10px; }
+  .nav-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    cursor: pointer;
+    border: 1px solid;
+    transition: all 0.15s;
+  }
+  .btn-back { background: #1f2937; border-color: #374151; color: #d1d5db; }
+  .btn-back:hover { background: #374151; }
+  .btn-restart { background: #111827; border-color: #1f2937; color: #6b7280; }
+  .btn-restart:hover { color: #d1d5db; background: #1f2937; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    font-size: 0.6rem;
+    color: #1f2937;
+    letter-spacing: 0.2em;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+
+  /* Color themes */
+  .theme-start   { --c: #4f8ef7; --bg: #0d0d20; }
+  .theme-decision{ --c: #f7c04f; --bg: #100e00; }
+  .theme-question{ --c: #4fc3f7; --bg: #000d14; }
+  .theme-action  { --c: #4fda8e; --bg: #001a0e; }
+  .theme-emergency{ --c: #f74f4f; --bg: #1a0000; }
+  .theme-final   { --c: #a78bfa; --bg: #0a0014; }
+
+  .themed { background: var(--bg) !important; border-color: var(--c) !important; }
+  .themed h2 { color: var(--c); }
+  .themed .badge { color: var(--c); border-color: var(--c); }
+  .themed .section-label { color: var(--c); }
+  .themed .pearl { border-color: var(--c); background: rgba(255,255,255,0.03); }
+  .themed .pearl-label { color: var(--c); }
+  .themed .step-num { color: var(--c); background: rgba(255,255,255,0.07); }
+
+  /* Pulse on emergency */
+  .theme-emergency .badge {
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 480px) {
+    .card h2 { font-size: 1.1rem; }
+    .opt-btn { font-size: 0.72rem; padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>☠ Maxillofacial Trauma</h1>
+    <p>Airway Management Algorithm · FNB Exit 2026</p>
+  </div>
+
+  <div class="breadcrumb" id="breadcrumb"></div>
+  <div id="app"></div>
+
+  <div class="footer">BASED ON ATLS 10TH ED + NAP4 GUIDELINES · DR. WILSON</div>
+</div>
+
+<script>
+const nodes = {
+  start: {
+    id: "start", type: "start",
+    text: "MAXILLOFACIAL TRAUMA PATIENT",
+    subtitle: "Systematic airway assessment required. Work through each step carefully.",
+    options: [{ label: "Begin Assessment →", next: "assess" }]
+  },
+  assess: {
+    id: "assess", type: "decision",
+    text: "ASSESS AIRWAY ANATOMY",
+    subtitle: "First — check for immediate danger signs before doing anything else",
+    dangers: [
+      "Le Fort III fracture? (entire face mobile)",
+      "Bilateral mandible fracture? (tongue loses support)",
+      "Cribriform plate fracture? (nasal route = brain!)",
+      "Laryngotracheal disruption?",
+      "Massive oropharyngeal haemorrhage?"
+    ],
+    options: [
+      { label: "⚠ ANY danger sign present → surgical airway from start", next: "surgical", color: "red" },
+      { label: "No immediate danger sign → continue assessment", next: "conscious" }
+    ]
+  },
+  conscious: {
+    id: "conscious", type: "question",
+    text: "IS PATIENT COOPERATIVE?",
+    subtitle: "Can they follow commands and cooperate with procedures?",
+    options: [
+      { label: "YES — Cooperative and responsive", next: "difficult_coop" },
+      { label: "NO — Uncooperative / Unconscious / Combative", next: "difficult_uncoop" }
+    ]
+  },
+  difficult_coop: {
+    id: "difficult_coop", type: "question",
+    text: "IS AIRWAY DIFFICULT OR THREATENED?",
+    subtitle: "Assess: active bleeding, swelling, distorted anatomy, limited mouth opening, stridor",
+    options: [
+      { label: "YES — Airway threatened / difficult anatomy", next: "afoi" },
+      { label: "NO — Appears anatomically manageable", next: "standard_rsi" }
+    ]
+  },
+  afoi: {
+    id: "afoi", type: "action",
+    text: "AWAKE FIBREOPTIC INTUBATION",
+    subtitle: "Gold standard: cooperative + threatened airway. Patient breathes throughout!",
+    steps: [
+      "Topicalise airway: lignocaine 4% spray + nebulisation",
+      "Glycopyrrolate 0.2mg IM — dries secretions for better view",
+      "Sedation: remifentanil TCI or dexmedetomidine infusion",
+      "Pass fibrescope nasally (if cribriform CLEAR) or orally",
+      "Visualise cords clearly → railroad ETT over scope",
+      "Confirm ETCO₂ waveform + bilateral air entry"
+    ],
+    pearl: "KEY ADVANTAGE: Patient breathing spontaneously throughout. If scope fails → patient still alive and breathing. NEVER give induction agent before scope is confirmed past the cords!",
+    options: [
+      { label: "✓ AFOI Successful → Airway Secured", next: "secured", color: "green" },
+      { label: "✗ AFOI Failed — patient still conscious + breathing →", next: "cico_risk" }
+    ]
+  },
+  standard_rsi: {
+    id: "standard_rsi", type: "action",
+    text: "STANDARD RSI",
+    subtitle: "Cooperative + manageable airway + assumed full stomach",
+    steps: [
+      "Pre-oxygenate 3-5 mins, FiO₂ 1.0",
+      "Ketamine 1-2mg/kg IV (haemodynamically unstable) OR propofol if stable",
+      "Suxamethonium 1.5mg/kg OR Rocuronium 1.2mg/kg + sugammadex standby",
+      "Cricoid pressure 30N — REMOVE immediately if worsens view!",
+      "Video laryngoscopy preferred (bloody / distorted field)",
+      "NO BMV between induction and intubation (standard RSI)"
+    ],
+    pearl: "Standard RSI = NO BMV. Remove cricoid pressure if: active vomiting (oesophageal rupture risk!) or worsens laryngoscopic grade. If patient is hypoxic → use Modified RSI instead!",
+    options: [
+      { label: "✓ RSI Successful → Airway Secured", next: "secured", color: "green" },
+      { label: "✗ Failed — but can still oxygenate via BMV/SAD →", next: "cico_risk" },
+      { label: "✗ Failed + CANNOT oxygenate (CICO) →", next: "surgical", color: "red" }
+    ]
+  },
+  difficult_uncoop: {
+    id: "difficult_uncoop", type: "question",
+    text: "UNCOOPERATIVE + DIFFICULT AIRWAY",
+    subtitle: "Cannot cooperate for AFOI. Assess current oxygenation status.",
+    options: [
+      { label: "Can maintain SpO₂ with BMV — attempt Modified RSI", next: "modified_rsi" },
+      { label: "⚠ Cannot maintain SpO₂ AT ALL → immediate surgical airway", next: "surgical", color: "red" },
+      { label: "⚠ Anticipated impossible airway (Le Fort III / bilateral mandible) → plan surgical from start", next: "surgical", color: "red" }
+    ]
+  },
+  modified_rsi: {
+    id: "modified_rsi", type: "action",
+    text: "MODIFIED RSI",
+    subtitle: "Uncooperative + can maintain SpO₂ with BMV + full stomach",
+    steps: [
+      "Pre-oxygenate maximally before induction",
+      "Induction agent + NMB same as standard RSI",
+      "GENTLE BMV ALLOWED if SpO₂ falling — pressures <20cmH₂O",
+      "SUCTION THOROUGHLY FIRST before BMV in bloody airway!",
+      "Video laryngoscopy preferred — better view in bloody field",
+      "Maximum 3 intubation attempts — call for senior help early"
+    ],
+    pearl: "Risk of hypoxia > risk of aspiration in this scenario. BUT — if SpO₂ cannot be maintained AFTER induction → move to CICO pathway immediately. Do not persist with multiple failed attempts without oxygenation!",
+    options: [
+      { label: "✓ Intubation Successful → Airway Secured", next: "secured", color: "green" },
+      { label: "✗ Failed — but can still oxygenate via BMV/SAD →", next: "cico_risk" },
+      { label: "✗ Failed + NOW cannot oxygenate (CICO) →", next: "surgical", color: "red" }
+    ]
+  },
+  secured: {
+    id: "secured", type: "final",
+    text: "AIRWAY SECURED ✓",
+    subtitle: "ETT in situ — confirm position and prepare for surgery",
+    steps: [
+      "Confirm: ETCO₂ waveform + bilateral equal air entry",
+      "Insert throat pack — DOCUMENT IN NOTES + LABEL ON PATIENT!",
+      "Use armoured (reinforced) ETT — surgeon will move head repeatedly",
+      "Tape tube to CHIN not cheek — surgical access to face needed",
+      "Arrange CXR post-intubation to confirm position",
+      "Extubation plan: fully awake, sitting up, suction field clear, throat pack REMOVED"
+    ],
+    pearl: "Forgotten throat pack = retained foreign body = NEVER EVENT. Write 'THROAT PACK IN SITU' on forehead tape. Check before extubation every single time!"
+  },
+  cico_risk: {
+    id: "cico_risk", type: "question",
+    text: "CANNOT INTUBATE — CAN YOU OXYGENATE?",
+    subtitle: "CICO situation assessment. Every second counts.",
+    options: [
+      { label: "YES — Can oxygenate via BVM or SAD device", next: "rescue" },
+      { label: "⚠ NO — Cannot intubate AND cannot oxygenate (true CICO)", next: "surgical", color: "red" }
+    ]
+  },
+  rescue: {
+    id: "rescue", type: "action",
+    text: "RESCUE OXYGENATION",
+    subtitle: "Maintain oxygenation while planning definitive airway",
+    steps: [
+      "2-person BMV technique — one seals mask, one squeezes bag",
+      "Insert supraglottic airway device (SAD): i-gel or LMA Supreme",
+      "CALL FOR SENIOR HELP — do not continue alone",
+      "Consider video laryngoscopy with bougie as next attempt",
+      "HFNO (high flow nasal oxygen) if available — buys time",
+      "After 3 failed attempts with oxygenation maintained → surgical airway"
+    ],
+    pearl: "Oxygenation > Intubation. If you can oxygenate via SAD, take a moment, call for help, and plan properly. A calm surgical airway is safer than a panicked repeated attempt.",
+    options: [
+      { label: "⚠ All attempts failed — now CICO →", next: "surgical", color: "red" }
+    ]
+  },
+  surgical: {
+    id: "surgical", type: "emergency",
+    text: "⚠ SURGICAL AIRWAY",
+    subtitle: "Cannot delay — this is a life-saving procedure",
+    indications: [
+      "Bilateral mandibular fracture (tongue loses bony support)",
+      "Le Fort III — craniofacial dysjunction (nothing to intubate through)",
+      "Cribriform plate fracture (nasal route risks brain injury)",
+      "True CICO — all other methods failed",
+      "Massive oropharyngeal haemorrhage (laryngoscopy impossible)",
+      "Laryngotracheal disruption (intubate distal stump or tracheostomy)"
+    ],
+    options: [
+      { label: "⚡ EMERGENCY CICO — immediate cricothyroidotomy", next: "cricothyroid", color: "red" },
+      { label: "Anticipated impossible airway — planned awake tracheostomy", next: "tracheostomy" }
+    ]
+  },
+  cricothyroid: {
+    id: "cricothyroid", type: "final",
+    text: "EMERGENCY CRICOTHYROIDOTOMY",
+    subtitle: "Scalpel — Bougie — Tube. This is the NAP4 recommended technique.",
+    steps: [
+      "Extend neck if c-spine cleared — identifies landmarks",
+      "Palpate cricothyroid membrane (between thyroid + cricoid cartilage)",
+      "HORIZONTAL stab incision through skin AND membrane",
+      "Traction inferiorly on trachea with hook or finger",
+      "Insert bougie through incision, angle downward",
+      "Railroad 6.0 cuffed ETT over bougie — inflate cuff, confirm ETCO₂",
+      "Convert to formal tracheostomy when patient is stable"
+    ],
+    pearl: "NAP4 recommendation: use SCALPEL not needle in adults — needle cricothyroidotomy is unreliable, kinks easily, and jet ventilation is dangerous. Scalpel-bougie-tube is faster and more reliable!"
+  },
+  tracheostomy: {
+    id: "tracheostomy", type: "final",
+    text: "AWAKE TRACHEOSTOMY UNDER LA",
+    subtitle: "Anticipated impossible airway — safest when planned in advance",
+    steps: [
+      "Explain procedure to patient — they remain awake and breathing",
+      "Infiltrate anterior neck with lignocaine 1% + adrenaline 1:200,000",
+      "Supplemental oxygen via nasal cannula throughout",
+      "Surgical team performs formal tracheostomy with patient spontaneously breathing",
+      "Insert appropriately sized cuffed tracheostomy tube",
+      "Confirm ETCO₂ + air entry — NOW safe to induce general anaesthesia"
+    ],
+    pearl: "Le Fort III + bilateral mandible = nothing to intubate through. Plan awake tracheostomy from the START — don't attempt multiple intubations and arrive at surgical airway exhausted and hypoxic. Pre-emptive planning saves lives!"
+  }
+};
+
+const themes = {
+  start: "theme-start", decision: "theme-decision", question: "theme-question",
+  action: "theme-action", emergency: "theme-emergency", final: "theme-final"
+};
+
+const badges = {
+  start: "▶ START", decision: "◈ ASSESS", question: "? DECISION",
+  action: "→ ACTION", emergency: "⚠ EMERGENCY", final: "✓ PROCEDURE"
+};
+
+let current = "start";
+let history = [];
+
+function render() {
+  const node = nodes[current];
+  const app = document.getElementById("app");
+  const bc = document.getElementById("breadcrumb");
+
+  // Breadcrumb
+  bc.innerHTML = history.map(h =>
+    `<span>${nodes[h].text.split(" ").slice(0,3).join(" ")} ›</span>`
+  ).join("") + `<span class="current">${node.text.split(" ").slice(0,3).join(" ")}</span>`;
+
+  let html = `
+    <div class="card themed ${themes[node.type] || 'theme-action'}">
+      <div class="badge">${badges[node.type] || "→ ACTION"}</div>
+      <h2>${node.text}</h2>
+      ${node.subtitle ? `<p class="subtitle">${node.subtitle}</p>` : ""}
+  `;
+
+  // Danger signs
+  if (node.dangers) {
+    html += `<p class="section-label">⚡ Check for:</p>`;
+    node.dangers.forEach(d => {
+      html += `<div class="list-item"><span class="list-arrow" style="color:#f59e0b">▸</span><span style="color:#fef3c7;font-size:0.8rem">${d}</span></div>`;
+    });
+    html += "<br>";
+  }
+
+  // Indications
+  if (node.indications) {
+    html += `<p class="section-label" style="color:#f87171">⚡ Indications:</p>`;
+    node.indications.forEach(d => {
+      html += `<div class="list-item"><span class="list-arrow" style="color:#ef4444">▸</span><span style="color:#fecaca;font-size:0.8rem">${d}</span></div>`;
+    });
+    html += "<br>";
+  }
+
+  // Steps
+  if (node.steps) {
+    html += `<p class="section-label">📋 Steps:</p>`;
+    node.steps.forEach((s, i) => {
+      html += `<div class="list-item"><span class="step-num">${i+1}</span><span style="color:#d1d5db">${s}</span></div>`;
+    });
+  }
+
+  // Pearl
+  if (node.pearl) {
+    html += `
+      <div class="pearl">
+        <div class="pearl-label">💡 Examiner Pearl:</div>
+        <p>${node.pearl}</p>
+      </div>`;
+  }
+
+  html += `</div>`;
+
+  // Options
+  if (node.options) {
+    html += `<div class="options">`;
+    node.options.forEach((opt, i) => {
+      const cls = opt.color === "red" ? "btn-red" : opt.color === "green" ? "btn-green" : "btn-default";
+      html += `<button class="opt-btn ${cls}" onclick="go('${opt.next}')">${opt.label}</button>`;
+    });
+    html += `</div>`;
+  } else {
+    html += `
+      <div class="end-msg">
+        <div class="end-title">✓ End of pathway</div>
+        <div class="end-sub">Proceed with selected technique</div>
+      </div>`;
+  }
+
+  // Nav
+  html += `<div class="nav">`;
+  if (history.length > 0) {
+    html += `<button class="nav-btn btn-back" onclick="back()">← Back</button>`;
+  }
+  html += `<button class="nav-btn btn-restart" onclick="restart()">↺ Restart</button>`;
+  html += `</div>`;
+
+  app.innerHTML = html;
+  window.scrollTo(0, 0);
+}
+
+function go(next) {
+  history.push(current);
+  current = next;
+  render();
+}
+
+function back() {
+  if (history.length === 0) return;
+  current = history.pop();
+  render();
+}
+
+function restart() {
+  current = "start";
+  history = [];
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
