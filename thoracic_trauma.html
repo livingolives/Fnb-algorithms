@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thoracic Trauma — Life Threatening Injuries</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #060612; color: #fff;
+  font-family: 'Courier New', monospace;
+  min-height: 100vh; padding: 16px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.container { width: 100%; max-width: 640px; }
+.header { text-align: center; margin-bottom: 20px; padding-top: 8px; }
+.header h1 { font-size: 1.2rem; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; color: #fb923c; }
+.header p { font-size: 0.65rem; color: #4b5563; letter-spacing: 0.2em; text-transform: uppercase; margin-top: 4px; }
+
+/* Tabs */
+.tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+.tab {
+  flex: 1; padding: 8px 4px; border-radius: 8px; font-size: 0.68rem;
+  font-weight: 900; font-family: 'Courier New', monospace;
+  cursor: pointer; border: 2px solid; text-align: center;
+  transition: all 0.2s; letter-spacing: 0.05em; text-transform: uppercase;
+  line-height: 1.3;
+}
+.tab-immediate { border-color: #f87171; color: #f87171; }
+.tab-immediate.active { background: #f87171; color: #000; }
+.tab-hidden { border-color: #fb923c; color: #fb923c; }
+.tab-hidden.active { background: #fb923c; color: #000; }
+.tab-manage { border-color: #4ade80; color: #4ade80; }
+.tab-manage.active { background: #4ade80; color: #000; }
+
+/* Cards */
+.injury-card {
+  border-radius: 12px; padding: 16px 18px; margin-bottom: 10px;
+  border: 2px solid; cursor: pointer; transition: all 0.2s;
+  background: #0a0a1a;
+}
+.injury-card:hover { transform: translateX(3px); filter: brightness(1.1); }
+.injury-card .card-header {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 0;
+}
+.injury-card .card-title { font-size: 0.95rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; }
+.injury-card .card-arrow { font-size: 1rem; transition: transform 0.2s; }
+.injury-card.open .card-arrow { transform: rotate(90deg); }
+.injury-card .card-subtitle { font-size: 0.7rem; color: #9ca3af; margin-top: 4px; }
+.injury-card .card-body { margin-top: 14px; display: none; }
+.injury-card.open .card-body { display: block; }
+
+/* Content */
+.section-label { font-size: 0.6rem; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; margin: 10px 0 6px; }
+.item { display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; margin-bottom: 5px; line-height: 1.4; }
+.step { display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; margin-bottom: 6px; line-height: 1.4; }
+.step-num { font-size: 0.65rem; font-weight: 900; padding: 1px 5px; border-radius: 3px; flex-shrink: 0; margin-top: 1px; }
+.pearl { border-radius: 8px; padding: 10px 12px; margin-top: 12px; border: 1px solid; }
+.pearl-label { font-size: 0.6rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+.pearl p { font-size: 0.76rem; color: #d1d5db; line-height: 1.5; }
+.divider { height: 1px; background: #1f2937; margin: 12px 0; }
+
+/* Management section */
+.mgmt-card { border-radius: 12px; padding: 16px 18px; margin-bottom: 10px; border: 2px solid; background: #0a0a1a; }
+.mgmt-card h3 { font-size: 0.9rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+
+.footer { text-align: center; font-size: 0.58rem; color: #1f2937; letter-spacing: 0.2em; margin-top: 20px; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🫁 Thoracic Trauma</h1>
+    <p>Life Threatening Injuries · ATLS Deadly Dozen · FNB Exit 2026</p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab tab-immediate active" onclick="showTab('immediate')">⚡ Immediate<br>Killers (6)</div>
+    <div class="tab tab-hidden" onclick="showTab('hidden')">🔍 Hidden<br>Killers (6)</div>
+    <div class="tab tab-manage" onclick="showTab('manage')">💊 General<br>Management</div>
+  </div>
+
+  <div id="immediate-panel">
+    <!-- Tension PTX -->
+    <div class="injury-card" style="border-color:#f87171" onclick="toggle(this)">
+      <div class="card-header">
+        <div>
+          <div class="card-title" style="color:#f87171">⚡ Tension Pneumothorax</div>
+          <div class="card-subtitle">Most immediately fatal — diagnose clinically, treat before CXR!</div>
+        </div>
+        <div class="card-arrow" style="color:#f87171">→</div>
+      </div>
+      <div class="card-body">
+        <p class="section-label" style="color:#f87171">Clinical Features:</p>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Respiratory distress + hypoxia</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Absent breath sounds unilaterally</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Tracheal deviation AWAY from affected side</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Engorged neck veins (raised JVP)</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Hypotension + tachycardia</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Hypoxia unresponsive to oxygen</span></div>
+        <div class="divider"></div>
+        <p class="section-label" style="color:#4ade80">Treatment:</p>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">1</span><span style="color:#d1d5db">Needle decompression — 2nd ICS midclavicular line</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">2</span><span style="color:#d1d5db">Follow with ICD at safety triangle (4th/5th ICS anterior axillary line)</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">3</span><span style="color:#d1d5db">High flow O₂, secure airway if needed</span></div>
+        <div class="pearl" style="border-color:#f8717155;background:#f8717108">
+          <div class="pearl-label" style="color:#f87171">💡 Examiner Pearl:</div>
+          <p>Tension PTX on ventilator → sudden ↑PIP, ↓SpO₂, ↓BP. NEVER wait for CXR — decompress immediately! In ATLS, diagnosis is clinical.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Massive Haemothorax -->
+    <div class="injury-card" style="border-color:#f87171" onclick="toggle(this)">
+      <div class="card-header">
+        <div>
+          <div class="card-title" style="color:#f87171">🩸 Massive Haemothorax</div>
+          <div class="card-subtitle">>1500ml blood in chest cavity</div>
+        </div>
+        <div class="card-arrow" style="color:#f87171">→</div>
+      </div>
+      <div class="card-body">
+        <p class="section-label" style="color:#f87171">Definition:</p>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">>1500ml initial drain OR >200ml/hr for 4 hours</span></div>
+        <p class="section-label" style="color:#f87171">Clinical Features:</p>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Absent breath sounds + dullness to percussion</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Haemorrhagic shock signs</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Flat neck veins (unlike tamponade!)</span></div>
+        <p class="section-label" style="color:#4ade80">Treatment:</p>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">1</span><span style="color:#d1d5db">Large bore ICD — safety triangle</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">2</span><span style="color:#d1d5db">Activate MTP — 1:1:1 (pRBC:FFP:Platelets)</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">3</span><span style="color:#d1d5db">Autotransfusion — collect drained blood → retransfuse!</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">4</span><span style="color:#d1d5db">TXA 1g IV within 3 hours</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">5</span><span style="color:#d1d5db">Thoracotomy if >1500ml or ongoing bleeding</span></div>
+        <div class="pearl" style="border-color:#f8717155;background:#f8717108">
+          <div class="pearl-label" style="color:#f87171">💡 Examiner Pearl:</div>
+          <p>Autotransfusion gold standard — collected haemothorax blood = patient's own, type-matched, warm, contains clotting factors! Collect via ICD → infuse back. Saves lives in resource-limited settings!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cardiac Tamponade -->
+    <div class="injury-card" style="border-color:#f87171" onclick="toggle(this)">
+      <div class="card-header">
+        <div>
+          <div class="card-title" style="color:#f87171">💔 Cardiac Tamponade</div>
+          <div class="card-subtitle">Beck's Triad — classic presentation</div>
+        </div>
+        <div class="card-arrow" style="color:#f87171">→</div>
+      </div>
+      <div class="card-body">
+        <p class="section-label" style="color:#f87171">Beck's Triad:</p>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Hypotension</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Muffled/distant heart sounds</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Raised JVP (engorged neck veins)</span></div>
+        <p class="section-label" style="color:#f87171">Also Look For:</p>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Pulsus paradoxus >10mmHg</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">POCUS — pericardial effusion + RV collapse</span></div>
+        <p class="section-label" style="color:#4ade80">Treatment:</p>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">1</span><span style="color:#d1d5db">Pericardiocentesis — xiphisternum → left shoulder, 45° angle</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">2</span><span style="color:#d1d5db">Attach 3-way stopcock → drain + autotransfuse!</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">3</span><span style="color:#d1d5db">Induction SITTING UP — positive pressure impedes venous return</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">4</span><span style="color:#d1d5db">Surgeon scrubbed before induction — arrest at induction is common!</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">5</span><span style="color:#d1d5db">Definitive: surgical pericardiotomy/window</span></div>
+        <div class="pearl" style="border-color:#f8717155;background:#f8717108">
+          <div class="pearl-label" style="color:#f87171">💡 Examiner Pearl:</div>
+          <p>Tamponade + induction = catastrophic drop in BP. Positive pressure ventilation ↑ intrathoracic pressure → impedes venous return → no cardiac output. Always induce sitting up, surgeon scrubbed, knife on chest!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Open PTX -->
+    <div class="injury-card" style="border-color:#f87171" onclick="toggle(this)">
+      <div class="card-header">
+        <div>
+          <div class="card-title" style="color:#f87171">💨 Open Pneumothorax</div>
+          <div class="card-subtitle">"Sucking chest wound"</div>
+        </div>
+        <div class="card-arrow" style="color:#f87171">→</div>
+      </div>
+      <div class="card-body">
+        <p class="section-label" style="color:#f87171">Mechanism:</p>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Chest wall defect >2/3 tracheal diameter</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Air preferentially enters via defect (less resistance)</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Progressive respiratory failure</span></div>
+        <p class="section-label" style="color:#4ade80">Treatment:</p>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">1</span><span style="color:#d1d5db">THREE-SIDED occlusive dressing (flutter valve effect)</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">2</span><span style="color:#d1d5db">NEVER fully occlude → converts to tension PTX!</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">3</span><span style="color:#d1d5db">Definitive: ICD + surgical closure</span></div>
+        <div class="pearl" style="border-color:#f8717155;background:#f8717108">
+          <div class="pearl-label" style="color:#f87171">💡 Examiner Pearl:</div>
+          <p>3-sided = top, left, right sealed. Bottom open = acts as one-way valve. Air exits on expiration, cannot re-enter. Full occlusion → tension PTX → death!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flail Chest -->
+    <div class="injury-card" style="border-color:#f87171" onclick="toggle(this)">
+      <div class="card-header">
+        <div>
+          <div class="card-title" style="color:#f87171">🦴 Flail Chest</div>
+          <div class="card-subtitle">≥3 ribs fractured in ≥2 places = free floating segment</div>
+        </div>
+        <div class="card-arrow" style="color:#f87171">→</div>
+      </div>
+      <div class="card-body">
+        <p class="section-label" style="color:#f87171">Mechanism:</p>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Paradoxical breathing — segment moves IN on inspiration</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Underlying pulmonary contusion — the REAL killer!</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Pain → splinting → atelectasis → hypoxia</span></div>
+        <p class="section-label" style="color:#4ade80">Treatment:</p>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">1</span><span style="color:#d1d5db">ANALGESIA first! — ESP block / thoracic epidural / PCA</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">2</span><span style="color:#d1d5db">CPAP/NIV — pneumatic splinting of chest wall</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">3</span><span style="color:#d1d5db">Intubation + ventilation if respiratory failure</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">4</span><span style="color:#d1d5db">Surgical rib fixation if prolonged ventilation needed</span></div>
+        <div class="pearl" style="border-color:#f8717155;background:#f8717108">
+          <div class="pearl-label" style="color:#f87171">💡 Examiner Pearl:</div>
+          <p>Flail chest diagnosis = CLINICAL. The paradoxical movement may not be obvious early (patient splinting). Underlying pulmonary contusion causes hypoxia — not the mechanical flail segment itself!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Airway obstruction -->
+    <div class="injury-card" style="border-color:#f87171" onclick="toggle(this)">
+      <div class="card-header">
+        <div>
+          <div class="card-title" style="color:#f87171">🚨 Airway Obstruction</div>
+          <div class="card-subtitle">Most immediately reversible killer</div>
+        </div>
+        <div class="card-arrow" style="color:#f87171">→</div>
+      </div>
+      <div class="card-body">
+        <p class="section-label" style="color:#f87171">Causes in Thoracic Trauma:</p>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Blood/secretions/teeth in airway</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Laryngotracheal disruption</span></div>
+        <div class="item"><span style="color:#fca5a5">▸</span><span style="color:#e5e7eb">Tracheal compression from haematoma</span></div>
+        <p class="section-label" style="color:#4ade80">Treatment:</p>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">1</span><span style="color:#d1d5db">Suction + jaw thrust/chin lift</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">2</span><span style="color:#d1d5db">RSI + intubation (video laryngoscopy)</span></div>
+        <div class="step"><span class="step-num" style="background:#f8717122;color:#f87171">3</span><span style="color:#d1d5db">Surgical airway if cannot intubate</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden killers panel -->
+  <div id="hidden-panel" style="display:none">
+
+    <!-- Aortic disruption -->
+    <div class="injury-card" style="border-color:#fb923c" onclick="toggle(this)">
+      <div class="card-header">
+        <div>
+          <div class="card-title" style="color:#fb923c">🔴 Traumatic Aortic Disruption</div>
+          <div class="card-subtitle">80% die at scene — suspect in high-speed deceleration</div>
+        </div>
+        <div class="card-arrow" style="color:#fb923c">→</div>
+      </div>
+      <div class="card-body">
+        <p class="section-label" style="color:#fb923c">CXR Signs:</p>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Widened mediastinum (>8cm)</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Obliterated aortic knuckle</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Tracheal deviation right</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Left pleural cap</span></div>
+        <p class="section-label" style="color:#4ade80">Management:</p>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">1</span><span style="color:#d1d5db">CT angiography if haemodynamically stable</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">2</span><span style="color:#d1d5db">REBOA Zone 1 if unstable — bridge to theatre</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">3</span><span style="color:#d1d5db">Unstable → Emergency Dept Thoracotomy (EDT)</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">4</span><span style="color:#d1d5db">Definitive: TEVAR (endovascular) or open repair</span></div>
+        <div class="pearl" style="border-color:#fb923c55;background:#fb923c08">
+          <div class="pearl-label" style="color:#fb923c">💡 Examiner Pearl:</div>
+          <p>Most common site = aortic isthmus (ligamentum arteriosum). Deceleration injury → shear force at fixed point. Pseudoaneurysm = contained rupture — can survive long enough to reach hospital!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tracheobronchial -->
+    <div class="injury-card" style="border-color:#fb923c" onclick="toggle(this)">
+      <div class="card-header">
+        <div>
+          <div class="card-title" style="color:#fb923c">💨 Tracheobronchial Injury</div>
+          <div class="card-subtitle">Rare but highly lethal — suspect persistent air leak</div>
+        </div>
+        <div class="card-arrow" style="color:#fb923c">→</div>
+      </div>
+      <div class="card-body">
+        <p class="section-label" style="color:#fb923c">Clinical Features:</p>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Persistent air leak despite ICD</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Massive surgical emphysema</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Tension PTX not responding to decompression</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Haemoptysis</span></div>
+        <p class="section-label" style="color:#4ade80">Management:</p>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">1</span><span style="color:#d1d5db">Intubate distal to injury if possible</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">2</span><span style="color:#d1d5db">Double lumen ETT / bronchial blocker for lung isolation</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">3</span><span style="color:#d1d5db">Bronchoscopy for diagnosis + guide intubation</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">4</span><span style="color:#d1d5db">Surgical repair</span></div>
+      </div>
+    </div>
+
+    <!-- Cardiac contusion -->
+    <div class="injury-card" style="border-color:#fb923c" onclick="toggle(this)">
+      <div class="card-header">
+        <div>
+          <div class="card-title" style="color:#fb923c">💗 Cardiac Contusion + Commotio Cordis</div>
+          <div class="card-subtitle">Blunt cardiac injury spectrum</div>
+        </div>
+        <div class="card-arrow" style="color:#fb923c">→</div>
+      </div>
+      <div class="card-body">
+        <p class="section-label" style="color:#fb923c">Cardiac Contusion:</p>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Bruising of myocardium — especially RV (anterior)</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">ECG: new RBBB, ST changes, arrhythmias</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Troponin elevated</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Management: monitoring, treat arrhythmias</span></div>
+        <div class="divider"></div>
+        <p class="section-label" style="color:#fb923c">Commotio Cordis:</p>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Blunt impact during VULNERABLE T WAVE period</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Triggers VF → cardiac arrest</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">NO structural cardiac damage!</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Common: young athletes (cricket/baseball/hockey)</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">Rx</span><span style="color:#d1d5db">Immediate defibrillation — survival depends on speed!</span></div>
+        <div class="pearl" style="border-color:#fb923c55;background:#fb923c08">
+          <div class="pearl-label" style="color:#fb923c">💡 Examiner Pearl:</div>
+          <p>T wave = repolarisation = relative refractory period = electrically unstable. Small mechanical stimulus → re-entrant VF. "T for Trouble!" Defibrillate immediately — survival drops 10% per minute without defibrillation!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Oesophageal rupture -->
+    <div class="injury-card" style="border-color:#fb923c" onclick="toggle(this)">
+      <div class="card-header">
+        <div>
+          <div class="card-title" style="color:#fb923c">🫁 Oesophageal Rupture</div>
+          <div class="card-subtitle">Boerhaave's equivalent in trauma</div>
+        </div>
+        <div class="card-arrow" style="color:#fb923c">→</div>
+      </div>
+      <div class="card-body">
+        <p class="section-label" style="color:#fb923c">Clinical Features:</p>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Chest pain out of proportion to injury</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Surgical emphysema</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Pneumomediastinum on CXR</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Left pleural effusion (saliva/gastric contents)</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Rapidly deteriorating sepsis if delayed</span></div>
+        <p class="section-label" style="color:#4ade80">Management:</p>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">1</span><span style="color:#d1d5db">CT chest with contrast — confirms diagnosis</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">2</span><span style="color:#d1d5db">Broad spectrum antibiotics immediately</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">3</span><span style="color:#d1d5db">Surgical repair if <24hrs — stent if delayed</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">4</span><span style="color:#d1d5db">NPO + NGT decompression</span></div>
+      </div>
+    </div>
+
+    <!-- Diaphragmatic rupture -->
+    <div class="injury-card" style="border-color:#fb923c" onclick="toggle(this)">
+      <div class="card-header">
+        <div>
+          <div class="card-title" style="color:#fb923c">↕ Diaphragmatic Rupture</div>
+          <div class="card-subtitle">Commonly missed — left > right (liver protects right)</div>
+        </div>
+        <div class="card-arrow" style="color:#fb923c">→</div>
+      </div>
+      <div class="card-body">
+        <p class="section-label" style="color:#fb923c">Clinical Features:</p>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Bowel sounds in chest</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">NGT in chest on CXR — pathognomonic!</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Respiratory distress from abdominal contents in chest</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Often presents late — missed acutely</span></div>
+        <p class="section-label" style="color:#4ade80">Management:</p>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">1</span><span style="color:#d1d5db">DO NOT insert ICD — bowel in chest!</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">2</span><span style="color:#d1d5db">NGT decompression</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">3</span><span style="color:#d1d5db">Surgical repair — laparoscopic or open</span></div>
+        <div class="pearl" style="border-color:#fb923c55;background:#fb923c08">
+          <div class="pearl-label" style="color:#fb923c">💡 Examiner Pearl:</div>
+          <p>NGT coiling in left chest = diaphragmatic rupture until proven otherwise. Left side 90% because liver protects right hemidiaphragm from rupture. NEVER insert ICD blindly — you'll puncture bowel!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pulmonary contusion -->
+    <div class="injury-card" style="border-color:#fb923c" onclick="toggle(this)">
+      <div class="card-header">
+        <div>
+          <div class="card-title" style="color:#fb923c">🫁 Pulmonary Contusion</div>
+          <div class="card-subtitle">Most common cause of death in chest trauma</div>
+        </div>
+        <div class="card-arrow" style="color:#fb923c">→</div>
+      </div>
+      <div class="card-body">
+        <p class="section-label" style="color:#fb923c">Pathophysiology:</p>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Alveolar haemorrhage + oedema → shunt → hypoxia</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Worsens over 24-48hrs — NOT immediately apparent</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">CT more sensitive than CXR early</span></div>
+        <div class="item"><span style="color:#fdba74">▸</span><span style="color:#e5e7eb">Often underlying flail chest injury</span></div>
+        <p class="section-label" style="color:#4ade80">Management:</p>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">1</span><span style="color:#d1d5db">Restrict IV fluids — worsens contusion!</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">2</span><span style="color:#d1d5db">Aggressive analgesia — prevents splinting</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">3</span><span style="color:#d1d5db">CPAP/NIV first line</span></div>
+        <div class="step"><span class="step-num" style="background:#fb923c22;color:#fb923c">4</span><span style="color:#d1d5db">Lung protective ventilation if intubated</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Management panel -->
+  <div id="manage-panel" style="display:none">
+    <div class="mgmt-card" style="border-color:#4ade80">
+      <h3 style="color:#4ade80">ABCDE Approach</h3>
+      <p class="section-label" style="color:#4ade80">A — Airway:</p>
+      <div class="step"><span class="step-num" style="background:#4ade8022;color:#4ade80">1</span><span style="color:#d1d5db">Secure if GCS deteriorating or airway threatened</span></div>
+      <div class="step"><span class="step-num" style="background:#4ade8022;color:#4ade80">2</span><span style="color:#d1d5db">RSI with MILS if c-spine not cleared</span></div>
+      <div class="step"><span class="step-num" style="background:#4ade8022;color:#4ade80">3</span><span style="color:#d1d5db">Video laryngoscopy — preferred in trauma</span></div>
+      <p class="section-label" style="color:#4ade80">B — Breathing:</p>
+      <div class="step"><span class="step-num" style="background:#4ade8022;color:#4ade80">1</span><span style="color:#d1d5db">High flow O₂ — target SpO₂ >94%</span></div>
+      <div class="step"><span class="step-num" style="background:#4ade8022;color:#4ade80">2</span><span style="color:#d1d5db">eFAST — pneumothorax + haemothorax</span></div>
+      <div class="step"><span class="step-num" style="background:#4ade8022;color:#4ade80">3</span><span style="color:#d1d5db">ICD safety triangle for PTX/haemothorax</span></div>
+      <p class="section-label" style="color:#4ade80">C — Circulation:</p>
+      <div class="step"><span class="step-num" style="background:#4ade8022;color:#4ade80">1</span><span style="color:#d1d5db">2x large bore IV + arterial line</span></div>
+      <div class="step"><span class="step-num" style="background:#4ade8022;color:#4ade80">2</span><span style="color:#d1d5db">Activate MTP 1:1:1</span></div>
+      <div class="step"><span class="step-num" style="background:#4ade8022;color:#4ade80">3</span><span style="color:#d1d5db">TXA 1g IV within 3 hours</span></div>
+      <div class="step"><span class="step-num" style="background:#4ade8022;color:#4ade80">4</span><span style="color:#d1d5db">Calcium if iCa <1.1 mmol/L</span></div>
+      <div class="step"><span class="step-num" style="background:#4ade8022;color:#4ade80">5</span><span style="color:#d1d5db">Autotransfusion from haemothorax</span></div>
+      <div class="step"><span class="step-num" style="background:#4ade8022;color:#4ade80">6</span><span style="color:#d1d5db">Cell salvage — reduce allogeneic transfusion</span></div>
+      <div class="step"><span class="step-num" style="background:#4ade8022;color:#4ade80">7</span><span style="color:#d1d5db">Warming — forced air blanket + warm fluids</span></div>
+    </div>
+
+    <div class="mgmt-card" style="border-color:#a78bfa">
+      <h3 style="color:#a78bfa">Safety Triangle — ICD Insertion</h3>
+      <div class="item"><span style="color:#c4b5fd">▸</span><span style="color:#e5e7eb">Anterior border: lateral edge of pectoralis major</span></div>
+      <div class="item"><span style="color:#c4b5fd">▸</span><span style="color:#e5e7eb">Posterior border: anterior edge of latissimus dorsi</span></div>
+      <div class="item"><span style="color:#c4b5fd">▸</span><span style="color:#e5e7eb">Superior border: base of axilla</span></div>
+      <div class="item"><span style="color:#c4b5fd">▸</span><span style="color:#e5e7eb">Level: 4th or 5th intercostal space</span></div>
+      <div class="pearl" style="border-color:#a78bfa55;background:#a78bfa08">
+        <div class="pearl-label" style="color:#a78bfa">💡 Why Safety Triangle?</div>
+        <p>Avoids long thoracic nerve (latissimus), avoids breast tissue, avoids diaphragm (below 5th ICS anteriorly), avoids neurovascular bundle (stay above inferior rib margin)!</p>
+      </div>
+    </div>
+
+    <div class="mgmt-card" style="border-color:#4fc3f7">
+      <h3 style="color:#4fc3f7">EDT vs REBOA — Decision</h3>
+      <div class="item"><span style="color:#bae6fd">▸</span><span style="color:#e5e7eb">Unstable + no response to resus → EDT</span></div>
+      <div class="item"><span style="color:#bae6fd">▸</span><span style="color:#e5e7eb">Penetrating + witnessed cardiac arrest → EDT</span></div>
+      <div class="item"><span style="color:#bae6fd">▸</span><span style="color:#e5e7eb">Aortic injury + stable → REBOA Zone 1 → OT</span></div>
+      <div class="item"><span style="color:#bae6fd">▸</span><span style="color:#e5e7eb">Blunt + CPR >10 mins → futile (both)</span></div>
+    </div>
+  </div>
+
+  <div class="footer">ATLS 10TH ED DEADLY DOZEN · DR. WILSON · FNB EXIT 2026</div>
+</div>
+
+<script>
+function toggle(card) {
+  card.classList.toggle('open');
+}
+
+function showTab(tab) {
+  document.getElementById('immediate-panel').style.display = tab === 'immediate' ? 'block' : 'none';
+  document.getElementById('hidden-panel').style.display = tab === 'hidden' ? 'block' : 'none';
+  document.getElementById('manage-panel').style.display = tab === 'manage' ? 'block' : 'none';
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('.tab-' + tab).classList.add('active');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
