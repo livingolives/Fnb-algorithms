@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traumatic Spinal Cord Injury | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060612;color:#fff;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.back-btn{display:inline-block;margin-bottom:16px;font-size:.6rem;color:#4b5563;text-decoration:none;letter-spacing:.1em;border:1px solid #1f2937;padding:5px 12px;}
+.back-btn:hover{color:#34d399;border-color:#34d399;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #1f2937;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.2rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#34d399;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#4b5563;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#4b5563;margin-bottom:10px;padding-left:4px;}
+.card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-title{font-size:.8rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.card-body{font-size:.75rem;color:#9ca3af;line-height:1.7;}
+.card-body b{color:#e5e7eb;}
+.red{color:#f87171;} .green{color:#4ade80;} .amber{color:#facc15;} .blue{color:#60a5fa;} .teal{color:#34d399;}
+.comp-table{width:100%;border-collapse:collapse;font-size:.65rem;margin-bottom:14px;}
+.comp-table th{background:#0a0a1a;color:#9ca3af;padding:7px 9px;text-align:left;letter-spacing:.08em;font-size:.56rem;text-transform:uppercase;border:1px solid #1f2937;}
+.comp-table td{padding:7px 9px;border:1px solid #1f2937;vertical-align:middle;color:#9ca3af;}
+.comp-table td b{color:#e5e7eb;}
+.comp-table tr:nth-child(even){background:#07070f;}
+.flow{display:flex;flex-direction:column;gap:0;}
+.flow-step{background:#0a0a1a;border:1px solid #1f2937;border-radius:8px;padding:11px 14px;font-size:.72rem;color:#9ca3af;line-height:1.6;}
+.flow-step b{color:#e5e7eb;}
+.flow-step .step-lbl{font-size:.5rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;margin-bottom:3px;}
+.flow-arrow{text-align:center;color:#374151;font-size:1rem;padding:2px 0;}
+.pearl{background:#0a0a1a;border-left:3px solid #34d399;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#34d399;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#9ca3af;line-height:1.6;}
+.pearl-a b{color:#e5e7eb;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.grid-item{background:#070712;border:1px solid #1f2937;border-radius:7px;padding:10px 12px;}
+.gi-title{font-size:.58rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+.gi-body{font-size:.68rem;color:#9ca3af;line-height:1.5;}
+.gi-body b{color:#e5e7eb;}
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #0f172a;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-btn" href="index.html">← BACK TO ALGORITHMS</a>
+
+  <div class="header">
+    <div class="icon">🦴</div>
+    <h1>Traumatic Spinal Cord Injury</h1>
+    <div class="sub">ATLS 10th Ed · AANS Guidelines · Core Concepts Critical Care 2026</div>
+  </div>
+
+  <!-- CLASSIFICATION -->
+  <div class="section">
+    <p class="section-title">📊 TSCI Classification</p>
+    <div class="card">
+      <div class="card-title" style="color:#34d399;">ASIA IMPAIRMENT SCALE</div>
+      <table class="comp-table">
+        <thead><tr><th>Grade</th><th>Definition</th><th>Prognosis</th></tr></thead>
+        <tbody>
+          <tr><td><b style="color:#f87171;">A — Complete</b></td><td>No motor or sensory function preserved in S4–S5</td><td>Poor</td></tr>
+          <tr><td><b style="color:#fb923c;">B — Sensory incomplete</b></td><td>Sensory but no motor below level, including S4–S5</td><td>Guarded</td></tr>
+          <tr><td><b style="color:#facc15;">C — Motor incomplete</b></td><td>Motor preserved below; >50% key muscles grade &lt;3</td><td>Moderate</td></tr>
+          <tr><td><b style="color:#4ade80;">D — Motor incomplete</b></td><td>Motor preserved below; ≥50% key muscles grade ≥3</td><td>Good</td></tr>
+          <tr><td><b style="color:#34d399;">E — Normal</b></td><td>Motor and sensory normal</td><td>Full recovery</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NEUROGENIC vs SPINAL SHOCK -->
+  <div class="section">
+    <p class="section-title">⚡ Neurogenic Shock vs Spinal Shock — KNOW THIS COLD</p>
+    <div class="grid2">
+      <div class="grid-item" style="border-color:#f87171;">
+        <div class="gi-title" style="color:#f87171;">NEUROGENIC SHOCK</div>
+        <div class="gi-body">
+          <b>What:</b> Haemodynamic entity — distributive shock<br>
+          <b>Level:</b> Injury above T6<br>
+          <b>Mechanism:</b> Loss of descending sympathetic pathways → ↓ vasomotor tone → vasodilation + pooling → hypotension + bradycardia (unopposed vagal tone)<br>
+          <b>Classic:</b> Hypotension WITHOUT tachycardia, warm peripheries<br>
+          <b>Duration:</b> Up to 5 weeks<br>
+          <b>Treatment:</b> Vasopressors (noradrenaline/dopamine) + fluids cautiously + atropine for bradycardia
+        </div>
+      </div>
+      <div class="grid-item" style="border-color:#60a5fa;">
+        <div class="gi-title" style="color:#60a5fa;">SPINAL SHOCK</div>
+        <div class="gi-body">
+          <b>What:</b> Neurological syndrome — NOT haemodynamic<br>
+          <b>Level:</b> Any level<br>
+          <b>Mechanism:</b> Transient loss of spinal reflex activity below injury level<br>
+          <b>Features:</b> Flaccid paralysis, areflexia, loss of sensation, loss of bladder/bowel<br>
+          <b>Resolution:</b> Return of bulbocavernosus reflex at 48–72h = end of spinal shock<br>
+          <b>Treatment:</b> Supportive — no specific haemodynamic treatment needed
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-color:#facc15;">
+      <div class="card-body">
+        <b class="amber">⚠ KEY EXAM TRAP:</b> "Spinal shock" does NOT mean haemodynamic shock. It is purely a neurological phenomenon. Neurogenic shock is the haemodynamic emergency. Don't confuse them.<br><br>
+        <b>Neurogenic shock below T6?</b> → Look for another cause — haemorrhage most likely. TSCI below T6 rarely causes neurogenic shock.
+      </div>
+    </div>
+  </div>
+
+  <!-- HAEMODYNAMIC MANAGEMENT -->
+  <div class="section">
+    <p class="section-title">💉 Haemodynamic Management — TSCI Protocol</p>
+    <div class="flow">
+      <div class="flow-step" style="border-color:#f87171;">
+        <div class="step-lbl" style="color:#f87171;">STEP 1 — EXCLUDE HAEMORRHAGE FIRST</div>
+        Hypotension in TSCI = haemorrhage until proven otherwise. FAST scan. Check for other injuries. Do NOT assume neurogenic shock without excluding bleeding.
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="border-color:#facc15;">
+        <div class="step-lbl" style="color:#facc15;">STEP 2 — FLUID RESUSCITATION</div>
+        Judicious isotonic crystalloid (0.9% NaCl or Hartmann's). <b>Avoid hypotonic fluids</b> (D5W, 0.45% NaCl) — cause spinal cord oedema. Avoid over-resuscitation — cervical/high thoracic injuries prone to pulmonary oedema (↓ sympathetic cardiac input).
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="border-color:#34d399;">
+        <div class="step-lbl" style="color:#34d399;">STEP 3 — VASOPRESSORS</div>
+        <b>Target MAP 85–90 mmHg for 7 days</b> (AANS guidelines — optimises spinal cord perfusion).<br>
+        First line: <b>Noradrenaline</b> (vasoconstrictive + inotropic)<br>
+        Above T6: consider <b>Dopamine</b> (vasoconstrictive + chronotropic — helps bradycardia)<br>
+        Atropine or external pacing for haemodynamically significant bradycardia
+      </div>
+    </div>
+    <div class="card" style="border-color:#34d399;margin-top:10px;">
+      <div class="card-body">
+        <b class="teal">MAP target: 85–90 mmHg for 7 days</b> — spinal cord perfusion pressure = MAP − CSFP. Autoregulation lost after TSCI → cord becomes pressure-passive. Maintaining MAP directly maintains cord perfusion.
+      </div>
+    </div>
+  </div>
+
+  <!-- AIRWAY -->
+  <div class="section">
+    <p class="section-title">🫁 Airway Considerations</p>
+    <div class="card">
+      <div class="card-body">
+        <b>C3–C5:</b> Phrenic nerve — diaphragm paralysis → immediate ventilatory failure. Intubate.<br>
+        <b>C5–T1:</b> Intercostal + accessory muscle loss → reduced respiratory reserve. Monitor closely.<br>
+        <b>Above C5:</b> High probability of requiring mechanical ventilation.<br><br>
+        <b>Intubation technique:</b> MILS (manual in-line stabilisation) — NOT traction. CMAC/video laryngoscopy preferred. Awake fibreoptic if time allows and patient cooperative.<br><br>
+        <b>Suxamethonium:</b> <span class="green">Safe within first 72 hours.</span> <span class="red">AVOID between Day 3 and 9 months</span> — upregulation of extrajunctional ACh receptors → life-threatening hyperkalaemia.
+      </div>
+    </div>
+  </div>
+
+  <!-- INCOMPLETE SCI SYNDROMES -->
+  <div class="section">
+    <p class="section-title">🧠 Incomplete SCI Syndromes</p>
+    <div class="grid2">
+      <div class="grid-item" style="border-color:#c084fc;">
+        <div class="gi-title" style="color:#c084fc;">CENTRAL CORD</div>
+        <div class="gi-body">Most common incomplete SCI. Hyperextension injury. Upper limbs &gt; lower limbs weakness. Bladder dysfunction. Elderly + cervical spondylosis.<br><b>Prognosis:</b> Best of incomplete syndromes.</div>
+      </div>
+      <div class="grid-item" style="border-color:#f87171;">
+        <div class="gi-title" style="color:#f87171;">ANTERIOR CORD</div>
+        <div class="gi-body">Flexion injury / vascular (anterior spinal artery). Loss of motor + pain/temp below. Preserved proprioception + vibration (posterior columns intact).<br><b>Prognosis:</b> Worst of incomplete syndromes.</div>
+      </div>
+      <div class="grid-item" style="border-color:#60a5fa;">
+        <div class="gi-title" style="color:#60a5fa;">BROWN-SÉQUARD</div>
+        <div class="gi-body">Hemisection of cord (penetrating trauma). Ipsilateral: motor loss + proprioception/vibration loss. Contralateral: pain/temp loss.<br><b>Prognosis:</b> Good — most recovery.</div>
+      </div>
+      <div class="grid-item" style="border-color:#facc15;">
+        <div class="gi-title" style="color:#facc15;">POSTERIOR CORD</div>
+        <div class="gi-body">Rare. Loss of proprioception + vibration + fine touch below. Motor and pain/temp preserved.<br><b>Prognosis:</b> Variable.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIC SCORING -->
+  <div class="section">
+    <p class="section-title">📊 SLIC Score — Subaxial Cervical Injury</p>
+    <div class="card">
+      <div class="card-body">
+        <b>Morphology:</b> No injury (0) · Compression (1) · Burst (2) · Distraction (3) · Rotation/translation (4)<br>
+        <b>DLC (Disc-Ligament Complex):</b> Intact (0) · Indeterminate (1) · Disrupted (2)<br>
+        <b>Neurological status:</b> Intact (0) · Root injury (1) · Complete cord (2) · Incomplete cord (3) · Ongoing compression +1<br><br>
+        <b>Score ≤3:</b> Non-operative (immobilisation)<br>
+        <b>Score = 4:</b> Indeterminate — surgeon judgement<br>
+        <b>Score ≥5:</b> Operative — surgical stabilisation
+      </div>
+    </div>
+  </div>
+
+  <!-- CERVICAL SPINE CLEARANCE -->
+  <div class="section">
+    <p class="section-title">🔍 Cervical Spine Clearance Rules</p>
+
+    <!-- NEXUS -->
+    <div class="card" style="border-color:#60a5fa;margin-bottom:10px;">
+      <div class="card-title" style="color:#60a5fa;">NEXUS CRITERIA — Low Risk = No Imaging Needed</div>
+      <div class="card-body">
+        ALL 5 must be present to clear clinically (no CT/X-ray needed):<br><br>
+        <b>1.</b> No midline cervical tenderness<br>
+        <b>2.</b> No focal neurological deficit<br>
+        <b>3.</b> Normal level of alertness (GCS 15)<br>
+        <b>4.</b> No intoxication (alcohol or drugs)<br>
+        <b>5.</b> No painful distracting injury<br><br>
+        <span class="blue">If ALL 5 present → low risk → no imaging required → can remove collar.</span><br>
+        <span class="red">If ANY criterion absent → image the spine.</span><br><br>
+        <b>Sensitivity:</b> 99.6% · <b>Specificity:</b> 12.9% — high sensitivity, low specificity (many false positives)
+      </div>
+    </div>
+
+    <!-- Canadian C-Spine Rule -->
+    <div class="card" style="border-color:#34d399;margin-bottom:10px;">
+      <div class="card-title" style="color:#34d399;">CANADIAN C-SPINE RULE (CCR)</div>
+      <div class="card-body">
+        <b>Step 1 — Any HIGH RISK factor? → Image immediately:</b><br>
+        · Age ≥65<br>
+        · Dangerous mechanism (fall &gt;1m/5 stairs, axial load to head, high-speed MVC, rollover, ejection, motorised recreational vehicle, bicycle collision)<br>
+        · Paraesthesia in extremities<br><br>
+        <b>Step 2 — Any LOW RISK factor allowing safe ROM assessment?</b><br>
+        · Simple rear-end MVC<br>
+        · Sitting position in ED<br>
+        · Ambulatory at any time<br>
+        · Delayed onset neck pain<br>
+        · Absence of midline C-spine tenderness<br><br>
+        <b>Step 3 — Can patient actively rotate neck 45° left AND right?</b><br>
+        Yes → <span class="green">No imaging needed</span><br>
+        No → <span class="red">Image required</span><br><br>
+        <b>Sensitivity:</b> 99.4% · <b>Specificity:</b> 45.1% — more specific than NEXUS<br>
+        <b>Not applicable:</b> GCS &lt;15, unstable vitals, age &lt;16, known vertebral disease, previous C-spine surgery
+      </div>
+    </div>
+
+    <!-- NEXUS vs CCR -->
+    <div class="card" style="margin-bottom:10px;">
+      <div class="card-title" style="color:#facc15;">NEXUS vs CCR — Which is Better?</div>
+      <div class="card-body">
+        <table class="comp-table">
+          <thead><tr><th>Feature</th><th style="color:#60a5fa;">NEXUS</th><th style="color:#34d399;">Canadian C-Spine</th></tr></thead>
+          <tbody>
+            <tr><td>Sensitivity</td><td>99.6%</td><td>99.4%</td></tr>
+            <tr><td>Specificity</td><td>12.9%</td><td><b style="color:#34d399;">45.1% — better</b></td></tr>
+            <tr><td>Imaging reduction</td><td>Modest</td><td><b style="color:#34d399;">Greater</b></td></tr>
+            <tr><td>Applies to</td><td>All alert blunt trauma</td><td>GCS 15, stable, &gt;16yr</td></tr>
+            <tr><td>Ease of use</td><td>Simpler — 5 criteria</td><td>More complex — 3 steps</td></tr>
+            <tr><td>Preferred</td><td>ED triage, low complexity</td><td>Where specificity matters</td></tr>
+          </tbody>
+        </table>
+        <span class="amber">Canadian C-Spine Rule is more specific — reduces unnecessary imaging more than NEXUS. Both validated. Know both.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCIWORA -->
+  <div class="section">
+    <p class="section-title">⚡ SCIWORA</p>
+    <div class="card" style="border-color:#c084fc;">
+      <div class="card-title" style="color:#c084fc;">SCIWORA — Spinal Cord Injury Without Radiological Abnormality</div>
+      <div class="card-body">
+        <b>Definition:</b> Objective signs of myelopathy (neurological deficit) with no evidence of fracture or malalignment on plain X-rays AND CT scan.<br><br>
+        <b>Mechanism:</b> Cord injury from transient compression, vascular insult, or disc herniation without bony injury. Cord elastic deformation exceeds physiological limits.<br><br>
+        <b>Who gets it:</b><br>
+        · <span class="amber">Children</span> — hypermobile ligamentous spine, small vertebral bodies → cord can be compressed without bony injury (up to 50% of paediatric SCI)<br>
+        · Adults with cervical spondylosis — pre-existing canal stenosis<br>
+        · Hyperextension injuries in elderly<br><br>
+        <b>Diagnosis:</b> <span class="teal">MRI is mandatory</span> — may show cord contusion, haematoma, oedema, disc herniation not visible on CT. Normal MRI does not exclude SCIWORA.<br><br>
+        <b>Management:</b> Immobilise · MRI urgently · Neurosurgical review · Same haemodynamic targets as other TSCI (MAP 85–90 mmHg)<br><br>
+        <b>Prognosis:</b> Variable — complete neurological deficit = poor. Partial deficit = better recovery possible.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAEDIATRIC SPINE -->
+  <div class="section">
+    <p class="section-title">👶 Paediatric Spinal Cord Injury — Key Differences</p>
+    <div class="card" style="border-color:#facc15;">
+      <div class="card-body">
+        <b class="amber">Anatomy differences:</b><br>
+        · Large head relative to body → <b>fulcrum of injury at C2–C3</b> (adults C5–C6)<br>
+        · Hypermobile ligamentous spine → greater range of motion → SCIWORA more common<br>
+        · Horizontal facet joints → more translational injuries<br>
+        · Vertebral bodies incompletely ossified → pseudosubluxation can mimic injury<br><br>
+        <b class="amber">Pseudosubluxation:</b> Normal physiological anterior displacement of C2 on C3 (up to 3mm) and C3 on C4 in children &lt;8 years — do NOT mistake for injury. Use Swischuk's line to differentiate.<br><br>
+        <b class="amber">SCIWORA prevalence:</b> Up to 50% of paediatric SCI — always MRI if neurological signs with normal CT.<br><br>
+        <b class="amber">NEXUS/CCR in children:</b> NEXUS validated from age 2+. CCR NOT validated under 16 — use clinical judgement + NEXUS in children.<br><br>
+        <b class="amber">Immobilisation:</b> Standard adult backboard causes neck <b>flexion</b> in children (large occiput) → use occipital recess board or pad under torso to maintain neutral alignment.<br><br>
+        <b class="amber">Suxamethonium:</b> Same 72h rule applies — safe initially, avoid after Day 3 to 9 months post-injury.<br><br>
+        <b class="amber">Haemodynamic targets:</b> MAP targets lower than adults — age-appropriate. Avoid aggressive fluid resuscitation — risk of pulmonary oedema greater.
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTONOMIC DYSREFLEXIA -->
+  <div class="section">
+    <p class="section-title">⚠️ Autonomic Dysreflexia — Late Complication</p>
+    <div class="card" style="border-color:#f87171;">
+      <div class="card-title" style="color:#f87171;">AUTONOMIC DYSREFLEXIA (T6 and above)</div>
+      <div class="card-body">
+        <b>Trigger:</b> Noxious stimulus below level of injury — most common: <b>bladder distension or faecal impaction</b><br><br>
+        <b>Mechanism:</b> Massive sympathetic discharge below injury level → vasoconstriction + hypertension. Compensatory parasympathetic response above level → bradycardia + vasodilation (flushing, sweating above injury).<br><br>
+        <b>Clinical:</b> Severe hypertensive crisis · Bradycardia · Pounding headache · Flushing/sweating above level · Pallor below level · Nasal congestion · Anxiety<br><br>
+        <b>Complications:</b> MI · Intracranial haemorrhage · Stroke · Seizures · Pulmonary oedema · Retinal haemorrhage<br><br>
+        <b>Treatment:</b><br>
+        1. Sit patient up (↓ BP orthostatic)<br>
+        2. Find and remove trigger — catheterise if in retention, relieve faecal impaction<br>
+        3. Antihypertensives: GTN spray/patch · Labetalol · Hydralazine · Nifedipine<br>
+        4. Atropine/glycopyrrolate for bradycardia<br>
+        5. Prophylaxis: oral nifedipine or prazosin
+      </div>
+    </div>
+  </div>
+
+  <!-- STEROIDS -->
+  <div class="section">
+    <p class="section-title">🚫 Steroids in TSCI</p>
+    <div class="card" style="border-color:#f87171;">
+      <div class="card-body">
+        <b>Methylprednisolone (NASCIS trials):</b> Once recommended — now <span class="red">NOT recommended</span> in acute TSCI.<br><br>
+        Evidence of increased sepsis, pneumonia, GI bleeding, and ICU complications without clear neurological benefit.<br><br>
+        <span class="red">Current AANS/ATLS guidelines: Steroids are not standard of care in acute TSCI.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMINER PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Neurogenic shock vs haemorrhagic shock — how do you differentiate?</div>
+      <div class="pearl-a">Neurogenic shock: hypotension + <b>bradycardia</b> + warm peripheries + no tachycardia. Haemorrhagic shock: hypotension + <b>tachycardia</b> + cold clammy peripheries. But ALWAYS exclude haemorrhage first — it is far more common and both can coexist.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why avoid suxamethonium after 72 hours in TSCI?</div>
+      <div class="pearl-a">Denervation → upregulation of extrajunctional nicotinic ACh receptors across the entire muscle membrane. Suxamethonium depolarises ALL these receptors simultaneously → massive K⁺ efflux → life-threatening hyperkalaemia → cardiac arrest. Avoid from Day 3 to 9 months post-injury. Use rocuronium + sugammadex instead.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why is MAP target 85–90 mmHg (not 65 mmHg) in TSCI?</div>
+      <div class="pearl-a">Spinal cord perfusion pressure = MAP − CSFP. After TSCI, spinal cord autoregulation is lost — cord becomes pressure-passive. A higher MAP target directly maintains cord perfusion pressure, preventing secondary ischaemic injury. Evidence (AANS Class 3) supports 7 days of MAP ≥85 mmHg to optimise neurological recovery.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What is sacral sparing and why does it matter?</div>
+      <div class="pearl-a">Preservation of any sacral function (perianal sensation, voluntary anal sphincter contraction, great toe flexion) = incomplete injury = ASIA B or better. Critical distinction: complete vs incomplete changes prognosis dramatically. Always check sacral function before classifying a cord injury as complete.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    ATLS 10TH ED · AANS GUIDELINES · NASCIS TRIALS<br>
+    CORE CONCEPTS CRITICAL CARE 2026 · ESSENTIALS OF TRAUMA ANAESTHESIA AND ICU
+  </div>
+
+</div>
+</body>
+</html>
