@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coagulopathy in Trauma | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060612;color:#fff;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.back-btn{display:inline-block;margin-bottom:16px;font-size:.6rem;color:#4b5563;text-decoration:none;letter-spacing:.1em;border:1px solid #1f2937;padding:5px 12px;}
+.back-btn:hover{color:#34d399;border-color:#34d399;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #1f2937;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.2rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#34d399;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#4b5563;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#4b5563;margin-bottom:10px;padding-left:4px;}
+.card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-title{font-size:.8rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.card-body{font-size:.75rem;color:#9ca3af;line-height:1.7;}
+.card-body b{color:#e5e7eb;}
+.red{color:#f87171;} .green{color:#4ade80;} .amber{color:#facc15;} .blue{color:#60a5fa;} .teal{color:#34d399;}
+
+.coag-card{border-radius:10px;padding:14px 16px;border:1px solid;margin-bottom:10px;}
+.coag-num{font-size:.55rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px;}
+.coag-name{font-size:.85rem;font-weight:900;letter-spacing:.05em;margin-bottom:6px;}
+.coag-body{font-size:.72rem;color:#9ca3af;line-height:1.6;}
+.coag-body b{color:#e5e7eb;}
+
+.flow{display:flex;flex-direction:column;gap:0;}
+.flow-step{background:#0a0a1a;border:1px solid #1f2937;border-radius:8px;padding:11px 14px;font-size:.72rem;color:#9ca3af;line-height:1.6;}
+.flow-step b{color:#e5e7eb;}
+.flow-step .step-lbl{font-size:.5rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;margin-bottom:3px;}
+.flow-arrow{text-align:center;color:#374151;font-size:1rem;padding:2px 0;}
+
+.diamond-box{background:#070712;border:1px solid #1f2937;border-radius:10px;padding:16px;margin-bottom:12px;}
+.diamond-title{font-size:.65rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#facc15;margin-bottom:12px;text-align:center;}
+.diamond-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.diamond-item{border-radius:8px;padding:11px 12px;text-align:center;border:1px solid;}
+.di-title{font-size:.62rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;}
+.di-body{font-size:.62rem;color:#9ca3af;line-height:1.5;}
+
+.comp-table{width:100%;border-collapse:collapse;font-size:.65rem;margin-bottom:14px;}
+.comp-table th{background:#0a0a1a;color:#9ca3af;padding:7px 9px;text-align:left;letter-spacing:.08em;font-size:.56rem;text-transform:uppercase;border:1px solid #1f2937;}
+.comp-table td{padding:7px 9px;border:1px solid #1f2937;vertical-align:middle;color:#9ca3af;}
+.comp-table td b{color:#e5e7eb;}
+.comp-table tr:nth-child(even){background:#07070f;}
+
+/* TEG/ROTEM SVG graph */
+.teg-container{background:#070712;border:1px solid #1f2937;border-radius:10px;padding:14px;margin-bottom:12px;}
+.teg-title{font-size:.65rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;text-align:center;}
+.teg-graphs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.teg-graph-box{background:#0a0a1a;border-radius:8px;padding:10px;}
+.teg-graph-label{font-size:.55rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;text-align:center;}
+.teg-params{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.teg-param{background:#070712;border:1px solid #1f2937;border-radius:6px;padding:8px 10px;}
+.teg-param-name{font-size:.52rem;font-weight:900;letter-spacing:.1em;color:#e5e7eb;margin-bottom:3px;}
+.teg-param-teg{font-size:.6rem;color:#34d399;margin-bottom:1px;}
+.teg-param-rotem{font-size:.6rem;color:#60a5fa;margin-bottom:3px;}
+.teg-param-meaning{font-size:.58rem;color:#6b7280;line-height:1.4;}
+.teg-abnormal{font-size:.6rem;color:#f87171;margin-top:3px;}
+
+/* Cell based vs cascade */
+.theory-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.theory-card{background:#070712;border:1px solid #1f2937;border-radius:8px;padding:12px;}
+.theory-title{font-size:.65rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.theory-body{font-size:.68rem;color:#9ca3af;line-height:1.6;}
+.theory-body b{color:#e5e7eb;}
+.theory-phase{font-size:.58rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-top:7px;margin-bottom:3px;}
+
+.rotem-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.rotem-item{background:#070712;border:1px solid #1f2937;border-radius:7px;padding:10px 12px;}
+.rotem-label{font-size:.55rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.rotem-name{font-size:.7rem;color:#e5e7eb;margin-bottom:3px;}
+.rotem-meaning{font-size:.62rem;color:#9ca3af;line-height:1.4;}
+
+.pearl{background:#0a0a1a;border-left:3px solid #34d399;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#34d399;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#9ca3af;line-height:1.6;}
+.pearl-a b{color:#e5e7eb;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #0f172a;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-btn" href="index.html">← BACK TO ALGORITHMS</a>
+
+  <div class="header">
+    <div class="icon">🔬</div>
+    <h1>Coagulopathy in Trauma</h1>
+    <div class="sub">ATC · RAC · DIC · TEG/ROTEM · Cascade vs Cell-Based Theory</div>
+  </div>
+
+  <!-- THREE COAGULOPATHIES -->
+  <div class="section">
+    <p class="section-title">🩸 Three Distinct Coagulopathies</p>
+
+    <div class="coag-card" style="border-color:#f87171;background:rgba(248,113,113,.04);">
+      <div class="coag-num" style="color:#f87171;">① EARLY — PRE-RESUSCITATION</div>
+      <div class="coag-name" style="color:#f87171;">Acute Traumatic Coagulopathy (ATC)</div>
+      <div class="coag-body">
+        <b>Trigger:</b> Tissue injury + systemic hypoperfusion — BOTH required.<br>
+        <b>Mechanism:</b> Thrombomodulin ↑ → Protein C activation → inactivates Factors Va + VIIIa → ↓ thrombin + ↑ fibrinolysis (tPA from damaged glycocalyx).<br>
+        <b>Onset:</b> Within 30 minutes. Incidence 25% of major trauma. 4× mortality.<br>
+        <b>Rx:</b> TXA ≤3h · 1:1:1 MTP · Correct lethal triad
+      </div>
+    </div>
+
+    <div class="coag-card" style="border-color:#60a5fa;background:rgba(96,165,250,.04);">
+      <div class="coag-num" style="color:#60a5fa;">② LATER — RESUSCITATION-DRIVEN</div>
+      <div class="coag-name" style="color:#60a5fa;">Resuscitation-Associated Coagulopathy (RAC)</div>
+      <div class="coag-body">
+        <b>Trigger:</b> Excessive crystalloid resuscitation.<br>
+        <b>Mechanisms:</b> Dilution of clotting factors · Hypothermia (unwarmed fluids) → impairs enzyme kinetics · Hyperchloraemic acidosis → impairs coagulation · ↑ hydrostatic pressure disrupts clots.<br>
+        <b>Prevention:</b> 1:1:1 blood products. Avoid large crystalloid. Warm all fluids.
+      </div>
+    </div>
+
+    <div class="coag-card" style="border-color:#facc15;background:rgba(250,204,21,.04);">
+      <div class="coag-num" style="color:#facc15;">③ LATE — CONSUMPTION</div>
+      <div class="coag-name" style="color:#facc15;">Disseminated Intravascular Coagulation (DIC)</div>
+      <div class="coag-body">
+        <b>Trigger:</b> Massive tissue injury, sepsis, prolonged shock, amniotic fluid embolism.<br>
+        <b>Mechanism:</b> Uncontrolled systemic thrombin → widespread microthrombi → consumption of factors, fibrinogen AND platelets → paradoxical bleeding.<br>
+        <b>Unlike ATC:</b> Platelets LOW · Fibrinogen LOW · Microthrombi present · Organ failure.<br>
+        <b>Rx:</b> Treat cause · FFP · Cryoprecipitate · Platelets
+      </div>
+    </div>
+  </div>
+
+  <!-- CASCADE vs CELL-BASED -->
+  <div class="section">
+    <p class="section-title">⚗️ Coagulation Theory — Cascade vs Cell-Based</p>
+    <div class="theory-grid">
+      <div class="theory-card" style="border-color:#6b7280;">
+        <div class="theory-title" style="color:#9ca3af;">🏛️ CLASSIC CASCADE MODEL<br><span style="font-size:.5rem;color:#4b5563;">(Macfarlane 1964)</span></div>
+        <div class="theory-body">
+          Two parallel pathways converging on Factor X:<br><br>
+          <div class="theory-phase" style="color:#60a5fa;">INTRINSIC (contact)</div>
+          XII → XI → IX + VIII → X<br><br>
+          <div class="theory-phase" style="color:#f87171;">EXTRINSIC (tissue factor)</div>
+          VII + TF → X<br><br>
+          <div class="theory-phase" style="color:#facc15;">COMMON PATHWAY</div>
+          X + V → Prothrombin → Thrombin → Fibrinogen → Fibrin<br><br>
+          <b style="color:#f87171;">Limitation:</b> Explains lab tests (PT, APTT) but does NOT reflect in vivo coagulation. Patients with haemophilia A (Factor VIII deficiency) bleed despite normal extrinsic pathway — cascade model cannot explain this.
+        </div>
+      </div>
+      <div class="theory-card" style="border-color:#34d399;">
+        <div class="theory-title" style="color:#34d399;">🔬 CELL-BASED MODEL<br><span style="font-size:.5rem;color:#4b5563;">(Hoffman & Monroe 2001)</span></div>
+        <div class="theory-body">
+          Coagulation occurs on <b>cell surfaces</b> in 3 overlapping phases:<br><br>
+          <div class="theory-phase" style="color:#f87171;">INITIATION (TF-bearing cells)</div>
+          TF + VIIa → small amount of thrombin generated on TF-bearing cells (fibroblasts, monocytes)<br><br>
+          <div class="theory-phase" style="color:#facc15;">AMPLIFICATION (platelets)</div>
+          Small thrombin burst activates platelets + Factors V, VIII, XI → platelet surface primed<br><br>
+          <div class="theory-phase" style="color:#34d399;">PROPAGATION (platelet surface)</div>
+          Tenase + prothrombinase complexes on platelet surface → massive thrombin burst → stable fibrin clot<br><br>
+          <b style="color:#34d399;">Why it matters:</b> Explains why platelets are central · Why TXA works · Why TEG/ROTEM reflects reality better than PT/APTT · Basis for 1:1:1 MTP
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-color:#34d399;">
+      <div class="card-body">
+        <b class="teal">Key clinical implication:</b> The cell-based model explains why standard lab tests (PT, APTT) are inadequate for guiding trauma resuscitation — they measure individual pathway activity in plasma, not whole blood clot formation on cell surfaces. This is why <b>TEG/ROTEM (viscoelastic testing)</b> was developed — it measures the whole process.
+      </div>
+    </div>
+  </div>
+
+  <!-- TEG/ROTEM GRAPH -->
+  <div class="section">
+    <p class="section-title">📈 TEG / ROTEM — Visual Guide</p>
+    <div class="teg-container">
+      <div class="teg-title" style="color:#34d399;">NORMAL TEG/ROTEM TRACING</div>
+
+      <!-- SVG Graph -->
+      <div style="background:#0a0a1a;border-radius:8px;padding:12px;margin-bottom:12px;">
+        <svg viewBox="0 0 360 160" style="width:100%;display:block;">
+          <!-- Grid -->
+          <line x1="30" y1="10" x2="30" y2="150" stroke="#1f2937" stroke-width="1"/>
+          <line x1="30" y1="80" x2="350" y2="80" stroke="#1f2937" stroke-width="1"/>
+          <!-- Dashed centre -->
+          <line x1="30" y1="80" x2="350" y2="80" stroke="#374151" stroke-width="0.5" stroke-dasharray="4 3"/>
+
+          <!-- Normal TEG curve - top half -->
+          <path d="M 50 80 L 80 80 Q 90 80 95 78 L 110 72 Q 130 55 150 35 Q 170 20 190 18 Q 220 16 250 18 Q 280 20 300 30 Q 320 42 330 55 L 340 68 Q 345 76 348 80"
+            fill="none" stroke="#34d399" stroke-width="2"/>
+          <!-- Normal TEG curve - bottom half (mirror) -->
+          <path d="M 50 80 L 80 80 Q 90 80 95 82 L 110 88 Q 130 105 150 125 Q 170 140 190 142 Q 220 144 250 142 Q 280 140 300 130 Q 320 118 330 105 L 340 92 Q 345 84 348 80"
+            fill="none" stroke="#34d399" stroke-width="2"/>
+
+          <!-- Fill between curves -->
+          <path d="M 50 80 L 80 80 Q 90 80 95 78 L 110 72 Q 130 55 150 35 Q 170 20 190 18 Q 220 16 250 18 Q 280 20 300 30 Q 320 42 330 55 L 340 68 Q 345 76 348 80 Q 345 84 340 92 L 330 105 Q 320 118 300 130 Q 280 140 250 142 Q 220 144 190 142 Q 170 140 150 125 Q 130 105 110 88 L 95 82 Q 90 80 80 80 Z"
+            fill="rgba(52,211,153,.08)"/>
+
+          <!-- R time label -->
+          <line x1="50" y1="72" x2="95" y2="72" stroke="#f87171" stroke-width="1" stroke-dasharray="3 2"/>
+          <line x1="50" y1="68" x2="50" y2="85" stroke="#f87171" stroke-width="1"/>
+          <line x1="95" y1="68" x2="95" y2="85" stroke="#f87171" stroke-width="1"/>
+          <text x="65" y="65" font-family="monospace" font-size="7" fill="#f87171">R/CT</text>
+
+          <!-- K time label -->
+          <line x1="95" y1="60" x2="140" y2="60" stroke="#facc15" stroke-width="1" stroke-dasharray="3 2"/>
+          <line x1="140" y1="55" x2="140" y2="90" stroke="#facc15" stroke-width="1"/>
+          <text x="104" y="57" font-family="monospace" font-size="7" fill="#facc15">K/CFT</text>
+
+          <!-- Alpha angle -->
+          <line x1="95" y1="80" x2="155" y2="33" stroke="#60a5fa" stroke-width="1" stroke-dasharray="3 2"/>
+          <text x="96" y="95" font-family="monospace" font-size="7" fill="#60a5fa">α°</text>
+
+          <!-- MA label -->
+          <line x1="30" y1="18" x2="190" y2="18" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3 2"/>
+          <line x1="190" y1="10" x2="190" y2="150" stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="2 3"/>
+          <text x="195" y="22" font-family="monospace" font-size="7" fill="#a78bfa">MA/MCF</text>
+          <!-- MA double arrow -->
+          <line x1="32" y1="80" x2="32" y2="18" stroke="#a78bfa" stroke-width="1"/>
+          <text x="3" y="52" font-family="monospace" font-size="6" fill="#a78bfa">MA</text>
+
+          <!-- LY30 -->
+          <line x1="280" y1="25" x2="340" y2="70" stroke="#f43f5e" stroke-width="1" stroke-dasharray="3 2"/>
+          <text x="292" y="22" font-family="monospace" font-size="7" fill="#f43f5e">LY30</text>
+
+          <!-- X axis label -->
+          <text x="180" y="158" font-family="monospace" font-size="7" fill="#4b5563" text-anchor="middle">TIME (minutes)</text>
+
+          <!-- Parameter summary -->
+          <text x="36" y="148" font-family="monospace" font-size="6" fill="#f87171">R=CT</text>
+          <text x="80" y="148" font-family="monospace" font-size="6" fill="#facc15">K=CFT</text>
+          <text x="122" y="148" font-family="monospace" font-size="6" fill="#60a5fa">α°</text>
+          <text x="148" y="148" font-family="monospace" font-size="6" fill="#a78bfa">MA=MCF</text>
+          <text x="210" y="148" font-family="monospace" font-size="6" fill="#f43f5e">LY30=LI30</text>
+        </svg>
+      </div>
+
+      <!-- Abnormal patterns -->
+      <div class="teg-title" style="color:#f87171;margin-top:4px;">ABNORMAL PATTERNS</div>
+      <div style="background:#0a0a1a;border-radius:8px;padding:12px;margin-bottom:10px;">
+        <svg viewBox="0 0 360 120" style="width:100%;display:block;">
+          <!-- Grid lines -->
+          <line x1="0" y1="60" x2="360" y2="60" stroke="#1f2937" stroke-width="0.5"/>
+
+          <!-- Pattern 1: Prolonged R — factor deficiency -->
+          <g transform="translate(10,0)">
+            <text x="30" y="12" font-family="monospace" font-size="6" fill="#f87171" text-anchor="middle">↑R TIME</text>
+            <text x="30" y="20" font-family="monospace" font-size="5" fill="#6b7280" text-anchor="middle">Factor defic.</text>
+            <path d="M5 60 L35 60 Q38 60 40 58 L48 52 Q54 40 60 35 Q65 31 70 30 Q75 31 80 35 Q86 42 88 52 L90 58 Q92 60 95 60" fill="none" stroke="#f87171" stroke-width="1.5"/>
+            <path d="M5 60 L35 60 Q38 60 40 62 L48 68 Q54 80 60 85 Q65 89 70 90 Q75 89 80 85 Q86 78 88 68 L90 62 Q92 60 95 60" fill="none" stroke="#f87171" stroke-width="1.5"/>
+            <path d="M5 60 L35 60 Q38 60 40 58 L48 52 Q54 40 60 35 Q65 31 70 30 Q75 31 80 35 Q86 42 88 52 L90 58 Q92 60 95 60 Q92 60 90 62 L88 68 Q86 78 80 85 Q75 89 70 90 Q65 89 60 85 Q54 80 48 68 L40 62 Q38 60 35 60 Z" fill="rgba(248,113,113,.06)"/>
+            <text x="30" y="108" font-family="monospace" font-size="5.5" fill="#f87171" text-anchor="middle">→ Give FFP</text>
+          </g>
+
+          <!-- Pattern 2: Small MA — platelet deficiency -->
+          <g transform="translate(95,0)">
+            <text x="35" y="12" font-family="monospace" font-size="6" fill="#60a5fa" text-anchor="middle">↓ MA/MCF</text>
+            <text x="35" y="20" font-family="monospace" font-size="5" fill="#6b7280" text-anchor="middle">Platelet defic.</text>
+            <path d="M5 60 L15 60 Q17 60 18 59 L22 56 Q26 50 30 46 Q34 43 38 42 Q42 43 46 46 Q50 50 54 56 L58 59 Q59 60 61 60 L95 60" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+            <path d="M5 60 L15 60 Q17 60 18 61 L22 64 Q26 70 30 74 Q34 77 38 78 Q42 77 46 74 Q50 70 54 64 L58 61 Q59 60 61 60 L95 60" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+            <path d="M5 60 L15 60 Q17 60 18 59 L22 56 Q26 50 30 46 Q34 43 38 42 Q42 43 46 46 Q50 50 54 56 L58 59 Q59 60 61 60 L95 60 Q59 60 61 60 L58 61 Q54 64 50 70 L46 74 Q42 77 38 78 Q34 77 30 74 Q26 70 22 64 L18 61 Q17 60 15 60 Z" fill="rgba(96,165,250,.06)"/>
+            <text x="35" y="108" font-family="monospace" font-size="5.5" fill="#60a5fa" text-anchor="middle">→ Give Platelets</text>
+          </g>
+
+          <!-- Pattern 3: Hyperfibrinolysis -->
+          <g transform="translate(200,0)">
+            <text x="38" y="12" font-family="monospace" font-size="6" fill="#f43f5e" text-anchor="middle">FIBRINOLYSIS</text>
+            <text x="38" y="20" font-family="monospace" font-size="5" fill="#6b7280" text-anchor="middle">Clot lysis ↑</text>
+            <path d="M5 60 L15 60 Q17 60 18 58 L22 52 Q28 38 34 28 Q38 22 42 20 Q46 22 50 28 Q54 36 58 48 L62 56 Q64 59 66 60" fill="none" stroke="#34d399" stroke-width="1.5"/>
+            <!-- Lysis - clot shrinks back -->
+            <path d="M66 60 Q70 60 75 58 L82 54 Q88 50 92 52 L98 58 Q100 60 105 60" fill="none" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="3 2"/>
+            <path d="M5 60 L15 60 Q17 60 18 62 L22 68 Q28 82 34 92 Q38 98 42 100 Q46 98 50 92 Q54 84 58 72 L62 64 Q64 61 66 60" fill="none" stroke="#34d399" stroke-width="1.5"/>
+            <path d="M66 60 Q70 60 75 62 L82 66 Q88 70 92 68 L98 62 Q100 60 105 60" fill="none" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="3 2"/>
+            <text x="38" y="108" font-family="monospace" font-size="5.5" fill="#f43f5e" text-anchor="middle">→ Give TXA</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- TEG vs ROTEM parameters -->
+      <div class="teg-title" style="color:#60a5fa;margin-top:4px;">TEG vs ROTEM — PARAMETER COMPARISON</div>
+      <div class="teg-params">
+        <div class="teg-param">
+          <div class="teg-param-name">Clot Initiation</div>
+          <div class="teg-param-teg">TEG: R time (3–8 min)</div>
+          <div class="teg-param-rotem">ROTEM: CT (clot time)</div>
+          <div class="teg-param-meaning">Time to first fibrin formation</div>
+          <div class="teg-abnormal">↑ = Factor deficiency → FFP</div>
+        </div>
+        <div class="teg-param">
+          <div class="teg-param-name">Clot Formation</div>
+          <div class="teg-param-teg">TEG: K time (1–4 min)</div>
+          <div class="teg-param-rotem">ROTEM: CFT (clot formation time)</div>
+          <div class="teg-param-meaning">Speed of clot strengthening</div>
+          <div class="teg-abnormal">↑ = Fibrinogen low → Cryoprecipitate</div>
+        </div>
+        <div class="teg-param">
+          <div class="teg-param-name">Clot Rate</div>
+          <div class="teg-param-teg">TEG: Alpha angle (55–78°)</div>
+          <div class="teg-param-rotem">ROTEM: Alpha angle</div>
+          <div class="teg-param-meaning">Rate of fibrin cross-linking</div>
+          <div class="teg-abnormal">↓ = Fibrinogen deficiency → Cryoprecipitate</div>
+        </div>
+        <div class="teg-param">
+          <div class="teg-param-name">Clot Strength</div>
+          <div class="teg-param-teg">TEG: MA (55–73 mm)</div>
+          <div class="teg-param-rotem">ROTEM: MCF (max clot firmness)</div>
+          <div class="teg-param-meaning">Platelet + fibrin contribution</div>
+          <div class="teg-abnormal">↓ = Platelet deficiency → Platelets</div>
+        </div>
+        <div class="teg-param">
+          <div class="teg-param-name">Clot Lysis</div>
+          <div class="teg-param-teg">TEG: LY30 (&lt;8%)</div>
+          <div class="teg-param-rotem">ROTEM: LI30 (&gt;85%)</div>
+          <div class="teg-param-meaning">% clot remaining at 30 min</div>
+          <div class="teg-abnormal">↑ lysis = Hyperfibrinolysis → TXA</div>
+        </div>
+        <div class="teg-param">
+          <div class="teg-param-name">Overall</div>
+          <div class="teg-param-teg">TEG: Uses pin + cup</div>
+          <div class="teg-param-rotem">ROTEM: Uses pin + cuvette</div>
+          <div class="teg-param-meaning">Both = viscoelastic whole blood tests</div>
+          <div class="teg-abnormal">Flat line = no clot → Full MTP</div>
+        </div>
+      </div>
+
+      <!-- ROTEM CHANNELS -->
+      <div class="teg-title" style="color:#f43f5e;margin-top:4px;">ROTEM — THE 4 CHANNELS</div>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px;">
+        <div style="background:#0a0a1a;border:1px solid #f87171;border-radius:7px;padding:10px 13px;">
+          <div style="font-family:monospace;font-size:.65rem;font-weight:900;color:#f87171;letter-spacing:.1em;margin-bottom:4px;">EXTEM — Extrinsic Pathway</div>
+          <div style="font-size:.68rem;color:#9ca3af;line-height:1.6;">
+            <b style="color:#e5e7eb;">Activator:</b> Tissue factor (TF) — triggers extrinsic pathway<br>
+            <b style="color:#e5e7eb;">What it measures:</b> Overall clot formation — factors VII, X, V, II, fibrinogen, platelets<br>
+            <b style="color:#e5e7eb;">Abnormal CT:</b> Factor deficiency (VII, X, V, II) → give FFP<br>
+            <b style="color:#e5e7eb;">Abnormal MCF:</b> Platelet or fibrinogen deficiency → check FIBTEM to differentiate<br>
+            <b style="color:#e5e7eb;">Clinical use:</b> First test to run — gives overall picture
+          </div>
+        </div>
+        <div style="background:#0a0a1a;border:1px solid #60a5fa;border-radius:7px;padding:10px 13px;">
+          <div style="font-family:monospace;font-size:.65rem;font-weight:900;color:#60a5fa;letter-spacing:.1em;margin-bottom:4px;">INTEM — Intrinsic Pathway</div>
+          <div style="font-size:.68rem;color:#9ca3af;line-height:1.6;">
+            <b style="color:#e5e7eb;">Activator:</b> Ellagic acid (contact activator) — triggers intrinsic pathway<br>
+            <b style="color:#e5e7eb;">What it measures:</b> Factors XII, XI, IX, VIII, X, V, II, fibrinogen, platelets<br>
+            <b style="color:#e5e7eb;">Key use:</b> Detects heparin effect — compare INTEM vs HEPTEM<br>
+            <b style="color:#e5e7eb;">Abnormal CT vs normal HEPTEM CT:</b> Confirms heparin is prolonging clotting<br>
+            <b style="color:#e5e7eb;">Clinical use:</b> Monitors heparin anticoagulation in cardiac surgery/ECMO
+          </div>
+        </div>
+        <div style="background:#0a0a1a;border:1px solid #34d399;border-radius:7px;padding:10px 13px;">
+          <div style="font-family:monospace;font-size:.65rem;font-weight:900;color:#34d399;letter-spacing:.1em;margin-bottom:4px;">FIBTEM — Fibrinogen Channel</div>
+          <div style="font-size:.68rem;color:#9ca3af;line-height:1.6;">
+            <b style="color:#e5e7eb;">Activator:</b> TF + cytochalasin D (platelet inhibitor)<br>
+            <b style="color:#e5e7eb;">What it measures:</b> Fibrinogen contribution to clot strength ONLY — platelets blocked<br>
+            <b style="color:#e5e7eb;">Normal MCF:</b> 9–25 mm<br>
+            <b style="color:#e5e7eb;">Abnormal MCF &lt;8mm:</b> Fibrinogen deficiency → give cryoprecipitate or fibrinogen concentrate<br>
+            <b style="color:#e5e7eb;">Key interpretation:</b> Compare EXTEM MCF vs FIBTEM MCF:<br>
+            — ↓EXTEM + normal FIBTEM = platelet problem → give platelets<br>
+            — ↓EXTEM + ↓FIBTEM = fibrinogen problem → give cryoprecipitate<br>
+            <b style="color:#34d399;">FIBTEM is the most clinically useful channel in trauma</b>
+          </div>
+        </div>
+        <div style="background:#0a0a1a;border:1px solid #a78bfa;border-radius:7px;padding:10px 13px;">
+          <div style="font-family:monospace;font-size:.65rem;font-weight:900;color:#a78bfa;letter-spacing:.1em;margin-bottom:4px;">HEPTEM — Heparin Channel</div>
+          <div style="font-size:.68rem;color:#9ca3af;line-height:1.6;">
+            <b style="color:#e5e7eb;">Activator:</b> Ellagic acid + heparinase (neutralises heparin)<br>
+            <b style="color:#e5e7eb;">What it measures:</b> Intrinsic pathway with heparin effect removed<br>
+            <b style="color:#e5e7eb;">Key interpretation:</b> Compare INTEM CT vs HEPTEM CT:<br>
+            — INTEM CT prolonged + HEPTEM CT normal = <b style="color:#a78bfa;">heparin present → give protamine</b><br>
+            — Both prolonged = factor deficiency, not heparin → give FFP<br>
+            <b style="color:#e5e7eb;">Clinical use:</b> Post-cardiac surgery, heparin reversal monitoring, ECMO
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick interpretation guide -->
+      <div class="teg-title" style="color:#facc15;margin-top:4px;">ROTEM INTERPRETATION — QUICK GUIDE</div>
+      <table class="comp-table" style="margin-bottom:12px;">
+        <thead><tr><th>EXTEM</th><th>FIBTEM</th><th>INTEM vs HEPTEM</th><th>Diagnosis</th><th style="color:#34d399;">Give</th></tr></thead>
+        <tbody>
+          <tr><td>↑CT</td><td>Normal</td><td>—</td><td>Factor deficiency</td><td><b style="color:#34d399;">FFP</b></td></tr>
+          <tr><td>↓MCF</td><td>↓MCF</td><td>—</td><td>Fibrinogen deficiency</td><td><b style="color:#34d399;">Cryoprecipitate</b></td></tr>
+          <tr><td>↓MCF</td><td>Normal MCF</td><td>—</td><td>Platelet deficiency</td><td><b style="color:#34d399;">Platelets</b></td></tr>
+          <tr><td>↑CT</td><td>—</td><td>INTEM ↑, HEPTEM normal</td><td>Heparin effect</td><td><b style="color:#34d399;">Protamine</b></td></tr>
+          <tr><td>Lysis ↑</td><td>—</td><td>—</td><td>Hyperfibrinolysis</td><td><b style="color:#34d399;">TXA</b></td></tr>
+          <tr><td>Flat line</td><td>Flat</td><td>—</td><td>No clot forming</td><td><b style="color:#34d399;">Full MTP</b></td></tr>
+        </tbody>
+      </table>
+
+      <!-- TEG vs ROTEM differences -->
+      <div class="teg-title" style="color:#facc15;margin-top:4px;">TEG vs ROTEM — KEY DIFFERENCES</div>
+      <table class="comp-table">
+        <thead><tr><th>Feature</th><th style="color:#34d399;">TEG</th><th style="color:#60a5fa;">ROTEM</th></tr></thead>
+        <tbody>
+          <tr><td>Manufacturer</td><td>Haemonetics</td><td>Instrumentation Labs (Werfen)</td></tr>
+          <tr><td>Motion type</td><td>Cup oscillates, pin fixed</td><td>Pin oscillates, cup fixed</td></tr>
+          <tr><td>Channels</td><td>Kaolin, RapidTEG, heparinase</td><td><b>EXTEM, INTEM, FIBTEM, HEPTEM</b></td></tr>
+          <tr><td>Fibrinogen specific</td><td>Not available</td><td><b style="color:#34d399;">FIBTEM</b> — platelet-inhibited channel</td></tr>
+          <tr><td>Heparin detection</td><td>Heparinase channel</td><td><b style="color:#a78bfa;">HEPTEM</b> vs INTEM comparison</td></tr>
+          <tr><td>Vibration sensitivity</td><td>More sensitive — problematic in OR</td><td>Less sensitive — better bedside</td></tr>
+          <tr><td>Where used</td><td>USA predominantly</td><td>Europe, South Africa, UK</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DIAMOND OF DEATH -->
+  <div class="section">
+    <p class="section-title">💀 Diamond of Death</p>
+    <div class="diamond-box">
+      <div class="diamond-title">MUTUALLY REINFORCING — EACH WORSENS THE OTHERS</div>
+      <div class="diamond-grid">
+        <div class="diamond-item" style="border-color:#60a5fa;background:rgba(96,165,250,.05);">
+          <div class="di-title" style="color:#60a5fa;">🥶 Hypothermia</div>
+          <div class="di-body">&lt;34°C impairs enzyme kinetics. Worsens acidosis. Target &gt;36°C actively.</div>
+        </div>
+        <div class="diamond-item" style="border-color:#f87171;background:rgba(248,113,113,.05);">
+          <div class="di-title" style="color:#f87171;">🧪 Acidosis</div>
+          <div class="di-body">pH &lt;7.1 = 70-80% ↓ factor activity. ↓ platelet function. BD &gt;6 = marker.</div>
+        </div>
+        <div class="diamond-item" style="border-color:#facc15;background:rgba(250,204,21,.05);">
+          <div class="di-title" style="color:#facc15;">🔬 Coagulopathy</div>
+          <div class="di-body">ATC + dilution + hypothermia. More bleeding → more shock → more lethal triad.</div>
+        </div>
+        <div class="diamond-item" style="border-color:#34d399;background:rgba(52,211,153,.05);">
+          <div class="di-title" style="color:#34d399;">🦴 Hypocalcaemia</div>
+          <div class="di-body">Citrate chelates Ca²⁺. ↓ contractility + ↓ coagulation. CaCl₂ with every 4 units pRBC.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ATC vs RAC vs DIC -->
+  <div class="section">
+    <p class="section-title">📊 ATC vs RAC vs DIC</p>
+    <div style="overflow-x:auto;">
+      <table class="comp-table">
+        <thead>
+          <tr><th>Feature</th><th style="color:#f87171;">ATC</th><th style="color:#60a5fa;">RAC</th><th style="color:#facc15;">DIC</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Timing</td><td>&lt;30 min, pre-resus</td><td>During resus</td><td>Hours–days</td></tr>
+          <tr><td>Cause</td><td>Injury + hypoperfusion</td><td>Crystalloid excess</td><td>Consumption</td></tr>
+          <tr><td>Platelets</td><td>Normal</td><td>↓ Diluted</td><td>↓↓ Consumed</td></tr>
+          <tr><td>Fibrinogen</td><td>Normal</td><td>↓ Diluted</td><td>↓↓ Consumed</td></tr>
+          <tr><td>Fibrinolysis</td><td>↑↑ Hyper</td><td>Variable</td><td>↑ Secondary</td></tr>
+          <tr><td>Microthrombi</td><td>Absent</td><td>Absent</td><td><b>Present</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TXA -->
+  <div class="section">
+    <p class="section-title">💊 Tranexamic Acid — CRASH-2</p>
+    <div class="card" style="border-color:#34d399;">
+      <div class="card-body">
+        <b>Mechanism:</b> Inhibits plasminogen activation → antifibrinolytic → protects forming clot from premature lysis<br><br>
+        <b>Dose:</b> 1g IV over 10 min → 1g IV over 8 hours<br><br>
+        <b>Window:</b> <span class="red">≤3 hours from injury.</span> After 3h: fibrinolytic phase over — TXA may promote pathological microthrombi → ↑ mortality (CRASH-2).<br><br>
+        <b>CRASH-2:</b> 20,211 patients — TXA ≤3h reduced all-cause mortality (RR 0.91). Benefit greatest ≤1h (RR 0.68).<br><br>
+        <span class="teal">Give TXA to ALL significant haemorrhage. Do not wait for coagulation results.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMINER PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: What does FIBTEM on ROTEM tell you that TEG cannot?</div>
+      <div class="pearl-a">FIBTEM uses cytochalasin D to block platelet contribution — the resulting MCF reflects <b>fibrinogen contribution alone</b> to clot strength. This allows you to specifically diagnose fibrinogen deficiency vs platelet deficiency. TEG cannot separate these. FIBTEM MCF &lt;8mm = give cryoprecipitate.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why does the cascade model fail to explain haemophilia A bleeding?</div>
+      <div class="pearl-a">Haemophilia A = Factor VIII deficiency. In the cascade model, the extrinsic pathway (TF + VII) bypasses Factor VIII and should generate enough thrombin via the common pathway. Yet haemophiliacs bleed profusely. The cell-based model explains this: without Factor VIII, the amplification phase on the platelet surface fails → insufficient thrombin burst → inadequate stable clot.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: ROTEM shows ↓EXTEM MCF but normal FIBTEM MCF — what does this mean?</div>
+      <div class="pearl-a">EXTEM measures overall clot strength (platelet + fibrinogen). FIBTEM measures fibrinogen only. Normal FIBTEM = fibrinogen is fine. ↓EXTEM MCF with normal FIBTEM = <b>platelet deficiency</b> is responsible for the weak clot. Treatment: give platelets.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: How does acidosis impair coagulation at the molecular level?</div>
+      <div class="pearl-a">Coagulation enzymes are serine proteases — their active sites are pH-dependent. At pH 7.4: normal. pH 7.2: 50% reduction in factor activity. pH 7.0: 70–80% reduction. Acidosis also impairs fibrin polymerisation and platelet aggregation. This is why pouring more FFP into an acidic patient without correcting the acidosis is futile.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    CRASH-2 (LANCET 2010) · MATTERS TRIAL · ATLS 10TH ED<br>
+    HOFFMAN & MONROE CELL-BASED MODEL (2001) · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>
