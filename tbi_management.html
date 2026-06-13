@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TBI Management | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060612;color:#fff;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.back-btn{display:inline-block;margin-bottom:16px;font-size:.6rem;color:#4b5563;text-decoration:none;letter-spacing:.1em;border:1px solid #1f2937;padding:5px 12px;}
+.back-btn:hover{color:#818cf8;border-color:#818cf8;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #1f2937;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.2rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#818cf8;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#4b5563;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#4b5563;margin-bottom:10px;padding-left:4px;}
+.card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-title{font-size:.8rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.card-body{font-size:.75rem;color:#9ca3af;line-height:1.7;}
+.card-body b{color:#e5e7eb;}
+.red{color:#f87171;}
+.green{color:#4ade80;}
+.amber{color:#facc15;}
+.blue{color:#60a5fa;}
+.purple{color:#a78bfa;}
+
+/* Monroe Kellie visual */
+.mk-box{background:#070712;border:1px solid #1f2937;border-radius:8px;padding:14px;margin-bottom:12px;text-align:center;}
+.mk-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#a78bfa;margin-bottom:10px;}
+.mk-equation{font-size:1rem;font-weight:900;color:#e5e7eb;letter-spacing:.05em;margin-bottom:8px;}
+.mk-sub{font-size:.68rem;color:#9ca3af;line-height:1.6;}
+
+/* CPP formula */
+.formula-box{background:#070712;border:2px solid #818cf8;border-radius:8px;padding:14px;text-align:center;margin-bottom:12px;}
+.formula{font-size:1.1rem;font-weight:900;color:#818cf8;letter-spacing:.08em;margin-bottom:6px;}
+.formula-sub{font-size:.68rem;color:#9ca3af;}
+
+/* ICP tiers */
+.tier{border-radius:8px;padding:13px 15px;margin-bottom:8px;border:1px solid;}
+.tier-num{font-size:.55rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;margin-bottom:5px;}
+.tier-title{font-size:.75rem;font-weight:900;letter-spacing:.05em;margin-bottom:6px;}
+.tier-body{font-size:.7rem;color:#9ca3af;line-height:1.6;}
+.tier-body b{color:#e5e7eb;}
+
+/* Secondary insults table */
+.insult-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.insult-item{background:#070712;border:1px solid #1f2937;border-radius:6px;padding:10px 12px;}
+.insult-label{font-size:.55rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.insult-target{font-size:.72rem;color:#e5e7eb;}
+.insult-why{font-size:.62rem;color:#6b7280;margin-top:3px;line-height:1.4;}
+
+/* Flow */
+.flow{display:flex;flex-direction:column;gap:0;}
+.flow-step{background:#0a0a1a;border:1px solid #1f2937;border-radius:8px;padding:12px 15px;font-size:.73rem;color:#9ca3af;line-height:1.6;}
+.flow-step b{color:#e5e7eb;}
+.flow-step .step-label{font-size:.52rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px;}
+.flow-arrow{text-align:center;color:#374151;font-size:1.1rem;padding:2px 0;}
+
+/* Pearl */
+.pearl{background:#0a0a1a;border-left:3px solid #818cf8;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#818cf8;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#9ca3af;line-height:1.6;}
+.pearl-a b{color:#e5e7eb;}
+
+/* Trigger list */
+.trigger-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:#070712;border:1px solid #1f2937;border-radius:6px;font-size:.71rem;color:#9ca3af;margin-bottom:6px;}
+.trigger-item b{color:#e5e7eb;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #0f172a;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-btn" href="index.html">← BACK TO ALGORITHMS</a>
+
+  <div class="header">
+    <div class="icon">🧠</div>
+    <h1>TBI Management</h1>
+    <div class="sub">BTF 4th Ed · SIBICC Protocol · Core Concepts Critical Care 2026</div>
+  </div>
+
+  <!-- MONROE KELLIE -->
+  <div class="section">
+    <p class="section-title">⚖️ Monroe-Kellie Doctrine</p>
+    <div class="mk-box">
+      <div class="mk-title">CRANIUM = RIGID, FIXED VOLUME</div>
+      <div class="mk-equation">V<sub>brain</sub> + V<sub>CSF</sub> + V<sub>blood</sub> = CONSTANT</div>
+      <div class="mk-sub">
+        Any ↑ in one compartment must be compensated by ↓ in another.<br><br>
+        <b>Stage 1 — Compensation:</b> CSF displaced to spinal canal · Venous blood squeezed out → ICP maintained<br><br>
+        <b>Stage 2 — Decompensation:</b> Compensatory reserve exhausted → sharp exponential ↑ ICP → ↓ CPP → ischaemia → cytotoxic oedema → more ICP rise → herniation
+      </div>
+    </div>
+    <div class="formula-box">
+      <div class="formula">CPP = MAP − ICP</div>
+      <div class="formula-sub">Target CPP: <b style="color:#4ade80">60–70 mmHg</b> (BTF 4th Ed)<br>
+      &gt;70 mmHg → risk of ARDS from aggressive fluid/pressor use<br>
+      &lt;50 mmHg → cerebral ischaemia</div>
+    </div>
+  </div>
+
+  <!-- SECONDARY INSULTS -->
+  <div class="section">
+    <p class="section-title">⚠️ Secondary Brain Insults — Prevent These</p>
+    <div class="insult-grid">
+      <div class="insult-item" style="border-color:#f87171;">
+        <div class="insult-label" style="color:#f87171;">HYPOTENSION</div>
+        <div class="insult-target">SBP &gt;90 mmHg<br>MAP ≥80 mmHg</div>
+        <div class="insult-why">Single episode SBP &lt;90 mmHg doubles mortality. Most modifiable killer.</div>
+      </div>
+      <div class="insult-item" style="border-color:#f87171;">
+        <div class="insult-label" style="color:#f87171;">HYPOXIA</div>
+        <div class="insult-target">SpO₂ ≥94%<br>PaO₂ &gt;60 mmHg</div>
+        <div class="insult-why">Hypoxia + hypotension together = catastrophic secondary injury.</div>
+      </div>
+      <div class="insult-item" style="border-color:#facc15;">
+        <div class="insult-label" style="color:#facc15;">HYPERCAPNIA</div>
+        <div class="insult-target">PaCO₂ 35–40 mmHg</div>
+        <div class="insult-why">↑CO₂ → cerebral vasodilation → ↑CBF → ↑ICP.</div>
+      </div>
+      <div class="insult-item" style="border-color:#facc15;">
+        <div class="insult-label" style="color:#facc15;">HYPOCAPNIA</div>
+        <div class="insult-target">PaCO₂ &gt;30 mmHg</div>
+        <div class="insult-why">↓CO₂ → vasoconstriction → ↓CBF → ischaemia. Prophylactic hyperventilation HARMFUL.</div>
+      </div>
+      <div class="insult-item" style="border-color:#60a5fa;">
+        <div class="insult-label" style="color:#60a5fa;">HYPERTHERMIA</div>
+        <div class="insult-target">Temp &lt;38°C</div>
+        <div class="insult-why">↑ metabolic rate → ↑ O₂ demand → worsens ischaemia. Actively cool.</div>
+      </div>
+      <div class="insult-item" style="border-color:#60a5fa;">
+        <div class="insult-label" style="color:#60a5fa;">HYPO/HYPERGLYCAEMIA</div>
+        <div class="insult-target">Glucose 6–10 mmol/L</div>
+        <div class="insult-why">Hypoglycaemia = direct secondary insult. Tight control (4–6) causes dangerous episodes.</div>
+      </div>
+      <div class="insult-item" style="border-color:#a78bfa;">
+        <div class="insult-label" style="color:#a78bfa;">HYPONATRAEMIA</div>
+        <div class="insult-target">Na⁺ 140–155 mmol/L</div>
+        <div class="insult-why">Hyponatraemia → cerebral oedema → ↑ICP. Target mild hypernatraemia.</div>
+      </div>
+      <div class="insult-item" style="border-color:#a78bfa;">
+        <div class="insult-label" style="color:#a78bfa;">ANAEMIA</div>
+        <div class="insult-target">Hb &gt;7–8 g/dL<br>(some guidelines &gt;10 in TBI)</div>
+        <div class="insult-why">↓ O₂ carrying capacity → ↓ cerebral O₂ delivery → secondary ischaemia.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INITIAL MANAGEMENT -->
+  <div class="section">
+    <p class="section-title">🚨 Initial Management — ABCDE</p>
+    <div class="flow">
+      <div class="flow-step" style="border-color:#f87171;">
+        <div class="step-label" style="color:#f87171;">A — AIRWAY</div>
+        <b>GCS ≤8 = intubate.</b> C-spine protection (MILS). RSI: ketamine 1–2 mg/kg (does NOT raise ICP when ventilated — safe, haemodynamically favourable) + rocuronium 1.2 mg/kg. CMAC / video laryngoscopy. Confirm with EtCO₂.
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="border-color:#facc15;">
+        <div class="step-label" style="color:#facc15;">B — BREATHING</div>
+        <b>Target PaCO₂ 35–40 mmHg.</b> SpO₂ ≥94%. Avoid hypocapnia (vasoconstriction → ischaemia). Brief hyperventilation (PaCO₂ 30–35) only for acute herniation as bridge to surgery — NOT prophylactic.
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="border-color:#60a5fa;">
+        <div class="step-label" style="color:#60a5fa;">C — CIRCULATION</div>
+        <b>MAP ≥80 mmHg in TBI + haemorrhage.</b> Avoid hypotension. Isotonic/hypertonic fluids — NOT hypotonic (0.45% NaCl worsens cerebral oedema). Vasopressors if volume insufficient: noradrenaline first line. NO permissive hypotension.
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="border-color:#a78bfa;">
+        <div class="step-label" style="color:#a78bfa;">D — DISABILITY</div>
+        <b>GCS, pupils, lateralising signs.</b> Unilateral dilated sluggish pupil = CN III compression = uncal herniation. Bilateral fixed = late sign. Glucose check — treat hypoglycaemia immediately. CT head after airway secured.
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="border-color:#4ade80;">
+        <div class="step-label" style="color:#4ade80;">E + POSITIONING</div>
+        <b>Head up 30°, midline</b> — optimises venous drainage. Avoid tight ETT ties (obstruct JVD). Log roll. Avoid hyperthermia. Keep Na⁺ 140–155.
+      </div>
+    </div>
+  </div>
+
+  <!-- ICP MONITORING -->
+  <div class="section">
+    <p class="section-title">📊 ICP Monitoring — Indications (BTF 4th Ed)</p>
+    <div class="card">
+      <div class="card-body">
+        <b>Indicated (Level II):</b> GCS ≤8 + abnormal CT (haematoma, contusion, swelling, compressed basal cisterns, midline shift)<br><br>
+        <b>Indicated (Level III):</b> GCS ≤8 + normal CT if 2 or more of: age &gt;40 · motor posturing · SBP &lt;90 mmHg<br><br>
+        <b>Consider also:</b> GCS &gt;8 with large/multiple contusions at high risk of progression · Pre-op for extracranial surgery where exam limited<br><br>
+        <b>Gold standard device:</b> External Ventricular Drain (EVD) — measures ICP AND drains CSF therapeutically<br><br>
+        <b>Treat ICP at:</b> <span class="red">&gt;20–22 mmHg</span> sustained &gt;5 minutes
+      </div>
+    </div>
+  </div>
+
+  <!-- ICP TREATMENT TIERS -->
+  <div class="section">
+    <p class="section-title">📈 ICP Management — Tiered Approach (SIBICC)</p>
+
+    <div class="tier" style="border-color:#4ade80;background:rgba(74,222,128,.04);">
+      <div class="tier-num" style="color:#4ade80;">TIER ZERO — UNIVERSAL</div>
+      <div class="tier-title" style="color:#4ade80;">Basic ICU Care</div>
+      <div class="tier-body">
+        Head 30° elevated, midline · Adequate sedation + analgesia · Normothermia · Normoglycaemia · Normonatraemia (Na 140–155) · Avoid hypoxia · Maintain CPP 60–70 mmHg · Haemoglobin &gt;7 g/dL · Seizure prophylaxis (levetiracetam — NOT valproate) · ETT ties not obstructing JVD · Nutrition within 72h
+      </div>
+    </div>
+
+    <div class="tier" style="border-color:#facc15;background:rgba(250,204,21,.04);">
+      <div class="tier-num" style="color:#facc15;">TIER ONE</div>
+      <div class="tier-title" style="color:#facc15;">First Line ICP Lowering</div>
+      <div class="tier-body">
+        <b>CSF drainage via EVD</b> (if in situ)<br>
+        <b>Mannitol</b> 0.25–1 g/kg IV bolus — osmotic diuretic, reduces cerebral oedema. Monitor serum osmolality &lt;320 mOsm/L<br>
+        <b>Hypertonic saline</b> 3% or 23.4% — raises Na⁺, draws water from brain. Preferred in hypotensive TBI (no diuretic effect)<br>
+        ↑ sedation · ↓ metabolic demand · PaCO₂ low-normal end (35 mmHg)
+      </div>
+    </div>
+
+    <div class="tier" style="border-color:#fb923c;background:rgba(251,146,60,.04);">
+      <div class="tier-num" style="color:#fb923c;">TIER TWO</div>
+      <div class="tier-title" style="color:#fb923c;">Second Line</div>
+      <div class="tier-body">
+        <b>Mild hyperventilation</b> PaCO₂ 32–35 mmHg (not &lt;30)<br>
+        <b>Neuromuscular paralysis</b> (if adequate sedation not reducing ICP)<br>
+        <b>MAP Challenge</b> — assess cerebrovascular autoregulation. If intact: ↑MAP → ↓ICP. If disrupted: ↑MAP → ↑ICP<br>
+        Adjust CPP target based on autoregulation status
+      </div>
+    </div>
+
+    <div class="tier" style="border-color:#f87171;background:rgba(248,113,113,.04);">
+      <div class="tier-num" style="color:#f87171;">TIER THREE — REFRACTORY</div>
+      <div class="tier-title" style="color:#f87171;">Last Resort</div>
+      <div class="tier-body">
+        <b>Barbiturate coma</b> — pentobarbital or thiopentone. Titrate to ICP control. Avoid if haemodynamically unstable. Monitor EEG for burst suppression.<br>
+        <b>Decompressive craniectomy</b> — DECRA trial: reduces ICP but may worsen functional outcome. RESCUE-ICP: reduces mortality but ↑ vegetative survival.<br>
+        <b>Mild hypothermia</b> 35–36°C — EUROTHERM trial: 33°C caused HARM. If used: 35–36°C only, for refractory ICP.
+      </div>
+    </div>
+  </div>
+
+  <!-- HYPERVENTILATION -->
+  <div class="section">
+    <p class="section-title">💨 Hyperventilation — The Trap</p>
+    <div class="card" style="border-color:#f87171;">
+      <div class="card-title" style="color:#f87171;">⚠️ DO NOT HYPERVENTILATE PROPHYLACTICALLY</div>
+      <div class="card-body">
+        ↓PaCO₂ → cerebral vasoconstriction → ↓ICP ✓ but also → <span class="red">↓CBF → cerebral ischaemia</span> ✗<br><br>
+        <b>Especially dangerous in first 24–48 hours</b> — CBF already critically low after TBI.<br><br>
+        <b>Only acceptable use:</b> Acute herniation (blown pupil, Cushing's triad) as a <span class="amber">bridge to definitive surgery</span> — brief, targeted, then stop.<br><br>
+        <b>Target during acute herniation:</b> PaCO₂ 30–35 mmHg — NOT below 30 mmHg.
+      </div>
+    </div>
+  </div>
+
+  <!-- KETAMINE IN TBI -->
+  <div class="section">
+    <p class="section-title">💉 Ketamine in TBI — Myth vs Evidence</p>
+    <div class="card" style="border-color:#4ade80;">
+      <div class="card-body">
+        <b>Old teaching:</b> <span class="red">Ketamine contraindicated in TBI</span> — feared to raise ICP via sympathomimetic stimulation.<br><br>
+        <b>Current evidence:</b> <span class="green">Ketamine does NOT raise ICP when the patient is ventilated.</span> Multiple studies + meta-analyses support safety.<br><br>
+        <b>Advantages in TBI + haemodynamic instability:</b><br>
+        · Maintains BP — preserves CPP<br>
+        · Bronchodilatory — useful if bronchospasm<br>
+        · Analgesic + amnestic<br><br>
+        <b>Conclusion:</b> Ketamine is a reasonable RSI induction agent in TBI, especially when haemodynamically compromised. Be ready to defend this in the viva.
+      </div>
+    </div>
+  </div>
+
+  <!-- STEROIDS -->
+  <div class="section">
+    <p class="section-title">🚫 Steroids in TBI</p>
+    <div class="card" style="border-color:#f87171;">
+      <div class="card-body">
+        <b>CRASH trial (2004):</b> Methylprednisolone in severe TBI → <span class="red">increased mortality</span> at 2 weeks (RR 1.18).<br><br>
+        <span class="red">Corticosteroids are CONTRAINDICATED in TBI.</span> Do not give dexamethasone or methylprednisolone for ICP management.
+      </div>
+    </div>
+  </div>
+
+  <!-- TBI + HAEMORRHAGE -->
+  <div class="section">
+    <p class="section-title">⚡ TBI + Haemorrhagic Shock — The Hardest Scenario</p>
+    <div class="card" style="border-color:#a78bfa;">
+      <div class="card-body">
+        Two competing demands:<br><br>
+        · <span class="purple">TBI needs MAP ≥80 mmHg</span> (CPP preservation)<br>
+        · <span class="amber">Haemorrhage traditionally = permissive hypotension</span><br><br>
+        <b>Resolution:</b><br>
+        1. Permissive hypotension has <span class="red">NO role</span> when TBI is present<br>
+        2. Target MAP ≥80 mmHg — accept the higher resuscitation target<br>
+        3. Achieve <span class="green">haemorrhage control as fast as possible</span> — damage control surgery<br>
+        4. Do not delay haemorrhage control for ICP management<br>
+        5. Once bleeding controlled — optimise CPP aggressively
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMINER PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: What is Cushing's Triad and what does it mean?</div>
+      <div class="pearl-a"><b>Hypertension + Bradycardia + Irregular respiration</b> = Cushing's Triad. Indicates critically raised ICP with brainstem compression — hypertension is a reflex to maintain CPP. Late and ominous sign. Treat as acute herniation: hyperventilate briefly, mannitol/HTS, urgent surgery.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: DECRA vs RESCUE-ICP — what did they show?</div>
+      <div class="pearl-a">DECRA (2011): Early decompressive craniectomy reduced ICP but worsened unfavourable outcomes. RESCUE-ICP (2016): Late craniectomy reduced mortality but increased vegetative survival. Both show craniectomy is a last resort — it saves lives but at a neurological cost.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why avoid hypotonic fluids in TBI?</div>
+      <div class="pearl-a">Hypotonic fluids (0.45% NaCl, 5% dextrose) lower serum osmolality → free water moves into brain cells → cerebral oedema → ↑ICP. Use isotonic (0.9% NaCl, Hartmann's) or hypertonic saline. Never hypotonic.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Mannitol vs hypertonic saline — which when?</div>
+      <div class="pearl-a"><b>Mannitol:</b> Works via osmotic diuresis — reduces ICP. Risk: causes diuresis → hypovolaemia → ↓BP → ↓CPP. Avoid if haemodynamically unstable.<br><b>Hypertonic saline:</b> Raises osmolality WITHOUT diuresis — preserves intravascular volume. Preferred in haemodynamically unstable TBI.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What is the FOUR score?</div>
+      <div class="pearl-a">Full Outline of UnResponsiveness — alternative to GCS in intubated patients (GCS verbal component unusable). Assesses: Eye response (0–4) + Motor response (0–4) + Brainstem reflexes (0–4) + Breathing (0–4). Max 16. Better predicts outcome in ventilated patients.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    BTF GUIDELINES 4TH ED · SIBICC PROTOCOL · CRASH TRIAL<br>
+    DECRA TRIAL · RESCUE-ICP TRIAL · CORE CONCEPTS CRITICAL CARE 2026<br>
+    ESSENTIALS OF TRAUMA ANAESTHESIA AND ICU
+  </div>
+
+</div>
+</body>
+</html>
