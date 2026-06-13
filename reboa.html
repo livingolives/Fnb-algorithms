@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REBOA | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060612;color:#fff;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.back-btn{display:inline-block;margin-bottom:16px;font-size:.6rem;color:#4b5563;text-decoration:none;letter-spacing:.1em;border:1px solid #1f2937;padding:5px 12px;}
+.back-btn:hover{color:#f43f5e;border-color:#f43f5e;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #1f2937;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.2rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#f43f5e;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#4b5563;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#4b5563;margin-bottom:10px;padding-left:4px;}
+.card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-title{font-size:.8rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.card-body{font-size:.75rem;color:#9ca3af;line-height:1.7;}
+.card-body b{color:#e5e7eb;}
+.red{color:#f87171;} .green{color:#4ade80;} .amber{color:#facc15;} .blue{color:#60a5fa;} .pink{color:#f43f5e;}
+
+/* Aorta zones visual */
+.aorta-vis{background:#070712;border:1px solid #1f2937;border-radius:10px;padding:16px;margin-bottom:12px;}
+.aorta-title{font-size:.65rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#f43f5e;margin-bottom:14px;text-align:center;}
+.zone-block{display:flex;gap:12px;align-items:stretch;margin-bottom:8px;}
+.zone-badge{min-width:60px;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.65rem;font-weight:900;letter-spacing:.08em;padding:8px 4px;text-align:center;}
+.zone-detail{flex:1;background:#0a0a1a;border-radius:6px;padding:10px 12px;}
+.zone-name{font-size:.7rem;font-weight:900;color:#e5e7eb;margin-bottom:3px;}
+.zone-anatomy{font-size:.62rem;color:#9ca3af;margin-bottom:5px;}
+.zone-indication{font-size:.65rem;line-height:1.5;}
+.zone-time{font-size:.58rem;font-weight:900;letter-spacing:.1em;margin-top:5px;padding:2px 7px;border-radius:3px;display:inline-block;}
+
+/* Decision ladder */
+.ladder{display:flex;flex-direction:column;gap:0;}
+.ladder-step{padding:12px 15px;font-size:.73rem;color:#9ca3af;line-height:1.6;border-radius:8px;border:1px solid;}
+.ladder-step b{color:#e5e7eb;}
+.ladder-step .step-label{font-size:.52rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px;}
+.ladder-arrow{text-align:center;color:#374151;font-size:1.1rem;padding:2px 0;}
+
+/* Comparison */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.compare-card{background:#070712;border:1px solid #1f2937;border-radius:8px;padding:12px;}
+.compare-title{font-size:.65rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.compare-item{font-size:.68rem;color:#9ca3af;padding:4px 0;border-bottom:1px solid #0f172a;line-height:1.4;}
+.compare-item:last-child{border-bottom:none;}
+.compare-item b{color:#e5e7eb;}
+
+/* Pearl */
+.pearl{background:#0a0a1a;border-left:3px solid #f43f5e;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#f43f5e;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#9ca3af;line-height:1.6;}
+.pearl-a b{color:#e5e7eb;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #0f172a;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-btn" href="index.html">← BACK TO ALGORITHMS</a>
+
+  <div class="header">
+    <div class="icon">🫀</div>
+    <h1>REBOA</h1>
+    <div class="sub">Resuscitative Endovascular Balloon Occlusion of the Aorta</div>
+  </div>
+
+  <!-- DEFINITION -->
+  <div class="section">
+    <p class="section-title">📖 Definition</p>
+    <div class="card">
+      <div class="card-body">
+        <b>REBOA</b> = Resuscitative Endovascular Balloon Occlusion of the Aorta.<br><br>
+        A balloon catheter inserted via the common femoral artery, advanced into the aorta, and inflated to <b>partially or completely occlude aortic flow</b> — increasing proximal perfusion pressure (heart + brain) while reducing haemorrhage distal to the balloon.<br><br>
+        <b>Purpose:</b> Bridge to definitive haemorrhage control in OR/IR. Not a definitive treatment.
+      </div>
+    </div>
+  </div>
+
+  <!-- ZONES -->
+  <div class="section">
+    <p class="section-title">🗺️ Aortic Zones</p>
+    <div class="aorta-vis">
+      <div class="aorta-title">REBOA ZONE ANATOMY + INDICATIONS</div>
+
+      <div class="zone-block">
+        <div class="zone-badge" style="background:rgba(248,113,113,.12);border:1px solid #f87171;color:#f87171;">ZONE<br>I</div>
+        <div class="zone-detail">
+          <div class="zone-name">Descending Thoracic Aorta</div>
+          <div class="zone-anatomy">Left subclavian artery → Coeliac axis (T4–T12)</div>
+          <div class="zone-indication" style="color:#f87171;">Non-compressible thoracic + upper abdominal haemorrhage. Liver, spleen, aortic injury. Haemodynamically unstable — bridge to OR.</div>
+          <span class="zone-time" style="background:rgba(248,113,113,.12);color:#f87171;border:1px solid #f87171;">MAX 30–60 MIN — ischaemia risk</span>
+        </div>
+      </div>
+
+      <div class="zone-block">
+        <div class="zone-badge" style="background:rgba(100,100,100,.1);border:1px solid #374151;color:#4b5563;">ZONE<br>II</div>
+        <div class="zone-detail">
+          <div class="zone-name">Visceral Aorta</div>
+          <div class="zone-anatomy">Coeliac axis → Lowest renal artery (L1–L2)</div>
+          <div class="zone-indication" style="color:#6b7280;"><b style="color:#f87171;">NOT USED.</b> Contains visceral vessels (SMA, renal arteries) — balloon inflation causes immediate mesenteric + renal ischaemia. High AKI and bowel infarction risk.</div>
+          <span class="zone-time" style="background:rgba(248,113,113,.08);color:#4b5563;border:1px solid #374151;">CONTRAINDICATED</span>
+        </div>
+      </div>
+
+      <div class="zone-block">
+        <div class="zone-badge" style="background:rgba(250,204,21,.1);border:1px solid #facc15;color:#facc15;">ZONE<br>III</div>
+        <div class="zone-detail">
+          <div class="zone-name">Infrarenal Aorta</div>
+          <div class="zone-anatomy">Lowest renal artery → Aortic bifurcation (L2–L4)</div>
+          <div class="zone-indication" style="color:#facc15;">Pelvic fracture haemorrhage. Junctional haemorrhage (groin). Non-compressible pelvic bleeding not controlled by pelvic binder.</div>
+          <span class="zone-time" style="background:rgba(250,204,21,.1);color:#facc15;border:1px solid #facc15;">MAX 60–90 MIN — lower ischaemia risk</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DECISION FRAMEWORK -->
+  <div class="section">
+    <p class="section-title">⚡ REBOA vs EDT — Decision Framework</p>
+    <div class="ladder">
+      <div class="ladder-step" style="border-color:#4ade80;background:rgba(74,222,128,.04);">
+        <div class="step-label" style="color:#4ade80;">STABLE</div>
+        <b>Haemodynamically stable</b> — BP responds and maintains with resuscitation.<br>
+        → CT scan → angioembolisation or elective OR. REBOA not indicated.
+      </div>
+      <div class="ladder-arrow">↓</div>
+      <div class="ladder-step" style="border-color:#facc15;background:rgba(250,204,21,.04);">
+        <div class="step-label" style="color:#facc15;">UNSTABLE — REBOA ZONE</div>
+        <b>Haemodynamically unstable</b> — BP not maintaining despite resuscitation. Still has pulse. Transient responder or non-responder.<br>
+        → <b>REBOA</b> — inflate balloon to restore proximal pressure → buy time → immediate OR for haemorrhage control.
+      </div>
+      <div class="ladder-arrow">↓</div>
+      <div class="ladder-step" style="border-color:#f87171;background:rgba(248,113,113,.04);">
+        <div class="step-label" style="color:#f87171;">IN EXTREMIS — EDT ZONE</div>
+        <b>Cardiac arrest or perimortem</b> — no pulse, CPR in progress.<br>
+        Penetrating: witnessed arrest &lt;15 mins · Blunt: CPR &lt;5 mins<br>
+        → <b>Emergency Department Thoracotomy (EDT)</b> — open chest, cross-clamp aorta, internal cardiac massage, relieve tamponade.
+      </div>
+    </div>
+
+    <div class="card" style="border-color:#facc15;margin-top:12px;">
+      <div class="card-body">
+        <b class="amber">Key distinction:</b> REBOA needs a pulse. EDT is when REBOA is too late — patient is arresting.<br><br>
+        REBOA sits between unstable and arrest. EDT is last resort when all else has failed.
+      </div>
+    </div>
+  </div>
+
+  <!-- REBOA vs EDT COMPARISON -->
+  <div class="section">
+    <p class="section-title">⚖️ REBOA vs EDT — Head to Head</p>
+    <div class="compare-grid">
+      <div class="compare-card" style="border-color:#f43f5e;">
+        <div class="compare-title" style="color:#f43f5e;">REBOA</div>
+        <div class="compare-item"><b>Access:</b> Femoral artery — percutaneous</div>
+        <div class="compare-item"><b>Setting:</b> ED, IR, even pre-hospital</div>
+        <div class="compare-item"><b>Patient:</b> Pulse present, unstable</div>
+        <div class="compare-item"><b>Skill:</b> Endovascular — lower threshold</div>
+        <div class="compare-item"><b>Complications:</b> Limb ischaemia, AKI, reperfusion injury</div>
+        <div class="compare-item"><b>Time:</b> Zone I ≤60 min, Zone III ≤90 min</div>
+      </div>
+      <div class="compare-card" style="border-color:#818cf8;">
+        <div class="compare-title" style="color:#818cf8;">EDT</div>
+        <div class="compare-item"><b>Access:</b> Left anterolateral thoracotomy</div>
+        <div class="compare-item"><b>Setting:</b> ED / OR only</div>
+        <div class="compare-item"><b>Patient:</b> Arrest / perimortem</div>
+        <div class="compare-item"><b>Skill:</b> Open surgery — higher threshold</div>
+        <div class="compare-item"><b>Complications:</b> Major — thoracic, cardiac injury</div>
+        <div class="compare-item"><b>Survival:</b> Penetrating 15–30% · Blunt &lt;5%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INDICATIONS + CONTRAINDICATIONS -->
+  <div class="section">
+    <p class="section-title">✓ / ✗ Indications & Contraindications</p>
+    <div class="card" style="border-color:#4ade80;">
+      <div class="card-title" style="color:#4ade80;">INDICATIONS</div>
+      <div class="card-body">
+        · Non-compressible torso haemorrhage (NCTH) — chest, abdomen, pelvis<br>
+        · Haemodynamically unstable (SBP &lt;90 despite resuscitation)<br>
+        · Pelvic fracture with haemodynamic instability — Zone III<br>
+        · Bridge to OR when surgical team not immediately available<br>
+        · Junctional haemorrhage not amenable to tourniquet — Zone III
+      </div>
+    </div>
+    <div class="card" style="border-color:#f87171;">
+      <div class="card-title" style="color:#f87171;">CONTRAINDICATIONS / CAUTION</div>
+      <div class="card-body">
+        · Cardiac arrest — EDT preferred<br>
+        · Aortic injury at intended zone — balloon inflation worsens injury<br>
+        · Zone II — NEVER (visceral ischaemia)<br>
+        · TBI — use with extreme caution: ↑ proximal BP may ↑ ICP<br>
+        · Femoral artery injury / thrombosis — no access<br>
+        · Coagulopathy uncorrected — address with MTP concurrently
+      </div>
+    </div>
+  </div>
+
+  <!-- REPERFUSION -->
+  <div class="section">
+    <p class="section-title">⚠️ Reperfusion Injury — After Balloon Deflation</p>
+    <div class="card" style="border-color:#fb923c;">
+      <div class="card-body">
+        Balloon deflation after prolonged inflation → sudden restoration of blood flow to ischaemic territory → <b>reperfusion injury</b>:<br><br>
+        · Massive systemic inflammatory response<br>
+        · Hyperkalaemia (from ischaemic cells)<br>
+        · Lactic acidosis surge<br>
+        · Myocardial depression<br>
+        · AKI — especially after Zone I (renal ischaemia)<br><br>
+        <b>Mitigate by:</b> Partial deflation (not sudden complete) · Ensure haemorrhage controlled before deflating · Calcium ready · Bicarbonate if severe acidosis · ICU post-op
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMINER PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why is Zone II never used?</div>
+      <div class="pearl-a">Zone II contains the coeliac axis, SMA and renal arteries. Balloon inflation at this level immediately occludes these vessels → mesenteric ischaemia + bowel infarction + bilateral AKI. The risk far outweighs any benefit. Zone I or Zone III only.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why is time limit shorter for Zone I than Zone III?</div>
+      <div class="pearl-a">Zone I occludes the descending thoracic aorta — cuts off blood supply to spinal cord (anterior spinal artery), kidneys, bowel. Prolonged occlusion causes irreversible spinal cord ischaemia (paraplegia) and multi-organ failure. Zone III only occludes infrarenal aorta — lower ischaemia burden on critical organs.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: REBOA vs resuscitative thoracotomy — which in blunt trauma arrest?</div>
+      <div class="pearl-a">Blunt trauma arrest has dismal outcomes with EDT (&lt;5% survival). REBOA can be considered in blunt trauma with witnessed arrest &lt;5 mins as a less invasive alternative. However evidence remains limited — current guidelines favour EDT for arrest in penetrating trauma. Blunt arrest = very select cases only.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: How do you confirm correct balloon position?</div>
+      <div class="pearl-a">Fluoroscopy is gold standard — confirms zone placement radiologically. CXR can confirm Zone I (balloon should be at T4–T12, below carina). Pressure waveform change on inflation confirms occlusion. Point-of-care ultrasound can visualise balloon in aorta. Avoid blind inflation without confirmation where possible.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    ATLS 10TH ED · AAST REBOA GUIDELINES · TRACR TRIAL<br>
+    CORE CONCEPTS CRITICAL CARE 2026 · ESSENTIALS OF TRAUMA ANAESTHESIA
+  </div>
+
+</div>
+</body>
+</html>
