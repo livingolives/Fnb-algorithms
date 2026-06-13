@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Haemorrhagic Shock & DCR | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060612;color:#fff;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+
+/* Header */
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #1f2937;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.2rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#f87171;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#4b5563;letter-spacing:.2em;text-transform:uppercase;}
+.back-btn{display:inline-block;margin-bottom:16px;font-size:.6rem;color:#4b5563;text-decoration:none;letter-spacing:.1em;border:1px solid #1f2937;padding:5px 12px;}
+.back-btn:hover{color:#f87171;border-color:#f87171;}
+
+/* Section */
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#4b5563;margin-bottom:10px;padding-left:4px;}
+
+/* Shock Classification Table */
+.shock-table{width:100%;border-collapse:collapse;font-size:.68rem;margin-bottom:16px;}
+.shock-table th{background:#0a0a1a;color:#9ca3af;padding:8px 10px;text-align:left;letter-spacing:.1em;font-size:.58rem;text-transform:uppercase;border:1px solid #1f2937;}
+.shock-table td{padding:8px 10px;border:1px solid #1f2937;vertical-align:middle;}
+.shock-table tr:nth-child(even){background:#07070f;}
+.shock-table tr:hover{background:#0d0d1f;}
+.class-badge{display:inline-block;font-weight:900;font-size:.65rem;padding:2px 8px;border-radius:4px;letter-spacing:.05em;}
+.c1{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid #4ade80;}
+.c2{background:rgba(250,204,21,.15);color:#facc15;border:1px solid #facc15;}
+.c3{background:rgba(251,146,60,.15);color:#fb923c;border:1px solid #fb923c;}
+.c4{background:rgba(248,113,113,.15);color:#f87171;border:1px solid #f87171;}
+
+/* Cards */
+.card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-title{font-size:.8rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.card-body{font-size:.75rem;color:#9ca3af;line-height:1.7;}
+.card-body b{color:#e5e7eb;}
+.card-body .highlight{color:#f87171;}
+.card-body .green{color:#4ade80;}
+.card-body .amber{color:#facc15;}
+.card-body .blue{color:#60a5fa;}
+
+/* Flow */
+.flow{display:flex;flex-direction:column;gap:0;}
+.flow-step{background:#0a0a1a;border:1px solid #1f2937;border-radius:8px;padding:13px 16px;font-size:.75rem;color:#9ca3af;line-height:1.6;}
+.flow-step b{color:#e5e7eb;}
+.flow-step .step-num{font-size:.55rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;margin-bottom:5px;}
+.flow-arrow{text-align:center;color:#374151;font-size:1.2rem;padding:2px 0;}
+.step-red .step-num{color:#f87171;}
+.step-red{border-color:#f87171;background:rgba(248,113,113,.05);}
+.step-amber .step-num{color:#facc15;}
+.step-amber{border-color:#facc15;background:rgba(250,204,21,.05);}
+.step-green .step-num{color:#4ade80;}
+.step-green{border-color:#4ade80;background:rgba(74,222,128,.05);}
+.step-blue .step-num{color:#60a5fa;}
+.step-blue{border-color:#60a5fa;background:rgba(96,165,250,.05);}
+
+/* DCR three pillars */
+.pillars{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.pillar{background:#0a0a1a;border:1px solid #1f2937;border-radius:8px;padding:12px 10px;text-align:center;}
+.pillar-icon{font-size:1.4rem;margin-bottom:6px;}
+.pillar-title{font-size:.6rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+.pillar-body{font-size:.62rem;color:#9ca3af;line-height:1.5;}
+
+/* MTP trigger table */
+.trigger-list{display:flex;flex-direction:column;gap:6px;}
+.trigger-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:#070712;border:1px solid #1f2937;border-radius:6px;font-size:.72rem;color:#9ca3af;}
+.trigger-item .ti-icon{font-size:1rem;min-width:22px;text-align:center;}
+.trigger-item b{color:#e5e7eb;}
+
+/* Lethal triad */
+.triad{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.triad-item{background:#0a0a1a;border-radius:8px;padding:12px 10px;text-align:center;border:1px solid;}
+.triad-item .ti-title{font-size:.65rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+.triad-item .ti-body{font-size:.6rem;color:#9ca3af;line-height:1.5;}
+
+/* Response categories */
+.response-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.resp-card{border-radius:8px;padding:12px 10px;text-align:center;border:1px solid;}
+.resp-title{font-size:.62rem;font-weight:900;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px;}
+.resp-body{font-size:.58rem;color:#9ca3af;line-height:1.5;}
+
+/* Examiner pearls */
+.pearl{background:#0a0a1a;border-left:3px solid #f87171;border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:8px;}
+.pearl-q{font-size:.68rem;color:#f87171;font-weight:900;letter-spacing:.05em;margin-bottom:5px;}
+.pearl-a{font-size:.72rem;color:#9ca3af;line-height:1.6;}
+.pearl-a b{color:#e5e7eb;}
+
+/* Source */
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #0f172a;}
+
+/* Expandable */
+.expand-btn{width:100%;background:#070712;border:1px solid #1f2937;border-radius:8px;padding:12px 16px;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.expand-btn:hover{border-color:#374151;}
+.expand-title{font-size:.75rem;font-weight:900;letter-spacing:.05em;text-transform:uppercase;color:#e5e7eb;}
+.expand-icon{color:#4b5563;font-size:1rem;transition:transform .2s;}
+.expand-content{display:none;background:#070712;border:1px solid #1f2937;border-top:none;border-radius:0 0 8px 8px;padding:14px 16px;margin-top:-8px;margin-bottom:8px;}
+.expand-content.open{display:block;}
+
+@media(max-width:480px){
+  .pillars,.triad,.response-grid{grid-template-columns:1fr;}
+  .shock-table{font-size:.6rem;}
+  .shock-table td,.shock-table th{padding:6px 7px;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-btn" href="index.html">← BACK TO ALGORITHMS</a>
+
+  <div class="header">
+    <div class="icon">🩸</div>
+    <h1>Haemorrhagic Shock & DCR</h1>
+    <div class="sub">ATLS 10th Ed · CRASH-2 · Core Concepts Critical Care 2026</div>
+  </div>
+
+  <!-- CLASSIFICATION -->
+  <div class="section">
+    <p class="section-title">📊 Haemorrhagic Shock Classification (ATLS 10e)</p>
+    <div style="overflow-x:auto;">
+      <table class="shock-table">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th><span class="class-badge c1">Class I</span></th>
+            <th><span class="class-badge c2">Class II</span></th>
+            <th><span class="class-badge c3">Class III</span></th>
+            <th><span class="class-badge c4">Class IV</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Blood loss</td><td>&lt;750 mL</td><td>750–1500 mL</td><td>1500–2000 mL</td><td>&gt;2000 mL</td></tr>
+          <tr><td>% Volume</td><td>&lt;15%</td><td>15–30%</td><td>30–40%</td><td>&gt;40%</td></tr>
+          <tr><td>HR (bpm)</td><td>&lt;100</td><td>100–120</td><td>120–140</td><td>&gt;140</td></tr>
+          <tr><td>BP</td><td>Normal</td><td>Normal</td><td>↓ Reduced</td><td>↓ Reduced</td></tr>
+          <tr><td>Pulse pressure</td><td>Normal</td><td>↓ Narrow</td><td>↓ Narrow</td><td>↓ Narrow</td></tr>
+          <tr><td>RR (/min)</td><td>14–20</td><td>20–30</td><td>30–40</td><td>&gt;40</td></tr>
+          <tr><td>Urine (mL/h)</td><td>&gt;30</td><td>20–30</td><td>5–15</td><td>Negligible</td></tr>
+          <tr><td>GCS/Mental</td><td>Normal</td><td>Anxious</td><td>Confused</td><td>Lethargic</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="border-color:#facc15;margin-top:8px;">
+      <div class="card-title" style="color:#facc15;">⚡ CLASS II vs III — EXAM DISTINCTION</div>
+      <div class="card-body">
+        <b>Class II:</b> BP <span class="green">normal</span> but pulse pressure <span class="amber">narrowed</span> (↑ diastolic from vasoconstriction). Compensated.<br><br>
+        <b>Class III:</b> Systolic BP <span class="highlight">drops</span> — vasoconstriction overcome. Decompensating. Requires blood products.<br><br>
+        <b>Key pearl:</b> <span class="amber">Pulse pressure narrows before systolic drops</span> — earliest sign of significant haemorrhage.
+      </div>
+    </div>
+  </div>
+
+  <!-- FLUID RESPONSE CATEGORIES -->
+  <div class="section">
+    <p class="section-title">💧 Response to Resuscitation</p>
+    <div class="response-grid">
+      <div class="resp-card" style="border-color:#4ade80;background:rgba(74,222,128,.05);">
+        <div class="resp-title" style="color:#4ade80;">Rapid Responder</div>
+        <div class="resp-body">Responds and stays stable. Blood loss &lt;20%. Continue monitoring. May not need MTP.</div>
+      </div>
+      <div class="resp-card" style="border-color:#facc15;background:rgba(250,204,21,.05);">
+        <div class="resp-title" style="color:#facc15;">Transient Responder</div>
+        <div class="resp-body">Responds then deteriorates. Ongoing bleeding. Activate MTP. Prepare for surgery.</div>
+      </div>
+      <div class="resp-card" style="border-color:#f87171;background:rgba(248,113,113,.05);">
+        <div class="resp-title" style="color:#f87171;">Non-Responder</div>
+        <div class="resp-body">No response. Exsanguinating. Immediate surgery / IR. In extremis — crash laparotomy.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DCR -->
+  <div class="section">
+    <p class="section-title">🔄 Damage Control Resuscitation (DCR)</p>
+    <div class="pillars">
+      <div class="pillar" style="border-color:#f87171;">
+        <div class="pillar-icon">📉</div>
+        <div class="pillar-title" style="color:#f87171;">Permissive Hypotension</div>
+        <div class="pillar-body">SBP 80–90 mmHg until bleeding controlled.<br><br>TBI: MAP ≥80 mmHg.<br><br>Titrate to central pulse.</div>
+      </div>
+      <div class="pillar" style="border-color:#60a5fa;">
+        <div class="pillar-icon">🩸</div>
+        <div class="pillar-title" style="color:#60a5fa;">Haemostatic Resuscitation</div>
+        <div class="pillar-body">1:1:1 pRBC:FFP:Platelets.<br><br>TXA 1g IV within 3h, then 1g over 8h.<br><br>Calcium replacement.</div>
+      </div>
+      <div class="pillar" style="border-color:#4ade80;">
+        <div class="pillar-icon">🔪</div>
+        <div class="pillar-title" style="color:#4ade80;">Damage Control Surgery</div>
+        <div class="pillar-body">Abbreviated surgery. Control bleeding. Pack and close. Physiology first, anatomy later.</div>
+      </div>
+    </div>
+    <div class="card" style="border-color:#f87171;">
+      <div class="card-title" style="color:#f87171;">🚫 WHY NOT CRYSTALLOID FIRST?</div>
+      <div class="card-body">
+        Large crystalloid volumes → <b>haemodilution</b> → dilutes clotting factors → worsens coagulopathy.<br><br>
+        Raising BP before haemorrhage control → <b>"pops the clot"</b> → re-bleeding → more hypotension → vicious cycle.<br><br>
+        <span class="highlight">Crystalloid worsens the lethal triad. Blood products are the resuscitation fluid in haemorrhagic shock.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LETHAL TRIAD / DIAMOND OF DEATH -->
+  <div class="section">
+    <p class="section-title">💀 Lethal Triad / Diamond of Death</p>
+    <div class="triad">
+      <div class="triad-item" style="border-color:#60a5fa;">
+        <div class="ti-title" style="color:#60a5fa;">🥶 Hypothermia</div>
+        <div class="ti-body">Impairs enzyme kinetics of coagulation cascade. &lt;34°C = clinically significant coagulopathy. Target: &gt;36°C.</div>
+      </div>
+      <div class="triad-item" style="border-color:#f87171;">
+        <div class="ti-title" style="color:#f87171;">🧪 Acidosis</div>
+        <div class="ti-body">↓ coagulation factor activity. ↓ platelet function. pH &lt;7.1 = severe impairment. BD &gt;6 = marker of shock.</div>
+      </div>
+      <div class="triad-item" style="border-color:#facc15;">
+        <div class="ti-title" style="color:#facc15;">🔬 Coagulopathy</div>
+        <div class="ti-body">ATC occurs within 30 mins of injury. Dilutional coagulopathy follows resuscitation. INR ≥1.5 = diagnostic.</div>
+      </div>
+    </div>
+    <div class="card" style="border-color:#facc15;">
+      <div class="card-title" style="color:#facc15;">➕ Diamond of Death (4th Element)</div>
+      <div class="card-body">
+        <b>Hypocalcaemia</b> — massive transfusion → citrate in blood products chelates ionised calcium → ↓ cardiac contractility + ↓ coagulation.<br><br>
+        <span class="amber">Give calcium chloride / calcium gluconate with every 4 units of pRBC in MTP.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MTP -->
+  <div class="section">
+    <p class="section-title">🔴 Massive Transfusion Protocol (MTP)</p>
+
+    <div class="card" style="margin-bottom:12px;">
+      <div class="card-title" style="color:#f87171;">TRIGGERS FOR MTP ACTIVATION</div>
+      <div class="trigger-list">
+        <div class="trigger-item"><span class="ti-icon">💉</span><div><b>Shock Index &gt;1</b> (HR/SBP &gt;1) — simple, rapid bedside marker</div></div>
+        <div class="trigger-item"><span class="ti-icon">🩸</span><div><b>Predicted massive transfusion:</b> &gt;10 units pRBC in 24h or &gt;4 units in 1h</div></div>
+        <div class="trigger-item"><span class="ti-icon">📊</span><div><b>ABC Score ≥2:</b> Penetrating mechanism, SBP ≤90, HR ≥120, FAST positive</div></div>
+        <div class="trigger-item"><span class="ti-icon">🏥</span><div><b>Non-responder / transient responder</b> to initial resuscitation</div></div>
+        <div class="trigger-item"><span class="ti-icon">🔬</span><div><b>TEG/ROTEM:</b> Evidence of coagulopathy on functional testing</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="color:#60a5fa;">MTP RATIO — 1:1:1</div>
+      <div class="card-body">
+        <b>pRBC : FFP : Platelets = 1 : 1 : 1</b><br><br>
+        Mimics whole blood. Maintains haemostatic potential.<br><br>
+        <span class="blue">+ TXA 1g IV within 3 hours of injury (CRASH-2 trial)</span><br>
+        <span class="blue">+ Calcium with every 4 units pRBC</span><br>
+        <span class="blue">+ Cryoprecipitate if fibrinogen &lt;1.5 g/L</span><br>
+        <span class="blue">+ Warm all products — prevent hypothermia</span><br><br>
+        <b>Goal:</b> Haemoglobin &gt;7–8 g/dL, Platelets &gt;50×10⁹/L, INR &lt;1.5, Fibrinogen &gt;2 g/L, iCa &gt;1.1 mmol/L
+      </div>
+    </div>
+  </div>
+
+  <!-- ATC -->
+  <div class="section">
+    <p class="section-title">🔬 Acute Traumatic Coagulopathy (ATC)</p>
+    <div class="flow">
+      <div class="flow-step step-red"><div class="step-num" style="color:#f87171;">TRIGGER</div><b>Tissue injury + Systemic hypoperfusion</b> — both required. Not injury alone.</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step step-amber"><div class="step-num" style="color:#facc15;">MECHANISM</div>Thrombomodulin expression ↑ on endothelium → Thrombin-Thrombomodulin complex → <b>Protein C activation</b> → inactivates Factors Va + VIIIa → ↓ thrombin generation + ↑ fibrinolysis</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step step-red"><div class="step-num" style="color:#f87171;">RESULT</div><b>ATC within 30 minutes of injury</b> — before resuscitation begins. Present in 25% of trauma admissions. 4× mortality increase.</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step step-blue"><div class="step-num" style="color:#60a5fa;">DIAGNOSIS</div>INR ≥1.5 or PT/aPTT prolonged &gt;50% · Fibrinogen &lt;1.5 g/L · Base deficit &gt;6 mmol/L · TEG/ROTEM functional testing</div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step step-green"><div class="step-num" style="color:#4ade80;">TREATMENT</div>1:1:1 MTP · TXA ≤3h · Correct lethal triad · TEG-guided product replacement · Fibrinogen/cryoprecipitate if low</div>
+    </div>
+
+    <div class="card" style="border-color:#60a5fa;margin-top:12px;">
+      <div class="card-title" style="color:#60a5fa;">ATC vs DIC — KNOW THIS COLD</div>
+      <div style="overflow-x:auto;">
+        <table class="shock-table">
+          <thead><tr><th>Feature</th><th>ATC</th><th>DIC</th></tr></thead>
+          <tbody>
+            <tr><td>Timing</td><td>Early (&lt;30 min, pre-resuscitation)</td><td>Later (hours–days)</td></tr>
+            <tr><td>Cause</td><td>Injury + hypoperfusion</td><td>Consumption + microthrombi</td></tr>
+            <tr><td>Platelets</td><td>Normal (early)</td><td>↓ Low</td></tr>
+            <tr><td>Fibrinogen</td><td>Normal (early)</td><td>↓ Low</td></tr>
+            <tr><td>Thrombin generation</td><td>Intact</td><td>Impaired</td></tr>
+            <tr><td>Microthrombi</td><td>Absent</td><td>Present</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERMISSIVE HYPOTENSION -->
+  <div class="section">
+    <p class="section-title">📉 Permissive Hypotension — Targets</p>
+    <div class="card">
+      <div class="card-body">
+        <b>Blunt trauma (no TBI):</b> <span class="amber">SBP 80–90 mmHg · MAP ≥60 mmHg</span><br><br>
+        <b>Penetrating trauma:</b> <span class="amber">Titrate to central pulse only until OR</span><br><br>
+        <b>TBI + haemorrhage:</b> <span class="highlight">MAP ≥80 mmHg — CPP must be preserved</span><br><br>
+        <b>Elderly / hypertensive:</b> Higher baseline = higher target — "normal" for them may be SBP 120+<br><br>
+        <b>Endpoint:</b> <span class="green">Surgical haemorrhage control — then normalise</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TXA -->
+  <div class="section">
+    <p class="section-title">💊 Tranexamic Acid (TXA) — CRASH-2</p>
+    <div class="card" style="border-color:#4ade80;">
+      <div class="card-body">
+        <b>Mechanism:</b> Antifibrinolytic — inhibits plasminogen activation → prevents clot breakdown<br><br>
+        <b>Dose:</b> 1g IV over 10 min → then 1g IV over 8 hours<br><br>
+        <b>Timing:</b> <span class="highlight">Within 3 hours of injury</span> — efficacy declines sharply after 3h. After 3h = potential HARM (increased mortality in CRASH-2).<br><br>
+        <b>CRASH-2 trial:</b> 20,211 trauma patients — TXA within 3h reduced all-cause mortality (RR 0.91). Benefit greatest within 1 hour.<br><br>
+        <span class="green">Give TXA to ALL trauma patients with significant haemorrhage or at risk of haemorrhage — do not wait for coagulation results.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HAEMORRHAGE CONTROL -->
+  <div class="section">
+    <p class="section-title">🔪 Haemorrhage Control — Source-Based</p>
+    <div class="trigger-list">
+      <div class="trigger-item"><span class="ti-icon">🩹</span><div><b>External:</b> Direct pressure · Tourniquet (life-threatening limb haemorrhage) · Wound packing</div></div>
+      <div class="trigger-item"><span class="ti-icon">🫁</span><div><b>Thoracic:</b> Chest drain (haemothorax) · EDT if penetrating + &lt;15 mins signs of life</div></div>
+      <div class="trigger-item"><span class="ti-icon">🫃</span><div><b>Abdominal:</b> FAST + → damage control laparotomy · Packing · Angioembolism</div></div>
+      <div class="trigger-item"><span class="ti-icon">🦴</span><div><b>Pelvic:</b> Pelvic binder → angioembolism → pre-peritoneal packing → REBOA Zone 3</div></div>
+      <div class="trigger-item"><span class="ti-icon">🦵</span><div><b>Long bones:</b> Splinting (femur = up to 1.5L hidden blood loss) · External fixation</div></div>
+      <div class="trigger-item"><span class="ti-icon">🎯</span><div><b>REBOA:</b> Resuscitative Endovascular Balloon Occlusion of Aorta — zones I/III for non-compressible haemorrhage</div></div>
+    </div>
+  </div>
+
+  <!-- EXAMINER PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why not vasopressors in haemorrhagic shock?</div>
+      <div class="pearl-a">Haemorrhagic shock = volume problem. Vasopressors ↑ afterload on an empty ventricle → cardiovascular collapse. Fix volume first. Vasopressors only if haemorrhage controlled and hypotension persists.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Crystalloid vs blood products — which first?</div>
+      <div class="pearl-a">Blood products first in Class III/IV. Crystalloid dilutes clotting factors → worsens coagulopathy → lethal triad. Limited warm crystalloid acceptable as a bridge only (250–500ml aliquots).</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: TBI + haemorrhagic shock — how do you manage?</div>
+      <div class="pearl-a">The hardest scenario. TBI needs MAP ≥80 mmHg (CPP preservation). Haemorrhage needs permissive hypotension. Prioritise: secure haemorrhage control as fast as possible, then normalise BP for the brain. Avoid hypotension in TBI — doubles mortality.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What is Shock Index and when is it useful?</div>
+      <div class="pearl-a">Shock Index = HR ÷ SBP. Normal &lt;1. SI &gt;1 = significant haemorrhage. SI &gt;1.4 = severe shock. Simple bedside calculation — no equipment needed. Useful in triage.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What does EtCO₂ tell you in a trauma resus?</div>
+      <div class="pearl-a">Low EtCO₂ (&lt;20 mmHg) = poor cardiac output / severe haemorrhage. Correlates with metabolic acidosis and shock severity. Rising EtCO₂ during resuscitation = improving perfusion. A useful non-invasive resuscitation endpoint.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    ATLS 10TH ED · CRASH-2 TRIAL (LANCET 2010) · CORE CONCEPTS CRITICAL CARE 2026<br>
+    ESSENTIALS OF TRAUMA ANAESTHESIA AND ICU · PROPPR TRIAL
+  </div>
+
+</div>
+<script>
+document.querySelectorAll('.expand-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const content=btn.nextElementSibling;
+    const icon=btn.querySelector('.expand-icon');
+    content.classList.toggle('open');
+    icon.style.transform=content.classList.contains('open')?'rotate(180deg)':'rotate(0deg)';
+  });
+});
+</script>
+</body>
+</html>
