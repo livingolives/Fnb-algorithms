@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trauma in Pregnancy | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060612;color:#fff;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.back-btn{display:inline-block;margin-bottom:16px;font-size:.6rem;color:#4b5563;text-decoration:none;letter-spacing:.1em;border:1px solid #1f2937;padding:5px 12px;}
+.back-btn:hover{color:#f472b6;border-color:#f472b6;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #1f2937;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.2rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#f472b6;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#4b5563;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#4b5563;margin-bottom:10px;padding-left:4px;}
+.card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-title{font-size:.8rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.card-body{font-size:.75rem;color:#9ca3af;line-height:1.7;}
+.card-body b{color:#e5e7eb;}
+.red{color:#f87171;} .green{color:#4ade80;} .amber{color:#facc15;} .blue{color:#60a5fa;} .pink{color:#f472b6;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.grid-item{background:#070712;border:1px solid #1f2937;border-radius:7px;padding:10px 12px;}
+.gi-title{font-size:.58rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+.gi-body{font-size:.68rem;color:#9ca3af;line-height:1.55;}
+.gi-body b{color:#e5e7eb;}
+.flow{display:flex;flex-direction:column;gap:0;}
+.flow-step{background:#0a0a1a;border:1px solid #1f2937;border-radius:8px;padding:11px 14px;font-size:.72rem;color:#9ca3af;line-height:1.6;}
+.flow-step b{color:#e5e7eb;}
+.flow-step .step-lbl{font-size:.5rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;margin-bottom:3px;}
+.flow-arrow{text-align:center;color:#374151;font-size:1rem;padding:2px 0;}
+.pearl{background:#0a0a1a;border-left:3px solid #f472b6;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#f472b6;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#9ca3af;line-height:1.6;}
+.pearl-a b{color:#e5e7eb;}
+.comp-table{width:100%;border-collapse:collapse;font-size:.65rem;margin-bottom:14px;}
+.comp-table th{background:#0a0a1a;color:#9ca3af;padding:7px 9px;text-align:left;letter-spacing:.08em;font-size:.56rem;text-transform:uppercase;border:1px solid #1f2937;}
+.comp-table td{padding:7px 9px;border:1px solid #1f2937;vertical-align:middle;color:#9ca3af;}
+.comp-table td b{color:#e5e7eb;}
+.comp-table tr:nth-child(even){background:#07070f;}
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #0f172a;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-btn" href="index.html">← BACK TO ALGORITHMS</a>
+
+  <div class="header">
+    <div class="icon">🤰</div>
+    <h1>Trauma in Pregnancy</h1>
+    <div class="sub">ATLS 10th Ed · ALSO Guidelines · Core Concepts Critical Care 2026</div>
+  </div>
+
+  <!-- PHYSIOLOGICAL CHANGES -->
+  <div class="section">
+    <p class="section-title">🔬 Physiological Changes — Why Pregnancy Changes Everything</p>
+
+    <div class="card" style="border-color:#f472b6;">
+      <div class="card-title" style="color:#f472b6;">AIRWAY</div>
+      <div class="card-body">
+        <b>Engorged mucosa</b> — capillary engorgement → friable, bleeds easily on instrumentation. Use smaller ETT (6.5–7.0mm).<br>
+        <b>Pendulous breasts</b> — impinge on laryngoscope handle. Use short-handled laryngoscope or CMAC.<br>
+        <b>Delayed gastric emptying</b> — progesterone effect + pain → full stomach at any gestation. RSI mandatory.<br>
+        <b>↓ Lower oesophageal sphincter tone</b> → aspiration risk greatly increased.<br><br>
+        <span class="pink">All pregnant patients = FULL STOMACH. RSI with cricoid pressure.</span>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:#60a5fa;">
+      <div class="card-title" style="color:#60a5fa;">BREATHING — RAPID DESATURATION</div>
+      <div class="card-body">
+        <b>↑ O₂ consumption</b> — 20% increase (fetal + metabolic demands). Less oxygen reserve.<br>
+        <b>Basal atelectasis</b> — gravid uterus splints diaphragm → ↓ FRC by 20%.<br>
+        <b>↑ RR + ↑ tidal volume</b> — progesterone drives hyperventilation → PaCO₂ 28–32 mmHg is NORMAL in pregnancy.<br><br>
+        <span class="red">Result: Pregnant patients desaturate faster than non-pregnant. Pre-oxygenation is critical. Apnoea tolerance ↓↓.</span><br><br>
+        <b>Ventilation target:</b> PaCO₂ 28–32 mmHg (normal for pregnancy — do NOT over-ventilate to "normal" 40 mmHg as this is relatively hypercapnic for the fetus).
+      </div>
+    </div>
+
+    <div class="card" style="border-color:#facc15;">
+      <div class="card-title" style="color:#facc15;">CIRCULATION — AORTOCAVAL COMPRESSION</div>
+      <div class="card-body">
+        <b>Supine hypotension syndrome:</b> Gravid uterus (&gt;20 weeks) compresses IVC + aorta when supine → ↓ venous return → ↓ CO → hypotension.<br><br>
+        <b>Left lateral tilt 15–30°</b> after 20 weeks — displaces uterus off IVC. If on spinal board: manual left uterine displacement (LUD).<br><br>
+        <b>Physiological anaemia:</b> Plasma volume ↑ 40–50% but RBC mass ↑ only 20–30% → dilutional anaemia. Normal Hb in pregnancy = 10–12 g/dL.<br><br>
+        <b>↑ Blood volume:</b> Pregnant women can lose up to 30–35% blood volume before showing signs of shock — <span class="red">fetus is already compromised while mother looks stable.</span><br><br>
+        <b>HR:</b> Resting HR ↑ 15–20 bpm in pregnancy. Normal HR in pregnancy = 80–100 bpm.<br><br>
+        <b>BP:</b> ↓ 10–15 mmHg in 2nd trimester (vasodilation), returns to normal by term.
+      </div>
+    </div>
+
+    <div class="card" style="border-color:#34d399;">
+      <div class="card-title" style="color:#34d399;">HAEMATOLOGY + COAGULATION</div>
+      <div class="card-body">
+        <b>Hypercoagulable state:</b> ↑ Fibrinogen, ↑ Factors VII, VIII, X, XII. Protective against PPH — but ↑ DVT/PE risk.<br><br>
+        <b>Fibrinogen:</b> Normal in pregnancy = 4–6 g/L (double non-pregnant). <span class="red">Fibrinogen is the FIRST factor to drop in obstetric haemorrhage/DIC.</span><br><br>
+        <b>Placental trauma → tPA release → hyperfibrinolysis.</b> TXA indicated in obstetric haemorrhage (WOMAN trial).<br><br>
+        <b>Platelets:</b> Slightly lower (gestational thrombocytopaenia) — normal down to 100×10⁹/L in pregnancy.<br><br>
+        <b>GFR:</b> ↑ 50% in pregnancy → serum creatinine LOWER than normal. "Normal" creatinine (90 μmol/L) may indicate significant renal impairment in a pregnant patient.
+      </div>
+    </div>
+  </div>
+
+  <!-- FETAL CONSIDERATIONS -->
+  <div class="section">
+    <p class="section-title">👶 Fetal Considerations</p>
+    <div class="card" style="border-color:#f472b6;">
+      <div class="card-body">
+        <b>Uteroplacental perfusion has NO autoregulation</b> — entirely dependent on maternal cardiac output and MAP. Any maternal hypotension → immediate fetal compromise.<br><br>
+        <b>Fetal acidosis</b> precedes maternal signs of shock — fetus is the canary in the coal mine.<br><br>
+        <b>Cardiotocography (CTG):</b> Should be commenced as soon as possible (&gt;20 weeks) — most sensitive indicator of fetal wellbeing and placental abruption.<br><br>
+        <b>Placental abruption:</b> Most common cause of fetal death in trauma. May occur with apparently minor trauma. Uterus is rigid, tender. CTG: decelerations, loss of variability.<br><br>
+        <b>Resuscitate the mother → resuscitate the fetus.</b> Fetal outcome follows maternal outcome.
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUSCITATION PRIORITIES -->
+  <div class="section">
+    <p class="section-title">🚨 Resuscitation — Key Modifications</p>
+    <div class="flow">
+      <div class="flow-step" style="border-color:#f87171;">
+        <div class="step-lbl" style="color:#f87171;">AIRWAY</div>
+        RSI mandatory (full stomach). Smaller ETT 6.5–7.0mm. CMAC/video laryngoscopy. Cricoid pressure. Have surgical airway ready — failed intubation more common in pregnancy.
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="border-color:#facc15;">
+        <div class="step-lbl" style="color:#facc15;">BREATHING</div>
+        Pre-oxygenate aggressively. Target SpO₂ &gt;95%. Ventilate to PaCO₂ 28–32 mmHg (normal for pregnancy). Avoid PaCO₂ 40 mmHg — relatively hypercapnic for fetus → umbilical vasoconstriction.
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="border-color:#60a5fa;">
+        <div class="step-lbl" style="color:#60a5fa;">CIRCULATION</div>
+        Left lateral tilt 15–30° OR manual left uterine displacement &gt;20 weeks. Maintain MAP — no permissive hypotension (uteroplacental has no autoregulation). IV access above diaphragm preferred (IVC compression). TXA if haemorrhage. MTP if massive haemorrhage.
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step" style="border-color:#34d399;">
+        <div class="step-lbl" style="color:#34d399;">MONITORING</div>
+        CTG as soon as possible &gt;20 weeks. Obstetric review. FAST scan. Kleihauer-Betke test. Anti-D if Rh-negative. Foetal USS for placental assessment.
+      </div>
+    </div>
+  </div>
+
+  <!-- PMCS -->
+  <div class="section">
+    <p class="section-title">⚡ Perimortem Caesarean Section (PMCS)</p>
+    <div class="card" style="border-color:#f87171;">
+      <div class="card-title" style="color:#f87171;">THE 4-MINUTE RULE</div>
+      <div class="card-body">
+        <b>Indication:</b> Maternal cardiac arrest &gt;20 weeks gestation.<br><br>
+        <b>Timeline:</b><br>
+        · Start CPR immediately<br>
+        · If no ROSC within <span class="red">4 minutes</span> → deliver baby<br>
+        · Baby out by <span class="red">5 minutes</span> from arrest<br><br>
+        <b>Why it helps the MOTHER:</b><br>
+        · Gravid uterus compresses IVC even during CPR → limits venous return → limits cardiac output from compressions<br>
+        · Delivery relieves aortocaval compression → ↑ venous return → improves CPR effectiveness → better chance of maternal ROSC<br><br>
+        <b>Why it helps the BABY:</b><br>
+        · Brain injury begins at 4–6 minutes of anoxia<br>
+        · Delivery before 5 minutes → best neurological outcome<br><br>
+        <b>Gestation:</b> &gt;24 weeks = potentially viable fetus. 20–24 weeks = PMCS still beneficial for maternal resuscitation even if fetus non-viable.<br><br>
+        <b>Technique:</b> Vertical midline incision. Classical uterine incision (vertical). No need for sterile prep — speed is everything. Continue CPR throughout.
+      </div>
+    </div>
+  </div>
+
+  <!-- KLEIHAUER-BETKE -->
+  <div class="section">
+    <p class="section-title">🔬 Kleihauer-Betke (KB) Test</p>
+    <div class="card" style="border-color:#34d399;">
+      <div class="card-body">
+        <b>Purpose:</b> Detect fetomaternal haemorrhage (FMH) — fetal RBCs crossing into maternal circulation.<br><br>
+        <b>Mechanism:</b> Acid elution — HbF resists acid, maternal HbA dissolves. Fetal cells stain pink, maternal cells appear as ghosts. Count ratio → estimate volume of FMH.<br><br>
+        <b>Who needs it:</b> All Rh-negative pregnant trauma patients. Also used in suspected placental abruption.<br><br>
+        <b>Anti-D immunoglobulin:</b><br>
+        · Give within <b>72 hours</b> to Rh-negative mothers<br>
+        · Standard dose: 300 mcg covers 30 mL fetal blood<br>
+        · If KB shows &gt;30 mL FMH → calculate additional Anti-D dose<br><br>
+        <b>Limitation:</b> KB test is semi-quantitative. Flow cytometry is more accurate but less widely available.
+      </div>
+    </div>
+  </div>
+
+  <!-- DRUG CONSIDERATIONS -->
+  <div class="section">
+    <p class="section-title">💊 Drug Considerations in Pregnancy</p>
+    <div class="card">
+      <div class="card-body">
+        <b>RSI drugs:</b> Ketamine safe (1–2 mg/kg) — maintains BP, not teratogenic. Propofol safe. Thiopentone safe. Suxamethonium safe — quaternary structure, minimal placental transfer.<br><br>
+        <b>Rocuronium:</b> Safe in pregnancy. Use sugammadex for reversal.<br><br>
+        <b class="red">Neostigmine:</b> Crosses placenta → fetal bradycardia, bronchoconstriction, increased secretions → <span class="red">potentially fetal asystole.</span><br>
+        Use <b>Atropine</b> (NOT glycopyrrolate) concurrently — glycopyrrolate is quaternary → does NOT cross placenta → fetal bradycardia unprotected.<br><br>
+        <b>Vasopressors:</b> Ephedrine — historically preferred (mixed α+β, maintains uteroplacental flow). Phenylephrine — now acceptable, evidence shows no worse fetal outcomes in spinal hypotension.<br><br>
+        <b>TXA:</b> Safe in pregnancy (WOMAN trial). Give for obstetric haemorrhage within 3 hours.<br><br>
+        <b>Opioids:</b> Cross placenta — neonatal respiratory depression. Have naloxone ready if delivery imminent.<br><br>
+        <b>NSAIDs:</b> Avoid after 32 weeks — premature closure of ductus arteriosus.
+      </div>
+    </div>
+  </div>
+
+  <!-- PLACENTAL ABRUPTION -->
+  <div class="section">
+    <p class="section-title">🩸 Placental Abruption — Most Common Cause of Fetal Death</p>
+    <div class="card" style="border-color:#f87171;">
+      <div class="card-body">
+        <b>Mechanism:</b> Shearing force separates placenta from uterine wall. Can occur with apparently minor trauma.<br><br>
+        <b>Signs:</b> Uterine tenderness · Rigid abdomen · Vaginal bleeding (may be absent if concealed) · Uterine contractions · Fetal distress on CTG<br><br>
+        <b>CTG findings:</b> Decelerations · Loss of variability · Sinusoidal pattern · Fetal tachycardia<br><br>
+        <b>Monitoring:</b> CTG for minimum <b>4–6 hours</b> after significant trauma even if initially normal — abruption can present late.<br><br>
+        <b>USS:</b> Insensitive for abruption — do NOT use to exclude it. CTG is more sensitive.<br><br>
+        <b>Management:</b> Resuscitate mother. Obstetric emergency → delivery if fetal distress or uncontrolled haemorrhage.
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMINER PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why does permissive hypotension have no role in pregnant trauma patients?</div>
+      <div class="pearl-a">Uteroplacental perfusion has no autoregulation — it is entirely pressure-dependent. Any maternal hypotension causes immediate reduction in placental blood flow → fetal hypoxia and acidosis. The fetus may be critically compromised while the mother appears haemodynamically reasonable. Maintain normal MAP throughout.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why use atropine and NOT glycopyrrolate with neostigmine in pregnancy?</div>
+      <div class="pearl-a">Glycopyrrolate is a quaternary ammonium compound — does NOT cross the placenta. Neostigmine DOES cross the placenta → fetal bradycardia, bronchoconstriction, secretions. If glycopyrrolate is used, it cannot counteract the fetal muscarinic effects of neostigmine → fetal asystole risk. Atropine crosses the placenta → protects fetus from neostigmine effects. Use atropine.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: A pregnant trauma patient looks haemodynamically stable — can you be reassured?</div>
+      <div class="pearl-a">NO. Pregnant patients can lose 30–35% of blood volume before showing haemodynamic compromise — due to increased blood volume of pregnancy. Meanwhile uteroplacental flow falls proportionally → fetal compromise occurs BEFORE maternal signs. Fetal CTG changes are the earliest warning. Always monitor the fetus.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What is "normal" PaCO₂ in pregnancy and why does it matter on the ventilator?</div>
+      <div class="pearl-a">Normal PaCO₂ in pregnancy = 28–32 mmHg (progesterone-driven hyperventilation). Ventilating to 40 mmHg (standard non-pregnant target) = relative hypercapnia for the pregnant patient → umbilical artery vasoconstriction → ↓ uteroplacental blood flow → fetal acidosis. Target PaCO₂ 28–32 mmHg on the ventilator.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    ATLS 10TH ED · ALSO GUIDELINES · WOMAN TRIAL (LANCET 2017)<br>
+    CORE CONCEPTS CRITICAL CARE 2026 · ESSENTIALS OF TRAUMA ANAESTHESIA AND ICU
+  </div>
+
+</div>
+</body>
+</html>
