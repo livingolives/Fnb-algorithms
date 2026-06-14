@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Burns Resuscitation | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060612;color:#fff;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.back-btn{display:inline-block;margin-bottom:16px;font-size:.6rem;color:#4b5563;text-decoration:none;letter-spacing:.1em;border:1px solid #1f2937;padding:5px 12px;}
+.back-btn:hover{color:#fb923c;border-color:#fb923c;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #1f2937;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.2rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#fb923c;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#4b5563;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#4b5563;margin-bottom:10px;padding-left:4px;}
+.card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-title{font-size:.8rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.card-body{font-size:.75rem;color:#9ca3af;line-height:1.7;}
+.card-body b{color:#e5e7eb;}
+.red{color:#f87171;} .green{color:#4ade80;} .amber{color:#facc15;} .blue{color:#60a5fa;} .orange{color:#fb923c;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.grid-item{background:#070712;border:1px solid #1f2937;border-radius:7px;padding:10px 12px;}
+.gi-title{font-size:.58rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+.gi-body{font-size:.68rem;color:#9ca3af;line-height:1.55;}
+.gi-body b{color:#e5e7eb;}
+.formula-box{background:#070712;border:2px solid #fb923c;border-radius:10px;padding:16px;text-align:center;margin-bottom:12px;}
+.formula{font-size:1.1rem;font-weight:900;color:#fb923c;letter-spacing:.05em;margin-bottom:6px;}
+.formula-sub{font-size:.7rem;color:#9ca3af;line-height:1.7;}
+.formula-sub b{color:#e5e7eb;}
+.timeline{display:flex;flex-direction:column;gap:0;margin-bottom:12px;}
+.tl-step{background:#0a0a1a;border:1px solid #1f2937;border-radius:8px;padding:11px 14px;font-size:.72rem;color:#9ca3af;line-height:1.6;}
+.tl-step b{color:#e5e7eb;}
+.tl-step .tl-lbl{font-size:.5rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;margin-bottom:3px;}
+.tl-arrow{text-align:center;color:#374151;font-size:1rem;padding:2px 0;}
+.comp-table{width:100%;border-collapse:collapse;font-size:.65rem;margin-bottom:14px;}
+.comp-table th{background:#0a0a1a;color:#9ca3af;padding:7px 9px;text-align:left;letter-spacing:.08em;font-size:.56rem;text-transform:uppercase;border:1px solid #1f2937;}
+.comp-table td{padding:7px 9px;border:1px solid #1f2937;vertical-align:middle;color:#9ca3af;}
+.comp-table td b{color:#e5e7eb;}
+.comp-table tr:nth-child(even){background:#07070f;}
+.pearl{background:#0a0a1a;border-left:3px solid #fb923c;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#fb923c;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#9ca3af;line-height:1.6;}
+.pearl-a b{color:#e5e7eb;}
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #0f172a;}
+
+/* Wallace rule of nines SVG */
+.body-diagram{background:#070712;border:1px solid #1f2937;border-radius:10px;padding:14px;margin-bottom:12px;}
+.bd-title{font-size:.65rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#fb923c;margin-bottom:10px;text-align:center;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-btn" href="index.html">← BACK TO ALGORITHMS</a>
+
+  <div class="header">
+    <div class="icon">🔥</div>
+    <h1>Burns Resuscitation</h1>
+    <div class="sub">Parkland Formula · Rule of Nines · ABA Guidelines · Escharotomy</div>
+  </div>
+
+  <!-- TBSA ASSESSMENT -->
+  <div class="section">
+    <p class="section-title">📐 TBSA Assessment</p>
+
+    <!-- Rule of Nines SVG -->
+    <div class="body-diagram">
+      <div class="bd-title">WALLACE RULE OF NINES — ADULTS</div>
+      <svg viewBox="0 0 340 280" style="width:100%;display:block;max-height:300px;">
+        <!-- Body outline - simplified -->
+        <!-- Head -->
+        <circle cx="170" cy="30" r="22" fill="#0e1c2c" stroke="#fb923c" stroke-width="1.5"/>
+        <text x="170" y="34" text-anchor="middle" font-family="monospace" font-size="11" fill="#fb923c" font-weight="bold">9%</text>
+        <text x="170" y="18" text-anchor="middle" font-family="monospace" font-size="7" fill="#9ca3af">HEAD+NECK</text>
+
+        <!-- Neck connector -->
+        <rect x="163" y="52" width="14" height="10" fill="#0e1c2c" stroke="#1a3050" stroke-width="1"/>
+
+        <!-- Trunk front -->
+        <rect x="130" y="62" width="80" height="90" rx="5" fill="#0e1c2c" stroke="#fb923c" stroke-width="1.5"/>
+        <text x="170" y="102" text-anchor="middle" font-family="monospace" font-size="11" fill="#fb923c" font-weight="bold">18%</text>
+        <text x="170" y="88" text-anchor="middle" font-family="monospace" font-size="7" fill="#9ca3af">ANTERIOR</text>
+        <text x="170" y="96" text-anchor="middle" font-family="monospace" font-size="7" fill="#9ca3af">TRUNK</text>
+        <!-- Chest/abdo divider -->
+        <line x1="130" y1="107" x2="210" y2="107" stroke="#1a3050" stroke-width="1" stroke-dasharray="3 2"/>
+        <text x="170" y="120" text-anchor="middle" font-family="monospace" font-size="7" fill="#6b7280">(chest 9% + abd 9%)</text>
+
+        <!-- Left arm -->
+        <rect x="88" y="62" width="38" height="75" rx="8" fill="#0e1c2c" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="107" y="102" text-anchor="middle" font-family="monospace" font-size="9" fill="#60a5fa" font-weight="bold">9%</text>
+        <text x="107" y="90" text-anchor="middle" font-family="monospace" font-size="6" fill="#9ca3af">LEFT</text>
+        <text x="107" y="97" text-anchor="middle" font-family="monospace" font-size="6" fill="#9ca3af">ARM</text>
+
+        <!-- Right arm -->
+        <rect x="214" y="62" width="38" height="75" rx="8" fill="#0e1c2c" stroke="#60a5fa" stroke-width="1.5"/>
+        <text x="233" y="102" text-anchor="middle" font-family="monospace" font-size="9" fill="#60a5fa" font-weight="bold">9%</text>
+        <text x="233" y="90" text-anchor="middle" font-family="monospace" font-size="6" fill="#9ca3af">RIGHT</text>
+        <text x="233" y="97" text-anchor="middle" font-family="monospace" font-size="6" fill="#9ca3af">ARM</text>
+
+        <!-- Left leg -->
+        <rect x="125" y="158" width="40" height="110" rx="8" fill="#0e1c2c" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="145" y="215" text-anchor="middle" font-family="monospace" font-size="9" fill="#4ade80" font-weight="bold">18%</text>
+        <text x="145" y="200" text-anchor="middle" font-family="monospace" font-size="6" fill="#9ca3af">LEFT LEG</text>
+        <text x="145" y="222" text-anchor="middle" font-family="monospace" font-size="6" fill="#6b7280">(front 9%</text>
+        <text x="145" y="229" text-anchor="middle" font-family="monospace" font-size="6" fill="#6b7280">back 9%)</text>
+
+        <!-- Right leg -->
+        <rect x="175" y="158" width="40" height="110" rx="8" fill="#0e1c2c" stroke="#4ade80" stroke-width="1.5"/>
+        <text x="195" y="215" text-anchor="middle" font-family="monospace" font-size="9" fill="#4ade80" font-weight="bold">18%</text>
+        <text x="195" y="200" text-anchor="middle" font-family="monospace" font-size="6" fill="#9ca3af">RIGHT LEG</text>
+        <text x="195" y="222" text-anchor="middle" font-family="monospace" font-size="6" fill="#6b7280">(front 9%</text>
+        <text x="195" y="229" text-anchor="middle" font-family="monospace" font-size="6" fill="#6b7280">back 9%)</text>
+
+        <!-- Perineum -->
+        <text x="170" y="158" text-anchor="middle" font-family="monospace" font-size="7" fill="#facc15">PERINEUM 1%</text>
+
+        <!-- Posterior trunk label -->
+        <text x="40" y="110" text-anchor="middle" font-family="monospace" font-size="8" fill="#fb923c" font-weight="bold">BACK</text>
+        <text x="40" y="120" text-anchor="middle" font-family="monospace" font-size="8" fill="#fb923c" font-weight="bold">18%</text>
+        <text x="40" y="130" text-anchor="middle" font-family="monospace" font-size="6" fill="#6b7280">(not shown)</text>
+        <line x1="75" y1="115" x2="128" y2="115" stroke="#374151" stroke-width="1" stroke-dasharray="3 2"/>
+
+        <!-- Total -->
+        <rect x="268" y="90" width="65" height="45" rx="4" fill="rgba(251,146,60,.1)" stroke="#fb923c" stroke-width="1"/>
+        <text x="300" y="107" text-anchor="middle" font-family="monospace" font-size="7" fill="#fb923c">TOTAL</text>
+        <text x="300" y="118" text-anchor="middle" font-family="monospace" font-size="11" fill="#fb923c" font-weight="bold">99%</text>
+        <text x="300" y="128" text-anchor="middle" font-family="monospace" font-size="6" fill="#6b7280">≈100%</text>
+      </svg>
+
+      <!-- Paeds note -->
+      <div style="font-size:.65rem;color:#9ca3af;margin-top:8px;padding:8px 10px;background:#0a0a1a;border-radius:6px;border-left:3px solid #facc15;">
+        <b style="color:#facc15;">PAEDIATRIC (Lund-Browder chart):</b> Head = 18% at birth (decreases with age). Each leg = 14% at birth (increases with age). Use Lund-Browder — Rule of Nines INACCURATE in children.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <b>What counts as burn for TBSA:</b> Partial thickness (superficial + deep) + full thickness. <span class="red">Exclude superficial/erythema — sunburn-like, no blistering, heals within 7 days.</span><br><br>
+        <b>Palm method:</b> Patient's palm (including fingers) = approximately 1% TBSA. Useful for scattered/irregular burns.
+      </div>
+    </div>
+  </div>
+
+  <!-- BURN DEPTH -->
+  <div class="section">
+    <p class="section-title">🔥 Burn Depth Classification</p>
+    <table class="comp-table">
+      <thead><tr><th>Depth</th><th>Layers</th><th>Appearance</th><th>Sensation</th><th>Healing</th></tr></thead>
+      <tbody>
+        <tr><td><b style="color:#facc15;">Superficial</b><br>(1st degree)</td><td>Epidermis only</td><td>Red, dry, no blisters</td><td>Painful</td><td>3–5 days. NOT counted in TBSA.</td></tr>
+        <tr><td><b style="color:#fb923c;">Superficial partial</b><br>(2nd degree)</td><td>Epidermis + superficial dermis</td><td>Blistered, moist, pink</td><td>Very painful</td><td>14–21 days. Conservative.</td></tr>
+        <tr><td><b style="color:#f87171;">Deep partial</b><br>(2nd degree)</td><td>Epidermis + deep dermis</td><td>White/pale, dry, blisters</td><td>Reduced</td><td>&gt;21 days. Often needs grafting.</td></tr>
+        <tr><td><b style="color:#6b7280;">Full thickness</b><br>(3rd degree)</td><td>All skin layers</td><td>White/brown/black, leathery</td><td><b>Painless</b></td><td>No spontaneous healing. Grafting required.</td></tr>
+        <tr><td><b style="color:#374151;">4th degree</b></td><td>Skin + underlying structures (fat, muscle, bone)</td><td>Charred, black</td><td>Painless</td><td>Amputation often required.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PARKLAND FORMULA -->
+  <div class="section">
+    <p class="section-title">💧 Parkland Formula — Fluid Resuscitation</p>
+
+    <div class="formula-box">
+      <div class="formula">4 ml × kg × % TBSA</div>
+      <div class="formula-sub">
+        Fluid of choice: <b>Hartmann's solution (Lactated Ringer's)</b><br>
+        Give over <b>24 hours from time of burn</b> (not time of arrival)<br><br>
+        <b>First 8 hours:</b> Give ½ of total volume<br>
+        <b>Next 16 hours:</b> Give remaining ½<br><br>
+        <b>Example: 80kg, 40% TBSA</b><br>
+        4 × 80 × 40 = <b style="color:#fb923c;">12,800 ml</b><br>
+        First 8h: 6,400ml · Next 16h: 6,400ml
+      </div>
+    </div>
+
+    <div class="card" style="border-color:#facc15;">
+      <div class="card-body">
+        <b class="amber">⚠ COMMON MISTAKES:</b><br>
+        · Second half over 16 hours NOT 18 hours (8 + 16 = 24 total)<br>
+        · Clock starts from TIME OF BURN — not arrival. Subtract pre-hospital time.<br>
+        · Do NOT include maintenance fluids in Parkland calculation — add separately<br>
+        · Do NOT use colloid in first 24 hours (glycocalyx disrupted — colloid leaks out)<br>
+        · Parkland is a <b>starting point</b> — titrate to urine output
+      </div>
+    </div>
+
+    <!-- Other formulae -->
+    <div class="card">
+      <div class="card-title" style="color:#60a5fa;">OTHER RESUSCITATION FORMULAE</div>
+      <table class="comp-table">
+        <thead><tr><th>Formula</th><th>Volume</th><th>Fluid</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><b>Parkland</b></td><td>4ml/kg/%</td><td>Hartmann's</td><td>Most widely used</td></tr>
+          <tr><td><b>Modified Brooke</b></td><td>2ml/kg/%</td><td>Hartmann's</td><td>Less fluid — reduces oedema</td></tr>
+          <tr><td><b>Muir & Barclay</b></td><td>0.5ml/kg/%</td><td>Colloid (albumin)</td><td>Per period — 6 periods in 36h. Used in UK.</td></tr>
+          <tr><td><b>Paediatric</b></td><td>3ml/kg/%</td><td>Hartmann's + dextrose</td><td>Add maintenance. Monitor glucose.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MONITORING -->
+  <div class="section">
+    <p class="section-title">📊 Monitoring Targets</p>
+    <div class="grid2">
+      <div class="grid-item" style="border-color:#4ade80;">
+        <div class="gi-title" style="color:#4ade80;">URINE OUTPUT</div>
+        <div class="gi-body">
+          <b>Adults:</b> 0.5–1 ml/kg/hr<br>
+          <b>Children:</b> 1 ml/kg/hr<br>
+          <b>Electrical burns/rhabdo:</b> 1–2 ml/kg/hr<br>
+          Best guide to resuscitation adequacy
+        </div>
+      </div>
+      <div class="grid-item" style="border-color:#f87171;">
+        <div class="gi-title" style="color:#f87171;">LACTATE / BE</div>
+        <div class="gi-body">
+          Lactate &lt;2 mmol/L<br>
+          Base excess &gt;-2<br>
+          Rising lactate = under-resuscitation or sepsis
+        </div>
+      </div>
+      <div class="grid-item" style="border-color:#60a5fa;">
+        <div class="gi-title" style="color:#60a5fa;">CLINICAL</div>
+        <div class="gi-body">
+          HR &lt;110 bpm<br>
+          MAP 65–70 mmHg<br>
+          Capillary refill &lt;2 sec<br>
+          Mental status
+        </div>
+      </div>
+      <div class="grid-item" style="border-color:#facc15;">
+        <div class="gi-title" style="color:#facc15;">TEMPERATURE</div>
+        <div class="gi-body">
+          Burns patients lose heat rapidly — large surface area + fluid evaporation<br>
+          Target: &gt;36.5°C<br>
+          Warm fluids, warm environment
+        </div>
+      </div>
+    </div>
+    <div class="card" style="border-color:#f87171;">
+      <div class="card-body">
+        <b class="red">Over-resuscitation = "fluid creep"</b> — too much fluid → abdominal compartment syndrome, pulmonary oedema, extremity compartment syndrome, orbital compartment syndrome. Titrate DOWN if urine output &gt;1ml/kg/hr consistently.
+      </div>
+    </div>
+  </div>
+
+  <!-- INHALATION INJURY -->
+  <div class="section">
+    <p class="section-title">💨 Inhalation Injury</p>
+    <div class="card" style="border-color:#f87171;">
+      <div class="card-body">
+        <b>Triad:</b> Burns in enclosed space · Carbonaceous sputum · Singed nasal hairs/eyebrows<br><br>
+        <b>Mechanism:</b><br>
+        · <b>Supraglottic:</b> Heat injury → rapid oedema → airway obstruction. Intubate EARLY — airway can close within hours.<br>
+        · <b>Infraglottic:</b> Chemical injury from toxic gases → mucosal damage → bronchospasm → ARDS<br>
+        · <b>Systemic:</b> CO poisoning · Cyanide poisoning<br><br>
+        <b class="red">Inhalation injury ↑ fluid resuscitation requirements by 30–50% above Parkland estimate.</b><br><br>
+        <b>Airway:</b> Early intubation if stridor, hoarseness, facial burns, oedema. Nasotracheal if oral burns severe. Surgical airway if oedema too severe.
+      </div>
+    </div>
+  </div>
+
+  <!-- CO POISONING -->
+  <div class="section">
+    <p class="section-title">🫁 Carbon Monoxide Poisoning</p>
+    <div class="card" style="border-color:#6b7280;">
+      <div class="card-body">
+        <b>Mechanism:</b> CO binds Hb with 250× affinity of O₂ → carboxyhaemoglobin (COHb) → ↓ O₂ carrying capacity + leftward shift of O₂ dissociation curve → tissue hypoxia<br><br>
+        <b>SpO₂ is FALSELY NORMAL</b> — pulse oximeter cannot distinguish COHb from OxyHb. Use <b>co-oximetry</b> (ABG).<br><br>
+        <b>Symptoms by COHb level:</b><br>
+        · &lt;10%: Headache, nausea<br>
+        · 10–30%: Confusion, weakness<br>
+        · 30–50%: Syncope, seizures<br>
+        · &gt;50%: Coma, death<br><br>
+        <b>Treatment:</b> 100% O₂ via NRB mask (half-life COHb: 5h room air → 90 min on 100% O₂)<br>
+        <b>Hyperbaric O₂ (HBO):</b> COHb &gt;25% · Pregnancy · Neurological symptoms · COHb &gt;15% in children
+      </div>
+    </div>
+  </div>
+
+  <!-- ESCHAROTOMY -->
+  <div class="section">
+    <p class="section-title">🔪 Escharotomy</p>
+    <div class="card" style="border-color:#fb923c;">
+      <div class="card-body">
+        <b>Indication:</b> Circumferential full thickness burns → eschar is non-elastic → compartment syndrome as oedema develops<br><br>
+        <b>Sites:</b><br>
+        · <b>Limbs:</b> Medial and lateral longitudinal incisions through eschar<br>
+        · <b>Chest:</b> Bilateral anterior axillary line incisions + transverse subcostal connecting incision → allows chest wall excursion<br>
+        · <b>Fingers:</b> Mid-lateral incisions bilaterally<br><br>
+        <b>Signs indicating need:</b> ↑ compartment pressure · ↓ Pulses · Tense oedema · ↑ Peak airway pressures (chest burns)<br><br>
+        <b>Timing:</b> Do not delay — perform within hours of presentation if indicated<br><br>
+        <b>Fasciotomy:</b> If muscle compartment involved (electrical burns, 4th degree) — deeper than escharotomy through fascia
+      </div>
+    </div>
+  </div>
+
+  <!-- SPECIAL BURNS -->
+  <div class="section">
+    <p class="section-title">⚡ Special Burns</p>
+    <div class="grid2">
+      <div class="grid-item" style="border-color:#facc15;">
+        <div class="gi-title" style="color:#facc15;">ELECTRICAL BURNS</div>
+        <div class="gi-body">
+          Entry + exit wounds. Internal injury far greater than surface area suggests.<br>
+          <b>Rhabdomyolysis</b> → myoglobinuria → AKI<br>
+          <b>UO target: 1–2 ml/kg/hr</b><br>
+          Cardiac monitoring 24h (arrhythmias)<br>
+          ECG on arrival
+        </div>
+      </div>
+      <div class="grid-item" style="border-color:#60a5fa;">
+        <div class="gi-title" style="color:#60a5fa;">CHEMICAL BURNS</div>
+        <div class="gi-body">
+          Continuous damage until chemical removed.<br>
+          <b>Irrigate copiously with water</b> — minimum 30 min<br>
+          Do NOT neutralise (exothermic reaction worsens injury)<br>
+          HF acid: calcium gluconate gel + systemic Ca²⁺
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERRAL CRITERIA -->
+  <div class="section">
+    <p class="section-title">🏥 Burns Unit Referral Criteria (ABA)</p>
+    <div class="card">
+      <div class="card-body">
+        · Partial thickness burns &gt;10% TBSA<br>
+        · Burns involving face, hands, feet, genitalia, perineum, major joints<br>
+        · Full thickness burns any size<br>
+        · Electrical or lightning burns<br>
+        · Chemical burns<br>
+        · Inhalation injury<br>
+        · Burns in patients with pre-existing medical comorbidities<br>
+        · Burns with concomitant trauma<br>
+        · Suspected non-accidental injury (children)<br>
+        · Circumferential burns of limbs or chest
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMINER PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Parkland gives 12.8L — patient's urine output is 2ml/kg/hr at hour 6. What do you do?</div>
+      <div class="pearl-a">Reduce the infusion rate. Target UO is 0.5–1 ml/kg/hr. UO of 2ml/kg/hr = over-resuscitation → fluid creep → risk of abdominal compartment syndrome, pulmonary oedema. Titrate DOWN. Parkland is a guide, not a prescription.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: SpO₂ 99% in a house fire victim — reassured?</div>
+      <div class="pearl-a">No. Pulse oximetry cannot distinguish carboxyhaemoglobin from oxyhaemoglobin — SpO₂ is falsely normal in CO poisoning. Perform co-oximetry on ABG to measure COHb directly. Give 100% O₂ empirically while awaiting results.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why use Hartmann's (Lactated Ringer's) and NOT 0.9% NaCl in burns?</div>
+      <div class="pearl-a">Large volumes of 0.9% NaCl → hyperchloraemic metabolic acidosis. Hartmann's is more physiologically balanced (Na 130, Cl 109, lactate 28, K 4, Ca 2). Lactate is metabolised to bicarbonate — buffering the metabolic acidosis of burns shock. Normal saline worsens the acid-base picture.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: When do you give colloid in burns resuscitation?</div>
+      <div class="pearl-a">After 24 hours. In the first 24 hours, the glycocalyx is disrupted and capillaries are hyperpermeable — colloid leaks into interstitium and worsens oedema. After 24 hours, capillary integrity is partially restored → colloid (albumin 5%) can be given to maintain oncotic pressure and reduce total fluid requirements.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    AMERICAN BURN ASSOCIATION (ABA) GUIDELINES · ATLS 10TH ED<br>
+    CORE CONCEPTS CRITICAL CARE 2026 · ESSENTIALS OF TRAUMA ANAESTHESIA AND ICU
+  </div>
+
+</div>
+</body>
+</html>
