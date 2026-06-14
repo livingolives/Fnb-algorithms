@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TraumaDog Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#06040a;--gold:#c9a84c;--gold-bright:#f0c040;--gold-dim:#7a5e20;--surface:#0e0a14;--border:#2a1f0a;--text:#c8b89a;--dim:#5a4a2a;--bright:#f5e8c0;--red:#f87171;--green:#4ade80;--serif:'Cinzel',serif;--body:'Exo 2',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;}
+.top-border{height:5px;background:repeating-linear-gradient(90deg,var(--gold) 0,var(--gold) 8px,transparent 8px,transparent 14px,var(--gold-dim) 14px,var(--gold-dim) 16px,transparent 16px,transparent 22px);}
+
+/* SCREENS */
+.screen{display:none;padding:20px 16px;max-width:620px;margin:0 auto;}
+.screen.active{display:block;}
+
+/* WELCOME */
+.logo{font-family:var(--serif);font-size:2rem;font-weight:900;color:var(--gold-bright);letter-spacing:.2em;text-align:center;margin:20px 0 4px;text-shadow:0 0 20px rgba(240,192,64,.3);}
+.logo-sub{font-family:var(--serif);font-size:.6rem;letter-spacing:.3em;color:var(--gold-dim);text-align:center;margin-bottom:20px;}
+.hieroglyph-strip{font-size:.9rem;letter-spacing:.3em;color:var(--gold-dim);text-align:center;margin-bottom:20px;opacity:.5;}
+.welcome-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px;}
+.welcome-title{font-family:var(--serif);font-size:1rem;color:var(--gold-bright);letter-spacing:.1em;text-align:center;margin-bottom:12px;}
+.welcome-text{font-size:.78rem;color:var(--text);line-height:1.8;margin-bottom:14px;}
+.grades-preview{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.grade-item{background:#070510;border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center;}
+.grade-icon{font-size:1.4rem;margin-bottom:4px;}
+.grade-name{font-family:var(--serif);font-size:.65rem;letter-spacing:.1em;margin-bottom:2px;}
+.grade-score{font-size:.6rem;color:var(--dim);}
+.start-btn{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#3a2800,#6a4800);border:1px solid var(--gold);color:var(--gold-bright);font-family:var(--serif);font-size:.9rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;border-radius:6px;transition:all .2s;text-align:center;}
+.start-btn:hover{background:linear-gradient(135deg,#5a3c00,#8a6000);box-shadow:0 0 20px rgba(201,168,76,.2);}
+.back-link{display:block;text-align:center;font-size:.6rem;color:var(--dim);letter-spacing:.1em;text-decoration:none;margin-top:12px;}
+.back-link:hover{color:var(--gold-dim);}
+
+/* QUIZ */
+.quiz-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;}
+.q-progress{font-family:var(--serif);font-size:.65rem;color:var(--gold);letter-spacing:.1em;}
+.q-timer{font-family:'Courier New',monospace;font-size:1rem;font-weight:900;color:var(--gold-bright);}
+.q-timer.urgent{color:var(--red);animation:blink .5s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.q-score-chip{font-family:var(--serif);font-size:.6rem;color:var(--gold-dim);letter-spacing:.1em;}
+
+/* Progress bar */
+.progress-bar{height:3px;background:#1a1208;border-radius:2px;margin-bottom:16px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));transition:width .4s;border-radius:2px;}
+
+/* Topic badge */
+.topic-badge{font-family:var(--serif);font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--gold-dim);color:var(--gold-dim);display:inline-block;margin-bottom:10px;border-radius:2px;}
+
+/* Question */
+.question-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:12px;}
+.question-text{font-size:.88rem;color:var(--bright);line-height:1.7;margin-bottom:4px;}
+.question-context{font-size:.75rem;color:var(--dim);line-height:1.6;margin-bottom:14px;font-style:italic;border-left:2px solid var(--gold-dim);padding-left:10px;}
+
+/* Options */
+.options{display:flex;flex-direction:column;gap:8px;}
+.opt-btn{background:#07050f;border:1px solid #1a1428;border-radius:6px;padding:11px 14px;text-align:left;cursor:pointer;font-family:var(--body);font-size:.82rem;color:var(--text);transition:all .18s;display:flex;align-items:flex-start;gap:10px;line-height:1.4;}
+.opt-btn:active{opacity:.7;}
+.opt-btn:hover:not(:disabled){border-color:var(--gold-dim);color:var(--bright);}
+.opt-key{font-family:'Courier New',monospace;font-size:.65rem;color:var(--dim);min-width:18px;padding-top:1px;flex-shrink:0;}
+.opt-btn.correct{border-color:var(--green);background:rgba(74,222,128,.06);color:var(--green);}
+.opt-btn.correct .opt-key{color:var(--green);}
+.opt-btn.wrong{border-color:var(--red);background:rgba(248,113,113,.06);color:var(--red);}
+.opt-btn.wrong .opt-key{color:var(--red);}
+.opt-btn:disabled{cursor:default;}
+
+/* Feedback */
+.feedback{margin-top:12px;padding:11px 14px;border-radius:6px;font-size:.78rem;line-height:1.6;display:none;}
+.feedback.show{display:block;}
+.feedback.correct{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.25);color:var(--green);}
+.feedback.wrong{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.25);color:#ff9999;}
+.next-btn{display:block;width:100%;margin-top:12px;padding:11px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--serif);font-size:.7rem;letter-spacing:.15em;cursor:pointer;border-radius:6px;transition:all .2s;display:none;}
+.next-btn.show{display:block;}
+.next-btn:hover{background:rgba(201,168,76,.08);border-color:var(--gold);}
+
+/* RESULTS */
+.result-header{text-align:center;padding:24px 0 16px;}
+.result-dog{font-size:4rem;margin-bottom:8px;}
+.result-grade{font-family:var(--serif);font-size:1.6rem;font-weight:900;letter-spacing:.1em;margin-bottom:6px;}
+.result-score{font-family:'Courier New',monospace;font-size:1rem;color:var(--text);margin-bottom:4px;}
+.result-time{font-size:.65rem;color:var(--dim);letter-spacing:.1em;margin-bottom:16px;}
+.result-msg{font-family:var(--serif);font-size:.82rem;font-style:italic;color:var(--gold);text-align:center;padding:12px 16px;border:1px solid var(--gold-dim);background:rgba(201,168,76,.05);border-radius:6px;line-height:1.8;margin-bottom:16px;}
+
+/* Review */
+.review-title{font-family:var(--serif);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:10px;}
+.review-item{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:8px;}
+.review-q{font-size:.75rem;color:var(--bright);margin-bottom:6px;line-height:1.5;}
+.review-answer{font-size:.7rem;margin-bottom:4px;}
+.review-explanation{font-size:.68rem;color:var(--dim);line-height:1.5;border-left:2px solid var(--gold-dim);padding-left:8px;margin-top:6px;}
+.result-btns{display:flex;gap:8px;margin-top:16px;}
+.result-btn{flex:1;padding:12px;font-family:var(--serif);font-size:.65rem;letter-spacing:.1em;cursor:pointer;border-radius:6px;border:none;transition:all .2s;}
+.result-btn.primary{background:linear-gradient(135deg,#3a2800,#6a4800);border:1px solid var(--gold);color:var(--gold-bright);}
+.result-btn.secondary{background:transparent;border:1px solid var(--border);color:var(--dim);}
+</style>
+</head>
+<body>
+<div class="top-border"></div>
+
+<!-- WELCOME SCREEN -->
+<div class="screen active" id="screenWelcome">
+  <div class="logo">TRAUMADOG</div>
+  <div class="logo-sub">THE CHALLENGE</div>
+  <div class="hieroglyph-strip">𓂀 𓅃 𓆣 𓁹 𓆙 𓊪 𓋴 𓌀 𓁹 𓂀</div>
+
+  <div class="welcome-card">
+    <div class="welcome-title">𓁹 ENTER IF YOU DARE 𓁹</div>
+    <div class="welcome-text">
+      5 questions. FNB/EDAIC level. Drawn randomly from a 30-question bank across all trauma topics. No hints. No mercy. The pack has no room for puppies.<br><br>
+      You have <strong style="color:var(--gold)">90 seconds per question.</strong> Waste time and the clock bites back.
+    </div>
+
+    <div class="grades-preview">
+      <div class="grade-item">
+        <div class="grade-icon">🐶</div>
+        <div class="grade-name" style="color:#6b7280;">PUPPY</div>
+        <div class="grade-score">0–1 correct</div>
+      </div>
+      <div class="grade-item">
+        <div class="grade-icon">🐕</div>
+        <div class="grade-name" style="color:var(--gold-dim);">BIG DOG</div>
+        <div class="grade-score">2–3 correct</div>
+      </div>
+      <div class="grade-item">
+        <div class="grade-icon">🐕‍🦺</div>
+        <div class="grade-name" style="color:var(--gold);">TOP DOG</div>
+        <div class="grade-score">4 correct</div>
+      </div>
+      <div class="grade-item">
+        <div class="grade-icon">👑</div>
+        <div class="grade-name" style="color:var(--gold-bright);">GRAND DOG</div>
+        <div class="grade-score">5/5 — flawless</div>
+      </div>
+    </div>
+
+    <button class="start-btn" onclick="startQuiz()">☥ BEGIN THE CHALLENGE ☥</button>
+  </div>
+  <a class="back-link" href="index.html">← Return to TraumaDog</a>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div class="screen" id="screenQuiz">
+  <div class="quiz-header">
+    <div class="q-progress" id="qProgress">QUESTION 1 OF 5</div>
+    <div class="q-timer" id="qTimer">1:30</div>
+    <div class="q-score-chip" id="qScoreChip">⭐ 0</div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="topic-badge" id="topicBadge">TOPIC</div>
+  <div class="question-card">
+    <div class="question-context" id="qContext" style="display:none"></div>
+    <div class="question-text" id="qText">Loading...</div>
+  </div>
+  <div class="options" id="optionsContainer"></div>
+  <div class="feedback" id="feedback"></div>
+  <button class="next-btn" id="nextBtn" onclick="nextQuestion()">NEXT QUESTION →</button>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div class="screen" id="screenResults">
+  <div class="result-header">
+    <div class="result-dog" id="resultDog">🐕</div>
+    <div class="result-grade" id="resultGrade">BIG DOG</div>
+    <div class="result-score" id="resultScore">3 / 5 correct</div>
+    <div class="result-time" id="resultTime">Completed in 4:32</div>
+  </div>
+  <div class="result-msg" id="resultMsg"></div>
+  <div class="review-title">𓂀 QUESTION REVIEW</div>
+  <div id="reviewContainer"></div>
+  <div class="result-btns">
+    <button class="result-btn primary" onclick="startQuiz()">☥ TRY AGAIN</button>
+    <button class="result-btn secondary" onclick="goHome()">← HOME</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// QUESTION BANK — 30 FNB-LEVEL QUESTIONS
+// ══════════════════════════════════════
+const QUESTIONS = [
+  // HAEMORRHAGIC SHOCK
+  {topic:'HAEMORRHAGIC SHOCK',
+   context:'28M, unrestrained driver, high-speed RTC. HR 142, BP 76/50, RR 34, GCS 12. Cold clammy peripheries. No response after 1L Hartmann\'s.',
+   q:'This patient is a non-responder to initial resuscitation. What is the MOST appropriate next step?',
+   opts:['Give another 2L crystalloid and reassess','Activate MTP — 1:1:1 pRBC:FFP:Platelets and proceed to damage control surgery','Start noradrenaline infusion via peripheral line','Perform emergency CT to identify source'],
+   correct:1,
+   explain:'Non-responders need immediate haemorrhage control and MTP activation — not more crystalloid. CT delays surgery. Vasopressors before volume in haemorrhagic shock = cardiovascular collapse.'},
+
+  {topic:'HAEMORRHAGIC SHOCK',
+   context:'Massive haemorrhage patient. MTP activated. You have given 6 units pRBC and 6 units FFP.',
+   q:'Which electrolyte abnormality requires active monitoring and replacement with every 4 units of pRBC?',
+   opts:['Hyperkalaemia — pRBC contain excess K⁺','Hypomagnesaemia — chelated by citrate','Hypocalcaemia — citrate chelates ionised Ca²⁺','Hyponatraemia — diluted by FFP'],
+   correct:2,
+   explain:'Citrate in blood products chelates ionised calcium → hypocalcaemia → ↓ cardiac contractility + ↓ coagulation. The 4th element of the Diamond of Death. Give CaCl₂ with every 4 units pRBC.'},
+
+  {topic:'HAEMORRHAGIC SHOCK',
+   context:'Trauma patient, Class III shock. Shock Index calculated at bedside.',
+   q:'What Shock Index value indicates the need for MTP activation?',
+   opts:['SI > 0.5','SI > 0.8','SI > 1.0','SI > 1.5'],
+   correct:2,
+   explain:'Shock Index = HR ÷ SBP. Normal <1. SI >1 = significant haemorrhage requiring MTP consideration. SI >1.4 = severe shock. Simple, rapid, no equipment needed.'},
+
+  // TBI
+  {topic:'TBI MANAGEMENT',
+   context:'Severe TBI patient, GCS 7, intubated. ICP monitor in situ showing ICP 28 mmHg. MAP 85 mmHg. You have given mannitol.',
+   q:'What is the CPP and is it adequate?',
+   opts:['CPP 57 mmHg — inadequate, target is 60-70 mmHg','CPP 113 mmHg — too high, reduce MAP','CPP 28 mmHg — critically low','CPP 85 mmHg — adequate'],
+   correct:0,
+   explain:'CPP = MAP − ICP = 85 − 28 = 57 mmHg. Target CPP is 60–70 mmHg (BTF 4th Ed). This is inadequate — need to either ↑ MAP or ↓ ICP. Give more mannitol/HTS or increase vasopressors.'},
+
+  {topic:'TBI MANAGEMENT',
+   context:'Intubated TBI patient. Neurosurgery asks you to hyperventilate to lower ICP while they prepare for theatre.',
+   q:'What is the correct PaCO₂ target during acute herniation as a bridge to surgery?',
+   opts:['PaCO₂ 25–28 mmHg — aggressive hyperventilation','PaCO₂ 30–35 mmHg — brief targeted hyperventilation','PaCO₂ 40–45 mmHg — normocapnia always','PaCO₂ 20–25 mmHg — maximum vasoconstriction'],
+   correct:1,
+   explain:'During acute herniation: brief targeted hyperventilation PaCO₂ 30–35 mmHg is acceptable as a BRIDGE to surgery only. <30 mmHg causes dangerous cerebral vasoconstriction and ischaemia. Prophylactic hyperventilation is HARMFUL.'},
+
+  {topic:'TBI MANAGEMENT',
+   context:'TBI + haemorrhagic shock. Surgeon wants to use permissive hypotension (SBP 80-90 mmHg).',
+   q:'What is the correct MAP target in TBI + haemorrhagic shock?',
+   opts:['MAP 50–60 mmHg — permissive hypotension to limit re-bleeding','MAP 65 mmHg — standard ICU target','MAP ≥80 mmHg — CPP preservation takes priority','MAP >100 mmHg — aggressive resuscitation'],
+   correct:2,
+   explain:'Permissive hypotension has NO role in TBI. CPP must be maintained. Target MAP ≥80 mmHg in TBI + haemorrhage. Achieve haemorrhage control as fast as possible, then optimise CPP.'},
+
+  // BURNS
+  {topic:'BURNS RESUSCITATION',
+   context:'60kg female, 45% TBSA burns from house fire. Burns occurred 2 hours ago. Now in ED.',
+   q:'Using Parkland formula, how much fluid should she receive in the NEXT 6 hours (clock started from time of burn)?',
+   opts:['5,400ml over next 6 hours','10,800ml over next 6 hours','3,600ml over next 6 hours — adjust for 2h already passed','5,400ml minus fluid already given pre-hospital'],
+   correct:2,
+   explain:'Parkland: 4 × 60 × 45 = 10,800ml. First half (5,400ml) over 8h FROM TIME OF BURN. 2h have passed → 5,400ml ÷ 8h × 6h remaining = 4,050ml + subtract any pre-hospital fluid. Closest: 3,600ml adjusted. Clock ALWAYS from burn time.'},
+
+  {topic:'BURNS RESUSCITATION',
+   context:'House fire victim. SpO₂ 99% on room air. Alert and talking. Singed eyebrows, carbonaceous sputum.',
+   q:'SpO₂ is 99% — are you reassured? What do you do next?',
+   opts:['SpO₂ 99% is reassuring — observe and give supplemental O₂','SpO₂ is falsely normal — CO poisoning. Give 100% O₂ and co-oximetry ABG immediately','Intubate immediately — SpO₂ will drop','Arrange CT chest to assess inhalation injury'],
+   correct:1,
+   explain:'Pulse oximetry CANNOT distinguish COHb from OxyHb — falsely normal in CO poisoning. SpO₂ 99% means nothing here. Singed eyebrows + carbonaceous sputum = inhalation injury + CO poisoning until proven otherwise. 100% O₂ via NRB + co-oximetry ABG.'},
+
+  {topic:'BURNS RESUSCITATION',
+   context:'Full thickness circumferential burns to right arm. 4 hours post-injury. Radial pulse now absent.',
+   q:'What is the immediate intervention?',
+   opts:['Urgent CT angiography to confirm vascular injury','Escharotomy — medial and lateral longitudinal incisions through eschar','Fasciotomy — immediately, do not delay','Elevation and reassess in 1 hour'],
+   correct:1,
+   explain:'Circumferential full thickness burns → non-elastic eschar → compartment syndrome as oedema develops → absent pulse. Escharotomy (medial + lateral incisions through eschar) is required immediately. Fasciotomy only if muscle compartment involved (electrical burns).'},
+
+  // COAGULOPATHY
+  {topic:'COAGULOPATHY',
+   context:'ROTEM results: EXTEM CT 95s (normal <80s). FIBTEM MCF 14mm (normal). INTEM CT 210s (normal <240s). HEPTEM CT 95s.',
+   q:'What is the diagnosis and treatment?',
+   opts:['Factor deficiency — give FFP','Fibrinogen deficiency — give cryoprecipitate','Heparin effect — give protamine','Platelet deficiency — give platelets'],
+   correct:0,
+   explain:'↑EXTEM CT = prolonged clot initiation = factor deficiency. FIBTEM normal = fibrinogen OK. INTEM vs HEPTEM: both similarly prolonged = NOT heparin (heparin would prolong INTEM but not HEPTEM). Diagnosis = factor deficiency → give FFP.'},
+
+  {topic:'COAGULOPATHY',
+   context:'Trauma patient. ROTEM: EXTEM MCF 32mm (↓). FIBTEM MCF 6mm (↓, normal 9-25mm).',
+   q:'What does this pattern indicate and what do you give?',
+   opts:['Platelet deficiency — give platelets','Factor deficiency — give FFP','Fibrinogen deficiency — give cryoprecipitate or fibrinogen concentrate','Heparin effect — give protamine'],
+   correct:2,
+   explain:'↓EXTEM MCF + ↓FIBTEM MCF = fibrinogen deficiency (FIBTEM isolates fibrinogen contribution by blocking platelets with cytochalasin D). Give cryoprecipitate (10 units raises fibrinogen ~1 g/L) or fibrinogen concentrate. Target fibrinogen >2 g/L.'},
+
+  {topic:'COAGULOPATHY',
+   context:'Major trauma patient arrives. Time of injury: 2.5 hours ago. Active haemorrhage ongoing.',
+   q:'Regarding TXA — what is MOST accurate?',
+   opts:['Give TXA only after confirming hyperfibrinolysis on TEG','Give TXA now — CRASH-2 shows benefit up to 3h, greatest within 1h','TXA is contraindicated with MTP activation','Wait for coagulation results before giving TXA'],
+   correct:1,
+   explain:'CRASH-2: TXA within 3h reduces all-cause mortality (RR 0.91). Greatest benefit within 1h (RR 0.68). After 3h = potentially harmful (↑mortality). Do NOT wait for TEG or coagulation results — give empirically to all significant haemorrhage within 3h.'},
+
+  // REBOA
+  {topic:'REBOA',
+   context:'35M, gunshot wound to abdomen. BP 60/40, HR 155, GCS 14. Transient responder to 2 units pRBC. OR is 3 minutes away.',
+   q:'REBOA is considered. In which zone should the balloon be inflated?',
+   opts:['Zone I — descending thoracic aorta, between left subclavian and coeliac axis','Zone II — between coeliac axis and lowest renal artery','Zone III — infrarenal aorta, below renal arteries','No REBOA — patient needs immediate EDT'],
+   correct:0,
+   explain:'Abdominal (non-pelvic) haemorrhage = Zone I REBOA. Zone I: left subclavian → coeliac axis. Zone II = NEVER used (visceral ischaemia). Zone III = pelvic/junctional. EDT for cardiac arrest — this patient has a pulse and BP, so REBOA is appropriate bridge to OR.'},
+
+  {topic:'REBOA',
+   context:'Zone I REBOA balloon inflated 55 minutes ago. Patient now in OR, haemorrhage controlled.',
+   q:'What is the PRIMARY concern now and how do you manage balloon deflation?',
+   opts:['Balloon migration — confirm position with fluoroscopy before deflating','Reperfusion injury — deflate gradually, have calcium ready, monitor for hyperkalaemia and acidosis surge','Balloon rupture — deflate immediately and replace','Air embolism — aspirate balloon slowly'],
+   correct:1,
+   explain:'Zone I time limit 30–60 minutes. Prolonged ischaemia to spinal cord, kidneys, bowel. Deflation → sudden reperfusion → massive inflammatory response + hyperkalaemia + lactic acidosis surge + myocardial depression. Deflate gradually, calcium ready, bicarbonate if needed, ICU post-op.'},
+
+  // SPINAL CORD INJURY
+  {topic:'SPINAL CORD INJURY',
+   context:'C5 fracture dislocation. BP 78/50, HR 52, warm peripheries. FAST scan negative.',
+   q:'What is the diagnosis and first-line vasopressor choice?',
+   opts:['Haemorrhagic shock — give blood products','Neurogenic shock — noradrenaline or dopamine, MAP target 85-90 mmHg','Cardiogenic shock — dobutamine','Septic shock — broad spectrum antibiotics and noradrenaline'],
+   correct:1,
+   explain:'Neurogenic shock: hypotension + bradycardia + warm peripheries from loss of sympathetic tone (injury above T6). FAST negative excludes haemorrhage. Vasopressors required — noradrenaline (or dopamine for chronotropy above T6). MAP 85–90 mmHg for 7 days (AANS).'},
+
+  {topic:'SPINAL CORD INJURY',
+   context:'T4 complete SCI, 6 months post-injury. Brought in with BP 210/130, severe headache, sweating above injury level, bradycardia.',
+   q:'Diagnosis and immediate management?',
+   opts:['Hypertensive emergency — labetalol IV and urgent CT head','Autonomic dysreflexia — sit up, find and remove trigger (catheterise if in retention), antihypertensives','Phaeochromocytoma crisis — alpha blockade first','Posterior reversible encephalopathy — MRI brain'],
+   correct:1,
+   explain:'Autonomic dysreflexia — T6 and above. Noxious stimulus below level → massive sympathetic discharge → hypertensive crisis + bradycardia + flushing/sweating above level. Most common trigger: bladder distension. Sit up → catheterise → GTN/labetalol. If untreated → ICH, MI, death.'},
+
+  {topic:'SPINAL CORD INJURY',
+   context:'C6 injury patient, Day 4. Rapid sequence induction required for emergency surgery. No rocuronium available.',
+   q:'Regarding suxamethonium — what is correct?',
+   opts:['Safe to use — suxamethonium is always safe in SCI','CONTRAINDICATED — upregulated extrajunctional ACh receptors → life-threatening hyperkalaemia','Use half the dose — reduced sensitivity','Safe only with prior calcium pretreatment'],
+   correct:1,
+   explain:'Suxamethonium safe within first 72h. From Day 3 to 9 months: upregulation of extrajunctional ACh receptors across entire muscle membrane → suxamethonium depolarises all simultaneously → massive K⁺ efflux → cardiac arrest. Day 4 = CONTRAINDICATED. Use rocuronium + sugammadex.'},
+
+  // TRAUMA IN PREGNANCY
+  {topic:'TRAUMA IN PREGNANCY',
+   context:'30-week pregnant trauma patient in cardiac arrest. CPR started. 3.5 minutes into arrest.',
+   q:'What must happen within the next 90 seconds?',
+   opts:['Continue CPR for 10 minutes before considering delivery','Perimortem Caesarean Section — baby must be delivered by 5 minutes from arrest','Transfer to theatre for formal C-section','Give adrenaline and reassess at 5 minutes'],
+   correct:1,
+   explain:'The 4-minute rule: if no ROSC within 4 minutes → deliver. Baby out by 5 minutes. PMCS helps MOTHER (relieves aortocaval compression → ↑ venous return → better CPR) AND baby (brain injury starts at 4-6 min anoxia). Do NOT wait. Do NOT transfer. Deliver in resus.'},
+
+  {topic:'TRAUMA IN PREGNANCY',
+   context:'32-week pregnant patient requiring emergency laparotomy. RSI performed. Ready to reverse NMB at end of case.',
+   q:'Which reversal agent combination is CORRECT in a pregnant patient?',
+   opts:['Neostigmine + glycopyrrolate — standard combination','Neostigmine + atropine — atropine crosses placenta to protect fetus','Sugammadex only — avoid all anticholinergics','Neostigmine alone — no anticholinergic needed in pregnancy'],
+   correct:1,
+   explain:'Neostigmine crosses placenta → fetal bradycardia/bronchoconstriction. Glycopyrrolate = quaternary structure → does NOT cross placenta → cannot protect fetus. Atropine DOES cross placenta → counteracts fetal muscarinic effects of neostigmine. Use neostigmine + ATROPINE. Or ideally: sugammadex (no anticholinergic needed).'},
+
+  {topic:'TRAUMA IN PREGNANCY',
+   context:'Rh-negative pregnant patient, 28 weeks, involved in RTC. Minor abdominal trauma. CTG normal.',
+   q:'What test is mandatory and within what timeframe must you act?',
+   opts:['Kleihauer-Betke test — anti-D immunoglobulin within 72 hours if positive','Group and save — crossmatch within 24 hours','FAST scan — within 30 minutes','Coagulation screen — fibrinogen within 1 hour'],
+   correct:0,
+   explain:'Kleihauer-Betke (KB) test: acid elution detects fetal RBCs in maternal circulation. Rh-negative mother exposed to Rh-positive fetal blood → sensitisation risk → future pregnancies affected. Anti-D immunoglobulin within 72 hours. Standard dose 300mcg covers 30ml fetal blood. More if KB shows larger FMH.'},
+
+  // THORACIC TRAUMA
+  {topic:'THORACIC TRAUMA',
+   context:'RTC patient. Absent left breath sounds, dullness to percussion left chest, BP 85/60, HR 130. Chest drain inserted — 800ml blood drains immediately.',
+   q:'The drain output criterion for emergency thoracotomy — what is it?',
+   opts:['Immediate output >500ml OR ongoing loss >200ml/hr for 2-4 hours','Immediate output >1500ml OR ongoing loss >200ml/hr for 2-4 hours','Any output >300ml warrants thoracotomy','Immediate output >800ml — this patient needs thoracotomy now'],
+   correct:1,
+   explain:'Massive haemothorax criteria for thoracotomy: immediate drainage >1500ml OR ongoing loss >200ml/hr for 2–4 hours. This patient drained 800ml initially — not yet meeting threshold. Continue monitoring. Prepare for theatre if criteria met.'},
+
+  {topic:'THORACIC TRAUMA',
+   context:'Mechanically ventilated trauma patient. Sudden ↑ PIP, absent right breath sounds, BP 70/40, HR 148. Trachea midline.',
+   q:'Tension pneumothorax confirmed clinically. Immediate management?',
+   opts:['Urgent CXR to confirm before decompressing','Needle decompression 2nd ICS MCL immediately — do not wait for imaging','Insert chest drain immediately without needle decompression','Bronchoscopy to assess airway'],
+   correct:1,
+   explain:'Tension PTX = CLINICAL diagnosis. Do NOT wait for CXR — patient will arrest. Needle decompress 2nd ICS MCL immediately → converts tension to simple PTX. Formal chest drain follows. In ventilated patients, bilateral needle decompression may be needed.'},
+
+  // VASOPRESSORS
+  {topic:'VASOPRESSORS IN SHOCK',
+   context:'Septic shock patient. MAP 55 despite 30ml/kg fluid. Choosing vasopressor.',
+   q:'First-line vasopressor in septic shock per current guidelines?',
+   opts:['Adrenaline — most potent, best survival data','Vasopressin — avoids tachycardia','Noradrenaline — first-line, best evidence','Dopamine — dopaminergic effect protects kidneys'],
+   correct:2,
+   explain:'Noradrenaline is first-line in septic shock (Surviving Sepsis Campaign). Predominantly α1 → ↑ SVR. Add vasopressin (0.03 units/min) as second agent to reduce noradrenaline dose. Dopamine associated with ↑ arrhythmias and worse outcomes vs noradrenaline (SOAP II trial).'},
+
+  {topic:'VASOPRESSORS IN SHOCK',
+   context:'Neurogenic shock post C4 SCI. BP 72/48, HR 48. Not responding to fluid alone.',
+   q:'Why is noradrenaline alone insufficient and what do you add?',
+   opts:['Add adrenaline — pure alpha needed','Add dopamine — chronotropic effect treats the bradycardia as well as hypotension','Add phenylephrine — pure alpha with no tachycardia risk','Add vasopressin — vagolytic effect counters bradycardia'],
+   correct:1,
+   explain:'Neurogenic shock above T6: loss of sympathetic to heart → bradycardia + hypotension. Noradrenaline (α1 + β1) helps BP but may not adequately increase HR. Dopamine (dopaminergic + α + β) provides additional chronotropy useful for neurogenic bradycardia. Atropine for acute severe bradycardia.'},
+
+  // AIRWAY
+  {topic:'MAXFAX AIRWAY',
+   context:'Le Fort III fracture patient, GCS 9, gurgling, blood in oropharynx. Attempting RSI.',
+   q:'What is the MOST important first step before laryngoscopy?',
+   opts:['Immediate laryngoscopy and intubate — time critical','Suction oropharynx thoroughly first — cannot intubate through a pool of blood','Insert LMA as definitive airway','Call ENT before instrumenting a maxfax airway'],
+   correct:1,
+   explain:'Gurgling = fluid in airway = suction first. You cannot visualise the cords through blood and secretions. Suction first, then laryngoscopy. CMAC/video laryngoscopy preferred for maxfax — improved view despite distorted anatomy. LMA is NOT a definitive airway.'},
+
+  // SODIUM
+  {topic:'SODIUM DISORDERS',
+   context:'TBI patient, Na⁺ 118 mmol/L, GCS deteriorating. Seizure just occurred.',
+   q:'Target rate of sodium correction and which agent?',
+   opts:['Correct slowly — <10 mmol/L per 24h — use oral fluid restriction','Correct urgently — 4-6 mmol/L over 1-2h using 3% hypertonic saline to stop seizures, then slow to <10/24h total','Correct at 1 mmol/L per hour continuously','Give 0.9% NaCl at maintenance rate'],
+   correct:1,
+   explain:'Symptomatic hyponatraemia (seizure/coma) = urgent correction. 3% HTS: raise Na⁺ by 4–6 mmol/L over 1–2h to stop seizures. Then slow correction: <10 mmol/L per 24h total (to prevent osmotic demyelination syndrome/ODS). Never >12 mmol/L/24h.'},
+
+  // MIXED TOPICS
+  {topic:'DAMAGE CONTROL SURGERY',
+   context:'Damage control laparotomy performed. Abdomen packed and temporarily closed. Now in ICU.',
+   q:'What is the LETHAL TRIAD targets that must be corrected before returning to OR?',
+   opts:['Temp >35°C, pH >7.2, INR <2.5','Temp >36°C, pH >7.35, INR <1.5, iCa >1.1 mmol/L','Temp >37°C, pH >7.4, Hb >10 g/dL','Temp >35°C, lactate <4, urine output >0.5ml/kg/hr'],
+   correct:1,
+   explain:'Before returning to OR after damage control: correct the lethal triad + hypocalcaemia (Diamond of Death). Target: Temp >36°C, pH >7.35, INR <1.5, ionised Ca²⁺ >1.1 mmol/L, fibrinogen >2 g/L, platelets >50. Failure to correct = re-bleeding in OR despite surgical haemostasis.'},
+
+  {topic:'ANAESTHETIC PHARMACOLOGY',
+   context:'Intubated burns patient, Day 12. Requiring procedural sedation for dressing change.',
+   q:'Regarding ketamine in burns patients — which statement is MOST accurate?',
+   opts:['Ketamine is contraindicated — catecholamine release worsens burns hypermetabolism','Ketamine is ideal — analgesic, sedative, maintains airway reflexes, haemodynamically stable','Ketamine increases ICP — avoid if any head burns','Ketamine causes excessive secretions — use glycopyrrolate premedication always'],
+   correct:1,
+   explain:'Ketamine is excellent for burns dressing changes: dissociative analgesia, maintains airway reflexes and spontaneous breathing, haemodynamically supportive (sympathomimetic). Use with a low-dose benzodiazepine to reduce emergence phenomena. Not contraindicated in burns — actually preferred.'},
+
+  {topic:'TRAUMA SCORING',
+   context:'Polytrauma patient. GCS 10, BP 90/60, RR 28. You need to calculate RTS.',
+   q:'What does the Revised Trauma Score (RTS) measure and what range indicates critical injury?',
+   opts:['GCS + ISS + blood pressure — RTS <4 = critical','Weighted score of GCS + SBP + RR — RTS <4 = severe injury, high mortality','Age + mechanism + vital signs — RTS <6 = trauma team activation','ISS + TRISS — RTS >10 = low mortality'],
+   correct:1,
+   explain:'RTS = weighted combination of GCS (weight 0.9368) + SBP (weight 0.7326) + RR (weight 0.2908). Range 0–7.84. RTS <4 = severe injury with high predicted mortality. Used for triage and outcome prediction. TRISS combines RTS + ISS + age for survival probability.'},
+
+  {topic:'FAT EMBOLISM',
+   context:'22F, closed femur fracture, Day 2. Sudden onset confusion, SpO₂ 84%, petechiae over chest and axillae.',
+   q:'Diagnosis and the MOST specific sign?',
+   opts:['Pulmonary embolism — the petechiae are incidental bruising','Fat embolism syndrome — petechial rash in non-dependent areas is MOST specific sign','ARDS from pneumonia — obtain sputum culture','Tension pneumothorax — petechiae from SVC obstruction'],
+   correct:1,
+   explain:'Fat Embolism Syndrome (Gurd\'s criteria): major criteria = respiratory insufficiency, cerebral involvement, petechial rash. The petechial rash (chest, axillae, conjunctiva, palate) is the MOST SPECIFIC sign — seen in 50–60% but pathognomonic when present. Occurs Day 1–3 post long bone fracture.'},
+];
+
+// ══════════════════════════════════════
+// GAME STATE
+// ══════════════════════════════════════
+let state = {
+  questions: [],
+  current: 0,
+  score: 0,
+  answers: [],
+  timerRef: null,
+  timeLeft: 90,
+  startTime: null,
+  totalTime: 0
+};
+
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5); }
+
+function startQuiz(){
+  // Pick 5 random questions
+  state.questions = shuffle(QUESTIONS).slice(0,5);
+  state.current = 0;
+  state.score = 0;
+  state.answers = [];
+  state.startTime = Date.now();
+  showScreen('screenQuiz');
+  renderQuestion();
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function renderQuestion(){
+  const q = state.questions[state.current];
+  const idx = state.current;
+
+  // Header
+  document.getElementById('qProgress').textContent = `QUESTION ${idx+1} OF 5`;
+  document.getElementById('qScoreChip').textContent = `⭐ ${state.score}`;
+  document.getElementById('progressFill').style.width = `${(idx/5)*100}%`;
+  document.getElementById('topicBadge').textContent = q.topic;
+
+  // Context
+  const ctxEl = document.getElementById('qContext');
+  if(q.context){ ctxEl.textContent = q.context; ctxEl.style.display='block'; }
+  else ctxEl.style.display='none';
+
+  document.getElementById('qText').textContent = q.q;
+
+  // Options
+  const container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+  const keys = ['A','B','C','D'];
+  q.opts.forEach((opt,i)=>{
+    const btn = document.createElement('button');
+    btn.className='opt-btn';
+    btn.innerHTML=`<span class="opt-key">${keys[i]}</span><span>${opt}</span>`;
+    btn.onclick=()=>answer(i,btn,container,q);
+    container.appendChild(btn);
+  });
+
+  // Reset feedback/next
+  const fb=document.getElementById('feedback');
+  fb.className='feedback';fb.textContent='';
+  const nb=document.getElementById('nextBtn');
+  nb.className='next-btn';
+
+  // Start timer
+  startTimer();
+}
+
+function startTimer(){
+  clearInterval(state.timerRef);
+  state.timeLeft=90;
+  updateTimer();
+  state.timerRef=setInterval(()=>{
+    state.timeLeft--;
+    updateTimer();
+    if(state.timeLeft<=0){
+      clearInterval(state.timerRef);
+      timeUp();
+    }
+  },1000);
+}
+
+function updateTimer(){
+  const el=document.getElementById('qTimer');
+  const m=Math.floor(state.timeLeft/60);
+  const s=String(state.timeLeft%60).padStart(2,'0');
+  el.textContent=`${m}:${s}`;
+  el.className='q-timer'+(state.timeLeft<=15?' urgent':'');
+}
+
+function timeUp(){
+  const q=state.questions[state.current];
+  const container=document.getElementById('optionsContainer');
+  container.querySelectorAll('.opt-btn').forEach((btn,i)=>{
+    btn.disabled=true;
+    if(i===q.correct)btn.classList.add('correct');
+  });
+  state.answers.push({q:q,selected:-1,correct:false});
+  showFeedback(false,q,'⏱ Time\'s up! '+q.explain);
+  document.getElementById('nextBtn').className='next-btn show';
+}
+
+function answer(selected,btn,container,q){
+  clearInterval(state.timerRef);
+  const isCorrect=selected===q.correct;
+
+  container.querySelectorAll('.opt-btn').forEach((b,i)=>{
+    b.disabled=true;
+    if(i===q.correct)b.classList.add('correct');
+  });
+  if(!isCorrect) btn.classList.add('wrong');
+  else state.score++;
+
+  state.answers.push({q,selected,correct:isCorrect});
+  document.getElementById('qScoreChip').textContent=`⭐ ${state.score}`;
+  showFeedback(isCorrect,q,isCorrect?'✓ Correct. '+q.explain:'✗ '+q.explain);
+  document.getElementById('nextBtn').className='next-btn show';
+}
+
+function showFeedback(correct,q,text){
+  const fb=document.getElementById('feedback');
+  fb.className='feedback show '+(correct?'correct':'wrong');
+  fb.textContent=text;
+}
+
+function nextQuestion(){
+  state.current++;
+  if(state.current>=5){ showResults(); return; }
+  renderQuestion();
+}
+
+function showResults(){
+  clearInterval(state.timerRef);
+  state.totalTime=Math.floor((Date.now()-state.startTime)/1000);
+  const s=state.score;
+  const grades=[
+    {score:0,emoji:'🐶',name:'PUPPY',color:'#6b7280',msg:'"Every Grand Dog was once a Puppy. Come back. Study harder. The pack awaits."'},
+    {score:1,emoji:'🐶',name:'PUPPY',color:'#6b7280',msg:'"Every Grand Dog was once a Puppy. Come back. Study harder. The pack awaits."'},
+    {score:2,emoji:'🐕',name:'BIG DOG',color:'#c9a84c',msg:'"You know the territory. But the hunt demands more. Review your weak topics and return."'},
+    {score:3,emoji:'🐕',name:'BIG DOG',color:'#c9a84c',msg:'"Solid foundation. The pack respects your effort. Push for Top Dog."'},
+    {score:4,emoji:'🐕‍🦺',name:'TOP DOG',color:'#f0c040',msg:'"Impressive. You move with precision. One more step to the throne."'},
+    {score:5,emoji:'👑',name:'GRAND DOG',color:'#fff',msg:'"𓁹 The pharaoh nods. Anubis himself would trust you at the threshold. Flawless."'},
+  ];
+  const g=grades[s];
+
+  showScreen('screenResults');
+  document.getElementById('resultDog').textContent=g.emoji;
+  document.getElementById('resultGrade').textContent=g.name;
+  document.getElementById('resultGrade').style.color=g.color;
+  document.getElementById('resultScore').textContent=`${s} / 5 correct`;
+  const m=Math.floor(state.totalTime/60);
+  const sec=String(state.totalTime%60).padStart(2,'0');
+  document.getElementById('resultTime').textContent=`Completed in ${m}:${sec}`;
+  document.getElementById('resultMsg').textContent=g.msg;
+
+  // Review
+  const rv=document.getElementById('reviewContainer');
+  rv.innerHTML='';
+  state.answers.forEach((a,i)=>{
+    const keys=['A','B','C','D'];
+    const div=document.createElement('div');
+    div.className='review-item';
+    const selectedText=a.selected>=0?`${keys[a.selected]}. ${a.q.opts[a.selected]}`:'No answer — timed out';
+    const correctText=`${keys[a.q.correct]}. ${a.q.opts[a.q.correct]}`;
+    div.innerHTML=`
+      <div class="review-q"><span style="color:var(--gold-dim)">Q${i+1} · ${a.q.topic}</span><br>${a.q.q}</div>
+      <div class="review-answer" style="color:${a.correct?'var(--green)':'var(--red)'}">
+        ${a.correct?'✓':'✗'} You answered: ${selectedText}
+      </div>
+      ${!a.correct?`<div class="review-answer" style="color:var(--green)">✓ Correct: ${correctText}</div>`:''}
+      <div class="review-explanation">${a.q.explain}</div>
+    `;
+    rv.appendChild(div);
+  });
+}
+
+function goHome(){ window.location.href='index.html'; }
+</script>
+</body>
+</html>
