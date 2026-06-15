@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feedback & Reports | TraumaDog</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --gold: #c9a84c;
+    --gold-dim: #7a6230;
+    --green: #34d399;
+    --red: #f85149;
+    --blue: #38bdf8;
+    --purple: #a78bfa;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Space Grotesk', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.6; font-size: 15px; }
+
+  /* HEADER */
+  .site-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center; gap: 12px; }
+  .site-header a { color: var(--muted); text-decoration: none; font-size: 13px; font-family: var(--mono); }
+  .site-header a:hover { color: var(--text); }
+  .breadcrumb-sep { color: var(--border); }
+
+  /* HERO */
+  .hero { padding: 48px 20px 32px; max-width: 680px; margin: 0 auto; text-align: center; }
+  .hero-icon { font-size: 2.5rem; margin-bottom: 12px; }
+  .hero h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .hero h1 span { color: var(--gold); }
+  .hero-sub { color: var(--muted); font-size: 14px; line-height: 1.7; max-width: 500px; margin: 0 auto; }
+
+  /* TAB SWITCHER */
+  .tab-wrap { max-width: 680px; margin: 28px auto 0; padding: 0 20px; }
+  .tabs { display: flex; gap: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 6px; }
+  .tab-btn { flex: 1; padding: 10px 16px; border-radius: 7px; border: none; background: transparent; color: var(--muted); font-family: var(--sans); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+  .tab-btn.active { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .tab-btn:hover:not(.active) { color: var(--text); }
+
+  /* FORM CONTAINER */
+  .form-wrap { max-width: 680px; margin: 20px auto 80px; padding: 0 20px; }
+  .form-panel { display: none; }
+  .form-panel.active { display: block; }
+
+  .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; }
+  .form-card.feedback-card { border-top: 3px solid var(--gold); }
+  .form-card.report-card { border-top: 3px solid var(--red); }
+
+  .form-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .form-desc { color: var(--muted); font-size: 13px; margin-bottom: 24px; line-height: 1.6; }
+
+  /* FIELDS */
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-size: 12px; font-weight: 600; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 7px; }
+  .field label span { color: var(--red); margin-left: 3px; }
+
+  .field input, .field textarea, .field select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 11px 14px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    transition: border-color 0.2s;
+    appearance: none;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  .field textarea { resize: vertical; min-height: 110px; }
+  .field select option { background: var(--surface2); }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* CHARACTER COUNT */
+  .char-count { font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: right; margin-top: 5px; }
+  .char-count.warn { color: var(--red); }
+
+  /* FIELD ERROR */
+  .field-error { font-size: 12px; color: var(--red); margin-top: 5px; font-family: var(--mono); display: none; }
+  .field-error.show { display: block; }
+
+  /* RATING */
+  .rating-row { display: flex; gap: 8px; }
+  .rating-btn {
+    flex: 1; padding: 10px 8px; border-radius: 7px; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--muted); font-size: 13px; cursor: pointer;
+    text-align: center; transition: all 0.2s; font-family: var(--sans);
+  }
+  .rating-btn:hover { border-color: var(--gold); color: var(--text); }
+  .rating-btn.selected { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
+
+  /* SUBMIT BUTTON */
+  .submit-btn {
+    width: 100%; padding: 14px; border-radius: 8px; border: none;
+    font-family: var(--sans); font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; margin-top: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .feedback-card .submit-btn { background: var(--gold); color: #000; }
+  .feedback-card .submit-btn:hover { opacity: 0.9; }
+  .report-card .submit-btn { background: var(--red); color: #fff; }
+  .report-card .submit-btn:hover { opacity: 0.9; }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* SUCCESS STATE */
+  .success-msg {
+    display: none; text-align: center; padding: 40px 20px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .success-msg.show { display: block; }
+  .success-msg .success-icon { font-size: 2.5rem; margin-bottom: 14px; }
+  .success-msg h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--green); }
+  .success-msg p { color: var(--muted); font-size: 14px; }
+  .success-msg .back-btn {
+    display: inline-block; margin-top: 20px; padding: 10px 24px;
+    border: 1px solid var(--border); border-radius: 7px; color: var(--muted);
+    text-decoration: none; font-size: 13px; transition: border-color 0.2s;
+  }
+  .success-msg .back-btn:hover { border-color: var(--gold); color: var(--text); }
+
+  /* FORM-LEVEL ERROR */
+  .form-error-banner {
+    display: none; background: #2a1010; border: 1px solid var(--red);
+    border-radius: 8px; padding: 12px 16px; margin-bottom: 16px;
+    font-size: 13px; color: var(--red);
+  }
+  .form-error-banner.show { display: block; }
+
+  /* PRIVACY NOTE */
+  .privacy-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 16px; font-family: var(--mono); line-height: 1.6; }
+
+  /* GUIDELINES */
+  .guidelines { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 20px; }
+  .guidelines-title { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px; }
+  .guideline-item { display: flex; gap: 8px; font-size: 12px; color: var(--muted); margin-bottom: 6px; line-height: 1.5; }
+  .guideline-item:last-child { margin-bottom: 0; }
+  .guideline-item .gi-icon { flex-shrink: 0; }
+
+  footer { border-top: 1px solid var(--border); padding: 24px 20px; text-align: center; font-size: 12px; color: var(--muted); font-family: var(--mono); }
+
+  @media (max-width: 500px) {
+    .field-row { grid-template-columns: 1fr; }
+    .form-card { padding: 20px 16px; }
+    .hero { padding: 36px 16px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html">🏠 Home</a>
+  <span class="breadcrumb-sep">/</span>
+  <a href="#">Feedback</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-icon">✉️</div>
+  <h1>Talk to <span>TraumaDog</span></h1>
+  <p class="hero-sub">Found a mistake? Have feedback? Want to suggest a case or topic? Drop it here — every submission goes directly to Dr. Wilson.</p>
+</section>
+
+<!-- TABS -->
+<div class="tab-wrap">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('feedback', this)">💬 General Feedback</button>
+    <button class="tab-btn" onclick="switchTab('report', this)">🐛 Report a Mistake</button>
+  </div>
+</div>
+
+<!-- FORMS -->
+<div class="form-wrap">
+
+  <!-- ── FEEDBACK FORM ── -->
+  <div id="panel-feedback" class="form-panel active">
+    <div id="success-feedback" class="success-msg">
+      <div class="success-icon">🐕</div>
+      <h3>TraumaDog received your message!</h3>
+      <p>Dr. Wilson will read every submission. Thanks for helping make this better.</p>
+      <a href="index.html" class="back-btn">← Back to TraumaDog</a>
+    </div>
+
+    <div id="card-feedback" class="form-card feedback-card">
+      <p class="form-title">💬 General Feedback</p>
+      <p class="form-desc">Tell us what you think — what's working, what's confusing, what you'd like to see added. All welcome.</p>
+
+      <div class="guidelines">
+        <p class="guidelines-title">Community Guidelines</p>
+        <div class="guideline-item"><span class="gi-icon">✅</span><span>Be constructive and specific — "the flowchart on Case 2 was confusing" is more useful than "it's bad"</span></div>
+        <div class="guideline-item"><span class="gi-icon">✅</span><span>Suggest topics, cases, or algorithms you'd like added</span></div>
+        <div class="guideline-item"><span class="gi-icon">🚫</span><span>No profanity, offensive language, or personal attacks</span></div>
+        <div class="guideline-item"><span class="gi-icon">🚫</span><span>No patient-identifiable information of any kind</span></div>
+      </div>
+
+      <div id="error-banner-feedback" class="form-error-banner">
+        Something went wrong. Please try again or check your connection.
+      </div>
+
+      <form id="form-feedback" novalidate>
+        <!-- Hidden Formspree fields -->
+        <input type="hidden" name="_subject" value="TraumaDog Feedback">
+        <input type="hidden" name="form_type" value="General Feedback">
+        <!-- Honeypot spam trap -->
+        <input type="text" name="_gotcha" style="display:none">
+
+        <div class="field-row">
+          <div class="field">
+            <label>Nickname <span>*</span></label>
+            <input type="text" name="nickname" id="fb-nickname" placeholder="e.g. TraumaDog123" maxlength="30" autocomplete="off">
+            <div class="field-error" id="fb-nickname-err">Please enter a nickname (max 30 characters)</div>
+          </div>
+          <div class="field">
+            <label>Your email <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+            <input type="email" name="email" id="fb-email" placeholder="if you'd like a reply">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>What is your feedback about?</label>
+          <select name="feedback_topic" id="fb-topic">
+            <option value="">— Select a topic —</option>
+            <option value="Algorithm page">Algorithm page</option>
+            <option value="Fellowship Cases">Fellowship Cases</option>
+            <option value="Simulator">Simulator</option>
+            <option value="Quiz">Quiz</option>
+            <option value="Website design / usability">Website design / usability</option>
+            <option value="Content accuracy">Content accuracy</option>
+            <option value="Topic suggestion">Topic suggestion — want something added</option>
+            <option value="General">General / other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>How would you rate TraumaDog?</label>
+          <div class="rating-row">
+            <button type="button" class="rating-btn" onclick="setRating(this, '⭐ Needs work')">⭐<br><span style="font-size:10px">Needs work</span></button>
+            <button type="button" class="rating-btn" onclick="setRating(this, '⭐⭐ Getting there')">⭐⭐<br><span style="font-size:10px">Getting there</span></button>
+            <button type="button" class="rating-btn" onclick="setRating(this, '⭐⭐⭐ Good')">⭐⭐⭐<br><span style="font-size:10px">Good</span></button>
+            <button type="button" class="rating-btn" onclick="setRating(this, '⭐⭐⭐⭐ Great')">⭐⭐⭐⭐<br><span style="font-size:10px">Great</span></button>
+            <button type="button" class="rating-btn" onclick="setRating(this, '⭐⭐⭐⭐⭐ Excellent')">⭐⭐⭐⭐⭐<br><span style="font-size:10px">Excellent</span></button>
+          </div>
+          <input type="hidden" name="rating" id="fb-rating" value="">
+        </div>
+
+        <div class="field">
+          <label>Your feedback <span>*</span></label>
+          <textarea name="message" id="fb-message" placeholder="Write your feedback here..." maxlength="1000" oninput="updateCount('fb-message','fb-count',1000)"></textarea>
+          <div class="char-count" id="fb-count">0 / 1000</div>
+          <div class="field-error" id="fb-message-err">Please write your feedback (minimum 10 characters)</div>
+        </div>
+
+        <button type="button" class="submit-btn" id="fb-submit" onclick="submitFeedback()">
+          <span id="fb-btn-text">Send Feedback 🐕</span>
+        </button>
+      </form>
+
+      <p class="privacy-note">Submissions are sent directly to Dr. Wilson via Formspree · No account required · Your email is never shared</p>
+    </div>
+  </div>
+
+  <!-- ── REPORT FORM ── -->
+  <div id="panel-report" class="form-panel">
+    <div id="success-report" class="success-msg">
+      <div class="success-icon">🔬</div>
+      <h3>Mistake reported — thank you!</h3>
+      <p>Dr. Wilson will review and correct it. Accurate clinical content matters.</p>
+      <a href="index.html" class="back-btn">← Back to TraumaDog</a>
+    </div>
+
+    <div id="card-report" class="form-card report-card">
+      <p class="form-title">🐛 Report a Mistake or Issue</p>
+      <p class="form-desc">Spotted an error in a drug dose, a wrong reference, a broken link, or a clinical inaccuracy? Report it here and it will be fixed.</p>
+
+      <div id="error-banner-report" class="form-error-banner">
+        Something went wrong. Please try again or check your connection.
+      </div>
+
+      <form id="form-report" novalidate>
+        <input type="hidden" name="_subject" value="TraumaDog — Mistake Report">
+        <input type="hidden" name="form_type" value="Mistake / Issue Report">
+        <input type="text" name="_gotcha" style="display:none">
+
+        <div class="field-row">
+          <div class="field">
+            <label>Nickname <span>*</span></label>
+            <input type="text" name="nickname" id="rp-nickname" placeholder="e.g. DrAnonymous" maxlength="30" autocomplete="off">
+            <div class="field-error" id="rp-nickname-err">Please enter a nickname</div>
+          </div>
+          <div class="field">
+            <label>Your email <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+            <input type="email" name="email" id="rp-email" placeholder="if you'd like a reply">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Where is the mistake? <span>*</span></label>
+          <select name="page" id="rp-page">
+            <option value="">— Select a page —</option>
+            <option value="Maxillofacial Airway Algorithm">Maxillofacial Airway Algorithm</option>
+            <option value="Sodium Disorders Algorithm">Sodium Disorders Algorithm</option>
+            <option value="Thoracic Trauma">Thoracic Trauma</option>
+            <option value="Vasopressors in Shock">Vasopressors in Shock</option>
+            <option value="Haemorrhagic Shock & DCR">Haemorrhagic Shock & DCR</option>
+            <option value="TBI Management">TBI Management</option>
+            <option value="Spinal Cord Injury">Spinal Cord Injury</option>
+            <option value="REBOA">REBOA</option>
+            <option value="Coagulopathy in Trauma">Coagulopathy in Trauma</option>
+            <option value="Trauma in Pregnancy">Trauma in Pregnancy</option>
+            <option value="Burns Resuscitation">Burns Resuscitation</option>
+            <option value="Calculators">Calculators / Trauma Labs</option>
+            <option value="Fellowship Cases — Case 1 (TBI in Pregnancy)">Fellowship Cases — Case 1 (TBI in Pregnancy)</option>
+            <option value="Fellowship Cases — Case 2 (SCI / Neurogenic Shock)">Fellowship Cases — Case 2 (SCI / Neurogenic Shock)</option>
+            <option value="Fellowship Cases — Case 3 (Mechanical Valve + OHS)">Fellowship Cases — Case 3 (Mechanical Valve + OHS)</option>
+            <option value="Fellowship Cases — Case 4 (NDM VAP)">Fellowship Cases — Case 4 (NDM VAP)</option>
+            <option value="Simulator">Simulator</option>
+            <option value="Quiz">Quiz</option>
+            <option value="Other / not listed">Other / not listed</option>
+          </select>
+          <div class="field-error" id="rp-page-err">Please select a page</div>
+        </div>
+
+        <div class="field">
+          <label>Type of issue <span>*</span></label>
+          <select name="issue_type" id="rp-type">
+            <option value="">— Select issue type —</option>
+            <option value="Clinical inaccuracy — wrong drug dose">Clinical inaccuracy — wrong drug dose</option>
+            <option value="Clinical inaccuracy — wrong guideline / reference">Clinical inaccuracy — wrong guideline / reference</option>
+            <option value="Clinical inaccuracy — wrong number / threshold">Clinical inaccuracy — wrong number / threshold</option>
+            <option value="Broken link">Broken link</option>
+            <option value="Page not loading / technical error">Page not loading / technical error</option>
+            <option value="Spelling / grammar error">Spelling / grammar error</option>
+            <option value="Missing information">Missing information</option>
+            <option value="Other">Other</option>
+          </select>
+          <div class="field-error" id="rp-type-err">Please select an issue type</div>
+        </div>
+
+        <div class="field">
+          <label>Describe the mistake <span>*</span></label>
+          <textarea name="message" id="rp-message" placeholder="Describe exactly what is wrong and (if you know it) what the correct information should be..." maxlength="1000" oninput="updateCount('rp-message','rp-count',1000)"></textarea>
+          <div class="char-count" id="rp-count">0 / 1000</div>
+          <div class="field-error" id="rp-message-err">Please describe the issue (minimum 10 characters)</div>
+        </div>
+
+        <div class="field">
+          <label>Correct information <span style="color:var(--muted);font-weight:400">(if known)</span></label>
+          <textarea name="correct_info" placeholder="What should it say instead? Include a reference if you have one..." style="min-height:70px" maxlength="500"></textarea>
+        </div>
+
+        <button type="button" class="submit-btn" id="rp-submit" onclick="submitReport()">
+          <span id="rp-btn-text">Submit Report 🔬</span>
+        </button>
+      </form>
+
+      <p class="privacy-note">Reports go directly to Dr. Wilson · Clinical accuracy is a priority · Thank you for helping keep this safe</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  TraumaDog · Dr. L.S. Wilson · FNB 2026 · Feedback powered by Formspree
+</footer>
+
+<script>
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mlgkznjg';
+
+  // ── BAD WORD FILTER ──
+  const BAD_WORDS = [
+    'fuck','shit','bitch','bastard','asshole','ass','cunt','damn','dick','piss',
+    'cock','pussy','whore','slut','fag','nigger','nigga','retard','idiot',
+    'moron','stupid','crap','bollocks','wanker','twat','motherfucker','fucker',
+    'bullshit','jackass','dumbass','prick','arse','arsehole','tosser','shag',
+    'shite','bloody hell','goddamn','jerk','loser','douchebag'
+  ];
+
+  function containsBadWords(text) {
+    const lower = text.toLowerCase().replace(/[^a-z\s]/g, '');
+    return BAD_WORDS.some(word => {
+      const regex = new RegExp('\\b' + word + '\\b', 'i');
+      return regex.test(lower);
+    });
+  }
+
+  // ── TAB SWITCHER ──
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-' + tab).classList.add('active');
+  }
+
+  // ── RATING ──
+  function setRating(btn, value) {
+    document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('fb-rating').value = value;
+  }
+
+  // ── CHAR COUNT ──
+  function updateCount(textareaId, countId, max) {
+    const len = document.getElementById(textareaId).value.length;
+    const el = document.getElementById(countId);
+    el.textContent = len + ' / ' + max;
+    el.classList.toggle('warn', len > max * 0.9);
+  }
+
+  // ── SHOW/HIDE FIELD ERROR ──
+  function showErr(id, show) {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('show', show);
+  }
+
+  // ── SUBMIT FEEDBACK ──
+  async function submitFeedback() {
+    const nickname = document.getElementById('fb-nickname').value.trim();
+    const message  = document.getElementById('fb-message').value.trim();
+    const email    = document.getElementById('fb-email').value.trim();
+
+    let valid = true;
+
+    // Validate nickname
+    if (!nickname || nickname.length < 2) { showErr('fb-nickname-err', true); valid = false; }
+    else { showErr('fb-nickname-err', false); }
+
+    // Validate message
+    if (!message || message.length < 10) { showErr('fb-message-err', true); valid = false; }
+    else { showErr('fb-message-err', false); }
+
+    // Bad word check
+    if (containsBadWords(nickname) || containsBadWords(message)) {
+      document.getElementById('error-banner-feedback').textContent = '🚫 Your submission contains inappropriate language. Please review and resubmit.';
+      document.getElementById('error-banner-feedback').classList.add('show');
+      return;
+    }
+
+    // Email format check
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    // Disable button
+    const btn = document.getElementById('fb-submit');
+    const btnText = document.getElementById('fb-btn-text');
+    btn.disabled = true;
+    btnText.textContent = 'Sending...';
+    document.getElementById('error-banner-feedback').classList.remove('show');
+
+    // Collect data
+    const formData = new FormData(document.getElementById('form-feedback'));
+
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        document.getElementById('card-feedback').style.display = 'none';
+        document.getElementById('success-feedback').classList.add('show');
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (e) {
+      document.getElementById('error-banner-feedback').textContent = 'Something went wrong. Please check your connection and try again.';
+      document.getElementById('error-banner-feedback').classList.add('show');
+      btn.disabled = false;
+      btnText.textContent = 'Send Feedback 🐕';
+    }
+  }
+
+  // ── SUBMIT REPORT ──
+  async function submitReport() {
+    const nickname = document.getElementById('rp-nickname').value.trim();
+    const page     = document.getElementById('rp-page').value;
+    const type     = document.getElementById('rp-type').value;
+    const message  = document.getElementById('rp-message').value.trim();
+
+    let valid = true;
+
+    if (!nickname || nickname.length < 2) { showErr('rp-nickname-err', true); valid = false; }
+    else { showErr('rp-nickname-err', false); }
+
+    if (!page) { showErr('rp-page-err', true); valid = false; }
+    else { showErr('rp-page-err', false); }
+
+    if (!type) { showErr('rp-type-err', true); valid = false; }
+    else { showErr('rp-type-err', false); }
+
+    if (!message || message.length < 10) { showErr('rp-message-err', true); valid = false; }
+    else { showErr('rp-message-err', false); }
+
+    // Bad word check
+    if (containsBadWords(nickname) || containsBadWords(message)) {
+      document.getElementById('error-banner-report').textContent = '🚫 Your submission contains inappropriate language. Please review and resubmit.';
+      document.getElementById('error-banner-report').classList.add('show');
+      return;
+    }
+
+    if (!valid) return;
+
+    const btn = document.getElementById('rp-submit');
+    const btnText = document.getElementById('rp-btn-text');
+    btn.disabled = true;
+    btnText.textContent = 'Submitting...';
+    document.getElementById('error-banner-report').classList.remove('show');
+
+    const formData = new FormData(document.getElementById('form-report'));
+
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        document.getElementById('card-report').style.display = 'none';
+        document.getElementById('success-report').classList.add('show');
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (e) {
+      document.getElementById('error-banner-report').textContent = 'Something went wrong. Please check your connection and try again.';
+      document.getElementById('error-banner-report').classList.add('show');
+      btn.disabled = false;
+      btnText.textContent = 'Submit Report 🔬';
+    }
+  }
+</script>
+
+</body>
+</html>
