@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bronchospasm | TraumaDog OR-SIM</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070d15;--gold:#c9a84c;--green:#2dff7a;--red:#ff3d4a;
+  --amber:#ffbe00;--blue:#4db8ff;--cyan:#00e5ff;--purple:#c084fc;
+  --dim:#3a5060;--bright:#e8f4ff;
+  --orb:'Orbitron',monospace;--body:'Exo 2',sans-serif;
+  --panel-h:230px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:var(--body);}
+
+/* HEADER */
+header{
+  height:40px;background:rgba(0,0,0,.96);border-bottom:2px solid var(--gold);
+  display:flex;align-items:center;justify-content:space-between;padding:0 10px;
+  z-index:50;flex-shrink:0;
+}
+.logo{font-family:var(--orb);font-size:.65rem;font-weight:900;color:var(--purple);letter-spacing:.1em;}
+.hud{display:flex;gap:8px;align-items:center;}
+.hc{font-family:var(--orb);font-size:.48rem;color:var(--dim);display:flex;align-items:center;gap:2px;}
+.hc b{color:var(--bright);}
+.hc b.r{color:var(--red);animation:blink .5s infinite;}
+.hc b.w{color:var(--amber);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.btn-back{font-family:var(--orb);font-size:.44rem;color:var(--dim);background:none;border:1px solid #1a2840;padding:3px 7px;cursor:pointer;}
+
+#app{display:flex;flex-direction:column;height:calc(100vh - 40px);}
+
+/* SCENE */
+#scene{
+  flex:1;position:relative;overflow:hidden;min-height:0;
+  background:#000;cursor:crosshair;
+}
+#bgPhoto{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center top;
+  filter:brightness(.72) saturate(.85);
+}
+/* Subtle scanline overlay */
+#scene::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:3;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.04) 3px);
+}
+
+/* Det bar */
+#detBar{position:absolute;top:0;left:0;right:0;height:4px;z-index:20;background:rgba(0,0,0,.4);}
+#detFill{height:100%;width:0%;transition:width .4s,background .4s;background:var(--green);}
+#detFill.w{background:var(--amber);}
+#detFill.r{background:var(--red);}
+
+/* Score pills */
+#scorebox{position:absolute;top:8px;left:8px;z-index:20;display:flex;gap:4px;}
+.pill{font-family:var(--orb);font-size:.42rem;padding:2px 7px;background:rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.08);}
+.pill b{color:var(--green);}
+.pill b.e{color:var(--red);}
+
+/* Mode */
+#modebar{position:absolute;top:8px;right:8px;z-index:20;display:flex;gap:3px;}
+.mtag{font-family:var(--orb);font-size:.4rem;padding:3px 7px;border:1px solid rgba(255,255,255,.08);color:var(--dim);cursor:pointer;background:rgba(0,0,0,.8);}
+.mtag.on{border-color:var(--amber);color:var(--amber);}
+
+/* ═══ BRACKET HOTSPOTS ═══
+   Styled as yellow corner brackets — matching annotation style */
+.hotspot{
+  position:absolute;z-index:10;cursor:pointer;
+  /* Corner bracket effect via border */
+  border:2px solid transparent;
+  transition:all .2s;
+}
+/* Corner bracket pseudo-elements */
+.hotspot::before,.hotspot::after{
+  content:'';position:absolute;
+  border-color:rgba(255,220,0,.55);border-style:solid;
+  width:14px;height:14px;transition:all .2s;
+}
+.hotspot::before{top:-2px;left:-2px;border-width:2px 0 0 2px;}
+.hotspot::after{bottom:-2px;right:-2px;border-width:0 2px 2px 0;}
+.hotspot:hover::before,.hotspot:hover::after{border-color:rgba(255,220,0,1);width:18px;height:18px;}
+/* Inner corner spans */
+.hs-br{position:absolute;bottom:-2px;left:-2px;width:14px;height:14px;border:2px solid rgba(255,220,0,.55);border-width:0 0 2px 2px;transition:all .2s;}
+.hs-tl{position:absolute;top:-2px;right:-2px;width:14px;height:14px;border:2px solid rgba(255,220,0,.55);border-width:2px 2px 0 0;transition:all .2s;}
+.hotspot:hover .hs-br,.hotspot:hover .hs-tl{border-color:rgba(255,220,0,1);width:18px;height:18px;}
+
+.hotspot.active::before,.hotspot.active::after,.hotspot.active .hs-br,.hotspot.active .hs-tl{
+  border-color:var(--amber);width:18px;height:18px;
+}
+.hotspot.active{background:rgba(255,190,0,.06);}
+
+/* Label above bracket */
+.hs-label{
+  position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+  font-family:var(--orb);font-size:.42rem;letter-spacing:.1em;
+  padding:2px 8px;background:rgba(0,0,0,.88);border:1px solid rgba(255,220,0,.4);
+  color:#ffe066;white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity .15s;
+}
+.hotspot:hover .hs-label,.hotspot.active .hs-label{opacity:1;}
+
+/* ═══ PANEL ═══ */
+#panel{
+  flex-shrink:0;height:var(--panel-h);background:rgba(0,0,0,.97);
+  border-top:2px solid var(--gold);display:flex;flex-direction:column;
+  position:relative;
+}
+#panel::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--purple),var(--blue),var(--cyan),var(--purple));
+  background-size:200%;animation:flow 3s linear infinite;
+}
+@keyframes flow{0%{background-position:0%}100%{background-position:200%}}
+
+/* Vitals strip */
+#vitals{
+  display:flex;align-items:center;border-bottom:1px solid #1a1a2a;
+  padding:4px 8px;gap:8px;flex-shrink:0;
+}
+.vit{display:flex;flex-direction:column;align-items:center;}
+.vl{font-family:var(--orb);font-size:.36rem;color:var(--dim);letter-spacing:.06em;}
+.vv{font-family:var(--orb);font-size:.8rem;font-weight:900;color:var(--green);line-height:1.1;}
+.vv.w{color:var(--amber);}
+.vv.r{color:var(--red);animation:blink .6s infinite;}
+.vu{font-family:var(--orb);font-size:.32rem;color:var(--dim);}
+canvas#ecg{height:24px;width:66px;display:block;flex-shrink:0;}
+
+/* Main panel — adventure game layout */
+#main-panel{flex:1;display:flex;min-height:0;}
+
+/* LEFT: Dialogue */
+#dlg-area{
+  flex:1;display:flex;flex-direction:column;padding:6px 8px;
+  border-right:1px solid #1a1a2a;overflow:hidden;
+}
+.who{font-family:var(--orb);font-size:.44rem;letter-spacing:.12em;color:var(--cyan);margin-bottom:2px;}
+.msg{font-size:.76rem;line-height:1.55;color:var(--bright);flex:1;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;}
+.msg.bad{color:var(--red);}
+.msg.warn{color:var(--amber);}
+.msg.ok{color:var(--green);}
+
+/* CENTRE: Verb grid — adventure game style */
+#verb-area{
+  width:148px;flex-shrink:0;border-right:1px solid #1a1a2a;
+  display:flex;flex-direction:column;
+}
+#verb-grid{
+  flex:1;display:grid;grid-template-columns:1fr 1fr;
+}
+.verb{
+  font-family:var(--orb);font-size:.4rem;letter-spacing:.05em;
+  padding:0 6px;border-right:1px solid #1a1a2a;border-bottom:1px solid #1a1a2a;
+  color:var(--dim);background:transparent;cursor:pointer;text-align:left;
+  min-height:28px;line-height:1.3;transition:all .12s;
+  display:flex;align-items:center;
+}
+.verb:nth-child(even){border-right:none;}
+.verb:nth-last-child(-n+2){border-bottom:none;}
+.verb:hover:not(.used):not(.locked){background:rgba(255,255,255,.04);color:var(--bright);}
+.verb:active:not(.used):not(.locked){opacity:.6;}
+.verb.obj{color:var(--blue);}
+.verb.treat{color:var(--green);}
+.verb.inv{color:var(--purple);}
+.verb.call{color:var(--cyan);}
+.verb.herring{color:#223030;}
+.verb.used{color:#152020;pointer-events:none;}
+.verb.locked{color:#1a1a1a;pointer-events:none;cursor:default;}
+#selected-label{
+  padding:4px 6px;border-top:1px solid #1a1a2a;
+  font-family:var(--orb);font-size:.38rem;color:var(--gold);
+  letter-spacing:.08em;text-align:center;background:rgba(201,168,76,.04);
+  flex-shrink:0;
+}
+
+/* RIGHT: Inventory/context panel */
+#inv-area{
+  width:110px;flex-shrink:0;display:flex;flex-direction:column;
+}
+.inv-title{
+  font-family:var(--orb);font-size:.36rem;letter-spacing:.12em;color:var(--dim);
+  padding:4px 6px;border-bottom:1px solid #1a1a2a;text-align:center;
+}
+#inv-grid{
+  flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0;overflow:hidden;
+}
+.inv-slot{
+  border-right:1px solid #1a1a2a;border-bottom:1px solid #1a1a2a;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:4px 2px;cursor:pointer;transition:background .12s;min-height:36px;
+}
+.inv-slot:nth-child(even){border-right:none;}
+.inv-slot:hover{background:rgba(255,255,255,.03);}
+.inv-slot.active{background:rgba(201,168,76,.08);border-color:var(--gold-dim);}
+.inv-icon{font-size:1rem;margin-bottom:1px;}
+.inv-name{font-family:var(--orb);font-size:.32rem;color:var(--dim);letter-spacing:.04em;text-align:center;line-height:1.2;}
+.inv-slot.active .inv-name{color:var(--amber);}
+
+/* TOAST */
+#toast{position:fixed;top:48px;left:50%;transform:translateX(-50%);font-family:var(--orb);font-size:.5rem;letter-spacing:.1em;padding:6px 12px;z-index:200;pointer-events:none;opacity:0;transition:opacity .2s;white-space:nowrap;max-width:92vw;text-align:center;}
+#toast.show{opacity:1;}
+#toast.ok{background:rgba(45,255,122,.1);border:1px solid var(--green);color:var(--green);}
+#toast.bad{background:rgba(255,61,74,.1);border:1px solid var(--red);color:var(--red);}
+#toast.warn{background:rgba(255,190,0,.1);border:1px solid var(--amber);color:var(--amber);}
+
+/* POPUP — for monitor/vent details */
+#popup{
+  position:absolute;z-index:40;background:rgba(0,0,0,.95);border:1px solid var(--gold);
+  border-radius:4px;padding:0;min-width:200px;max-width:280px;display:none;
+}
+#popup.open{display:block;}
+.pop-hdr{font-family:var(--orb);font-size:.5rem;letter-spacing:.12em;padding:6px 10px;border-bottom:1px solid #1a2840;color:var(--gold);display:flex;justify-content:space-between;align-items:center;}
+.pop-close{cursor:pointer;color:var(--dim);font-size:.7rem;}
+.pop-body{padding:10px;}
+.pop-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid #0a1020;font-size:.7rem;}
+.pop-row:last-child{border-bottom:none;}
+.pop-label{color:var(--dim);font-family:var(--orb);font-size:.4rem;letter-spacing:.06em;}
+.pop-val{font-family:var(--orb);font-size:.75rem;font-weight:900;}
+.pop-val.g{color:var(--green);}
+.pop-val.w{color:var(--amber);}
+.pop-val.r{color:var(--red);}
+.pop-note{font-size:.65rem;color:var(--dim);line-height:1.5;margin-top:8px;padding-top:6px;border-top:1px solid #0a1020;}
+
+/* END */
+#end{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.97);display:none;overflow-y:auto;padding:20px 14px;}
+#end.open{display:block;}
+.ettl{font-family:var(--orb);font-size:1.2rem;font-weight:900;letter-spacing:.08em;margin-bottom:4px;margin-top:24px;}
+.ettl.pass{color:var(--green);}
+.ettl.fail{color:var(--red);}
+.esc2{font-family:var(--orb);font-size:.56rem;color:var(--bright);margin-bottom:16px;}
+.pearl{padding:8px 11px;border-left:3px solid var(--amber);background:rgba(255,190,0,.04);margin-bottom:6px;font-size:.72rem;line-height:1.6;color:#9ca3af;}
+.pearl b{color:var(--amber);}
+.ebtns{display:flex;gap:8px;margin-top:14px;}
+.ebtn{flex:1;font-family:var(--orb);font-size:.54rem;letter-spacing:.08em;padding:11px;cursor:pointer;border:none;}
+.ebtn.r{background:var(--green);color:#000;}
+.ebtn.m{background:transparent;border:1px solid #1a2840;color:#9ca3af;}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">BRONCHOSPASM</div>
+  <div class="hud">
+    <div class="hc">SpO₂ <b id="hSpo" class="r">88%</b></div>
+    <div class="hc">PIP <b id="hPip" class="r">42</b></div>
+    <div class="hc">⭐ <b id="hSc" style="color:var(--gold)">0</b></div>
+  </div>
+  <button class="btn-back" onclick="window.location.href='simulator.html'">← BACK</button>
+</header>
+
+<div id="app">
+  <div id="scene">
+    <img id="bgPhoto" src="or_background.png" alt="OR"/>
+    <div id="detBar"><div id="detFill"></div></div>
+    <div id="scorebox">
+      <div class="pill">✓ <b id="scC">0</b></div>
+      <div class="pill">✗ <b class="e" id="scE">0</b></div>
+    </div>
+    <div id="modebar">
+      <div class="mtag on" id="mL" onclick="setMode('l')">LEARN</div>
+      <div class="mtag" id="mE" onclick="setMode('e')">EXPERT</div>
+    </div>
+
+    <!-- A: PATIENT — left side on table -->
+    <div class="hotspot" id="hs_patient" onclick="selectObj('patient')"
+      style="left:1%;top:30%;width:26%;height:58%;">
+      <div class="hs-label">A — PATIENT</div>
+      <span class="hs-br"></span><span class="hs-tl"></span>
+    </div>
+
+    <!-- B: ANAESTHESIA TECH — centre, blue scrubs -->
+    <div class="hotspot" id="hs_tech" onclick="selectObj('tech')"
+      style="left:36%;top:5%;width:22%;height:72%;">
+      <div class="hs-label">B — ANAES. TECH</div>
+      <span class="hs-br"></span><span class="hs-tl"></span>
+    </div>
+
+    <!-- C: PATIENT MONITOR — top right, blurred background -->
+    <div class="hotspot" id="hs_monitor" onclick="selectObj('monitor')"
+      style="left:62%;top:3%;width:20%;height:45%;">
+      <div class="hs-label">C — MONITOR</div>
+      <span class="hs-br"></span><span class="hs-tl"></span>
+    </div>
+
+    <!-- D: VENTILATOR/ANAES MACHINE — centre right -->
+    <div class="hotspot" id="hs_vent" onclick="selectObj('vent')"
+      style="left:58%;top:40%;width:18%;height:52%;">
+      <div class="hs-label">D — VENTILATOR</div>
+      <span class="hs-br"></span><span class="hs-tl"></span>
+    </div>
+
+    <!-- E yellow: DRUG / CRASH TROLLEY — right of vent -->
+    <div class="hotspot" id="hs_drugs" onclick="selectObj('drugs')"
+      style="left:75%;top:35%;width:14%;height:55%;">
+      <div class="hs-label">E — DRUG TROLLEY</div>
+      <span class="hs-br"></span><span class="hs-tl"></span>
+    </div>
+
+    <!-- E yellow: DEFIBRILLATOR — far right -->
+    <div class="hotspot" id="hs_defib" onclick="selectObj('defib')"
+      style="left:87%;top:35%;width:13%;height:52%;">
+      <div class="hs-label">F — DEFIB</div>
+      <span class="hs-br"></span><span class="hs-tl"></span>
+    </div>
+
+    <!-- POPUP for monitor/vent -->
+    <div id="popup">
+      <div class="pop-hdr">
+        <span id="popTitle">MONITOR</span>
+        <span class="pop-close" onclick="closePopup()">✕</span>
+      </div>
+      <div class="pop-body" id="popBody"></div>
+    </div>
+
+  </div>
+
+  <!-- ADVENTURE GAME PANEL -->
+  <div id="panel">
+    <div id="vitals">
+      <canvas id="ecg" width="66" height="24"></canvas>
+      <div class="vit"><div class="vl">HR</div><div class="vv w" id="v_hr">118</div><div class="vu">bpm</div></div>
+      <div class="vit"><div class="vl">SpO₂</div><div class="vv r" id="v_spo2">88</div><div class="vu">%</div></div>
+      <div class="vit"><div class="vl">EtCO₂</div><div class="vv w" id="v_etco2">52</div><div class="vu">mmHg</div></div>
+      <div class="vit"><div class="vl">PIP</div><div class="vv r" id="v_pip">42</div><div class="vu">cmH₂O</div></div>
+      <div class="vit"><div class="vl">FiO₂</div><div class="vv r" id="v_fio2">0.4</div></div>
+      <div class="vit"><div class="vl">BP</div><div class="vv" id="v_bp">145/88</div></div>
+    </div>
+
+    <div id="main-panel">
+      <!-- Dialogue -->
+      <div id="dlg-area">
+        <div class="who" id="dWho">// TAP A BRACKET TO INTERACT</div>
+        <div class="msg" id="dMsg">Alarms active. SpO₂ 88% falling. PIP 42 rising. EtCO₂ shark-fin pattern. Tap any bracketed object to investigate.</div>
+      </div>
+
+      <!-- Verb grid -->
+      <div id="verb-area">
+        <div id="verb-grid">
+          <!-- populated by JS -->
+        </div>
+        <div id="selected-label">SELECT AN OBJECT</div>
+      </div>
+
+      <!-- Inventory -->
+      <div id="inv-area">
+        <div class="inv-title">GIVEN / DONE</div>
+        <div id="inv-grid">
+          <!-- populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<div id="end">
+  <div class="ettl" id="eTtl">COMPLETE</div>
+  <div class="esc2" id="eSc"></div>
+  <div id="ePearls"></div>
+  <div class="ebtns">
+    <button class="ebtn r" onclick="location.reload()">↺ RESTART</button>
+    <button class="ebtn m" onclick="window.location.href='simulator.html'">← MENU</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════
+// STATE
+// ══════════════════════════════════
+const G={
+  mode:'l',score:0,correct:0,errors:0,ecgT:0,
+  detProg:0,detTimer:null,
+  selected:null,
+  done:[],   // completed correct actions
+  drugs:[],  // drugs administered
+  flags:{assessed:false,fio2:false,help:false,salb:false,deepened:false},
+  v:{HR:118,SpO2:88,EtCO2:52,PIP:42,FiO2:0.4,BP:'145/88'}
+};
+
+// Inventory slots — things the player has done
+const INV_SLOTS=[
+  {id:'fio2',  icon:'💨', name:'FiO₂ 1.0'},
+  {id:'help',  icon:'📞', name:'HELP CALLED'},
+  {id:'salb',  icon:'💊', name:'SALBUTAMOL'},
+  {id:'sevo',  icon:'🌫', name:'SEVO ↑'},
+  {id:'ket',   icon:'💉', name:'KETAMINE'},
+  {id:'mag',   icon:'🧪', name:'MGSO₄'},
+];
+
+// ══════════════════════════════════
+// VERB DEFINITIONS PER OBJECT
+// ══════════════════════════════════
+const VERBS={
+  patient:[
+    {id:'auscultate', label:'AUSCULTATE',     cls:'obj'},
+    {id:'check_ett',  label:'CHECK ETT DEPTH',cls:'obj'},
+    {id:'check_pupils',label:'CHECK PUPILS',  cls:'herring'},
+    {id:'take_temp',  label:'CHECK TEMP',     cls:'herring'},
+  ],
+  tech:[
+    {id:'call_help',  label:'CALL SENIOR',    cls:'call'},
+    {id:'ask_salb',   label:'ASK FOR SALB',   cls:'call'},
+    {id:'check_notes',label:'REVIEW NOTES',   cls:'herring'},
+  ],
+  monitor:[
+    {id:'read_monitor',label:'READ MONITOR',  cls:'obj'},
+    {id:'read_capno', label:'CAPNOGRAPHY',    cls:'inv'},
+  ],
+  vent:[
+    {id:'set_fio2',   label:'FiO₂ → 1.0',    cls:'treat'},
+    {id:'adj_ie',     label:'ADJUST I:E RATIO',cls:'treat'},
+    {id:'adj_rr',     label:'↓ REDUCE RR',    cls:'treat'},
+    {id:'check_pip',  label:'CHECK PEAK PRES',cls:'obj'},
+  ],
+  drugs:[
+    {id:'give_salb',  label:'SALBUTAMOL MDI', cls:'treat'},
+    {id:'give_sevo',  label:'SEVO ↑ 2.5MAC',  cls:'treat'},
+    {id:'give_ket',   label:'KETAMINE IV',    cls:'treat'},
+    {id:'give_mag',   label:'MgSO₄ IV',       cls:'treat'},
+    {id:'give_hydro', label:'HYDROCORT IV',   cls:'treat'},
+    {id:'give_adren', label:'ADRENALINE IV',  cls:'treat'},
+    {id:'give_neos',  label:'NEOSTIGMINE',    cls:'treat'},
+  ],
+  defib:[
+    {id:'read_rhythm',label:'READ RHYTHM',    cls:'obj'},
+    {id:'shock',      label:'DEFIBRILLATE',   cls:'treat'},
+  ],
+};
+
+// ══════════════════════════════════
+// ACTION HANDLERS
+// ══════════════════════════════════
+const ACT={
+  // PATIENT
+  auscultate(){
+    if(!G.flags.assessed){G.flags.assessed=true;addOk(10);}
+    say('AUSCULTATION','Bilateral expiratory wheeze. Prolonged expiratory phase. Both sides equal — not unilateral. Shark-fin on EtCO₂ confirms obstruction.','ok',
+      'Bilateral = bronchospasm. Unilateral wheeze = endobronchial intubation — different problem.');
+  },
+  check_ett(){
+    say('ETT DEPTH','22cm at lip. Bilateral air entry. Tube position correct — not endobronchial.','ok');
+  },
+  check_pupils:()=>waste('PUPILS','PEARL bilaterally. Normal. Clinically irrelevant here.','Checking pupils costs time in an airway emergency. Act on the wheeze.'),
+  take_temp:()=>waste('TEMPERATURE','36.2°C — normal. No relevance to bronchospasm management.','Temperature monitoring is good practice but checking it now wastes time.'),
+
+  // TECH
+  call_help(){
+    if(!G.flags.assessed){wrongAct('Assess the patient first — what will you tell the senior?');return;}
+    if(G.flags.help){say('TECH','Help already called. Senior on the way.','ok');return;}
+    G.flags.help=true;addOk(10);markInv('help');
+    say('TECH','Senior anaesthetist called. Crash trolley unlocked. "What do you need?"','ok');
+  },
+  ask_salb(){
+    if(!G.flags.help){wrongAct('Call for senior help first.');return;}
+    ACT.give_salb();
+  },
+  check_notes:()=>waste('NOTES','Known asthmatic. Salbutamol PRN — last used 3 months ago. Elective laparotomy.','Useful history but reading notes during acute bronchospasm wastes critical time.'),
+
+  // MONITOR — opens popup
+  read_monitor(){
+    showPopup('C — PATIENT MONITOR',`
+      <div class="pop-row"><span class="pop-label">HR</span><span class="pop-val w">${G.v.HR} bpm</span></div>
+      <div class="pop-row"><span class="pop-label">SpO₂</span><span class="pop-val r">${G.v.SpO2}%</span></div>
+      <div class="pop-row"><span class="pop-label">EtCO₂</span><span class="pop-val w">${G.v.EtCO2} mmHg</span></div>
+      <div class="pop-row"><span class="pop-label">PIP</span><span class="pop-val r">${G.v.PIP} cmH₂O</span></div>
+      <div class="pop-row"><span class="pop-label">FiO₂</span><span class="pop-val r">${G.v.FiO2.toFixed(1)}</span></div>
+      <div class="pop-row"><span class="pop-label">BP</span><span class="pop-val">${G.v.BP}</span></div>
+      <div class="pop-note">⚠ EtCO₂ shark-fin (upsloping plateau) — obstructive pattern. PIP elevated — high airway resistance.</div>
+    `,'monitor');
+  },
+  read_capno(){
+    showPopup('C — CAPNOGRAPHY',`
+      <div class="pop-row"><span class="pop-label">PATTERN</span><span class="pop-val w">SHARK-FIN</span></div>
+      <div class="pop-row"><span class="pop-label">EtCO₂</span><span class="pop-val w">${G.v.EtCO2} mmHg</span></div>
+      <div class="pop-note">Upsloping plateau = uneven alveolar emptying = <b style="color:var(--amber)">OBSTRUCTIVE</b>.<br><br>Normal shape = not endobronchial.<br>Flat = oesophageal intubation.</div>
+    `,'monitor');
+    if(!G.flags.assessed){G.flags.assessed=true;addOk(8);}
+  },
+
+  // VENTILATOR — opens popup
+  check_pip(){
+    showPopup('D — VENTILATOR STATUS',`
+      <div class="pop-row"><span class="pop-label">PIP</span><span class="pop-val r">${G.v.PIP} cmH₂O</span></div>
+      <div class="pop-row"><span class="pop-label">TV</span><span class="pop-val">500 mL</span></div>
+      <div class="pop-row"><span class="pop-label">RR</span><span class="pop-val">12 /min</span></div>
+      <div class="pop-row"><span class="pop-label">I:E</span><span class="pop-val">1:2</span></div>
+      <div class="pop-row"><span class="pop-label">FiO₂</span><span class="pop-val r">${G.v.FiO2.toFixed(1)}</span></div>
+      <div class="pop-note">PIP ${G.v.PIP} cmH₂O — critically high. Normal &lt;25 cmH₂O.<br>I:E 1:2 — insufficient expiratory time in obstruction. Change to 1:3 or 1:4.</div>
+    `,'vent');
+  },
+  set_fio2(){
+    if(G.flags.fio2){say('VENTILATOR','FiO₂ already at 1.0.','ok');return;}
+    if(!G.flags.assessed){wrongAct('Diagnose first — auscultate or read the capnography.');return;}
+    G.flags.fio2=true;addOk(15);markInv('fio2');
+    setV({...G.v,FiO2:1.0,SpO2:Math.min(G.v.SpO2+3,99)});
+    say('VENTILATOR','FiO₂ → 1.0. SpO₂ stabilising slightly. Buying time.','ok',
+      'FiO₂ 1.0 is ALWAYS first — before any drug. Buys time, costs nothing.');
+    stopDet();
+  },
+  adj_ie(){
+    if(!G.flags.fio2){wrongAct('Increase FiO₂ first.');return;}
+    addOk(8);setV({...G.v,PIP:Math.max(G.v.PIP-4,18)});
+    showPopup('D — VENTILATOR ADJUSTED',`
+      <div class="pop-row"><span class="pop-label">I:E</span><span class="pop-val g">1:3 ✓</span></div>
+      <div class="pop-row"><span class="pop-label">PIP</span><span class="pop-val w">${G.v.PIP} cmH₂O ↓</span></div>
+      <div class="pop-note">Prolonged expiratory time → reduces air trapping → ↓ auto-PEEP → ↓ PIP.</div>
+    `,'vent');
+    say('VENTILATOR','I:E changed to 1:3. PIP reducing.','ok');
+  },
+  adj_rr(){
+    if(!G.flags.fio2){wrongAct('Increase FiO₂ first.');return;}
+    addOk(5);setV({...G.v,PIP:Math.max(G.v.PIP-3,18)});
+    say('VENTILATOR','RR reduced to 10/min. More time for expiration. PIP slightly lower.','ok',
+      'Reducing RR in bronchospasm = more expiratory time = less air trapping = lower PIP.');
+  },
+
+  // DRUGS
+  give_salb(){
+    if(G.drugs.includes('salb')){say('DRUGS','Salbutamol already given.','ok');return;}
+    if(!G.flags.assessed){wrongAct('Diagnose first — what are you treating?');return;}
+    G.drugs.push('salb');G.flags.salb=true;addOk(22);markInv('salb');
+    setV({...G.v,PIP:Math.max(G.v.PIP-8,18),SpO2:Math.min(G.v.SpO2+6,99),EtCO2:Math.max(G.v.EtCO2-7,36)});
+    say('DRUGS','Salbutamol 8 puffs via ETT. PIP dropping. Wheeze easing.','ok',
+      'Inhaled salbutamol via ETT = first-line bronchodilator. Give after FiO₂ 1.0.');
+    stopDet();checkEnd();
+  },
+  give_sevo(){
+    if(!G.flags.salb){wrongAct(G.mode==='l'?'Salbutamol first — it\'s first-line inhaled bronchodilator.':'');return;}
+    if(G.drugs.includes('sevo')){say('DRUGS','Sevoflurane already deepened.','ok');return;}
+    G.drugs.push('sevo');G.flags.deepened=true;addOk(18);markInv('sevo');
+    setV({...G.v,PIP:Math.max(G.v.PIP-6,14),HR:Math.max(G.v.HR-10,80),SpO2:Math.min(G.v.SpO2+4,99)});
+    say('DRUGS','Sevoflurane → 2.5 MAC. Airway resistance falling. Wheeze clearing.','ok',
+      'Volatile agents bronchodilate. Deepen to 2–2.5 MAC concurrent with salbutamol.');
+    checkEnd();
+  },
+  give_ket(){
+    if(!G.flags.salb){wrongAct(G.mode==='l'?'Salbutamol first, then escalate.':'');return;}
+    if(G.drugs.includes('ket')){say('DRUGS','Ketamine already given.','ok');return;}
+    G.drugs.push('ket');addOk(20);markInv('ket');
+    setV({...G.v,PIP:Math.max(G.v.PIP-9,12),SpO2:Math.min(G.v.SpO2+5,98)});
+    say('DRUGS','Ketamine 0.75mg/kg IV. Sympathomimetic bronchodilator. PIP falling sharply.','ok',
+      'Ketamine = dissociative + sympathomimetic = bronchodilation. Ideal refractory bronchospasm escalation.');
+    checkEnd();
+  },
+  give_mag(){
+    if(!G.flags.salb){wrongAct(G.mode==='l'?'Give salbutamol first.':'');return;}
+    if(G.drugs.includes('mag')){say('DRUGS','Magnesium already given.','ok');return;}
+    G.drugs.push('mag');addOk(12);markInv('mag');
+    setV({...G.v,PIP:Math.max(G.v.PIP-3,18)});
+    say('DRUGS','MgSO₄ 2g IV. Smooth muscle relaxant. PIP marginally lower.','ok',
+      'MgSO₄: smooth muscle relaxant. Good adjunct — not first-line rescue.');
+  },
+  give_hydro(){
+    if(G.drugs.includes('hydro')){say('DRUGS','Hydrocortisone already given.','ok');return;}
+    G.drugs.push('hydro');addOk(4);
+    say('DRUGS','Hydrocortisone 200mg IV given. Onset 4–6 hours — will not rescue this episode.','warn',
+      'Correct to give — but anti-inflammatory effect takes hours. Not acute rescue.');
+  },
+  give_adren(){
+    addErr();
+    say('DRUGS','No anaphylaxis features — no urticaria, no haemodynamic collapse. Adrenaline is wrong here.','bad',
+      'Adrenaline = anaphylaxis with cardiovascular collapse. Not isolated bronchospasm.');
+    if(G.mode==='e')deteriorate();
+  },
+  give_neos(){
+    addErr();
+    say('DRUGS','⚠ CRITICAL — Neostigmine ↑ muscarinic tone → WORSENS bronchospasm → potentially fatal in asthmatics. Use SUGAMMADEX.','bad');
+    deteriorate();
+  },
+
+  // DEFIB
+  read_rhythm(){
+    say('DEFIB','Sinus tachycardia '+G.v.HR+'bpm. Organised rhythm. NOT a shockable rhythm.','ok');
+  },
+  shock(){
+    addErr();
+    say('DEFIB','Sinus tachycardia — NOT shockable. Defibrillation for VF / pulseless VT only. Wrong action.','bad');
+    if(G.mode==='e')deteriorate();
+  },
+};
+
+// ══════════════════════════════════
+// UI
+// ══════════════════════════════════
+function selectObj(obj){
+  G.selected=obj;
+  document.querySelectorAll('.hotspot').forEach(h=>h.classList.remove('active'));
+  document.getElementById('hs_'+obj)?.classList.add('active');
+  const labels={patient:'A — PATIENT',tech:'B — ANAES. TECH',monitor:'C — MONITOR',vent:'D — VENTILATOR',drugs:'E — DRUG TROLLEY',defib:'F — DEFIB'};
+  document.getElementById('selected-label').textContent=labels[obj]||obj.toUpperCase();
+  renderVerbs(obj);
+  closePopup();
+  say(labels[obj]||obj,'Select an action from the menu →','ok');
+}
+
+function renderVerbs(obj){
+  const grid=document.getElementById('verb-grid');
+  grid.innerHTML='';
+  const verbs=VERBS[obj]||[];
+  // Pad to even number
+  const padded=[...verbs];
+  if(padded.length%2!==0)padded.push({id:'_empty',label:'',cls:'locked'});
+  padded.forEach(v=>{
+    const used=G.done.includes(v.id)&&!['set_fio2','call_help','read_monitor','read_capno','check_pip','read_rhythm','check_ett'].includes(v.id);
+    const el=document.createElement('div');
+    el.className='verb '+v.cls+(used?' used':'');
+    el.textContent=v.label;
+    if(v.id!=='_empty'&&!used){
+      el.onclick=()=>{
+        if(!['set_fio2','call_help','read_monitor','read_capno','check_pip','read_rhythm','check_ett','adj_ie','adj_rr'].includes(v.id))
+          G.done.push(v.id);
+        ACT[v.id]?.();
+        renderVerbs(obj);
+      };
+    }
+    grid.appendChild(el);
+  });
+}
+
+function renderInv(){
+  const grid=document.getElementById('inv-grid');
+  grid.innerHTML='';
+  INV_SLOTS.forEach(s=>{
+    const el=document.createElement('div');
+    const active=G.done.includes(s.id)||G.flags[s.id]||G.drugs.includes(s.id.replace('give_',''));
+    el.className='inv-slot'+(active?' active':'');
+    el.innerHTML=`<div class="inv-icon">${active?s.icon:'·'}</div><div class="inv-name">${active?s.name:'—'}</div>`;
+    grid.appendChild(el);
+  });
+}
+
+function markInv(id){G.done.push(id);renderInv();}
+
+function say(who,msg,type='ok',teach=null){
+  document.getElementById('dWho').textContent='// '+who.toUpperCase();
+  const el=document.getElementById('dMsg');
+  el.textContent=msg;
+  el.className='msg'+(type==='bad'?' bad':type==='warn'?' warn':type==='ok'?' ok':'');
+  if(teach&&G.mode==='l'){
+    setTimeout(()=>{el.textContent=teach;el.className='msg ok';},1600);
+  }
+}
+
+function wrongAct(msg){
+  addErr();showToast('✗','bad');
+  if(G.mode==='l'&&msg)say('FEEDBACK',msg,'bad');
+  else if(G.mode==='e')deteriorate();
+}
+
+function waste(who,msg,teach){
+  addWaste(15);
+  say(who,msg,'warn',G.mode==='l'?teach:null);
+  showToast('⏱ TIME WASTED','warn');
+}
+
+// Monitor popup — positioned near C bracket
+function showPopup(title,body,type){
+  const p=document.getElementById('popup');
+  document.getElementById('popTitle').textContent=title;
+  document.getElementById('popBody').innerHTML=body;
+  // Position based on type
+  if(type==='monitor'){p.style.left='42%';p.style.top='5%';}
+  else if(type==='vent'){p.style.left='38%';p.style.top='10%';}
+  else{p.style.left='30%';p.style.top='10%';}
+  p.classList.add('open');
+}
+function closePopup(){document.getElementById('popup').classList.remove('open');}
+
+// ══════════════════════════════════
+// SCORE / DETERIORATION
+// ══════════════════════════════════
+function addOk(n){G.score+=n;G.correct++;document.getElementById('hSc').textContent=G.score;document.getElementById('scC').textContent=G.correct;}
+function addErr(){G.errors++;document.getElementById('scE').textContent=G.errors;}
+
+function setV(v){
+  Object.assign(G.v,v);
+  const s=(id,val,w,r)=>{const el=document.getElementById(id);if(!el)return;el.textContent=val;el.className='vv'+(r?' r':w?' w':'');};
+  s('v_hr',G.v.HR,G.v.HR>110,G.v.HR>145);
+  s('v_spo2',G.v.SpO2,G.v.SpO2<95,G.v.SpO2<85);
+  s('v_etco2',G.v.EtCO2,G.v.EtCO2>45,G.v.EtCO2>58);
+  s('v_pip',G.v.PIP,G.v.PIP>28,G.v.PIP>38);
+  s('v_fio2',G.v.FiO2.toFixed(1),false,G.v.FiO2<1.0);
+  document.getElementById('v_bp').textContent=G.v.BP;
+  document.getElementById('hSpo').textContent=G.v.SpO2+'%';
+  document.getElementById('hSpo').className=G.v.SpO2<85?'r':G.v.SpO2<95?'w':'';
+  document.getElementById('hPip').textContent=G.v.PIP;
+  document.getElementById('hPip').className=G.v.PIP>38?'r':G.v.PIP>28?'w':'';
+}
+
+function setMode(m){
+  G.mode=m;
+  document.getElementById('mL').className='mtag'+(m==='l'?' on':'');
+  document.getElementById('mE').className='mtag'+(m==='e'?' on':'');
+}
+
+function startDet(){
+  if(G.detTimer)return;
+  G.detTimer=setInterval(()=>{
+    G.detProg=Math.min(G.detProg+.4,100);
+    const f=document.getElementById('detFill');
+    f.style.width=G.detProg+'%';
+    f.className=G.detProg>70?'r':G.detProg>40?'w':'';
+    if(G.detProg>=100){clearInterval(G.detTimer);G.detTimer=null;deteriorate();}
+  },200);
+}
+function stopDet(){clearInterval(G.detTimer);G.detTimer=null;}
+function addWaste(s){
+  G.detProg=Math.min(G.detProg+s,100);
+  const f=document.getElementById('detFill');
+  f.style.width=G.detProg+'%';
+  f.className=G.detProg>70?'r':G.detProg>40?'w':'';
+  if(G.detProg>=100)deteriorate();
+}
+function deteriorate(){
+  setV({HR:Math.min(G.v.HR+18,162),SpO2:Math.max(G.v.SpO2-10,62),EtCO2:Math.min(G.v.EtCO2+5,66),PIP:Math.min(G.v.PIP+7,54),FiO2:G.v.FiO2,BP:'174/110'});
+  showToast('⚠ DETERIORATING','bad');
+  G.detProg=0;
+  const f=document.getElementById('detFill');f.style.width='0%';f.className='';
+  startDet();
+}
+
+function checkEnd(){
+  if(G.flags.salb&&(G.flags.deepened||G.drugs.includes('ket'))){
+    if(G.v.SpO2>=94&&G.v.PIP<=22){stopDet();setTimeout(()=>showEnd(true),800);}
+  }
+}
+
+function showEnd(passed){
+  stopDet();
+  const pct=G.correct+G.errors>0?Math.round(G.correct/(G.correct+G.errors)*100):0;
+  document.getElementById('eTtl').textContent=passed?'BRONCHOSPASM MANAGED':'PATIENT CRITICAL';
+  document.getElementById('eTtl').className='ettl '+(passed?'pass':'fail');
+  document.getElementById('eSc').textContent=`Score ${G.score} · ${G.correct} correct · ${G.errors} errors · ${pct}%`;
+  const pearls=[
+    {t:'SEQUENCE',b:'FiO₂ 1.0 FIRST → Salbutamol MDI via ETT → Deepen volatile (2–2.5MAC) → Adjust I:E to 1:3 → Escalate: ketamine or MgSO₄.'},
+    {t:'SHARK-FIN',b:'Upsloping EtCO₂ plateau = obstructive (bronchospasm). NOT endobronchial (normal shape, low value). NOT oesophageal (flat).'},
+    {t:'VENT SETTINGS',b:'Reduce RR. Prolong I:E to 1:3 or 1:4. Prevent auto-PEEP. Never increase RR — worsens air trapping.'},
+    {t:'CRITICAL',b:'Neostigmine → fatal in asthmatics. Use sugammadex. Adrenaline only for anaphylaxis with haemodynamic collapse.'},
+  ];
+  document.getElementById('ePearls').innerHTML=pearls.map(p=>`<div class="pearl"><b>${p.t}:</b> ${p.b}</div>`).join('');
+  document.getElementById('end').className='open';
+}
+
+// ══════════════════════════════════
+// ECG
+// ══════════════════════════════════
+const cv=document.getElementById('ecg'),cx=cv.getContext('2d');
+function drawECG(){
+  const w=66,h=24;cx.fillStyle='#000';cx.fillRect(0,0,w,h);
+  const hr=G.v.HR,per=60/Math.max(hr,1);
+  cx.strokeStyle=hr>130?'#ff3d4a':'#2dff7a';cx.lineWidth=1.2;cx.beginPath();
+  for(let i=0;i<120;i++){
+    const t=G.ecgT-(120-i)*.01,ph=(t%per)/per;let v=0;
+    if(ph<.05)v=ph/.05*.07;else if(ph<.1)v=(.1-ph)/.05*.07;
+    else if(ph<.38)v=0;else if(ph<.4)v=-(ph-.38)/.02*.15;
+    else if(ph<.42)v=(ph-.4)/.02;else if(ph<.45)v=1-(ph-.42)/.03*1.2;
+    else if(ph<.5)v=-.18+(ph-.45)/.05*.18;else if(ph<.6)v=(ph-.5)/.1*.09;
+    else if(ph<.7)v=.09-(ph-.6)/.1*.09;
+    const x=(i/120)*w,y=h/2-v*(h*.36);i===0?cx.moveTo(x,y):cx.lineTo(x,y);
+  }
+  cx.stroke();G.ecgT+=.018;
+}
+setInterval(drawECG,50);
+
+let _tt;
+function showToast(msg,type='ok'){
+  const el=document.getElementById('toast');el.textContent=msg;el.className=`show ${type}`;
+  clearTimeout(_tt);_tt=setTimeout(()=>el.className='',2200);
+}
+
+// INIT
+setV(G.v);
+renderInv();
+startDet();
+</script>
+</body>
+</html>
