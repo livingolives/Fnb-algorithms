@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case 2: SCI — Neurogenic Shock | TraumaDog</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--accent:#38bdf8;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;font-size:15px;}
+  .site-header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;}
+  .site-header a{color:var(--muted);text-decoration:none;font-size:13px;font-family:var(--mono);}
+  .site-header a:hover{color:var(--text);}
+  .breadcrumb-sep{color:var(--border);}
+  .case-section{max-width:900px;margin:0 auto;padding:40px 20px 80px;}
+  .case-header{margin-bottom:32px;padding:28px;background:var(--surface);border-radius:12px;border-left:4px solid var(--accent);}
+  .case-num{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .case-header h1{font-size:clamp(1.3rem,3vw,1.9rem);font-weight:700;line-height:1.2;letter-spacing:-0.02em;}
+  .case-header p{color:var(--muted);font-size:13px;margin-top:6px;}
+  .case-notice{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--muted);margin-bottom:28px;font-family:var(--mono);}
+  .vignette{background:var(--surface);border-radius:10px;border:1px solid var(--border);padding:24px;margin-bottom:28px;}
+  .vignette-label{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+  .vignette p{color:#cdd9e5;line-height:1.75;}
+  .vitals-strip{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+  .vital{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 14px;text-align:center;min-width:80px;}
+  .vital-val{font-family:var(--mono);font-size:16px;font-weight:500;color:var(--accent);}
+  .vital-label{font-size:10px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:0.08em;}
+  .section-label{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+  .flowchart-wrap{margin-bottom:28px;}
+  .flowchart{display:flex;flex-direction:column;}
+  .fc-step{display:flex;align-items:stretch;}
+  .fc-connector{display:flex;flex-direction:column;align-items:center;width:32px;flex-shrink:0;}
+  .fc-dot{width:12px;height:12px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:18px;}
+  .fc-line{width:2px;background:var(--border);flex:1;}
+  .fc-last .fc-line{display:none;}
+  .fc-box{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:4px 0 8px;cursor:pointer;}
+  .fc-box:hover{border-color:var(--accent);}
+  .fc-box-title{font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;}
+  .step-num{font-family:var(--mono);font-size:10px;background:var(--accent);color:#000;padding:1px 6px;border-radius:3px;font-weight:700;}
+  .fc-box-body{display:none;color:var(--muted);font-size:13px;line-height:1.7;margin-top:10px;border-top:1px solid var(--border);padding-top:10px;}
+  .fc-box.open .fc-box-body{display:block;}
+  .fc-box-body strong{color:var(--text);}
+  .fc-decision{background:var(--surface2);border:1px dashed var(--accent);}
+  .toggle-hint{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:8px;display:block;}
+  .tp-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:28px;}
+  .tp-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;font-size:13px;line-height:1.65;color:#cdd9e5;}
+  .tp-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+  .viva-section{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:28px;}
+  .viva-section h3{font-size:13px;font-weight:600;color:var(--accent);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;}
+  .viva-q{margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:14px;}
+  .viva-q:last-child{border-bottom:none;padding-bottom:0;margin-bottom:0;}
+  .viva-q-text{font-size:14px;font-weight:500;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .viva-q-text:hover{color:var(--accent);}
+  .viva-arrow{font-size:11px;color:var(--muted);transition:transform 0.2s;}
+  .viva-q.open .viva-arrow{transform:rotate(90deg);}
+  .viva-answer{display:none;margin-top:10px;padding:12px;background:var(--surface);border-radius:6px;border-left:3px solid var(--accent);font-size:13px;color:var(--muted);line-height:1.7;}
+  .viva-answer strong{color:var(--text);}
+  .viva-q.open .viva-answer{display:block;}
+  .drug-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:28px;}
+  .drug-table th{background:var(--surface2);color:var(--muted);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}
+  .drug-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:#cdd9e5;vertical-align:top;}
+  .drug-table tr:last-child td{border-bottom:none;}
+  .drug-table tr:hover td{background:var(--surface2);}
+  .ok{color:#34d399;}.caution{color:#d29922;}.avoid{color:#f85149;}
+  .case-nav-bottom{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:24px;border-top:1px solid var(--border);flex-wrap:wrap;}
+  .nav-btn{display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);text-decoration:none;font-size:13px;font-weight:500;transition:border-color 0.2s;}
+  .nav-btn:hover{border-color:var(--accent);}
+  footer{border-top:1px solid var(--border);padding:24px 20px;text-align:center;font-size:12px;color:var(--muted);font-family:var(--mono);}
+  @media(max-width:600px){.case-section{padding:28px 16px 60px;}.vitals-strip{gap:8px;}.vital{min-width:70px;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html">🏠 Home</a>
+  <span class="breadcrumb-sep">/</span>
+  <a href="traumadog-index.html">TraumaDog Cases</a>
+  <span class="breadcrumb-sep">/</span>
+  <a href="#">Case 2</a>
+</header>
+
+<section class="case-section">
+  <div class="case-header">
+    <div>
+      <p class="case-num">Case 02 · Spinal Trauma</p>
+      <h1>Complete SCI T7–T8 (ASIA A) — Neurogenic Shock</h1>
+      <p>38F · Fall from height · Fracture-dislocation T7–T8 · BP 78/46 · HR 52 · Warm peripheries</p>
+    </div>
+  </div>
+
+  <div class="case-notice">⚠ Composite case — no patient data. All values reflect real clinical principles.</div>
+
+  <div class="vignette">
+    <p class="vignette-label">📋 Clinical Vignette</p>
+    <p>38-year-old woman, fall from 2nd storey. Found unable to move lower limbs. GCS 15. No external haemorrhage. No neck vein distension. CT whole spine: fracture-dislocation T7–T8 with complete canal compromise. CT chest/abdomen/pelvis: no solid organ injury, no haemothorax. FAST: negative. Neurological exam: complete motor and sensory loss below T8 — <strong>ASIA A</strong>.</p>
+    <div class="vitals-strip">
+      <div class="vital"><div class="vital-val">78/46</div><div class="vital-label">BP mmHg</div></div>
+      <div class="vital"><div class="vital-val">52</div><div class="vital-label">HR bpm</div></div>
+      <div class="vital"><div class="vital-val">98%</div><div class="vital-label">SpO₂</div></div>
+      <div class="vital"><div class="vital-val">35.9°C</div><div class="vital-label">Temp</div></div>
+      <div class="vital"><div class="vital-val">ASIA A</div><div class="vital-label">SCI grade</div></div>
+    </div>
+  </div>
+
+  <p class="section-label">🔍 Critical Differentiation — Hypotension after Spinal Trauma</p>
+  <table class="drug-table">
+    <thead><tr><th>Feature</th><th>Haemorrhagic Shock</th><th>Neurogenic Shock</th></tr></thead>
+    <tbody>
+      <tr><td>Heart rate</td><td class="avoid">↑ Tachycardia</td><td class="caution">↓ Bradycardia</td></tr>
+      <tr><td>Skin temperature</td><td class="avoid">Cold, clammy, shut-down</td><td class="ok">Warm, flushed below injury</td></tr>
+      <tr><td>SVR</td><td class="avoid">↑ High (vasoconstriction)</td><td class="caution">↓ Low (vasodilation)</td></tr>
+      <tr><td>Mechanism</td><td>Volume loss</td><td>Loss of sympathetic tone (T1–L2)</td></tr>
+      <tr><td>Treatment</td><td>Volume ± vasopressors</td><td class="ok">Vasopressors first, cautious fluids</td></tr>
+    </tbody>
+  </table>
+
+  <div class="flowchart-wrap">
+    <p class="section-label">⬇ Management Flowchart — tap each step to expand</p>
+    <div class="flowchart">
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">01</span> Identify Neurogenic Shock — Clinical Diagnosis</div>
+          <div class="fc-box-body"><strong>Bradycardia + hypotension = neurogenic shock until proven otherwise.</strong><br><br>Cord injury at T7–T8 disrupts sympathetic outflow (T1–L2). Cardiac accelerator fibres from T1–T4 — injuries at or above T6 remove this input entirely. Vagal tone is unopposed → bradycardia.<br><br><strong>Press your hand on the patient's thigh.</strong> Warm = neurogenic. Cold = haemorrhagic.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box fc-decision" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">?</span> Exclude haemorrhage — CT + FAST</div>
+          <div class="fc-box-body">Before committing to neurogenic shock, haemorrhage must be actively excluded with CT chest/abdomen/pelvis and FAST. Once excluded — do not flood with crystalloid. The driver is vasodilation, not volume depletion.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">02</span> Vasopressor — Noradrenaline First-Line</div>
+          <div class="fc-box-body"><strong>Noradrenaline 0.1–0.2 mcg/kg/min</strong> — alpha-1 vasoconstriction restores SVR; mild beta-1 supports CO; does not worsen bradycardia.<br><br><strong>Why NOT phenylephrine?</strong> Pure alpha-1 agonist → reflex bradycardia. Already bradycardic from vagal predominance — phenylephrine makes it worse.<br><br>Atropine 0.6 mg IV — effect modest and transient. The bradycardia is structural, not purely vagal excess.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">03</span> MAP Target — 85–90 mmHg for 7 Days</div>
+          <div class="fc-box-body"><strong>This is the most consequential management decision in acute SCI.</strong><br><br>The injured cord is exquisitely sensitive to hypoperfusion. Secondary ischaemia at MAP 70 vs 85 mmHg causes preventable neurological deterioration independent of the primary injury.<br><br>NASCIS data and observational studies: <strong>MAP 85–90 mmHg for 7 days post-injury.</strong> Not a soft target — periods below 85 mmHg correlate with worsened neurological outcome.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">04</span> Surgical Stabilisation — Day 2</div>
+          <div class="fc-box-body">Posterior stabilisation T5–T10 once haemodynamically stable.<br><br>Induction: propofol 120 mg + fentanyl 200 mcg.<br><br><strong>⚠ SUXAMETHONIUM AVOIDED from 72h post-injury.</strong> Denervated muscle upregulates extrajunctional acetylcholine receptors → massive hyperkalaemic response → cardiac arrest. Use <strong>rocuronium 0.6 mg/kg</strong>.<br><br>Maintenance: TIVA (propofol + remifentanil) prone. Noradrenaline infusion continued throughout.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step fc-last">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">05</span> Spinal Shock vs Neurogenic Shock — The Key Distinction</div>
+          <div class="fc-box-body"><strong>Spinal shock:</strong> neurological phenomenon. Temporary flaccid paralysis + loss of all reflexes below injury immediately post-event. Resolves over days to weeks (return of bulbocavernosus reflex marks its end). <em>Not haemodynamic.</em><br><br><strong>Neurogenic shock:</strong> haemodynamic phenomenon. Loss of sympathetic vasomotor tone → hypotension + bradycardia + warm peripheries. <em>Not neurological per se.</em><br><br>They can co-exist simultaneously. The exam loves this distinction.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="section-label">📌 Key Teaching Points</p>
+  <div class="tp-grid">
+    <div class="tp-card"><span class="tp-icon">❤️</span><span><strong>Bradycardia + hypotension after spinal trauma = neurogenic shock</strong> — haemorrhagic shock is ALWAYS tachycardic.</span></div>
+    <div class="tp-card"><span class="tp-icon">🌡️</span><span>Neurogenic shock: <strong>warm peripheries</strong> below injury (absent sympathetic vasoconstriction).</span></div>
+    <div class="tp-card"><span class="tp-icon">💊</span><span><strong>Noradrenaline</strong> first-line. Phenylephrine worsens the bradycardia.</span></div>
+    <div class="tp-card"><span class="tp-icon">🎯</span><span>MAP <strong>85–90 mmHg for 7 days</strong> — secondary cord ischaemia is preventable.</span></div>
+    <div class="tp-card"><span class="tp-icon">🚫</span><span><strong>Never suxamethonium from 72h post-injury</strong> — hyperkalaemic arrest from upregulated extrajunctional receptors.</span></div>
+    <div class="tp-card"><span class="tp-icon">💧</span><span>Large-volume crystalloid is <strong>harmful</strong> — treat vasodilation with vasopressors, not fluid loading.</span></div>
+    <div class="tp-card"><span class="tp-icon">🧠</span><span>Spinal shock (neurological) ≠ Neurogenic shock (haemodynamic). They can co-exist.</span></div>
+  </div>
+
+  <div class="viva-section">
+    <h3>🎤 Viva Questions</h3>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">Why does neurogenic shock produce bradycardia while haemorrhagic shock produces tachycardia? <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer">Haemorrhagic shock activates the sympathetic nervous system via baroreceptor reflex → tachycardia and vasoconstriction. Neurogenic shock from cord injury above T6 disrupts sympathetic outflow entirely, including cardiac accelerator fibres from T1–T4. Vagal tone is now unopposed → bradycardia. The two mechanisms are physiologically opposite.</div>
+    </div>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">Why is the MAP target 85–90 mmHg rather than the usual 65 mmHg? <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer">The injured spinal cord loses its autoregulatory capacity and is entirely dependent on systemic MAP for perfusion pressure. At MAP 65 mmHg, the cord may be ischaemic. NASCIS observational data and SCI guidelines support MAP 85–90 mmHg for 7 days — this is the window when secondary ischaemic injury is most preventable. MAP 65 mmHg acceptable in sepsis is actively harmful in acute SCI.</div>
+    </div>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">When does suxamethonium become dangerous in SCI, and what is the mechanism? <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer">From approximately <strong>72 hours post-injury</strong>, denervated muscle fibres upregulate extrajunctional nicotinic acetylcholine receptors across the entire muscle membrane. Suxamethonium binds all these receptors simultaneously → massive synchronised potassium efflux → acute hyperkalaemia → cardiac arrest. Risk persists 6–12 months or indefinitely in complete injuries. Rocuronium is safe.</div>
+    </div>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">Distinguish spinal shock from neurogenic shock. <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer"><strong>Spinal shock</strong> is neurological: sudden loss of all cord reflexes below injury immediately post-event — flaccid paralysis, areflexia, loss of bladder/bowel tone. Resolves over days to weeks. The return of the bulbocavernosus reflex marks its end.<br><br><strong>Neurogenic shock</strong> is haemodynamic: loss of sympathetic vasomotor tone → hypotension, bradycardia, warm peripheries. Both can co-exist in the same patient.</div>
+    </div>
+  </div>
+
+  <div class="case-nav-bottom">
+    <a href="traumadog-case1.html" class="nav-btn">← Case 1: TBI in Pregnancy</a>
+    <a href="traumadog-case3.html" class="nav-btn">Case 3: Mechanical Valve + OHS →</a>
+  </div>
+</section>
+
+<footer>
+  TraumaDog · Case 2 · Dr. L.S. Wilson · FNB 2026 · Composite case — no patient data<br>
+  References: ATLS 10th Ed · NASCIS III · BTF/AO Spine SCI Guidelines · UpToDate
+</footer>
+
+<script>
+  function toggleBox(el){el.classList.toggle('open');}
+  function toggleViva(el){el.classList.toggle('open');}
+</script>
+</body>
+</html>

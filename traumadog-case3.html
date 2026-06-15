@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case 3: Mechanical Valve + OHS | TraumaDog</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--accent:#a78bfa;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;font-size:15px;}
+  .site-header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;}
+  .site-header a{color:var(--muted);text-decoration:none;font-size:13px;font-family:var(--mono);}
+  .site-header a:hover{color:var(--text);}
+  .breadcrumb-sep{color:var(--border);}
+  .case-section{max-width:900px;margin:0 auto;padding:40px 20px 80px;}
+  .case-header{margin-bottom:32px;padding:28px;background:var(--surface);border-radius:12px;border-left:4px solid var(--accent);}
+  .case-num{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .case-header h1{font-size:clamp(1.3rem,3vw,1.9rem);font-weight:700;line-height:1.2;letter-spacing:-0.02em;}
+  .case-header p{color:var(--muted);font-size:13px;margin-top:6px;}
+  .case-notice{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--muted);margin-bottom:28px;font-family:var(--mono);}
+  .vignette{background:var(--surface);border-radius:10px;border:1px solid var(--border);padding:24px;margin-bottom:28px;}
+  .vignette-label{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+  .vignette p{color:#cdd9e5;line-height:1.75;}
+  .vitals-strip{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+  .vital{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 14px;text-align:center;min-width:80px;}
+  .vital-val{font-family:var(--mono);font-size:16px;font-weight:500;color:var(--accent);}
+  .vital-label{font-size:10px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:0.08em;}
+  .section-label{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+  .flowchart-wrap{margin-bottom:28px;}
+  .flowchart{display:flex;flex-direction:column;}
+  .fc-step{display:flex;align-items:stretch;}
+  .fc-connector{display:flex;flex-direction:column;align-items:center;width:32px;flex-shrink:0;}
+  .fc-dot{width:12px;height:12px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:18px;}
+  .fc-line{width:2px;background:var(--border);flex:1;}
+  .fc-last .fc-line{display:none;}
+  .fc-box{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:4px 0 8px;cursor:pointer;}
+  .fc-box:hover{border-color:var(--accent);}
+  .fc-box-title{font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;}
+  .step-num{font-family:var(--mono);font-size:10px;background:var(--accent);color:#000;padding:1px 6px;border-radius:3px;font-weight:700;}
+  .fc-box-body{display:none;color:var(--muted);font-size:13px;line-height:1.7;margin-top:10px;border-top:1px solid var(--border);padding-top:10px;}
+  .fc-box.open .fc-box-body{display:block;}
+  .fc-box-body strong{color:var(--text);}
+  .fc-decision{background:var(--surface2);border:1px dashed var(--accent);}
+  .toggle-hint{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:8px;display:block;}
+  .tp-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:28px;}
+  .tp-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;font-size:13px;line-height:1.65;color:#cdd9e5;}
+  .tp-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+  .viva-section{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:28px;}
+  .viva-section h3{font-size:13px;font-weight:600;color:var(--accent);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;}
+  .viva-q{margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:14px;}
+  .viva-q:last-child{border-bottom:none;padding-bottom:0;margin-bottom:0;}
+  .viva-q-text{font-size:14px;font-weight:500;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .viva-q-text:hover{color:var(--accent);}
+  .viva-arrow{font-size:11px;color:var(--muted);transition:transform 0.2s;}
+  .viva-q.open .viva-arrow{transform:rotate(90deg);}
+  .viva-answer{display:none;margin-top:10px;padding:12px;background:var(--surface);border-radius:6px;border-left:3px solid var(--accent);font-size:13px;color:var(--muted);line-height:1.7;}
+  .viva-answer strong{color:var(--text);}
+  .viva-q.open .viva-answer{display:block;}
+  .drug-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:28px;}
+  .drug-table th{background:var(--surface2);color:var(--muted);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}
+  .drug-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:#cdd9e5;vertical-align:top;}
+  .drug-table tr:last-child td{border-bottom:none;}
+  .drug-table tr:hover td{background:var(--surface2);}
+  .ok{color:#34d399;}.caution{color:#d29922;}.avoid{color:#f85149;}
+  .case-nav-bottom{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:24px;border-top:1px solid var(--border);flex-wrap:wrap;}
+  .nav-btn{display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);text-decoration:none;font-size:13px;font-weight:500;transition:border-color 0.2s;}
+  .nav-btn:hover{border-color:var(--accent);}
+  footer{border-top:1px solid var(--border);padding:24px 20px;text-align:center;font-size:12px;color:var(--muted);font-family:var(--mono);}
+  @media(max-width:600px){.case-section{padding:28px 16px 60px;}.vitals-strip{gap:8px;}.vital{min-width:70px;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html">🏠 Home</a>
+  <span class="breadcrumb-sep">/</span>
+  <a href="traumadog-index.html">TraumaDog Cases</a>
+  <span class="breadcrumb-sep">/</span>
+  <a href="#">Case 3</a>
+</header>
+
+<section class="case-section">
+  <div class="case-header">
+    <div>
+      <p class="case-num">Case 03 · Cardiac + Airway</p>
+      <h1>Prosthetic Mechanical Mitral Valve + OSA/OHS</h1>
+      <p>58M · BMI 36 · Elective orthopaedic implant removal · INR 2.6 · Chronic hypercapnia PaCO₂ 49</p>
+    </div>
+  </div>
+
+  <div class="case-notice">⚠ Composite case — no patient data. All values reflect real clinical principles.</div>
+
+  <div class="vignette">
+    <p class="vignette-label">📋 Clinical Vignette</p>
+    <p>58-year-old man with rheumatic heart disease, mechanical MVR, OHS + OSA on home CPAP, presents for elective orthopaedic implant removal. On warfarin — INR 2.6 (therapeutic 2.5–3.5 for mechanical mitral). Pre-op ABG: PaCO₂ 49 mmHg (chronic hypercapnia, blunted ventilatory drive). Echo: EF 58%, normal prosthetic gradients, no vegetations.</p>
+    <div class="vitals-strip">
+      <div class="vital"><div class="vital-val">36 kg/m²</div><div class="vital-label">BMI</div></div>
+      <div class="vital"><div class="vital-val">2.6</div><div class="vital-label">INR</div></div>
+      <div class="vital"><div class="vital-val">49 mmHg</div><div class="vital-label">PaCO₂</div></div>
+      <div class="vital"><div class="vital-val">58%</div><div class="vital-label">LVEF</div></div>
+      <div class="vital"><div class="vital-val">CPAP</div><div class="vital-label">Home therapy</div></div>
+    </div>
+  </div>
+
+  <p class="section-label">🔍 OSA vs OHS — The Exam Distinction</p>
+  <table class="drug-table">
+    <thead><tr><th>Feature</th><th>OSA</th><th>OHS</th></tr></thead>
+    <tbody>
+      <tr><td>Definition</td><td>Episodic upper airway obstruction in sleep</td><td>Obesity (BMI>30) + daytime hypercapnia (PaCO₂>45) without other cause</td></tr>
+      <tr><td>Daytime CO₂</td><td>Normal</td><td class="avoid">↑ Elevated (>45 mmHg)</td></tr>
+      <tr><td>Ventilatory drive</td><td>Normal between episodes</td><td class="caution">Chronically blunted</td></tr>
+      <tr><td>Opioid sensitivity</td><td>Increased</td><td class="avoid">Markedly increased</td></tr>
+      <tr><td>Overlap</td><td colspan="2" style="text-align:center;color:var(--muted)">Many patients have BOTH — as in this case</td></tr>
+    </tbody>
+  </table>
+
+  <div class="flowchart-wrap">
+    <p class="section-label">⬇ Management Flowchart — tap each step to expand</p>
+    <div class="flowchart">
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">01</span> Anticoagulation Bridging Protocol</div>
+          <div class="fc-box-body">Mechanical mitral valve = <strong>highest thromboembolic risk valve position.</strong> Never stop warfarin without bridging.<br><br>
+          • Day −5: Stop warfarin<br>
+          • INR &lt;2.0 → Start enoxaparin 1 mg/kg SC BD (weight-adjusted)<br>
+          • Day −1: Stop LMWH (24h before surgery)<br>
+          • Day 0 morning: Confirm INR (was 1.1) → proceed<br>
+          • Day 0 evening: Restart warfarin<br>
+          • Continue LMWH bridge until INR therapeutic (confirmed Day 3)<br><br>
+          Antibiotic endocarditis prophylaxis: <strong>amoxicillin 2 g IV + gentamicin 1.5 mg/kg</strong> — 30 min pre-induction. Mandatory for all prosthetic valve patients.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">02</span> Airway Planning — Ramped Position + Video Laryngoscopy</div>
+          <div class="fc-box-body">Obesity: reduced FRC, increased upper airway soft tissue, more difficult mask ventilation and laryngoscopy.<br><br><strong>Ramped position:</strong> 25° head-up, ear-to-sternal-notch alignment. Improves laryngoscopy grade AND extends apnoeic safe period (FRC optimised).<br><br>Pre-oxygenation: 5 min 100% FiO₂, tightly fitting mask.<br><br><strong>Video laryngoscopy (C-MAC D-blade) as primary device</strong> → Grade I view obtained.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">03</span> TIVA — Propofol TCI (Lean Body Weight) + Remifentanil</div>
+          <div class="fc-box-body">Opioid sparing is the <strong>cornerstone</strong> of OHS management — residual opioids profoundly depress the blunted ventilatory reserve.<br><br><strong>Propofol TCI:</strong> use <strong>lean body weight</strong> — total body weight overestimates requirements → prolonged emergence. Effect-site target 2.5–3.0 mcg/mL maintenance.<br><br><strong>Remifentanil:</strong> ester-hydrolysed in plasma and tissue → pharmacokinetics weight-independent. Ultra-short context-sensitive half-life → offset within minutes of stopping. Ideal for OHS.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">04</span> Ventilation — PRVC + PEEP 8 cmH₂O</div>
+          <div class="fc-box-body">PRVC mode. TV 450 ml (<strong>6 ml/kg ideal body weight</strong> — lung-protective; never use total body weight for TV calculation).<br><br><strong>PEEP 8–10 cmH₂O</strong> — maintains alveolar recruitment against the reduced FRC. Without PEEP, progressive atelectasis under GA in OHS is nearly inevitable → hypoxaemia.<br><br>ETT 8.0 mm, cuff pressure 25 cmH₂O. Arterial line for continuous BP. Subclavian CVC for vasopressor delivery.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step fc-last">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">05</span> Post-op — Immediate CPAP, No Opioids, Monitored Bed</div>
+          <div class="fc-box-body"><strong>Home CPAP applied in recovery room immediately post-extubation.</strong> Upper airway muscle tone recovers slowly after GA — risk of obstruction and hypoxaemia highest in first 30–60 min.<br><br>Analgesia: <strong>paracetamol 1g QDS + ketorolac 15 mg IV</strong> — opioids deliberately avoided.<br><br>Step-down monitored bed overnight. Continuous SpO₂. Cardiac medications (bisoprolol, furosemide) resumed Day 1.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="section-label">📌 Key Teaching Points</p>
+  <div class="tp-grid">
+    <div class="tp-card"><span class="tp-icon">❤️</span><span>Mechanical mitral valve = <strong>highest thromboembolic risk position</strong> — always bridge when warfarin interrupted.</span></div>
+    <div class="tp-card"><span class="tp-icon">💉</span><span>Bridging: warfarin Day −5 → LMWH when INR &lt;2.0 → stop 24h pre-op → restart both post-op.</span></div>
+    <div class="tp-card"><span class="tp-icon">🦠</span><span>Endocarditis prophylaxis <strong>mandatory</strong> for all prosthetic valve patients undergoing surgery.</span></div>
+    <div class="tp-card"><span class="tp-icon">😴</span><span>OSA ≠ OHS: OHS = obesity + <strong>daytime PaCO₂ >45</strong> — different ventilatory drive impairment.</span></div>
+    <div class="tp-card"><span class="tp-icon">💻</span><span>TIVA with propofol TCI at <strong>lean body weight</strong> + remifentanil — preferred in OSA/OHS.</span></div>
+    <div class="tp-card"><span class="tp-icon">🛏️</span><span><strong>Ramped position</strong> (ear-to-sternal-notch) for pre-oxygenation and laryngoscopy.</span></div>
+    <div class="tp-card"><span class="tp-icon">💨</span><span>Post-op: <strong>immediate CPAP</strong>, no opioids, monitored bed, overnight SpO₂.</span></div>
+  </div>
+
+  <div class="viva-section">
+    <h3>🎤 Viva Questions</h3>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">Why does a mechanical mitral valve require bridging when a bioprosthetic may not? <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer">Mechanical prostheses are inherently thrombogenic — synthetic surfaces promote thrombus formation at all times. The mitral position has higher risk than aortic (lower flow velocity, larger orifice). Bioprosthetic valves have lower intrinsic thrombogenicity. AHA/ACC 2014 and ESC 2021 guidelines both mandate bridging for high-risk mechanical valves when warfarin must be interrupted.</div>
+    </div>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">Why use lean body weight for propofol TCI in obesity, not total body weight? <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer">Propofol distributes predominantly into lean body mass and plasma. Using total body weight overestimates requirements because the excess weight is adipose tissue with comparatively low propofol uptake — this produces deeper anaesthesia and prolonged emergence. Lean body weight gives predictable emergence times. Remifentanil is pharmacokinetically weight-independent (ester hydrolysis) and doesn't require adjustment.</div>
+    </div>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">What is the physiological basis for PEEP 8–10 in OHS patients under GA? <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer">In OHS, FRC is already reduced by central adiposity pressing on the diaphragm. Under GA, FRC falls a further 15–20% from loss of respiratory muscle tone. This brings many OHS patients below their closing capacity → airway closure during tidal ventilation → progressive atelectasis and V/Q mismatch → hypoxaemia. PEEP 8–10 cmH₂O stents alveoli above closing capacity, maintains recruitment, and prevents intraoperative desaturation.</div>
+    </div>
+  </div>
+
+  <div class="case-nav-bottom">
+    <a href="traumadog-case2.html" class="nav-btn">← Case 2: SCI / Neurogenic Shock</a>
+    <a href="traumadog-case4.html" class="nav-btn">Case 4: NDM VAP →</a>
+  </div>
+</section>
+
+<footer>
+  TraumaDog · Case 3 · Dr. L.S. Wilson · FNB 2026 · Composite case — no patient data<br>
+  References: AHA/ACC 2014 · ESC 2021 Valvular Guidelines · AASM OSA/OHS Guidelines · BTS OSA Guidelines
+</footer>
+
+<script>
+  function toggleBox(el){el.classList.toggle('open');}
+  function toggleViva(el){el.classList.toggle('open');}
+</script>
+</body>
+</html>

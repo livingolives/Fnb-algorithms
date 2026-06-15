@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case 1: TBI in Pregnancy | TraumaDog</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root { --bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--accent:#f97316;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif; }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;font-size:15px;}
+  .site-header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;}
+  .site-header a{color:var(--muted);text-decoration:none;font-size:13px;font-family:var(--mono);}
+  .site-header a:hover{color:var(--text);}
+  .breadcrumb-sep{color:var(--border);}
+  .case-section{max-width:900px;margin:0 auto;padding:40px 20px 80px;}
+  .case-header{margin-bottom:32px;padding:28px;background:var(--surface);border-radius:12px;border-left:4px solid var(--accent);}
+  .case-num{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .case-header h1{font-size:clamp(1.3rem,3vw,1.9rem);font-weight:700;line-height:1.2;letter-spacing:-0.02em;}
+  .case-header p{color:var(--muted);font-size:13px;margin-top:6px;}
+  .case-notice{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--muted);margin-bottom:28px;font-family:var(--mono);}
+  .vignette{background:var(--surface);border-radius:10px;border:1px solid var(--border);padding:24px;margin-bottom:28px;}
+  .vignette-label{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+  .vignette p{color:#cdd9e5;line-height:1.75;}
+  .vitals-strip{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+  .vital{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 14px;text-align:center;min-width:80px;}
+  .vital-val{font-family:var(--mono);font-size:16px;font-weight:500;color:var(--accent);}
+  .vital-label{font-size:10px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:0.08em;}
+  .section-label{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+  .flowchart-wrap{margin-bottom:28px;}
+  .flowchart{display:flex;flex-direction:column;}
+  .fc-step{display:flex;align-items:stretch;}
+  .fc-connector{display:flex;flex-direction:column;align-items:center;width:32px;flex-shrink:0;}
+  .fc-dot{width:12px;height:12px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:18px;}
+  .fc-line{width:2px;background:var(--border);flex:1;}
+  .fc-last .fc-line{display:none;}
+  .fc-box{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:4px 0 8px;cursor:pointer;}
+  .fc-box:hover{border-color:var(--accent);}
+  .fc-box-title{font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;}
+  .step-num{font-family:var(--mono);font-size:10px;background:var(--accent);color:#000;padding:1px 6px;border-radius:3px;font-weight:700;}
+  .fc-box-body{display:none;color:var(--muted);font-size:13px;line-height:1.7;margin-top:10px;border-top:1px solid var(--border);padding-top:10px;}
+  .fc-box.open .fc-box-body{display:block;}
+  .fc-box-body strong{color:var(--text);}
+  .fc-decision{background:var(--surface2);border:1px dashed var(--accent);}
+  .toggle-hint{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:8px;display:block;}
+  .tp-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:28px;}
+  .tp-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;font-size:13px;line-height:1.65;color:#cdd9e5;}
+  .tp-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+  .viva-section{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:28px;}
+  .viva-section h3{font-size:13px;font-weight:600;color:var(--accent);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;}
+  .viva-q{margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:14px;}
+  .viva-q:last-child{border-bottom:none;padding-bottom:0;margin-bottom:0;}
+  .viva-q-text{font-size:14px;font-weight:500;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .viva-q-text:hover{color:var(--accent);}
+  .viva-arrow{font-size:11px;color:var(--muted);transition:transform 0.2s;}
+  .viva-q.open .viva-arrow{transform:rotate(90deg);}
+  .viva-answer{display:none;margin-top:10px;padding:12px;background:var(--surface);border-radius:6px;border-left:3px solid var(--accent);font-size:13px;color:var(--muted);line-height:1.7;}
+  .viva-answer strong{color:var(--text);}
+  .viva-q.open .viva-answer{display:block;}
+  .drug-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:28px;}
+  .drug-table th{background:var(--surface2);color:var(--muted);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}
+  .drug-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:#cdd9e5;vertical-align:top;}
+  .drug-table tr:last-child td{border-bottom:none;}
+  .drug-table tr:hover td{background:var(--surface2);}
+  .ok{color:#34d399;}.caution{color:#d29922;}.avoid{color:#f85149;}
+  .case-nav-bottom{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:24px;border-top:1px solid var(--border);flex-wrap:wrap;}
+  .nav-btn{display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);text-decoration:none;font-size:13px;font-weight:500;transition:border-color 0.2s;}
+  .nav-btn:hover{border-color:var(--accent);}
+  footer{border-top:1px solid var(--border);padding:24px 20px;text-align:center;font-size:12px;color:var(--muted);font-family:var(--mono);}
+  @media(max-width:600px){.case-section{padding:28px 16px 60px;}.vitals-strip{gap:8px;}.vital{min-width:70px;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html">🏠 Home</a>
+  <span class="breadcrumb-sep">/</span>
+  <a href="traumadog-index.html">TraumaDog Cases</a>
+  <span class="breadcrumb-sep">/</span>
+  <a href="#">Case 1</a>
+</header>
+
+<section class="case-section">
+  <div class="case-header">
+    <div>
+      <p class="case-num">Case 01 · Neurotrauma</p>
+      <h1>Traumatic Brain Injury in Pregnancy</h1>
+      <p>29F · 28 weeks gestation · Pedestrian RTA · Bifrontal contusions · GCS 13→9</p>
+    </div>
+  </div>
+
+  <div class="case-notice">⚠ Composite case — no patient data. All values reflect real clinical principles.</div>
+
+  <div class="vignette">
+    <p class="vignette-label">📋 Clinical Vignette</p>
+    <p>A 29-year-old woman at 28 weeks gestation arrives after a pedestrian RTA. GCS 13. Pupils equal and reactive. Self-maintaining airway. CT head: bifrontal contusions with surrounding oedema — no midline shift, no haemorrhage requiring decompression. MRI spine: normal. Uterine artery Doppler bilateral PI 0.94. CTG: reactive pattern, no decelerations. She deteriorates to GCS 9 over the next 12 hours.</p>
+    <div class="vitals-strip">
+      <div class="vital"><div class="vital-val">108/72</div><div class="vital-label">BP mmHg</div></div>
+      <div class="vital"><div class="vital-val">104</div><div class="vital-label">HR bpm</div></div>
+      <div class="vital"><div class="vital-val">97%</div><div class="vital-label">SpO₂</div></div>
+      <div class="vital"><div class="vital-val">20</div><div class="vital-label">RR /min</div></div>
+      <div class="vital"><div class="vital-val">13→9</div><div class="vital-label">GCS</div></div>
+    </div>
+  </div>
+
+  <div class="flowchart-wrap">
+    <p class="section-label">⬇ Management Flowchart — tap each step to expand</p>
+    <div class="flowchart">
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">01</span> Left Lateral Tilt + ABC Primary Survey</div>
+          <div class="fc-box-body"><strong>Why tilt?</strong> The gravid uterus compresses the IVC in the supine position → reduced venous return → maternal hypotension → fetal compromise. Left lateral 15–30° or manual uterine displacement is mandatory from ≥20 weeks gestation.<br><br>Assess airway: self-maintained? FRC is reduced 20% in late pregnancy — desaturates faster than a non-pregnant patient. Pre-oxygenate aggressively before any instrumentation.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">02</span> CT Head + MRI Spine + Fetal Assessment</div>
+          <div class="fc-box-body">CT head: evaluate for haemorrhage requiring decompression. <strong>Fetal radiation risk from CT head is negligible.</strong><br><br>CTG monitoring. Uterine artery Doppler: bilateral PI within normal limits = no uteroplacental compromise at this stage. Obstetric review within the first hour — <em>this is a two-patient problem.</em></div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box fc-decision" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">?</span> GCS drops to 9 at 12 hours → Secure airway</div>
+          <div class="fc-box-body"><strong>RSI in pregnancy:</strong> full stomach, reduced FRC, elevated diaphragm.<br><br>Induction: <strong>Ketamine 100 mg + Fentanyl 100 mcg.</strong> Ketamine maintains sympathetic tone and blood pressure — ideal in haemodynamically borderline pregnant patients.<br><br>NMB: <strong>Suxamethonium 100 mg</strong> (rapid sequence, cricoid pressure).</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">03</span> Ventilation — Target PaCO₂ 30–32 mmHg</div>
+          <div class="fc-box-body"><strong>This is the most common exam trap.</strong> Normal PaCO₂ in the third trimester is <em>30–32 mmHg</em>, not 40 mmHg. Progesterone drives a compensatory respiratory alkalosis in pregnancy.<br><br>Ventilating to PaCO₂ 40 mmHg = hypercarbia relative to her physiological baseline → worsening cerebral oedema.<br><br>Avoid aggressive hyperventilation below 30 mmHg → cerebral vasoconstriction → reduced uteroplacental perfusion.<br><br>Mode: PRVC. Head elevation 30°. Sedation: propofol + fentanyl infusion.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">04</span> Anti-oedema Therapy — HTS preferred over Mannitol</div>
+          <div class="fc-box-body"><strong>Mannitol:</strong> crosses the placenta → fetal hyperosmolality and hypovolaemia. Not absolutely contraindicated (maternal herniation kills both patients) but use lowest effective bolus 0.5 g/kg.<br><br><strong>Hypertonic saline (3% NaCl):</strong> preferred in pregnancy — does not cross the placenta to the same degree, haemodynamically well tolerated, equally effective for ICP control.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step fc-last">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">05</span> Seizure Prophylaxis + TXA + Fetal Monitoring</div>
+          <div class="fc-box-body"><strong>Levetiracetam 500 mg IV BD</strong> — drug of choice. Category C; renally excreted; predictable PK.<br><br><strong>Valproate is Category D — CONTRAINDICATED.</strong> Teratogenic: neural tube defects, cognitive impairment, neonatal withdrawal.<br><br><strong>TXA:</strong> CRASH-3 supports use within 3 hours in mild-to-moderate TBI. WOMAN trial data reassuring in maternal haemorrhage. TXA 2 g IV over 30 min used here.<br><br>CTG 4-hourly. Hydroxyprogesterone 500 mg IM to reduce preterm labour risk. MDT (obstetrics, neurosurgery, neonatology) within first hour.<br><br><strong>Outcome:</strong> Weaned ventilation Day 8. GCS 15 by Day 12. Delivered electively 34 weeks by CS under spinal.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="section-label">💊 Drug Safety — TBI in Pregnancy</p>
+  <table class="drug-table">
+    <thead><tr><th>Drug</th><th>Use</th><th>Pregnancy</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Hypertonic saline (3%)</td><td>Anti-oedema</td><td class="ok">✔ Preferred</td><td>Minimal placental transfer</td></tr>
+      <tr><td>Mannitol</td><td>Anti-oedema</td><td class="caution">⚠ Caution</td><td>Crosses placenta → fetal hyperosmolality; use 0.5 g/kg minimum</td></tr>
+      <tr><td>Levetiracetam</td><td>Seizure prophylaxis</td><td class="ok">✔ Preferred</td><td>Category C; renal excretion; predictable PK</td></tr>
+      <tr><td>Sodium valproate</td><td>Seizure prophylaxis</td><td class="avoid">✘ Contraindicated</td><td>Category D — teratogenic, neural tube defects</td></tr>
+      <tr><td>Ketamine</td><td>RSI induction</td><td class="ok">✔ Preferred</td><td>Maintains BP; safe in haemodynamically borderline</td></tr>
+      <tr><td>Tranexamic acid</td><td>Haemostasis</td><td class="caution">⚠ Acceptable</td><td>Crosses placenta; WOMAN trial reassuring; use if haemorrhagic risk high</td></tr>
+      <tr><td>Propofol (short-term)</td><td>Sedation</td><td class="caution">⚠ Short-term only</td><td>PRIS risk with prolonged high-dose; add dex Day 3+</td></tr>
+    </tbody>
+  </table>
+
+  <p class="section-label">📌 Key Teaching Points</p>
+  <div class="tp-grid">
+    <div class="tp-card"><span class="tp-icon">🎯</span><span>Pregnancy shifts baseline PaCO₂ to <strong>30–32 mmHg</strong> — ventilate to THIS, not 40 mmHg.</span></div>
+    <div class="tp-card"><span class="tp-icon">💉</span><span><strong>Hypertonic saline</strong> preferred over mannitol for cerebral oedema in pregnancy.</span></div>
+    <div class="tp-card"><span class="tp-icon">🚫</span><span><strong>Valproate contraindicated</strong> (Category D). Use <strong>levetiracetam</strong>.</span></div>
+    <div class="tp-card"><span class="tp-icon">🤰</span><span><strong>Left lateral tilt mandatory</strong> from ≥20 weeks — aortocaval compression.</span></div>
+    <div class="tp-card"><span class="tp-icon">✅</span><span>TXA acceptable in haemorrhagic maternal TBI — WOMAN trial provides safety context.</span></div>
+    <div class="tp-card"><span class="tp-icon">🫁</span><span>FRC reduced <strong>20%</strong> in late pregnancy — faster desaturation during RSI apnoeic window.</span></div>
+    <div class="tp-card"><span class="tp-icon">👥</span><span>MDT input (obstetrics, neurosurgery, neonatology) within <strong>first hour</strong>.</span></div>
+  </div>
+
+  <div class="viva-section">
+    <h3>🎤 Viva Questions</h3>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">Why is PaCO₂ 40 mmHg harmful in a ventilated pregnant TBI patient? <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer">Progesterone drives a compensatory respiratory alkalosis in pregnancy. Normal third-trimester PaCO₂ is <strong>30–32 mmHg</strong>. Ventilating to 40 mmHg means you are hypercarbing her relative to her physiological baseline — this causes cerebral vasodilation and worsening oedema.</div>
+    </div>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">Why choose hypertonic saline over mannitol in this case? <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer">Mannitol crosses the placenta and can produce fetal hyperosmolality and hypovolaemia. Hypertonic saline has lower placental transfer, is haemodynamically well tolerated, and achieves equivalent ICP control. Mannitol is not absolutely contraindicated — herniation kills both patients — but HTS is the preferred first-line agent.</div>
+    </div>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">What is the significance of FRC reduction in pregnancy for RSI? <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer">FRC is reduced by ~20% at term because the gravid uterus elevates the diaphragm. The oxygen reserve during apnoea is smaller — the pregnant patient desaturates significantly faster during the apnoeic window of RSI. Thorough pre-oxygenation (5 min 100% FiO₂) and minimising apnoeic time are essential.</div>
+    </div>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">Why was valproate not used despite being a familiar anticonvulsant? <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer">Sodium valproate is FDA Category D — associated with neural tube defects, cognitive impairment in exposed children, and neonatal withdrawal. Levetiracetam (Category C, renally excreted, predictable pharmacokinetics) is the anticonvulsant of choice in TBI during pregnancy when a safer alternative exists.</div>
+    </div>
+  </div>
+
+  <div class="case-nav-bottom">
+    <a href="traumadog-index.html" class="nav-btn">← All Cases</a>
+    <a href="traumadog-case2.html" class="nav-btn">Case 2: SCI / Neurogenic Shock →</a>
+  </div>
+</section>
+
+<footer>
+  TraumaDog · Case 1 · Dr. L.S. Wilson · FNB 2026 · Composite case — no patient data<br>
+  References: OAA/DAS guidelines · CRASH-3 (Lancet 2019) · WOMAN Trial (Lancet 2017) · BTF 4th Ed TBI Guidelines
+</footer>
+
+<script>
+  function toggleBox(el){el.classList.toggle('open');}
+  function toggleViva(el){el.classList.toggle('open');}
+</script>
+</body>
+</html>

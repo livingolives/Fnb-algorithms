@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case 4: NDM-Positive VAP | TraumaDog</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--accent:#34d399;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;font-size:15px;}
+  .site-header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;}
+  .site-header a{color:var(--muted);text-decoration:none;font-size:13px;font-family:var(--mono);}
+  .site-header a:hover{color:var(--text);}
+  .breadcrumb-sep{color:var(--border);}
+  .case-section{max-width:900px;margin:0 auto;padding:40px 20px 80px;}
+  .case-header{margin-bottom:32px;padding:28px;background:var(--surface);border-radius:12px;border-left:4px solid var(--accent);}
+  .case-num{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .case-header h1{font-size:clamp(1.3rem,3vw,1.9rem);font-weight:700;line-height:1.2;letter-spacing:-0.02em;}
+  .case-header p{color:var(--muted);font-size:13px;margin-top:6px;}
+  .case-notice{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--muted);margin-bottom:28px;font-family:var(--mono);}
+  .vignette{background:var(--surface);border-radius:10px;border:1px solid var(--border);padding:24px;margin-bottom:28px;}
+  .vignette-label{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+  .vignette p{color:#cdd9e5;line-height:1.75;}
+  .vitals-strip{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+  .vital{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 14px;text-align:center;min-width:80px;}
+  .vital-val{font-family:var(--mono);font-size:16px;font-weight:500;color:var(--accent);}
+  .vital-label{font-size:10px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:0.08em;}
+  .section-label{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+  .flowchart-wrap{margin-bottom:28px;}
+  .flowchart{display:flex;flex-direction:column;}
+  .fc-step{display:flex;align-items:stretch;}
+  .fc-connector{display:flex;flex-direction:column;align-items:center;width:32px;flex-shrink:0;}
+  .fc-dot{width:12px;height:12px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:18px;}
+  .fc-line{width:2px;background:var(--border);flex:1;}
+  .fc-last .fc-line{display:none;}
+  .fc-box{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin:4px 0 8px;cursor:pointer;}
+  .fc-box:hover{border-color:var(--accent);}
+  .fc-box-title{font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px;}
+  .step-num{font-family:var(--mono);font-size:10px;background:var(--accent);color:#000;padding:1px 6px;border-radius:3px;font-weight:700;}
+  .fc-box-body{display:none;color:var(--muted);font-size:13px;line-height:1.7;margin-top:10px;border-top:1px solid var(--border);padding-top:10px;}
+  .fc-box.open .fc-box-body{display:block;}
+  .fc-box-body strong{color:var(--text);}
+  .fc-decision{background:var(--surface2);border:1px dashed var(--accent);}
+  .toggle-hint{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:8px;display:block;}
+  .tp-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:28px;}
+  .tp-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;font-size:13px;line-height:1.65;color:#cdd9e5;}
+  .tp-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+  .viva-section{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:28px;}
+  .viva-section h3{font-size:13px;font-weight:600;color:var(--accent);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;}
+  .viva-q{margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:14px;}
+  .viva-q:last-child{border-bottom:none;padding-bottom:0;margin-bottom:0;}
+  .viva-q-text{font-size:14px;font-weight:500;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+  .viva-q-text:hover{color:var(--accent);}
+  .viva-arrow{font-size:11px;color:var(--muted);transition:transform 0.2s;}
+  .viva-q.open .viva-arrow{transform:rotate(90deg);}
+  .viva-answer{display:none;margin-top:10px;padding:12px;background:var(--surface);border-radius:6px;border-left:3px solid var(--accent);font-size:13px;color:var(--muted);line-height:1.7;}
+  .viva-answer strong{color:var(--text);}
+  .viva-q.open .viva-answer{display:block;}
+  .drug-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:28px;}
+  .drug-table th{background:var(--surface2);color:var(--muted);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}
+  .drug-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:#cdd9e5;vertical-align:top;}
+  .drug-table tr:last-child td{border-bottom:none;}
+  .drug-table tr:hover td{background:var(--surface2);}
+  .ok{color:#34d399;}.caution{color:#d29922;}.avoid{color:#f85149;}
+  .mnemonic-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin-bottom:28px;}
+  .mnemonic-title{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:12px;}
+  .mnemonic-row{display:flex;gap:12px;align-items:flex-start;margin-bottom:8px;font-size:14px;}
+  .mnemonic-letter{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--accent);width:28px;flex-shrink:0;}
+  .case-nav-bottom{display:flex;justify-content:space-between;gap:12px;margin-top:40px;padding-top:24px;border-top:1px solid var(--border);flex-wrap:wrap;}
+  .nav-btn{display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);text-decoration:none;font-size:13px;font-weight:500;transition:border-color 0.2s;}
+  .nav-btn:hover{border-color:var(--accent);}
+  footer{border-top:1px solid var(--border);padding:24px 20px;text-align:center;font-size:12px;color:var(--muted);font-family:var(--mono);}
+  @media(max-width:600px){.case-section{padding:28px 16px 60px;}.vitals-strip{gap:8px;}.vital{min-width:70px;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html">🏠 Home</a>
+  <span class="breadcrumb-sep">/</span>
+  <a href="traumadog-index.html">TraumaDog Cases</a>
+  <span class="breadcrumb-sep">/</span>
+  <a href="#">Case 4</a>
+</header>
+
+<section class="case-section">
+  <div class="case-header">
+    <div>
+      <p class="case-num">Case 04 · ICU Infection</p>
+      <h1>NDM-Positive Acinetobacter baumannii VAP</h1>
+      <p>48M · Severe TBI post-craniotomy · Day 8 ventilation · P/F ratio 178 · Last-resort antibiotics</p>
+    </div>
+  </div>
+
+  <div class="case-notice">⚠ Composite case — no patient data. All values reflect real clinical principles.</div>
+
+  <div class="vignette">
+    <p class="vignette-label">📋 Clinical Vignette</p>
+    <p>48-year-old man, severe TBI post-decompressive craniotomy, ventilated in Trauma ICU. Day 8: new fever 38.9°C, CRP 287, WBC 18.4, increasing purulent tracheal secretions, worsening oxygenation (P/F 310→178), new LLL consolidation on CXR. BAL via bedside FOB: <strong>Acinetobacter baumannii, NDM-positive.</strong></p>
+    <div class="vitals-strip">
+      <div class="vital"><div class="vital-val">38.9°C</div><div class="vital-label">Temperature</div></div>
+      <div class="vital"><div class="vital-val">287</div><div class="vital-label">CRP mg/L</div></div>
+      <div class="vital"><div class="vital-val">18.4</div><div class="vital-label">WBC ×10⁹</div></div>
+      <div class="vital"><div class="vital-val">178</div><div class="vital-label">P/F ratio</div></div>
+      <div class="vital"><div class="vital-val">Day 8</div><div class="vital-label">Ventilation</div></div>
+    </div>
+  </div>
+
+  <p class="section-label">🦠 What is NDM and Why Does It Matter?</p>
+  <div class="mnemonic-card">
+    <p class="mnemonic-title">NDM = New Delhi Metallo-beta-lactamase</p>
+    <div class="mnemonic-row"><span class="mnemonic-letter">N</span><span><strong>New Delhi</strong> — first identified 2008 in a patient returning from India (Lancet Infect Dis)</span></div>
+    <div class="mnemonic-row"><span class="mnemonic-letter">D</span><span><strong>Destroys carbapenems</strong> — hydrolyses the beta-lactam ring of meropenem, imipenem, ertapenem</span></div>
+    <div class="mnemonic-row"><span class="mnemonic-letter">M</span><span><strong>Mobile</strong> — plasmid-mediated; horizontally transferred between organisms in the ICU</span></div>
+    <p style="margin-top:12px;color:var(--muted);font-size:13px;">NDM+ organisms are resistant to <strong>virtually all beta-lactams</strong> and typically fluoroquinolones and aminoglycosides too. Polymyxins are the only reliable backbone.</p>
+  </div>
+
+  <div class="flowchart-wrap">
+    <p class="section-label">⬇ Management Flowchart — tap each step to expand</p>
+    <div class="flowchart">
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">01</span> Diagnose VAP — Clinical Criteria + BAL</div>
+          <div class="fc-box-body"><strong>VAP definition:</strong> new pneumonia ≥48h after endotracheal intubation.<br><br>Clinical criteria: new CXR infiltrate + ≥2 of: fever >38°C, leukocytosis/leucopaenia, new purulent secretions, worsening oxygenation.<br><br><strong>BAL is superior to tracheal aspirate</strong> for organism identification and quantitative culture. Diagnostic threshold: ≥10⁴ CFU/mL from BAL.<br><br>Send: Gram stain, quantitative culture, sensitivity including carbapenem susceptibility and molecular beta-lactamase typing.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">02</span> Bedside FOB — Diagnosis AND Therapy</div>
+          <div class="fc-box-body">FOB served two purposes: BAL specimen collection AND therapeutic bronchial toileting of the mucus plug causing LLL collapse.<br><br><strong>FOB in a ventilated patient:</strong><br>
+          • Switch to <strong>volume-controlled ventilation</strong> — bronchoscope occupies ETT lumen → increased resistance → TV drops in pressure modes<br>
+          • Increase FiO₂ during procedure<br>
+          • Anticipate rising peak pressures<br>
+          • LLL re-expanded on CXR within 12 hours of plug removal</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">03</span> Antibiotic Strategy — Polymyxin Backbone</div>
+          <div class="fc-box-body"><strong>Colistin (Polymyxin E):</strong> administered as colistimethate sodium (CMS) — inactive prodrug hydrolysed in vivo. Disrupts Gram-negative outer membrane.<br><br>CMS 100 mg IV BD (weight-adjusted). Nephrotoxicity in <strong>30–50%</strong> — daily creatinine monitoring mandatory.<br><br><strong>Combination to reduce resistance emergence:</strong><br>
+          • Colistin + minocycline 200 mg BD + tigecycline (off-label)<br>
+          • <strong>Inhaled colistin</strong> — higher local airway concentrations than systemic delivery alone<br><br>Monotherapy = resistance emergence. Microbiologist input is essential and non-negotiable.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">04</span> Infection Control — Contact Precautions</div>
+          <div class="fc-box-body">NDM is plasmid-mediated — <strong>horizontally transferred between organisms</strong> via hands and contaminated equipment. A single index case can seed an entire unit.<br><br>Non-negotiable: contact precautions, dedicated nursing, apron + gloves for all contact, soap-and-water hand hygiene (Acinetobacter survives on dry surfaces for weeks — alcohol gel insufficient alone).<br><br>Notify infection control immediately.</div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+      <div class="fc-step fc-last">
+        <div class="fc-connector"><div class="fc-dot"></div><div class="fc-line"></div></div>
+        <div class="fc-box" onclick="toggleBox(this)">
+          <div class="fc-box-title"><span class="step-num">05</span> Ventilator Weaning — ABCDE Bundle</div>
+          <div class="fc-box-body" style="line-height:2.1;">
+            <strong>A</strong> — Analgesia first: adequate pain control before reducing sedation<br>
+            <strong>B</strong> — Breathing: daily SBT (PS 8 / PEEP 5, 30–120 min). Pass: RR &lt;35, SpO₂ &gt;90%, no distress, haemodynamically stable<br>
+            <strong>C</strong> — Coordination: daily sedation holds + neurological assessment<br>
+            <strong>D</strong> — Delirium screening (CAM-ICU)<br>
+            <strong>E</strong> — Early mobility and exercise<br><br>
+            Patient passed first SBT Day 14. Extubated to HFNO Day 15. Total ventilation: 17 days. Inflammatory markers normalising Day 10.
+          </div>
+          <span class="toggle-hint">tap to expand ▾</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="section-label">🛡️ IHI VAP Prevention Bundle</p>
+  <div class="tp-grid">
+    <div class="tp-card"><span class="tp-icon">🛏️</span><span><strong>HOB 30–45°</strong> — reduces micro-aspiration of subglottic secretions</span></div>
+    <div class="tp-card"><span class="tp-icon">📅</span><span><strong>Daily sedation hold + SBT</strong> — single most important weaning intervention</span></div>
+    <div class="tp-card"><span class="tp-icon">🦷</span><span><strong>Oral decontamination</strong> with chlorhexidine 0.2% BD</span></div>
+    <div class="tp-card"><span class="tp-icon">🚰</span><span><strong>Subglottic secretion drainage</strong> (if ETT available) — reduces pooling above cuff</span></div>
+    <div class="tp-card"><span class="tp-icon">🧼</span><span><strong>Hand hygiene compliance</strong> — most effective infection control measure in ICU</span></div>
+  </div>
+
+  <p class="section-label">📌 Key Teaching Points</p>
+  <div class="tp-grid">
+    <div class="tp-card"><span class="tp-icon">🦠</span><span>VAP = new pneumonia &gt;48h post-intubation; <strong>BAL</strong> superior to tracheal aspirate for organism ID.</span></div>
+    <div class="tp-card"><span class="tp-icon">🧬</span><span>NDM = <strong>carbapenemase</strong> — NDM+ organisms are resistant to ALL carbapenems.</span></div>
+    <div class="tp-card"><span class="tp-icon">💊</span><span><strong>Polymyxins</strong> (colistin, polymyxin B) are the backbone of NDM+ Acinetobacter treatment.</span></div>
+    <div class="tp-card"><span class="tp-icon">⚠️</span><span>Colistin as CMS (prodrug); renal toxicity in <strong>30–50%</strong> — daily creatinine monitoring.</span></div>
+    <div class="tp-card"><span class="tp-icon">🔬</span><span>Combination therapy reduces <strong>resistance emergence</strong> — never monotherapy.</span></div>
+    <div class="tp-card"><span class="tp-icon">💨</span><span>Inhaled colistin: higher local airway concentrations than systemic delivery alone.</span></div>
+    <div class="tp-card"><span class="tp-icon">🔭</span><span>FOB in ventilated patient: switch to <strong>VCV, ↑ FiO₂</strong>, expect rising peak pressures.</span></div>
+    <div class="tp-card"><span class="tp-icon">📋</span><span>ABCDE bundle: <strong>daily SBT</strong> is the single most important weaning intervention.</span></div>
+  </div>
+
+  <div class="viva-section">
+    <h3>🎤 Viva Questions</h3>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">What is NDM and why does it make Acinetobacter so difficult to treat? <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer">NDM is a plasmid-encoded carbapenemase that hydrolyses and inactivates all carbapenem antibiotics. NDM+ Acinetobacter is also typically resistant to fluoroquinolones and aminoglycosides — the therapeutic window narrows to polymyxins ± tigecycline/minocycline. Crucially, NDM is plasmid-mediated → horizontal transfer to other species in the ICU is possible, making containment critical.</div>
+    </div>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">Why is colistin nephrotoxic and how do you manage this risk? <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer">Colistin accumulates in proximal renal tubular cells and disrupts cellular membrane integrity (same mechanism as antibacterial action on bacterial outer membranes) → dose-dependent proximal tubular injury and AKI. Incidence 30–50%. Management: daily creatinine monitoring, avoid co-nephrotoxins, adequate hydration, renal dose-adjustment, and add inhaled colistin as adjunct to reduce systemic doses where possible.</div>
+    </div>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">What is the most important single intervention for ventilator weaning? <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer">The <strong>daily spontaneous breathing trial (SBT)</strong>. Multiple RCTs (Esteban et al., NEJM 1995) demonstrated daily SBT with PS 8 / PEEP 5 significantly reduces ventilator duration compared to gradual weaning. Pass criteria: RR &lt;35, SpO₂ &gt;90%, no haemodynamic deterioration, no accessory muscle use. A patient who passes their first SBT should be extubated that day unless there is a specific contraindication.</div>
+    </div>
+    <div class="viva-q" onclick="toggleViva(this)">
+      <div class="viva-q-text">Why adjust ventilator settings during bedside FOB in a ventilated patient? <span class="viva-arrow">▶</span></div>
+      <div class="viva-answer">The bronchoscope occupies a significant portion of the ETT lumen, dramatically increasing airway resistance. In pressure-controlled modes, tidal volume drops as pressure cannot overcome the elevated resistance. Switching to volume-controlled ventilation ensures consistent TV delivery. FiO₂ is increased to compensate for the additional dead space and V/Q mismatch during suctioning. These adjustments are reversed once the scope is removed.</div>
+    </div>
+  </div>
+
+  <div class="case-nav-bottom">
+    <a href="traumadog-case3.html" class="nav-btn">← Case 3: Mechanical Valve + OHS</a>
+    <a href="traumadog-index.html" class="nav-btn">All Cases →</a>
+  </div>
+</section>
+
+<footer>
+  TraumaDog · Case 4 · Dr. L.S. Wilson · FNB 2026 · Composite case — no patient data<br>
+  References: IDSA/ATS VAP Guidelines 2016 · EUCAST Polymyxin Guidelines · Paul et al., Lancet Infect Dis 2018
+</footer>
+
+<script>
+  function toggleBox(el){el.classList.toggle('open');}
+  function toggleViva(el){el.classList.toggle('open');}
+</script>
+</body>
+</html>

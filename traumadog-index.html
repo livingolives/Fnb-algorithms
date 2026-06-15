@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TraumaDog — Fellowship Cases | FNB 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;font-size:15px;}
+
+  .site-header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:12px;}
+  .site-header a{color:var(--muted);text-decoration:none;font-size:13px;font-family:var(--mono);}
+  .site-header a:hover{color:var(--text);}
+  .breadcrumb-sep{color:var(--border);}
+
+  .hero{padding:60px 20px 40px;max-width:900px;margin:0 auto;}
+  .hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+  .hero h1{font-size:clamp(2rem,6vw,3.2rem);font-weight:700;line-height:1.1;letter-spacing:-0.03em;margin-bottom:16px;}
+  .hero h1 span{background:linear-gradient(90deg,#f97316,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .hero-sub{color:var(--muted);font-size:15px;max-width:580px;line-height:1.7;margin-bottom:28px;}
+  .hero-tags{display:flex;flex-wrap:wrap;gap:8px;}
+  .tag{font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:4px;border:1px solid var(--border);color:var(--muted);background:var(--surface);}
+
+  .cases-grid{max-width:900px;margin:0 auto;padding:0 20px 80px;display:grid;grid-template-columns:1fr;gap:16px;}
+
+  .case-card{display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px 28px;transition:border-color 0.2s,transform 0.15s;position:relative;overflow:hidden;}
+  .case-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--card-accent);}
+  .case-card:hover{border-color:var(--card-accent);transform:translateY(-2px);}
+
+  .card-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--card-accent);margin-bottom:10px;}
+  .card-title{font-size:17px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:8px;}
+  .card-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px;}
+  .card-tags{display:flex;flex-wrap:wrap;gap:6px;}
+  .card-tag{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);}
+  .card-arrow{position:absolute;top:50%;right:24px;transform:translateY(-50%);font-size:18px;color:var(--border);transition:color 0.2s;}
+  .case-card:hover .card-arrow{color:var(--card-accent);}
+
+  .coming-soon{border-style:dashed;opacity:0.55;cursor:default;}
+  .coming-soon:hover{transform:none;border-color:var(--border);}
+  .coming-badge{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);}
+
+  .section-divider{max-width:900px;margin:0 auto 32px;padding:0 20px;}
+  .section-divider h2{font-size:11px;font-family:var(--mono);letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);padding-bottom:12px;border-bottom:1px solid var(--border);}
+
+  footer{border-top:1px solid var(--border);padding:24px 20px;text-align:center;font-size:12px;color:var(--muted);font-family:var(--mono);}
+  @media(max-width:600px){.hero{padding:40px 16px 28px;}.cases-grid{padding:0 16px 60px;}.card-arrow{display:none;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="index.html">🏠 Home</a>
+  <span class="breadcrumb-sep">/</span>
+  <a href="#">TraumaDog Cases</a>
+</header>
+
+<section class="hero">
+  <p class="hero-eyebrow">FNB Trauma Anaesthesia & Critical Care · 2026</p>
+  <h1><span>TraumaDog</span><br>Fellowship Cases</h1>
+  <p class="hero-sub">Composite teaching cases from real clinical principles. Vignette, decision flowchart, drug analysis, and viva questions — built for exam-ready learning.</p>
+  <div class="hero-tags">
+    <span class="tag">Dr. L.S. Wilson</span>
+    <span class="tag">MIOT International, Chennai</span>
+    <span class="tag">Composite · No Patient Data</span>
+  </div>
+</section>
+
+<div class="section-divider"><h2>Available Cases</h2></div>
+
+<div class="cases-grid">
+
+  <a href="traumadog-case1.html" class="case-card" style="--card-accent:#f97316">
+    <p class="card-eyebrow">Case 01 · Neurotrauma</p>
+    <p class="card-title">Traumatic Brain Injury in Pregnancy</p>
+    <p class="card-sub">29F · 28 weeks gestation · Pedestrian RTA · Bifrontal contusions · GCS 13→9. The two-patient problem: PaCO₂ targets, anti-oedema therapy, drug safety in pregnancy, RSI pitfalls.</p>
+    <div class="card-tags">
+      <span class="card-tag">TBI</span>
+      <span class="card-tag">Pregnancy</span>
+      <span class="card-tag">RSI</span>
+      <span class="card-tag">PaCO₂ targets</span>
+      <span class="card-tag">HTS vs Mannitol</span>
+      <span class="card-tag">Levetiracetam</span>
+    </div>
+    <span class="card-arrow">→</span>
+  </a>
+
+  <a href="traumadog-case2.html" class="case-card" style="--card-accent:#38bdf8">
+    <p class="card-eyebrow">Case 02 · Spinal Trauma</p>
+    <p class="card-title">Complete SCI T7–T8 (ASIA A) — Neurogenic Shock</p>
+    <p class="card-sub">38F · Fall from height · BP 78/46 · HR 52 · Warm peripheries. The bradycardic hypotensive trauma patient: vasopressor choice, MAP targets, suxamethonium hazard, spinal vs neurogenic shock.</p>
+    <div class="card-tags">
+      <span class="card-tag">Neurogenic shock</span>
+      <span class="card-tag">SCI</span>
+      <span class="card-tag">Noradrenaline</span>
+      <span class="card-tag">MAP 85–90</span>
+      <span class="card-tag">Suxamethonium hazard</span>
+      <span class="card-tag">ASIA grading</span>
+    </div>
+    <span class="card-arrow">→</span>
+  </a>
+
+  <a href="traumadog-case3.html" class="case-card" style="--card-accent:#a78bfa">
+    <p class="card-eyebrow">Case 03 · Cardiac + Airway</p>
+    <p class="card-title">Prosthetic Mechanical Mitral Valve + OSA/OHS</p>
+    <p class="card-sub">58M · BMI 36 · INR 2.6 · PaCO₂ 49 mmHg. Anticoagulation bridging, obese airway management, TIVA dosing in obesity, PEEP in OHS, post-op opioid avoidance.</p>
+    <div class="card-tags">
+      <span class="card-tag">Mechanical valve</span>
+      <span class="card-tag">LMWH bridging</span>
+      <span class="card-tag">OSA vs OHS</span>
+      <span class="card-tag">TIVA</span>
+      <span class="card-tag">Lean body weight</span>
+      <span class="card-tag">Ramped position</span>
+    </div>
+    <span class="card-arrow">→</span>
+  </a>
+
+  <a href="traumadog-case4.html" class="case-card" style="--card-accent:#34d399">
+    <p class="card-eyebrow">Case 04 · ICU Infection</p>
+    <p class="card-title">NDM-Positive Acinetobacter baumannii VAP</p>
+    <p class="card-sub">48M · Post-craniotomy Day 8 · P/F 178 · Last-resort antibiotics. VAP diagnosis, bedside FOB, polymyxin therapy, colistin nephrotoxicity, ABCDE weaning bundle, infection control.</p>
+    <div class="card-tags">
+      <span class="card-tag">VAP</span>
+      <span class="card-tag">NDM Acinetobacter</span>
+      <span class="card-tag">Colistin</span>
+      <span class="card-tag">BAL</span>
+      <span class="card-tag">ABCDE bundle</span>
+      <span class="card-tag">Polymyxins</span>
+    </div>
+    <span class="card-arrow">→</span>
+  </a>
+
+</div>
+
+<div class="section-divider"><h2>Coming Soon</h2></div>
+
+<div class="cases-grid" style="padding-bottom:80px;">
+  <div class="case-card coming-soon" style="--card-accent:#8b949e">
+    <p class="card-eyebrow">Case 05 · <span class="coming-badge">Coming soon</span></p>
+    <p class="card-title">More cases loading...</p>
+    <p class="card-sub">New composite teaching cases added as they are written. Check back soon.</p>
+  </div>
+</div>
+
+<footer>
+  TraumaDog Fellowship Cases · Dr. L.S. Wilson · FNB Trauma Anaesthesia & Critical Care 2026<br>
+  Composite teaching cases. No patient data. All clinical principles from peer-reviewed sources.
+</footer>
+
+</body>
+</html>
