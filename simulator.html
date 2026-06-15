@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OR Simulator | TraumaDog</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#c9a84c;--gold-bright:#f0c040;--gold-dim:#7a5e20;--bg:#06040a;--surface:#0e0a14;--border:#2a1f0a;--text:#c8b89a;--dim:#5a4a2a;--orb:'Orbitron',serif;--body:'Exo 2',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:520px;margin:0 auto;}
+.top-border{height:4px;background:repeating-linear-gradient(90deg,var(--gold) 0,var(--gold) 8px,transparent 8px,transparent 14px,var(--gold-dim) 14px,var(--gold-dim) 16px,transparent 16px,transparent 22px);margin:-20px -16px 0;width:calc(100% + 32px);}
+.header{text-align:center;padding:28px 0 20px;}
+.title{font-family:var(--orb);font-size:1.4rem;font-weight:900;color:var(--gold-bright);letter-spacing:.2em;text-shadow:0 0 20px rgba(240,192,64,.3);margin-bottom:4px;}
+.sub{font-family:var(--orb);font-size:.55rem;color:var(--gold-dim);letter-spacing:.25em;margin-bottom:6px;}
+.tagline{font-size:.72rem;color:var(--dim);font-style:italic;}
+.divider{display:flex;align-items:center;gap:8px;padding:12px 0;}
+.divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}
+.divider-icon{color:var(--gold);font-size:.8rem;}
+.sec-title{font-family:var(--orb);font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dim);margin-bottom:12px;}
+.scenario-card{display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px 18px;margin-bottom:10px;transition:all .2s;position:relative;overflow:hidden;}
+.scenario-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:background .2s;}
+.scenario-card:hover{border-color:var(--gold-dim);transform:translateX(3px);}
+.scenario-card:hover::before{background:var(--gold);}
+.sc-top{display:flex;align-items:center;gap:10px;margin-bottom:5px;}
+.sc-icon{font-size:1.3rem;flex-shrink:0;}
+.sc-name{font-family:var(--orb);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;}
+.sc-desc{font-size:.7rem;color:var(--dim);line-height:1.5;margin-bottom:8px;}
+.sc-tags{display:flex;gap:5px;flex-wrap:wrap;}
+.sc-tag{font-size:.48rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border:1px solid;border-radius:2px;}
+.sc-badge{position:absolute;top:10px;right:12px;font-family:var(--orb);font-size:.4rem;letter-spacing:.1em;padding:2px 6px;border-radius:2px;}
+.live{background:rgba(45,255,122,.1);border:1px solid rgba(45,255,122,.3);color:#2dff7a;}
+.soon{background:rgba(90,74,42,.2);border:1px solid var(--border);color:var(--dim);}
+.back-link{display:block;text-align:center;font-family:var(--orb);font-size:.5rem;color:var(--dim);letter-spacing:.1em;text-decoration:none;margin-top:16px;padding:10px;}
+.back-link:hover{color:var(--gold-dim);}
+.mode-note{background:rgba(201,168,76,.05);border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:16px;font-size:.7rem;color:var(--dim);line-height:1.6;}
+.mode-note b{color:var(--gold);}
+</style>
+</head>
+<body>
+<div class="top-border"></div>
+<div class="container">
+
+  <div class="header">
+    <div class="title">OR SIMULATOR</div>
+    <div class="sub">𓂀 TRAUMADOG CLINICAL SCENARIOS 𓂀</div>
+    <div class="tagline">Point-and-click · Real OR environment · FNB level</div>
+  </div>
+
+  <div class="mode-note">
+    <b>LEARN MODE:</b> Teaching notes after each action. Correct answers shown on mistakes.<br>
+    <b>EXPERT MODE:</b> No feedback. Wrong actions deteriorate the patient silently.
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-icon">☥</div><div class="divider-line"></div></div>
+  <p class="sec-title">🎮 Choose Your Scenario</p>
+
+  <!-- BRONCHOSPASM — LIVE -->
+  <a class="scenario-card" href="simulator-game.html" style="border-color:#3a1f6a;">
+    <div class="sc-badge live">● LIVE</div>
+    <div class="sc-top">
+      <span class="sc-icon">🫁</span>
+      <span class="sc-name" style="color:#c084fc;">Intraoperative Bronchospasm</span>
+    </div>
+    <div class="sc-desc">Mid-laparotomy. SpO₂ dropping. PIP rising. Bilateral wheeze. Shark-fin capnography. Diagnose and treat before the patient crashes.</div>
+    <div class="sc-tags">
+      <span class="sc-tag" style="border-color:#c084fc;color:#c084fc;">Airway</span>
+      <span class="sc-tag" style="border-color:#c084fc;color:#c084fc;">Bronchospasm</span>
+      <span class="sc-tag" style="border-color:#c084fc;color:#c084fc;">Ventilation</span>
+    </div>
+  </a>
+
+  <!-- TUBE DISPLACEMENT — COMING SOON -->
+  <div class="scenario-card" style="opacity:.5;cursor:default;">
+    <div class="sc-badge soon">COMING SOON</div>
+    <div class="sc-top">
+      <span class="sc-icon">🔧</span>
+      <span class="sc-name" style="color:#ffbe00;">Tube Displacement</span>
+    </div>
+    <div class="sc-desc">ETT has advanced from 22cm to 26cm. Absent right breath sounds. SpO₂ falling. Diagnose and correct.</div>
+    <div class="sc-tags">
+      <span class="sc-tag" style="border-color:#ffbe00;color:#ffbe00;">Airway</span>
+      <span class="sc-tag" style="border-color:#ffbe00;color:#ffbe00;">ETT</span>
+    </div>
+  </div>
+
+  <!-- CARDIAC ARREST — COMING SOON -->
+  <div class="scenario-card" style="opacity:.5;cursor:default;">
+    <div class="sc-badge soon">COMING SOON</div>
+    <div class="sc-top">
+      <span class="sc-icon">💀</span>
+      <span class="sc-name" style="color:#ff3d4a;">Intraoperative Cardiac Arrest</span>
+    </div>
+    <div class="sc-desc">PEA arrest mid-laparotomy. Flatline. EtCO₂ 8. You are the anaesthetist. CPR. Find the reversible cause.</div>
+    <div class="sc-tags">
+      <span class="sc-tag" style="border-color:#ff3d4a;color:#ff3d4a;">Arrest</span>
+      <span class="sc-tag" style="border-color:#ff3d4a;color:#ff3d4a;">PEA</span>
+      <span class="sc-tag" style="border-color:#ff3d4a;color:#ff3d4a;">4Hs 4Ts</span>
+    </div>
+  </div>
+
+  <!-- ATLS — COMING SOON -->
+  <div class="scenario-card" style="opacity:.5;cursor:default;">
+    <div class="sc-badge soon">COMING SOON</div>
+    <div class="sc-top">
+      <span class="sc-icon">🚑</span>
+      <span class="sc-name" style="color:#4db8ff;">ATLS Primary Survey</span>
+    </div>
+    <div class="sc-desc">Polytrauma. GCS 8. BP 88/60. Work through A-B-C-D-E. Tension PTX. Haemorrhage. TBI. All at once.</div>
+    <div class="sc-tags">
+      <span class="sc-tag" style="border-color:#4db8ff;color:#4db8ff;">ATLS</span>
+      <span class="sc-tag" style="border-color:#4db8ff;color:#4db8ff;">Trauma</span>
+      <span class="sc-tag" style="border-color:#4db8ff;color:#4db8ff;">ABCDE</span>
+    </div>
+  </div>
+
+  <a class="back-link" href="index.html">← RETURN TO TRAUMADOG</a>
+</div>
+</body>
+</html>
