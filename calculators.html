@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trauma Calculators | TraumaDog</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Exo+2:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06040a;--gold:#c9a84c;--gold-bright:#f0c040;--gold-dim:#7a5e20;
+  --surface:#0e0a14;--border:#1a1428;--text:#c8b89a;--dim:#5a4a2a;--bright:#f5e8c0;
+  --red:#f87171;--green:#4ade80;--amber:#ffbe00;--blue:#60a5fa;--purple:#c084fc;
+  --serif:'Cinzel',serif;--body:'Exo 2',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;padding-bottom:40px;}
+
+/* TOP BAR */
+.topbar{height:5px;background:repeating-linear-gradient(90deg,var(--gold) 0,var(--gold) 8px,transparent 8px,transparent 14px,var(--gold-dim) 14px,var(--gold-dim) 16px,transparent 16px,transparent 22px);}
+.header{padding:20px 16px 16px;max-width:600px;margin:0 auto;}
+.back-link{font-family:var(--mono);font-size:.52rem;color:var(--dim);text-decoration:none;letter-spacing:.1em;display:block;margin-bottom:12px;}
+.back-link:hover{color:var(--gold-dim);}
+.page-title{font-family:var(--serif);font-size:1.4rem;font-weight:900;color:var(--gold-bright);letter-spacing:.15em;text-shadow:0 0 20px rgba(240,192,64,.25);margin-bottom:2px;}
+.page-sub{font-family:var(--mono);font-size:.52rem;color:var(--dim);letter-spacing:.15em;}
+.hieroglyph{font-size:.8rem;letter-spacing:.25em;color:var(--gold-dim);opacity:.4;margin-top:4px;}
+
+/* NAV PILLS */
+.nav-scroll{overflow-x:auto;padding:12px 16px;display:flex;gap:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.nav-scroll::-webkit-scrollbar{display:none;}
+.nav-pill{font-family:var(--mono);font-size:.48rem;letter-spacing:.08em;padding:6px 12px;border:1px solid var(--border);color:var(--dim);background:var(--surface);cursor:pointer;white-space:nowrap;border-radius:3px;flex-shrink:0;transition:all .15s;}
+.nav-pill.active,.nav-pill:hover{border-color:var(--gold-dim);color:var(--gold);}
+.nav-pill.active{background:rgba(201,168,76,.06);}
+
+/* CALC CONTAINER */
+.calcs{max-width:600px;margin:0 auto;padding:0 16px;}
+.calc-section{display:none;}
+.calc-section.active{display:block;}
+
+/* CARD */
+.calc-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden;}
+.calc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold-dim),transparent);}
+.calc-title{font-family:var(--serif);font-size:.85rem;letter-spacing:.08em;color:var(--gold);margin-bottom:3px;}
+.calc-formula{font-family:var(--mono);font-size:.52rem;color:var(--dim);margin-bottom:14px;line-height:1.5;}
+
+/* INPUTS */
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.input-row.single{grid-template-columns:1fr;}
+.input-row.triple{grid-template-columns:1fr 1fr 1fr;}
+.field{display:flex;flex-direction:column;gap:3px;}
+.field label{font-family:var(--mono);font-size:.44rem;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;}
+.field input,.field select{background:#07050f;border:1px solid var(--border);border-radius:4px;padding:9px 10px;font-family:var(--mono);font-size:.78rem;color:var(--bright);outline:none;width:100%;transition:border-color .15s;}
+.field input:focus,.field select:focus{border-color:var(--gold-dim);}
+.field select option{background:#07050f;}
+
+/* BUTTONS */
+.calc-btn{width:100%;padding:11px;background:rgba(201,168,76,.08);border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--serif);font-size:.65rem;letter-spacing:.12em;cursor:pointer;border-radius:4px;margin-top:10px;transition:all .2s;}
+.calc-btn:hover{background:rgba(201,168,76,.15);}
+
+/* RESULT BOX */
+.result-box{margin-top:12px;padding:14px;background:#07050f;border:1px solid var(--border);border-radius:6px;display:none;}
+.result-box.show{display:block;}
+.result-main{font-family:var(--serif);font-size:1.1rem;font-weight:700;margin-bottom:6px;}
+.result-main.g{color:var(--green);}
+.result-main.w{color:var(--amber);}
+.result-main.r{color:var(--red);}
+.result-main.b{color:var(--blue);}
+.result-rows{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+.result-row{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--border);font-size:.72rem;}
+.result-row:last-child{border-bottom:none;}
+.rr-label{color:var(--dim);font-family:var(--mono);font-size:.48rem;letter-spacing:.06em;}
+.rr-val{font-family:var(--mono);font-size:.75rem;color:var(--bright);}
+.rr-val.g{color:var(--green);}
+.rr-val.w{color:var(--amber);}
+.rr-val.r{color:var(--red);}
+.interpret{font-size:.72rem;color:var(--text);line-height:1.7;padding:10px 12px;background:rgba(201,168,76,.04);border-left:2px solid var(--gold-dim);border-radius:0 4px 4px 0;margin-top:8px;}
+.interpret b{color:var(--gold);}
+.interpret .warn{color:var(--amber);}
+.interpret .crit{color:var(--red);}
+.interpret .ok{color:var(--green);}
+
+/* Score input for RTS/AIS */
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;}
+.score-item{background:#07050f;border:1px solid var(--border);border-radius:4px;padding:8px 10px;}
+.score-label{font-family:var(--mono);font-size:.42rem;color:var(--dim);letter-spacing:.06em;margin-bottom:4px;}
+.score-select{background:transparent;border:none;color:var(--bright);font-family:var(--mono);font-size:.72rem;width:100%;outline:none;cursor:pointer;}
+
+/* Pediatric drug table */
+.drug-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:.7rem;}
+.drug-table th{background:rgba(201,168,76,.08);color:var(--gold-dim);font-family:var(--mono);font-size:.44rem;letter-spacing:.08em;padding:7px 8px;text-align:left;border-bottom:1px solid var(--border);}
+.drug-table td{padding:7px 8px;border-bottom:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:.65rem;}
+.drug-table tr:last-child td{border-bottom:none;}
+.drug-table .drug-name{color:var(--bright);}
+.drug-table .drug-dose{color:var(--amber);}
+.drug-table .drug-max{color:var(--dim);font-size:.58rem;}
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+<div class="header">
+  <a class="back-link" href="index.html">← TRAUMADOG</a>
+  <div class="page-title">TRAUMA LABS</div>
+  <div class="page-sub">𓂀 CLINICAL CALCULATORS · FNB EXIT 2026</div>
+  <div class="hieroglyph">𓂀 𓅃 𓆣 𓁹 𓆙 𓊪 𓁹 𓂀</div>
+</div>
+
+<!-- NAV -->
+<div class="nav-scroll">
+  <div class="nav-pill active" onclick="showCalc('shock')">⚡ Shock Index</div>
+  <div class="nav-pill" onclick="showCalc('rts')">📊 RTS / AIS</div>
+  <div class="nav-pill" onclick="showCalc('mtp')">🩸 MTP Trigger</div>
+  <div class="nav-pill" onclick="showCalc('blood')">💉 Blood Loss</div>
+  <div class="nav-pill" onclick="showCalc('abg')">🫁 ABG Analyser</div>
+  <div class="nav-pill" onclick="showCalc('gfr')">🫘 GFR</div>
+  <div class="nav-pill" onclick="showCalc('peds')">👶 Paediatric Drugs</div>
+</div>
+
+<div class="calcs">
+
+  <!-- ═══ SHOCK INDEX ═══ -->
+  <div class="calc-section active" id="calc_shock">
+    <div class="calc-card">
+      <div class="calc-title">Shock Index</div>
+      <div class="calc-formula">SI = HR ÷ SBP · Normal &lt;1.0 · SI &gt;1 = significant haemorrhage · SI &gt;1.4 = severe shock</div>
+      <div class="input-row">
+        <div class="field"><label>Heart Rate (bpm)</label><input type="number" id="si_hr" placeholder="e.g. 118"/></div>
+        <div class="field"><label>Systolic BP (mmHg)</label><input type="number" id="si_sbp" placeholder="e.g. 90"/></div>
+      </div>
+      <div class="input-row">
+        <div class="field"><label>Patient Age</label><input type="number" id="si_age" placeholder="e.g. 35"/></div>
+        <div class="field"><label>Mechanism</label>
+          <select id="si_mech">
+            <option value="blunt">Blunt</option>
+            <option value="penetrating">Penetrating</option>
+          </select>
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcShock()">CALCULATE ☥</button>
+      <div class="result-box" id="res_shock">
+        <div class="result-main" id="res_shock_main"></div>
+        <div class="result-rows" id="res_shock_rows"></div>
+        <div class="interpret" id="res_shock_interp"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RTS / AIS ═══ -->
+  <div class="calc-section" id="calc_rts">
+    <div class="calc-card">
+      <div class="calc-title">Revised Trauma Score (RTS)</div>
+      <div class="calc-formula">RTS = 0.9368×GCS + 0.7326×SBP + 0.2908×RR · Range 0–7.84 · RTS &lt;4 = high mortality</div>
+      <div class="score-grid">
+        <div class="score-item">
+          <div class="score-label">GCS</div>
+          <select class="score-select" id="rts_gcs">
+            <option value="4">13–15 (score 4)</option>
+            <option value="3">9–12 (score 3)</option>
+            <option value="2">6–8 (score 2)</option>
+            <option value="1">4–5 (score 1)</option>
+            <option value="0">3 (score 0)</option>
+          </select>
+        </div>
+        <div class="score-item">
+          <div class="score-label">SBP (mmHg)</div>
+          <select class="score-select" id="rts_sbp">
+            <option value="4">&gt;89 (score 4)</option>
+            <option value="3">76–89 (score 3)</option>
+            <option value="2">50–75 (score 2)</option>
+            <option value="1">1–49 (score 1)</option>
+            <option value="0">0 (score 0)</option>
+          </select>
+        </div>
+        <div class="score-item">
+          <div class="score-label">RR (/min)</div>
+          <select class="score-select" id="rts_rr">
+            <option value="4">10–29 (score 4)</option>
+            <option value="3">&gt;29 (score 3)</option>
+            <option value="2">6–9 (score 2)</option>
+            <option value="1">1–5 (score 1)</option>
+            <option value="0">0 (score 0)</option>
+          </select>
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcRTS()">CALCULATE ☥</button>
+      <div class="result-box" id="res_rts">
+        <div class="result-main" id="res_rts_main"></div>
+        <div class="result-rows" id="res_rts_rows"></div>
+        <div class="interpret" id="res_rts_interp"></div>
+      </div>
+    </div>
+
+    <div class="calc-card">
+      <div class="calc-title">Abbreviated Injury Scale (AIS) → ISS</div>
+      <div class="calc-formula">ISS = sum of squares of 3 highest AIS scores from different body regions · ISS &gt;15 = major trauma</div>
+      <div class="score-grid">
+        <div class="score-item"><div class="score-label">Head/Neck AIS</div><select class="score-select" id="ais_head"><option value="0">0 — None</option><option value="1">1 — Minor</option><option value="2">2 — Moderate</option><option value="3">3 — Serious</option><option value="4">4 — Severe</option><option value="5">5 — Critical</option></select></div>
+        <div class="score-item"><div class="score-label">Face AIS</div><select class="score-select" id="ais_face"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+        <div class="score-item"><div class="score-label">Chest AIS</div><select class="score-select" id="ais_chest"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+        <div class="score-item"><div class="score-label">Abdomen AIS</div><select class="score-select" id="ais_abd"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+        <div class="score-item"><div class="score-label">Extremity AIS</div><select class="score-select" id="ais_ext"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div>
+        <div class="score-item"><div class="score-label">External AIS</div><select class="score-select" id="ais_ext2"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></div>
+      </div>
+      <button class="calc-btn" onclick="calcISS()">CALCULATE ISS ☥</button>
+      <div class="result-box" id="res_iss">
+        <div class="result-main" id="res_iss_main"></div>
+        <div class="result-rows" id="res_iss_rows"></div>
+        <div class="interpret" id="res_iss_interp"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MTP TRIGGER ═══ -->
+  <div class="calc-section" id="calc_mtp">
+    <div class="calc-card">
+      <div class="calc-title">MTP Trigger — ABC Score</div>
+      <div class="calc-formula">Assessment of Blood Consumption (ABC) Score · ≥2 = MTP activation · Each criterion = 1 point</div>
+      <div class="score-grid">
+        <div class="score-item"><div class="score-label">Penetrating mechanism</div><select class="score-select" id="abc_mech"><option value="0">No (0)</option><option value="1">Yes (1)</option></select></div>
+        <div class="score-item"><div class="score-label">SBP ≤90 mmHg</div><select class="score-select" id="abc_sbp"><option value="0">No (0)</option><option value="1">Yes (1)</option></select></div>
+        <div class="score-item"><div class="score-label">HR ≥120 bpm</div><select class="score-select" id="abc_hr"><option value="0">No (0)</option><option value="1">Yes (1)</option></select></div>
+        <div class="score-item"><div class="score-label">FAST positive</div><select class="score-select" id="abc_fast"><option value="0">No (0)</option><option value="1">Yes (1)</option></select></div>
+      </div>
+      <button class="calc-btn" onclick="calcMTP()">CALCULATE ☥</button>
+      <div class="result-box" id="res_mtp">
+        <div class="result-main" id="res_mtp_main"></div>
+        <div class="interpret" id="res_mtp_interp"></div>
+      </div>
+    </div>
+
+    <div class="calc-card">
+      <div class="calc-title">Shock Index MTP Trigger</div>
+      <div class="calc-formula">SI &gt;1.0 = consider MTP · SI &gt;1.4 = activate MTP · Combine with ABC score for best sensitivity</div>
+      <div class="input-row">
+        <div class="field"><label>HR (bpm)</label><input type="number" id="si2_hr" placeholder="120"/></div>
+        <div class="field"><label>SBP (mmHg)</label><input type="number" id="si2_sbp" placeholder="80"/></div>
+      </div>
+      <button class="calc-btn" onclick="calcSI2()">CALCULATE ☥</button>
+      <div class="result-box" id="res_si2">
+        <div class="result-main" id="res_si2_main"></div>
+        <div class="interpret" id="res_si2_interp"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ BLOOD LOSS ═══ -->
+  <div class="calc-section" id="calc_blood">
+    <div class="calc-card">
+      <div class="calc-title">Estimated Blood Volume & Maximum Blood Loss</div>
+      <div class="calc-formula">EBV: Adult male 70ml/kg · Female 65ml/kg · Child 80ml/kg · Neonate 85–90ml/kg · MBL = EBV × (Hct_start − Hct_min) ÷ Hct_avg</div>
+      <div class="input-row">
+        <div class="field"><label>Weight (kg)</label><input type="number" id="bl_wt" placeholder="70"/></div>
+        <div class="field"><label>Sex</label><select id="bl_sex"><option value="m">Male</option><option value="f">Female</option><option value="c">Child</option><option value="n">Neonate</option></select></div>
+      </div>
+      <div class="input-row triple">
+        <div class="field"><label>Starting Hct (%)</label><input type="number" id="bl_hct_start" placeholder="40"/></div>
+        <div class="field"><label>Min Hct (%)</label><input type="number" id="bl_hct_min" placeholder="21"/></div>
+        <div class="field"><label>Trigger Hb (g/dL)</label><input type="number" id="bl_hb_trigger" placeholder="7"/></div>
+      </div>
+      <button class="calc-btn" onclick="calcBlood()">CALCULATE ☥</button>
+      <div class="result-box" id="res_blood">
+        <div class="result-main" id="res_blood_main"></div>
+        <div class="result-rows" id="res_blood_rows"></div>
+        <div class="interpret" id="res_blood_interp"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ABG ANALYSER ═══ -->
+  <div class="calc-section" id="calc_abg">
+    <div class="calc-card">
+      <div class="calc-title">ABG Analyser</div>
+      <div class="calc-formula">Systematic: pH → primary disorder → compensation → anion gap → delta gap → mixed disorder?</div>
+      <div class="input-row">
+        <div class="field"><label>pH</label><input type="number" id="abg_ph" placeholder="7.35" step="0.01"/></div>
+        <div class="field"><label>PaCO₂ (mmHg)</label><input type="number" id="abg_co2" placeholder="40"/></div>
+      </div>
+      <div class="input-row">
+        <div class="field"><label>HCO₃⁻ (mmol/L)</label><input type="number" id="abg_hco3" placeholder="24"/></div>
+        <div class="field"><label>PaO₂ (mmHg)</label><input type="number" id="abg_po2" placeholder="95"/></div>
+      </div>
+      <div class="input-row triple">
+        <div class="field"><label>Na⁺ (mmol/L)</label><input type="number" id="abg_na" placeholder="140"/></div>
+        <div class="field"><label>Cl⁻ (mmol/L)</label><input type="number" id="abg_cl" placeholder="102"/></div>
+        <div class="field"><label>Albumin (g/dL)</label><input type="number" id="abg_alb" placeholder="4" step="0.1"/></div>
+      </div>
+      <div class="input-row">
+        <div class="field"><label>FiO₂ (%)</label><input type="number" id="abg_fio2" placeholder="21"/></div>
+        <div class="field"><label>Base Excess</label><input type="number" id="abg_be" placeholder="0" step="0.1"/></div>
+      </div>
+      <button class="calc-btn" onclick="calcABG()">ANALYSE ☥</button>
+      <div class="result-box" id="res_abg">
+        <div class="result-main" id="res_abg_main"></div>
+        <div class="result-rows" id="res_abg_rows"></div>
+        <div class="interpret" id="res_abg_interp"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ GFR ═══ -->
+  <div class="calc-section" id="calc_gfr">
+    <div class="calc-card">
+      <div class="calc-title">eGFR — CKD-EPI 2021</div>
+      <div class="calc-formula">CKD-EPI 2021 (race-free): eGFR = 142 × min(Scr/κ, 1)^α × max(Scr/κ, 1)^−1.200 × 0.9938^Age [× 1.012 if female]</div>
+      <div class="input-row">
+        <div class="field"><label>Creatinine (μmol/L)</label><input type="number" id="gfr_cr" placeholder="90"/></div>
+        <div class="field"><label>Age (years)</label><input type="number" id="gfr_age" placeholder="40"/></div>
+      </div>
+      <div class="input-row">
+        <div class="field"><label>Sex</label><select id="gfr_sex"><option value="m">Male</option><option value="f">Female</option></select></div>
+        <div class="field"><label>Creatinine unit</label><select id="gfr_unit"><option value="umol">μmol/L</option><option value="mgdl">mg/dL</option></select></div>
+      </div>
+      <button class="calc-btn" onclick="calcGFR()">CALCULATE ☥</button>
+      <div class="result-box" id="res_gfr">
+        <div class="result-main" id="res_gfr_main"></div>
+        <div class="result-rows" id="res_gfr_rows"></div>
+        <div class="interpret" id="res_gfr_interp"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PAEDIATRIC DRUGS ═══ -->
+  <div class="calc-section" id="calc_peds">
+    <div class="calc-card">
+      <div class="calc-title">Paediatric Drug Doses</div>
+      <div class="calc-formula">Weight-based dosing. Always verify against local formulary. Max doses shown.</div>
+      <div class="input-row">
+        <div class="field"><label>Weight (kg)</label><input type="number" id="ped_wt" placeholder="20" oninput="calcPeds()"/></div>
+        <div class="field"><label>Age (years)</label><input type="number" id="ped_age" placeholder="5" oninput="updatePedAge()"/></div>
+      </div>
+      <div class="field" style="margin-bottom:10px;">
+        <label>Estimated weight (Broselow / Rule)</label>
+        <input type="text" id="ped_est" readonly style="color:var(--amber);background:#07050f;border:1px solid var(--border);border-radius:4px;padding:8px 10px;font-family:var(--mono);font-size:.75rem;"/>
+      </div>
+      <div class="result-box show" id="res_peds">
+        <table class="drug-table" id="peds_table"></table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end calcs -->
+
+<script>
+// ══════════════════════════════════
+// NAV
+// ══════════════════════════════════
+function showCalc(id){
+  document.querySelectorAll('.calc-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-pill').forEach(p=>p.classList.remove('active'));
+  document.getElementById('calc_'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function showResult(id,show=true){
+  document.getElementById(id).className='result-box'+(show?' show':'');
+}
+
+// ══════════════════════════════════
+// SHOCK INDEX
+// ══════════════════════════════════
+function calcShock(){
+  const hr=parseFloat(document.getElementById('si_hr').value);
+  const sbp=parseFloat(document.getElementById('si_sbp').value);
+  const age=parseFloat(document.getElementById('si_age').value)||35;
+  const mech=document.getElementById('si_mech').value;
+  if(!hr||!sbp){alert('Enter HR and SBP');return;}
+  const si=(hr/sbp).toFixed(2);
+  let grade,color,interp;
+  if(si<0.6){grade='BELOW NORMAL';color='b';interp='<b>SI &lt;0.6:</b> Below normal range. Consider relative bradycardia or hypertension.';}
+  else if(si<1.0){grade='NORMAL';color='g';interp='<b>SI 0.6–1.0:</b> Normal. No immediate haemorrhagic shock concern.';}
+  else if(si<1.4){grade='SIGNIFICANT HAEMORRHAGE';color='w';interp='<b class="warn">SI 1.0–1.4:</b> Significant haemorrhage likely. Consider MTP activation. Urgent assessment. Class II–III shock.';}
+  else{grade='SEVERE SHOCK';color='r';interp='<b class="crit">SI &gt;1.4:</b> Severe haemorrhagic shock. Activate MTP immediately. Class III–IV. May need damage control surgery. REBOA if non-compressible haemorrhage.';}
+
+  // Adjusted SI for age >55
+  const si_adj=age>55?(si*1.1).toFixed(2):null;
+
+  document.getElementById('res_shock_main').textContent=`SI = ${si} — ${grade}`;
+  document.getElementById('res_shock_main').className=`result-main ${color}`;
+  document.getElementById('res_shock_rows').innerHTML=`
+    <div class="result-row"><span class="rr-label">HR</span><span class="rr-val">${hr} bpm</span></div>
+    <div class="result-row"><span class="rr-label">SBP</span><span class="rr-val">${sbp} mmHg</span></div>
+    <div class="result-row"><span class="rr-label">Mechanism</span><span class="rr-val">${mech}</span></div>
+    ${si_adj?`<div class="result-row"><span class="rr-label">Age-adjusted SI (>55yrs)</span><span class="rr-val ${parseFloat(si_adj)>1?'w':''}">${si_adj}</span></div>`:''}
+  `;
+  document.getElementById('res_shock_interp').innerHTML=interp+'<br><br><b>Formula:</b> SI = HR ÷ SBP. Simple, no equipment needed. Validated for MTP activation, ED triage, and prehospital triage.';
+  showResult('res_shock');
+}
+
+// ══════════════════════════════════
+// RTS
+// ══════════════════════════════════
+function calcRTS(){
+  const gcs=parseFloat(document.getElementById('rts_gcs').value);
+  const sbp=parseFloat(document.getElementById('rts_sbp').value);
+  const rr=parseFloat(document.getElementById('rts_rr').value);
+  const rts=(0.9368*gcs+0.7326*sbp+0.2908*rr).toFixed(2);
+  let surv,color;
+  if(rts>=7){surv='~98%';color='g';}
+  else if(rts>=5){surv='~75%';color='w';}
+  else if(rts>=3){surv='~50%';color='w';}
+  else{surv='~25%';color='r';}
+  document.getElementById('res_rts_main').textContent=`RTS = ${rts}`;
+  document.getElementById('res_rts_main').className=`result-main ${color}`;
+  document.getElementById('res_rts_rows').innerHTML=`
+    <div class="result-row"><span class="rr-label">GCS score</span><span class="rr-val">${gcs}/4</span></div>
+    <div class="result-row"><span class="rr-label">SBP score</span><span class="rr-val">${sbp}/4</span></div>
+    <div class="result-row"><span class="rr-label">RR score</span><span class="rr-val">${rr}/4</span></div>
+    <div class="result-row"><span class="rr-label">Predicted survival</span><span class="rr-val ${color}">${surv}</span></div>
+  `;
+  document.getElementById('res_rts_interp').innerHTML=`<b>RTS ${rts}:</b> ${rts<4?'<span class="crit">High mortality — major trauma activation required.</span>':rts<6?'<span class="warn">Significant injury — trauma team involvement needed.</span>':'<span class="ok">Lower mortality predicted — continue full assessment.</span>'}<br><br><b>Formula:</b> RTS = 0.9368×GCS_coded + 0.7326×SBP_coded + 0.2908×RR_coded. Used for triage, outcome prediction, and TRISS calculation.`;
+  showResult('res_rts');
+}
+
+// ══════════════════════════════════
+// ISS
+// ══════════════════════════════════
+function calcISS(){
+  const scores=[
+    parseInt(document.getElementById('ais_head').value),
+    parseInt(document.getElementById('ais_face').value),
+    parseInt(document.getElementById('ais_chest').value),
+    parseInt(document.getElementById('ais_abd').value),
+    parseInt(document.getElementById('ais_ext').value),
+    parseInt(document.getElementById('ais_ext2').value),
+  ];
+  // If any AIS=6, ISS=75 (unsurvivable)
+  if(scores.includes(6)){document.getElementById('res_iss_main').textContent='ISS = 75 (AIS 6 = Unsurvivable)';document.getElementById('res_iss_main').className='result-main r';showResult('res_iss');return;}
+  const top3=scores.sort((a,b)=>b-a).slice(0,3);
+  const iss=top3.reduce((sum,s)=>sum+s*s,0);
+  let color=iss>24?'r':iss>15?'w':'g';
+  document.getElementById('res_iss_main').textContent=`ISS = ${iss}`;
+  document.getElementById('res_iss_main').className=`result-main ${color}`;
+  document.getElementById('res_iss_rows').innerHTML=`
+    <div class="result-row"><span class="rr-label">Top 3 AIS scores</span><span class="rr-val">${top3.join(', ')}</span></div>
+    <div class="result-row"><span class="rr-label">Squares</span><span class="rr-val">${top3.map(s=>s+'²='+s*s).join(' + ')}</span></div>
+    <div class="result-row"><span class="rr-label">Classification</span><span class="rr-val ${color}">${iss>24?'Severe trauma':iss>15?'Major trauma':iss>8?'Moderate':'Minor'}</span></div>
+  `;
+  document.getElementById('res_iss_interp').innerHTML=`<b>ISS ${iss}:</b> ${iss>24?'<span class="crit">Severe — ISS >24. High mortality. ICU admission likely.</span>':iss>15?'<span class="warn">Major trauma — ISS >15. Trauma team activation. Mortality risk increases significantly.</span>':'<span class="ok">ISS ≤15 — minor to moderate injury.</span>'}<br><br><b>Formula:</b> ISS = sum of squares of 3 highest AIS from DIFFERENT body regions. AIS 6 in any region = ISS 75 (unsurvivable).`;
+  showResult('res_iss');
+}
+
+// ══════════════════════════════════
+// MTP
+// ══════════════════════════════════
+function calcMTP(){
+  const s=parseInt(document.getElementById('abc_mech').value)+parseInt(document.getElementById('abc_sbp').value)+parseInt(document.getElementById('abc_hr').value)+parseInt(document.getElementById('abc_fast').value);
+  let color=s>=2?'r':s===1?'w':'g';
+  document.getElementById('res_mtp_main').textContent=`ABC Score = ${s}/4`;
+  document.getElementById('res_mtp_main').className=`result-main ${color}`;
+  document.getElementById('res_mtp_interp').innerHTML=s>=2?'<b class="crit">ABC ≥2 — ACTIVATE MTP.</b> Predicted massive transfusion. Initiate 1:1:1 pRBC:FFP:Platelets. Give TXA within 3 hours. Notify haematology and blood bank.<br><br>Sensitivity ~75%, Specificity ~85% for massive transfusion.':s===1?'<b class="warn">ABC = 1 — monitor closely.</b> Not yet at MTP threshold. Reassess frequently. If haemodynamics worsen or FAST becomes positive — activate MTP.<br><br>Combined with SI >1.0, consider early MTP.':'<b class="ok">ABC = 0 — low risk.</b> Unlikely to require massive transfusion based on current parameters. Continue monitoring.';
+  showResult('res_mtp');
+}
+
+function calcSI2(){
+  const hr=parseFloat(document.getElementById('si2_hr').value);
+  const sbp=parseFloat(document.getElementById('si2_sbp').value);
+  if(!hr||!sbp)return;
+  const si=(hr/sbp).toFixed(2);
+  let color=si>=1.4?'r':si>=1.0?'w':'g';
+  document.getElementById('res_si2_main').textContent=`SI = ${si}`;
+  document.getElementById('res_si2_main').className=`result-main ${color}`;
+  document.getElementById('res_si2_interp').innerHTML=si>=1.4?'<b class="crit">SI ≥1.4 — ACTIVATE MTP.</b> High likelihood of massive haemorrhage.':si>=1.0?'<b class="warn">SI ≥1.0 — Consider MTP.</b> Combine with ABC score. Prepare blood products.':'<b class="ok">SI &lt;1.0 — Normal range.</b>';
+  showResult('res_si2');
+}
+
+// ══════════════════════════════════
+// BLOOD LOSS
+// ══════════════════════════════════
+function calcBlood(){
+  const wt=parseFloat(document.getElementById('bl_wt').value);
+  const sex=document.getElementById('bl_sex').value;
+  const hct_s=parseFloat(document.getElementById('bl_hct_start').value)||38;
+  const hct_m=parseFloat(document.getElementById('bl_hct_min').value)||21;
+  const hb_t=parseFloat(document.getElementById('bl_hb_trigger').value)||7;
+  if(!wt){alert('Enter weight');return;}
+  const ebvFactor={m:70,f:65,c:80,n:88};
+  const ebv=Math.round(wt*ebvFactor[sex]);
+  const hct_avg=(hct_s+hct_m)/2;
+  const mbl=Math.round(ebv*(hct_s-hct_m)/hct_avg);
+  const blToTrigger=Math.round(ebv*(hct_s-hb_t*3)/hct_avg); // Hct ≈ Hb × 3
+  const unitsRBC=Math.round(mbl/250); // ~250ml per unit packed cells
+
+  document.getElementById('res_blood_main').textContent=`EBV = ${ebv} mL`;
+  document.getElementById('res_blood_main').className='result-main b';
+  document.getElementById('res_blood_rows').innerHTML=`
+    <div class="result-row"><span class="rr-label">Estimated Blood Volume</span><span class="rr-val b">${ebv} mL</span></div>
+    <div class="result-row"><span class="rr-label">Maximum Allowable Blood Loss</span><span class="rr-val w">${mbl} mL</span></div>
+    <div class="result-row"><span class="rr-label">Blood loss to Hb trigger (${hb_t} g/dL)</span><span class="rr-val w">${blToTrigger>0?blToTrigger+' mL':'Already at/below trigger'}</span></div>
+    <div class="result-row"><span class="rr-label">Approx. pRBC units needed</span><span class="rr-val r">~${unitsRBC} units</span></div>
+    <div class="result-row"><span class="rr-label">Starting Hct</span><span class="rr-val">${hct_s}%</span></div>
+    <div class="result-row"><span class="rr-label">Minimum acceptable Hct</span><span class="rr-val">${hct_m}%</span></div>
+  `;
+  document.getElementById('res_blood_interp').innerHTML=`<b>MBL Formula:</b> EBV × (Hct_start − Hct_min) ÷ Hct_avg<br><br>Blood loss approaching <b>${mbl}mL</b> should trigger transfusion consideration. At MBL, patient is at minimum acceptable Hct (${hct_m}%). EBV uses ${ebvFactor[sex]}ml/kg for this patient type.<br><br><b>Note:</b> In trauma with haemorrhage, activate MTP (1:1:1) rather than waiting for trigger Hb — ATC begins within 30 minutes.`;
+  showResult('res_blood');
+}
+
+// ══════════════════════════════════
+// ABG ANALYSER
+// ══════════════════════════════════
+function calcABG(){
+  const pH=parseFloat(document.getElementById('abg_ph').value);
+  const pco2=parseFloat(document.getElementById('abg_co2').value);
+  const hco3=parseFloat(document.getElementById('abg_hco3').value);
+  const po2=parseFloat(document.getElementById('abg_po2').value);
+  const na=parseFloat(document.getElementById('abg_na').value)||140;
+  const cl=parseFloat(document.getElementById('abg_cl').value)||102;
+  const alb=parseFloat(document.getElementById('abg_alb').value)||4;
+  const fio2=parseFloat(document.getElementById('abg_fio2').value)||21;
+  const be=parseFloat(document.getElementById('abg_be').value)||0;
+  if(!pH||!pco2||!hco3){alert('Enter pH, PaCO₂ and HCO₃⁻');return;}
+
+  // Step 1: Oxygenation
+  const pao2_expected=fio2*5-pco2*1.25; // simplified A-a calc at sea level
+  const aa_grad=pao2_expected-po2;
+  const hypoxic=po2<80;
+
+  // Step 2: Primary disorder
+  let primary='',primaryNote='';
+  const acidosis=pH<7.35;
+  const alkalosis=pH>7.45;
+  if(acidosis){
+    if(pco2>45){primary='Respiratory Acidosis';primaryNote='↑PaCO₂ causing acidaemia.';}
+    else if(hco3<22){primary='Metabolic Acidosis';primaryNote='↓HCO₃⁻ causing acidaemia.';}
+    else{primary='Mixed Acidosis';primaryNote='Both PaCO₂ and HCO₃⁻ contributing.';}
+  } else if(alkalosis){
+    if(pco2<35){primary='Respiratory Alkalosis';primaryNote='↓PaCO₂ causing alkalaemia.';}
+    else if(hco3>26){primary='Metabolic Alkalosis';primaryNote='↑HCO₃⁻ causing alkalaemia.';}
+    else{primary='Mixed Alkalosis';primaryNote='Both contributing.';}
+  } else {
+    primary='Normal pH';
+    primaryNote='pH normal. May still have mixed disorder — check compensation.';
+  }
+
+  // Step 3: Compensation
+  let compExpected='',compActual='',compNote='';
+  if(primary==='Metabolic Acidosis'){
+    const pco2_exp=(1.5*hco3+8).toFixed(1);
+    compExpected=`Expected PaCO₂: ${pco2_exp} mmHg (Winters formula)`;
+    if(Math.abs(pco2-pco2_exp)<2)compNote='Compensation appropriate. Simple metabolic acidosis.';
+    else if(pco2<pco2_exp)compNote='<span class="warn">PaCO₂ lower than expected → Additional respiratory alkalosis.</span>';
+    else compNote='<span class="crit">PaCO₂ higher than expected → Additional respiratory acidosis — mixed disorder!</span>';
+  } else if(primary==='Respiratory Acidosis'){
+    const acute_hco3=(7.35-pH)*80+24;
+    const chronic_hco3=24+(pco2-40)*0.35;
+    compNote=`Acute expected HCO₃⁻: ~${acute_hco3.toFixed(0)} / Chronic: ~${chronic_hco3.toFixed(0)} · Actual: ${hco3}`;
+  } else if(primary==='Metabolic Alkalosis'){
+    const pco2_exp=(40+(hco3-24)*0.7).toFixed(1);
+    compNote=`Expected PaCO₂: ${pco2_exp} mmHg · Actual: ${pco2} · ${Math.abs(pco2-pco2_exp)<3?'Appropriate compensation':'<span class="warn">Inadequate compensation — mixed disorder possible</span>'}`;
+  } else if(primary==='Respiratory Alkalosis'){
+    const hco3_exp=(24-(40-pco2)*0.2).toFixed(1);
+    compNote=`Expected HCO₃⁻: ~${hco3_exp} mmol/L · Actual: ${hco3}`;
+  }
+
+  // Step 4: Anion Gap
+  const ag=na-(cl+hco3);
+  const ag_corrected=(ag+(4-alb)*2.5).toFixed(1); // albumin correction
+  const ag_elevated=ag_corrected>12;
+
+  // Step 5: Delta Gap (if HAGMA)
+  let deltaNote='';
+  if(ag_elevated){
+    const delta_ag=ag_corrected-12;
+    const delta_hco3=24-hco3;
+    const delta_ratio=(delta_ag/delta_hco3).toFixed(2);
+    if(delta_ratio<0.4)deltaNote='<span class="crit">Delta ratio &lt;0.4: Concurrent normal anion gap (hyperchloraemic) metabolic acidosis.</span>';
+    else if(delta_ratio<1)deltaNote='<span class="warn">Delta ratio 0.4–1.0: Mixed HAGMA + NAGMA.</span>';
+    else if(delta_ratio<=2)deltaNote='<span class="ok">Delta ratio 1–2: Pure HAGMA. No additional metabolic process.</span>';
+    else deltaNote='<span class="warn">Delta ratio &gt;2: Concurrent metabolic alkalosis masking metabolic acidosis.</span>';
+  }
+
+  // HAGMA causes mnemonic
+  const hagmaCauses=ag_elevated?'<b>HAGMA causes (MUDPILES):</b> Methanol · Uraemia · DKA · Propylene glycol · Isoniazid/Iron · Lactic acidosis · Ethylene glycol · Salicylates':'';
+
+  // Compile result
+  const phColor=acidosis?'r':alkalosis?'w':'g';
+  document.getElementById('res_abg_main').textContent=`${primary} · pH ${pH}`;
+  document.getElementById('res_abg_main').className=`result-main ${phColor}`;
+  document.getElementById('res_abg_rows').innerHTML=`
+    <div class="result-row"><span class="rr-label">pH</span><span class="rr-val ${phColor}">${pH} ${acidosis?'↓ Acidaemic':alkalosis?'↑ Alkalaemic':'✓ Normal'}</span></div>
+    <div class="result-row"><span class="rr-label">PaCO₂</span><span class="rr-val ${pco2>45?'r':pco2<35?'w':'g'}">${pco2} mmHg ${pco2>45?'↑ Hypercapnia':pco2<35?'↓ Hypocapnia':'✓ Normal'}</span></div>
+    <div class="result-row"><span class="rr-label">HCO₃⁻</span><span class="rr-val ${hco3<22?'r':hco3>26?'w':'g'}">${hco3} mmol/L ${hco3<22?'↓ Low':hco3>26?'↑ High':'✓ Normal'}</span></div>
+    <div class="result-row"><span class="rr-label">Base Excess</span><span class="rr-val ${be<-2?'r':be>2?'w':'g'}">${be} ${be<-2?'↓ Base deficit':be>2?'↑ Excess':'✓ Normal'}</span></div>
+    <div class="result-row"><span class="rr-label">PaO₂</span><span class="rr-val ${hypoxic?'r':'g'}">${po2} mmHg ${hypoxic?'↓ Hypoxaemia':'✓ Normal'}</span></div>
+    <div class="result-row"><span class="rr-label">Anion Gap (corrected for albumin)</span><span class="rr-val ${ag_elevated?'r':'g'}">${ag_corrected} ${ag_elevated?'↑ ELEVATED (>12)':'✓ Normal'}</span></div>
+    ${po2?`<div class="result-row"><span class="rr-label">A-a gradient (est.)</span><span class="rr-val ${aa_grad>20?'w':'g'}">${aa_grad.toFixed(0)} mmHg ${aa_grad>20?'↑ Widened':'✓ Normal'}</span></div>`:''}
+  `;
+  document.getElementById('res_abg_interp').innerHTML=`
+    <b>Primary:</b> ${primary} — ${primaryNote}<br><br>
+    ${compNote?`<b>Compensation:</b> ${compNote}<br><br>`:''}
+    <b>Anion Gap:</b> ${ag} (albumin-corrected: ${ag_corrected}) — ${ag_elevated?`<span class="crit">ELEVATED → HAGMA</span>`:'<span class="ok">Normal → NAGMA or non-metabolic acidosis</span>'}<br>
+    ${ag_elevated?`${deltaNote}<br><br>${hagmaCauses}<br><br>`:''}
+    ${be<-6?'<b class="crit">Base deficit &gt;6: Marker of shock/ATC in trauma context. Suggests significant tissue hypoperfusion.</b><br><br>':''}
+    <b>Formula:</b> AG = Na⁺ − (Cl⁻ + HCO₃⁻) · Corrected AG = AG + 2.5×(4 − albumin) · Delta ratio = (AG−12)÷(24−HCO₃⁻)
+  `;
+  showResult('res_abg');
+}
+
+// ══════════════════════════════════
+// GFR
+// ══════════════════════════════════
+function calcGFR(){
+  const unit=document.getElementById('gfr_unit').value;
+  let cr=parseFloat(document.getElementById('gfr_cr').value);
+  const age=parseFloat(document.getElementById('gfr_age').value);
+  const sex=document.getElementById('gfr_sex').value;
+  if(!cr||!age){alert('Enter creatinine and age');return;}
+  if(unit==='umol')cr=cr/88.42; // convert to mg/dL
+  const k=sex==='f'?0.7:0.9;
+  const a=sex==='f'?-0.241:-0.302;
+  const sexFactor=sex==='f'?1.012:1.0;
+  const ratio=cr/k;
+  const egfr=142*Math.pow(Math.min(ratio,1),a)*Math.pow(Math.max(ratio,1),-1.200)*Math.pow(0.9938,age)*sexFactor;
+  const egfrR=Math.round(egfr);
+  let stage,color,desc;
+  if(egfr>=90){stage='G1';color='g';desc='Normal or high. No CKD if no other markers.';}
+  else if(egfr>=60){stage='G2';color='g';desc='Mildly decreased.';}
+  else if(egfr>=45){stage='G3a';color='w';desc='Mildly to moderately decreased.';}
+  else if(egfr>=30){stage='G3b';color='w';desc='Moderately to severely decreased.';}
+  else if(egfr>=15){stage='G4';color='r';desc='Severely decreased. Nephrology referral.';}
+  else{stage='G5';color='r';desc='Kidney failure. Renal replacement therapy discussion.';}
+  document.getElementById('res_gfr_main').textContent=`eGFR = ${egfrR} mL/min/1.73m²`;
+  document.getElementById('res_gfr_main').className=`result-main ${color}`;
+  document.getElementById('res_gfr_rows').innerHTML=`
+    <div class="result-row"><span class="rr-label">eGFR</span><span class="rr-val ${color}">${egfrR} mL/min/1.73m²</span></div>
+    <div class="result-row"><span class="rr-label">CKD Stage</span><span class="rr-val ${color}">${stage}</span></div>
+    <div class="result-row"><span class="rr-label">Creatinine (mg/dL)</span><span class="rr-val">${cr.toFixed(2)}</span></div>
+  `;
+  document.getElementById('res_gfr_interp').innerHTML=`<b>CKD ${stage}:</b> ${desc}<br><br><b>Trauma relevance:</b> In pregnancy, GFR increases 50% — "normal" creatinine (90 μmol/L) may indicate significant renal impairment. After rhabdomyolysis or contrast use, monitor eGFR closely. AKI defined as ↑creatinine ≥26.5 μmol/L in 48h or ≥50% in 7 days.<br><br><b>Formula:</b> CKD-EPI 2021 (race-free equation).`;
+  showResult('res_gfr');
+}
+
+// ══════════════════════════════════
+// PAEDIATRIC DRUGS
+// ══════════════════════════════════
+const PED_DRUGS=[
+  {name:'Adrenaline (arrest)',dose:0.01,unit:'mg/kg',max:1,dilution:'1:10,000',route:'IV/IO'},
+  {name:'Adrenaline (anaphylaxis)',dose:0.01,unit:'mg/kg IM',max:0.5,dilution:'1:1,000',route:'IM'},
+  {name:'Atropine',dose:0.02,unit:'mg/kg',max:0.6,min:0.1,route:'IV'},
+  {name:'Ketamine (induction)',dose:2,unit:'mg/kg IV',max:200,route:'IV'},
+  {name:'Ketamine (IM)',dose:4,unit:'mg/kg IM',max:400,route:'IM'},
+  {name:'Propofol',dose:2.5,unit:'mg/kg',max:200,route:'IV'},
+  {name:'Morphine',dose:0.1,unit:'mg/kg',max:15,route:'IV slow'},
+  {name:'Fentanyl',dose:1,unit:'mcg/kg',max:100,route:'IV'},
+  {name:'Midazolam',dose:0.1,unit:'mg/kg',max:5,route:'IV'},
+  {name:'Suxamethonium',dose:2,unit:'mg/kg',max:150,route:'IV (>2yr: 1mg/kg)'},
+  {name:'Rocuronium',dose:1,unit:'mg/kg',max:100,route:'IV'},
+  {name:'Sugammadex',dose:16,unit:'mg/kg (deep block)',max:200,route:'IV'},
+  {name:'TXA',dose:15,unit:'mg/kg',max:1000,route:'IV over 10min'},
+  {name:'Adenosine',dose:0.1,unit:'mg/kg',max:6,route:'IV rapid'},
+  {name:'Amiodarone (arrest)',dose:5,unit:'mg/kg',max:300,route:'IV/IO'},
+  {name:'Calcium gluconate 10%',dose:0.2,unit:'mL/kg',max:20,route:'IV slow'},
+  {name:'Glucose 10%',dose:5,unit:'mL/kg',max:250,route:'IV'},
+  {name:'NaCl 0.9% bolus',dose:10,unit:'mL/kg',max:500,route:'IV (repeat PRN)'},
+  {name:'Paracetamol IV',dose:15,unit:'mg/kg',max:1000,route:'IV over 15min'},
+  {name:'Ibuprofen (oral)',dose:5,unit:'mg/kg',max:400,route:'PO'},
+];
+
+function updatePedAge(){
+  const age=parseFloat(document.getElementById('ped_age').value);
+  if(age&&!document.getElementById('ped_wt').value){
+    // Broselow estimate: weight ≈ 2×(age+4) for 1-10yr
+    const est=age<=10?Math.round(2*(age+4)):Math.round(2.5*(age+4));
+    document.getElementById('ped_wt').value=est;
+    document.getElementById('ped_est').value=`~${est} kg (estimated by age formula)`;
+    calcPeds();
+  }
+}
+
+function calcPeds(){
+  const wt=parseFloat(document.getElementById('ped_wt').value);
+  if(!wt)return;
+  document.getElementById('ped_est').value=`${wt} kg entered`;
+  const tbody=document.getElementById('peds_table');
+  const ETT=wt<=10?3.5:wt<=20?4.0+(wt-10)*0.1:wt<=40?4.5+(wt-20)*0.05:6.5;
+  const ETTd=Math.round(ETT*10)/10;
+  const blade=wt<10?'0-1':wt<20?'1':'2';
+
+  tbody.innerHTML=`
+    <tr><th>Drug</th><th>Dose</th><th>Volume / Notes</th></tr>
+    <tr><td class="drug-name" colspan="3" style="color:var(--gold-dim);font-size:.5rem;padding:6px 8px;background:rgba(201,168,76,.04);">⚙ AIRWAY: ETT size ${ETTd}mm uncuffed (${(ETTd+0.5).toFixed(1)}mm cuffed) · Blade size ${blade} · Depth ~${Math.round(ETTd*3)}cm</td></tr>
+    ${PED_DRUGS.map(d=>{
+      const raw=d.dose*wt;
+      const dose=d.min?Math.max(raw,d.min):raw;
+      const final=Math.min(dose,d.max);
+      const capped=final<dose;
+      return `<tr>
+        <td class="drug-name">${d.name}<br><span style="color:var(--dim);font-size:.5rem">${d.route}</span></td>
+        <td class="drug-dose">${final.toFixed(final<1?2:1)} ${d.unit.replace('mg/kg','mg').replace('mcg/kg','mcg').replace('mL/kg','mL')}</td>
+        <td class="drug-max">${capped?'⚠ MAX DOSE':''}${d.dilution?d.dilution:''}</td>
+      </tr>`;
+    }).join('')}
+  `;
+}
+
+// Init peds on load
+calcPeds();
+</script>
+</body>
+</html>
