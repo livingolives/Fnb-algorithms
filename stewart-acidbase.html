@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stewart Acid-Base | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060612;color:#fff;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.back-btn{display:inline-block;margin-bottom:16px;font-size:.6rem;color:#4b5563;text-decoration:none;letter-spacing:.1em;border:1px solid #1f2937;padding:5px 12px;}
+.back-btn:hover{color:#60a5fa;border-color:#60a5fa;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #1f2937;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.2rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#60a5fa;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#4b5563;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#4b5563;margin-bottom:10px;padding-left:4px;}
+.card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#9ca3af;line-height:1.7;}
+.card-body b{color:#e5e7eb;}
+.red{color:#f87171;} .green{color:#4ade80;} .amber{color:#facc15;} .blue{color:#60a5fa;} .pink{color:#f43f5e;}
+
+/* Three pillars */
+.pillars{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.pillar{border-radius:10px;border:1px solid;overflow:hidden;}
+.pillar-head{padding:10px 8px;text-align:center;font-size:.65rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;}
+.pillar-body{background:#070712;padding:10px 8px;}
+.pillar-item{font-size:.62rem;color:#9ca3af;line-height:1.5;padding:4px 0;border-bottom:1px solid #0f172a;}
+.pillar-item:last-child{border-bottom:none;}
+.pillar-item b{color:#e5e7eb;display:block;font-size:.6rem;}
+
+/* Equation display */
+.eq-box{background:#070712;border:1px solid #1f2937;border-radius:10px;padding:16px;margin-bottom:12px;text-align:center;}
+.eq-title{font-size:.58rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#4b5563;margin-bottom:10px;}
+.eq-main{font-size:.85rem;font-weight:900;color:#60a5fa;letter-spacing:.05em;margin-bottom:8px;line-height:1.6;}
+.eq-note{font-size:.62rem;color:#6b7280;line-height:1.5;}
+.eq-note b{color:#9ca3af;}
+
+/* Step-by-step gas interpretation */
+.steps{margin-bottom:12px;}
+.step{display:flex;gap:12px;margin-bottom:8px;align-items:flex-start;}
+.step-num{min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;background:rgba(96,165,250,.12);border:1px solid #60a5fa;color:#60a5fa;flex-shrink:0;}
+.step-content{flex:1;background:#0a0a1a;border:1px solid #1f2937;border-radius:8px;padding:10px 12px;}
+.step-title{font-size:.67rem;font-weight:900;color:#e5e7eb;margin-bottom:3px;letter-spacing:.05em;text-transform:uppercase;}
+.step-body{font-size:.68rem;color:#9ca3af;line-height:1.6;}
+.step-body b{color:#e5e7eb;}
+.step-formula{font-size:.7rem;color:#facc15;font-weight:900;margin-top:4px;padding:5px 8px;background:rgba(250,204,21,.06);border-radius:4px;display:inline-block;}
+
+/* Worked example */
+.worked{background:#070712;border:1px solid #1f2937;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.worked-head{padding:12px 15px;background:rgba(96,165,250,.08);border-bottom:1px solid #1f2937;}
+.worked-title{font-size:.7rem;font-weight:900;color:#60a5fa;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+.worked-gas{display:flex;flex-wrap:wrap;gap:6px;}
+.gas-val{background:#0a0a1a;border:1px solid #1f2937;border-radius:5px;padding:4px 8px;font-size:.65rem;}
+.gas-val span{color:#4b5563;margin-right:3px;}
+.gas-val b{color:#e5e7eb;}
+.worked-body{padding:12px 15px;}
+.worked-step{padding:8px 0;border-bottom:1px solid #0f172a;font-size:.68rem;color:#9ca3af;line-height:1.6;}
+.worked-step:last-child{border-bottom:none;}
+.worked-step b{color:#e5e7eb;}
+.worked-step .flag{display:inline-block;font-size:.6rem;font-weight:900;padding:2px 7px;border-radius:3px;margin-left:6px;}
+.flag-high{background:rgba(248,113,113,.12);color:#f87171;border:1px solid #f87171;}
+.flag-low{background:rgba(96,165,250,.12);color:#60a5fa;border:1px solid #60a5fa;}
+.flag-normal{background:rgba(74,222,128,.12);color:#4ade80;border:1px solid #4ade80;}
+.flag-masked{background:rgba(250,204,21,.12);color:#facc15;border:1px solid #facc15;}
+.worked-verdict{margin-top:12px;padding:12px;background:rgba(96,165,250,.06);border-radius:8px;border:1px solid #1e3a5f;}
+.verdict-title{font-size:.6rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#60a5fa;margin-bottom:6px;}
+.verdict-body{font-size:.7rem;color:#d1d5db;line-height:1.6;}
+
+/* HH vs Stewart table */
+.vs-table{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.vs-row{display:flex;border-bottom:1px solid #1f2937;}
+.vs-row:last-child{border-bottom:none;}
+.vs-cell{flex:1;padding:9px 12px;font-size:.63rem;line-height:1.5;color:#9ca3af;}
+.vs-cell.label{flex:.8;color:#4b5563;font-weight:900;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;background:#070712;}
+.vs-head{display:flex;background:#070712;}
+.vs-head .vs-cell{font-weight:900;text-transform:uppercase;font-size:.6rem;letter-spacing:.08em;}
+
+/* Callout */
+.callout{background:rgba(96,165,250,.06);border:1px solid #60a5fa;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#60a5fa;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+.callout-item .wrong{color:#f87171;text-decoration:line-through;}
+.callout-item .right{color:#4ade80;}
+
+/* Pearl */
+.pearl{background:#0a0a1a;border-left:3px solid #60a5fa;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#60a5fa;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#9ca3af;line-height:1.6;}
+.pearl-a b{color:#e5e7eb;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #0f172a;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-btn" href="index.html">← BACK TO ALGORITHMS</a>
+
+  <div class="header">
+    <div class="icon">⚗️</div>
+    <h1>Stewart Acid-Base</h1>
+    <div class="sub">Physicochemical Approach · Trauma & ICU Application</div>
+  </div>
+
+  <!-- WHY STEWART -->
+  <div class="section">
+    <p class="section-title">🔬 Why Henderson-Hasselbalch Falls Short</p>
+    <div class="card">
+      <div class="card-body">
+        Henderson-Hasselbalch (pH = pKa + log[HCO₃⁻/CO₂]) treats <b>HCO₃⁻ as a cause of pH</b>. It isn't. It's a dependent variable — it settles wherever charge balance demands. HH describes the relationship mathematically but implies a causality that doesn't exist, and cannot explain hyperchloraemic acidosis or hypoalbuminaemic alkalosis.
+      </div>
+    </div>
+
+    <div class="vs-table">
+      <div class="vs-head">
+        <div class="vs-cell label"> </div>
+        <div class="vs-cell" style="color:#f87171;">Henderson-Hasselbalch</div>
+        <div class="vs-cell" style="color:#60a5fa;">Stewart</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Framework</div>
+        <div class="vs-cell">Descriptive — reports what pH is</div>
+        <div class="vs-cell">Mechanistic — explains why pH changed</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">HCO₃⁻ role</div>
+        <div class="vs-cell">Treated as independent driver of pH</div>
+        <div class="vs-cell">Dependent variable — consequence of SID + Atot + PCO₂</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Hyperchloraemia</div>
+        <div class="vs-cell">"Metabolic acidosis" — cause unknown</div>
+        <div class="vs-cell">SID narrowed by Cl⁻ rise — mechanism explicit</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Hypoalbuminaemia</div>
+        <div class="vs-cell">Invisible — not in the equation</div>
+        <div class="vs-cell">Atot reduced → alkalosis — explained + quantifiable</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Mixed disorders</div>
+        <div class="vs-cell">Cannot decompose contributions</div>
+        <div class="vs-cell">Separates Cl⁻ effect, albumin effect, unmeasured ions</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THREE INDEPENDENT VARIABLES -->
+  <div class="section">
+    <p class="section-title">⚙️ The Three Independent Variables</p>
+    <div class="card">
+      <div class="card-body">
+        Stewart (1981) asked: <b>what actually determines pH?</b> His answer: three and only three independent variables. Everything else — H⁺, HCO₃⁻, OH⁻ — is dependent and falls out of solving the charge balance equation.
+      </div>
+    </div>
+
+    <div class="pillars">
+      <div class="pillar" style="border-color:#60a5fa;">
+        <div class="pillar-head" style="background:rgba(96,165,250,.12);color:#60a5fa;">PCO₂</div>
+        <div class="pillar-body">
+          <div class="pillar-item"><b>Set by</b>Ventilation</div>
+          <div class="pillar-item"><b>Effect ↑PCO₂</b>Respiratory acidosis</div>
+          <div class="pillar-item"><b>Effect ↓PCO₂</b>Respiratory alkalosis</div>
+        </div>
+      </div>
+      <div class="pillar" style="border-color:#facc15;">
+        <div class="pillar-head" style="background:rgba(250,204,21,.12);color:#facc15;">SID</div>
+        <div class="pillar-body">
+          <div class="pillar-item"><b>Set by</b>Kidneys / fluid given</div>
+          <div class="pillar-item"><b>Normal</b>~40 mEq/L</div>
+          <div class="pillar-item"><b>↓SID</b>Acidosis (saline, diarrhoea)</div>
+          <div class="pillar-item"><b>↑SID</b>Alkalosis (vomiting, diuretics)</div>
+        </div>
+      </div>
+      <div class="pillar" style="border-color:#c084fc;">
+        <div class="pillar-head" style="background:rgba(192,132,252,.12);color:#c084fc;">Atot</div>
+        <div class="pillar-body">
+          <div class="pillar-item"><b>Set by</b>Nutrition / liver / losses</div>
+          <div class="pillar-item"><b>Mainly</b>Albumin + phosphate</div>
+          <div class="pillar-item"><b>↓Atot</b>Alkalosis (hypoalbuminaemia)</div>
+          <div class="pillar-item"><b>↑Atot</b>Acidosis (rare)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="eq-box">
+      <div class="eq-title">Stewart Charge Balance</div>
+      <div class="eq-main">SID + (A⁻) − (HCO₃⁻ + CO₃²⁻ + OH⁻ − H⁺) = 0</div>
+      <div class="eq-note">
+        Electroneutrality is non-negotiable — plasma charge must always balance.<br>
+        <b>SID</b> = net strong ion charge (fixed). <b>A⁻</b> = weak acid dissociation (albumin, phosphate). <b>HCO₃⁻</b> adjusts passively to satisfy the equation. It cannot do otherwise.
+      </div>
+    </div>
+  </div>
+
+  <!-- SID EXPLAINED -->
+  <div class="section">
+    <p class="section-title">⚡ Strong Ion Difference — Simplified</p>
+    <div class="card">
+      <div class="card-body">
+        <b>SID (simplified) = Na⁺ − Cl⁻</b><br><br>
+        Normal plasma: Na⁺ ~140, Cl⁻ ~102 → SID ~38–40 mEq/L.<br><br>
+        0.9% saline: Na⁺ 154, Cl⁻ 154 → SID = <b>0</b>. Pour it in, Cl⁻ rises disproportionately relative to Na⁺ → SID narrows → bicarbonate falls to maintain charge balance → <b>hyperchloraemic metabolic acidosis</b>.<br><br>
+        Vomiting: Cl⁻ lost in gastric acid → SID widens → HCO₃⁻ rises → <b>hypochloraemic metabolic alkalosis</b>. Same mechanism, opposite direction.
+      </div>
+    </div>
+  </div>
+
+  <!-- ATOT + ALBUMIN -->
+  <div class="section">
+    <p class="section-title">🧪 Atot & Albumin — The Hidden Variable</p>
+    <div class="card">
+      <div class="card-body">
+        Albumin carries ~<b>12 mEq/L net negative charge</b> at physiological pH. It is a significant contributor to plasma electroneutrality — but invisible to Henderson-Hasselbalch.<br><br>
+        When albumin falls → fewer anions from Atot → the charge gap left by missing albumin must be filled by <b>rising HCO₃⁻</b> → metabolic alkalosis. No acid lost. No base gained. Pure charge accounting.<br><br>
+        <b>Clinical trap:</b> hypoalbuminaemic alkalosis can mask a genuine coexisting acidosis — the pH looks less severe than it truly is. Albumin infusion in ICU will slightly drop pH by restoring Atot — not because it's harmful, but because it's revealing the true acid-base picture underneath.
+      </div>
+    </div>
+  </div>
+
+  <!-- CORRECTED ANION GAP -->
+  <div class="section">
+    <p class="section-title">🔢 Corrected Anion Gap</p>
+    <div class="card">
+      <div class="card-body">
+        Standard AG = Na⁺ − (Cl⁻ + HCO₃⁻). Normal ~12 mEq/L — mostly <b>albumin's negative charge</b> sitting unaccounted for in the formula.<br><br>
+        If albumin is low, the AG shrinks artificially — unmeasured anions (lactate, ketones, uraemic acids) hide beneath a "normal" number.
+      </div>
+    </div>
+
+    <div class="eq-box">
+      <div class="eq-title">Figge Correction Formula</div>
+      <div class="eq-main">Corrected AG = Measured AG + 0.25 × (40 − albumin g/L)</div>
+      <div class="eq-note">
+        <b>Rule of thumb:</b> for every 4 g/L albumin falls below 40, add 1 mEq/L to the AG.<br>
+        Albumin 20 g/L → add 5 mEq/L. A "normal" AG of 12 becomes 17 — high AG acidosis unmasked.
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP BY STEP INTERPRETATION -->
+  <div class="section">
+    <p class="section-title">📋 Stewart-Based ABG Interpretation — Step by Step</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">pH — direction of primary disturbance</div>
+          <div class="step-body">Normal 7.35–7.45. Acidaemia &lt;7.35. Alkalaemia &gt;7.45. What direction is the problem?</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">PCO₂ — respiratory component</div>
+          <div class="step-body">Normal 35–45. If acidaemia + high PCO₂ → respiratory acidosis. If acidaemia + low PCO₂ → respiratory compensation for metabolic acidosis (or primary resp alkalosis with metabolic acidosis).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">SID — is there a chloride problem?</div>
+          <div class="step-body">Simplified SID = Na⁺ − Cl⁻. Normal ~38–40.<br>
+          <span class="step-formula">SID &lt; 38 → hyperchloraemic acidosis component</span><br>
+          <span class="step-formula">SID &gt; 42 → hypochloraemic alkalosis component</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Atot — correct for albumin</div>
+          <div class="step-body">For every 4 g/L albumin below 40 → expect 0.1 unit rise in pH (alkalosis contribution). Low albumin masks coexisting acidosis and artificially narrows the AG.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">Corrected AG — unmeasured anions</div>
+          <div class="step-body">Apply Figge correction. Corrected AG &gt;12 → unmeasured anions present (lactate, ketones, uraemic acids, toxins). Cross-check with measured lactate.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <div class="step-title">Synthesise — decompose the base deficit</div>
+          <div class="step-body">Using Fencl-Stewart approach, total BD is the sum of:<br>
+          <b>BD(Cl⁻)</b> = chloride effect from SID narrowing<br>
+          <b>BD(Alb)</b> = albumin effect (usually alkalosis — negative BD contribution)<br>
+          <b>BD(UA)</b> = unmeasured anion effect (corrected AG − 12)<br>
+          These should add up to the measured BD.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKED EXAMPLE -->
+  <div class="section">
+    <p class="section-title">🎯 Worked Example</p>
+    <div class="worked">
+      <div class="worked-head">
+        <div class="worked-title">Trauma Patient — Post Saline Resuscitation</div>
+        <div class="worked-gas">
+          <div class="gas-val"><span>pH</span><b>7.28</b></div>
+          <div class="gas-val"><span>PCO₂</span><b>38</b></div>
+          <div class="gas-val"><span>HCO₃⁻</span><b>17</b></div>
+          <div class="gas-val"><span>Na⁺</span><b>138</b></div>
+          <div class="gas-val"><span>Cl⁻</span><b>114</b></div>
+          <div class="gas-val"><span>Albumin</span><b>22 g/L</b></div>
+          <div class="gas-val"><span>Lactate</span><b>1.1</b></div>
+        </div>
+      </div>
+      <div class="worked-body">
+        <div class="worked-step"><b>Step 1 — pH:</b> 7.28 → acidaemia <span class="flag flag-high">ACID</span></div>
+        <div class="worked-step"><b>Step 2 — PCO₂:</b> 38 → normal/slightly low → not respiratory cause. Metabolic acidosis with mild respiratory compensation.</div>
+        <div class="worked-step"><b>Step 3 — SID:</b> Na⁺ 138 − Cl⁻ 114 = <b>24 mEq/L</b> <span class="flag flag-high">↓↓ LOW</span><br>Normal is ~40. SID severely narrowed → hyperchloraemic acidosis is the primary driver.</div>
+        <div class="worked-step"><b>Step 4 — Albumin effect:</b> Albumin 22 g/L (normal 40). Deficit = 18 g/L → alkalosis contribution of ~0.45 pH units being masked. <span class="flag flag-masked">MASKS ALKALOSIS</span><br>True acidosis is worse than pH 7.28 suggests.</div>
+        <div class="worked-step"><b>Step 5 — Corrected AG:</b> Measured AG = 138 − (114 + 17) = 7.<br>Corrected AG = 7 + 0.25 × 18 = <b>11.5 ≈ 12</b> <span class="flag flag-normal">NORMAL</span><br>No significant unmeasured anions. Lactate 1.1 confirms this. No occult lactic acidosis.</div>
+        <div class="worked-verdict">
+          <div class="verdict-title">Stewart Interpretation</div>
+          <div class="verdict-body">
+            <b>Hyperchloraemic normal-AG metabolic acidosis</b> — caused by excessive 0.9% saline narrowing SID to 24.<br><br>
+            Hypoalbuminaemia (22 g/L) is generating a concurrent <b>masked alkalosis</b> — the real pH is being partially defended by this effect; without it, pH would be lower.<br><br>
+            <b>Management:</b> Switch to balanced crystalloid (RL or Plasma-Lyte). Stop saline. Address hypoalbuminaemia. Do NOT give bicarbonate — treats the number without fixing the SID. Monitor serial Cl⁻ and SID as resuscitation endpoint, not just pH and HCO₃⁻.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLUID SID COMPARISON -->
+  <div class="section">
+    <p class="section-title">💧 Resuscitation Fluid SID Comparison</p>
+    <div class="vs-table">
+      <div class="vs-head">
+        <div class="vs-cell label">Fluid</div>
+        <div class="vs-cell" style="color:#60a5fa;">Na⁺/Cl⁻</div>
+        <div class="vs-cell" style="color:#facc15;">SID</div>
+        <div class="vs-cell" style="color:#c084fc;">pH Effect</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">0.9% Saline</div>
+        <div class="vs-cell">154 / 154</div>
+        <div class="vs-cell" style="color:#f87171;font-weight:900;">0</div>
+        <div class="vs-cell" style="color:#f87171;">↓↓ Acidosis</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Ringer's Lactate</div>
+        <div class="vs-cell">130 / 109</div>
+        <div class="vs-cell" style="color:#facc15;font-weight:900;">~28</div>
+        <div class="vs-cell" style="color:#facc15;">Mild acidosis</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Plasma-Lyte</div>
+        <div class="vs-cell">140 / 98</div>
+        <div class="vs-cell" style="color:#4ade80;font-weight:900;">~50</div>
+        <div class="vs-cell" style="color:#4ade80;">Near neutral</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Plasma</div>
+        <div class="vs-cell">140 / 102</div>
+        <div class="vs-cell" style="color:#4ade80;font-weight:900;">~40</div>
+        <div class="vs-cell" style="color:#4ade80;">Reference</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b>RL lactate note:</b> the lactate in RL (~28 mEq/L) is metabolised by the liver to HCO₃⁻ — it does not worsen lactic acidosis. A 1L bag contains roughly the same lactate as resting skeletal muscle produces in 10 minutes. In hepatic failure, consider Plasma-Lyte instead.</div>
+    </div>
+  </div>
+
+  <!-- EXAMINER TRAPS -->
+  <div class="section">
+    <p class="section-title">⚠️ Examiner Traps</p>
+    <div class="callout">
+      <div class="callout-title">Do not fall for these</div>
+      <div class="callout-item"><span class="wrong">HCO₃⁻ is low therefore metabolic acidosis — cause unclear</span> → <span class="right">Ask why. Check SID, albumin, corrected AG before concluding.</span></div>
+      <div class="callout-item"><span class="wrong">Normal AG — no unmeasured anions</span> → <span class="right">Only safe if albumin is normal. Always correct the AG for albumin first.</span></div>
+      <div class="callout-item"><span class="wrong">Give bicarbonate for metabolic acidosis</span> → <span class="right">Not for hyperchloraemic acidosis — fix the SID with balanced crystalloid. Bicarb generates CO₂, risks intracellular acidosis.</span></div>
+      <div class="callout-item"><span class="wrong">Albumin infusion improves acid-base</span> → <span class="right">It restores Atot — may slightly drop pH by unmasking the true picture. Not a treatment for acidosis.</span></div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: What are Stewart's three independent variables?</div>
+      <div class="pearl-a"><b>PCO₂</b> (set by ventilation), <b>SID</b> (set by kidneys and fluids given), and <b>Atot</b> (total weak acid concentration — mainly albumin + phosphate). Everything else including pH and HCO₃⁻ is dependent.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why does 0.9% saline cause acidosis?</div>
+      <div class="pearl-a">Saline SID = 0. Infusing it dilutes plasma toward zero-SID composition — Cl⁻ rises disproportionately relative to Na⁺, narrowing plasma SID. Charge balance demands HCO₃⁻ falls. Normal anion gap, hyperchloraemic metabolic acidosis.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Patient has AG of 10 and albumin of 18 g/L. Is the AG truly normal?</div>
+      <div class="pearl-a">No. Corrected AG = 10 + 0.25 × (40−18) = 10 + 5.5 = <b>15.5</b> — elevated. There are unmeasured anions hiding behind the low albumin. Always correct before concluding.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Flaw of Henderson-Hasselbalch in one sentence?</div>
+      <div class="pearl-a">It treats HCO₃⁻ as an independent determinant of pH when it is actually a dependent variable — a consequence of SID, Atot, and PCO₂, not a cause.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    STEWART PA 1981 · FENCL & LEITH 1993 · FIGGE ET AL CRIT CARE MED 1992<br>
+    SCHEINGRABER ET AL ANAESTHESIOLOGY 1999 · STORY ET AL BJA 2004<br>
+    DERANGED PHYSIOLOGY · ATLS 10TH ED · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>

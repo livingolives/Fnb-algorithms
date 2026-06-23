@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fat Embolism Syndrome | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060612;color:#fff;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.back-btn{display:inline-block;margin-bottom:16px;font-size:.6rem;color:#4b5563;text-decoration:none;letter-spacing:.1em;border:1px solid #1f2937;padding:5px 12px;}
+.back-btn:hover{color:#f97316;border-color:#f97316;}
+
+/* Header — orange accent, distinct from blue (Stewart) and gold (Hyperlac) */
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #1f2937;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.2rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#f97316;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#4b5563;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#4b5563;margin-bottom:10px;padding-left:4px;}
+.card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#9ca3af;line-height:1.7;}
+.card-body b{color:#e5e7eb;}
+.orange{color:#f97316;} .red{color:#f87171;} .green{color:#4ade80;} .amber{color:#facc15;} .blue{color:#60a5fa;}
+
+/* Triad — 3-column visual */
+.triad{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.triad-col{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;overflow:hidden;text-align:center;}
+.triad-head{padding:12px 8px 8px;font-size:2rem;}
+.triad-label{font-size:.65rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;padding:0 8px 4px;color:#f97316;}
+.triad-body{padding:8px;background:#070712;}
+.triad-item{font-size:.62rem;color:#9ca3af;line-height:1.5;padding:3px 0;}
+.triad-item b{color:#e5e7eb;}
+
+/* Timeline — horizontal phases */
+.phase-wrap{display:flex;gap:0;margin-bottom:12px;border-radius:10px;overflow:hidden;border:1px solid #1f2937;}
+.phase{flex:1;padding:12px 10px;background:#0a0a1a;}
+.phase:not(:last-child){border-right:1px solid #1f2937;}
+.phase-time{font-size:.58rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f97316;margin-bottom:4px;}
+.phase-title{font-size:.67rem;font-weight:900;color:#e5e7eb;margin-bottom:5px;}
+.phase-body{font-size:.61rem;color:#9ca3af;line-height:1.5;}
+
+/* Two-theory layout */
+.theory-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.theory{border-radius:10px;border:1px solid;overflow:hidden;}
+.theory-head{padding:10px 12px;font-size:.7rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.theory-body{background:#070712;padding:10px 12px;}
+.theory-step{font-size:.65rem;color:#9ca3af;line-height:1.6;padding:5px 0;border-bottom:1px solid #0f172a;position:relative;padding-left:14px;}
+.theory-step:last-child{border-bottom:none;}
+.theory-step::before{content:'→';position:absolute;left:0;color:#f97316;font-size:.6rem;}
+
+/* Gurd criteria — two-column card */
+.gurd{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.gurd-rule{background:rgba(249,115,22,.08);border-bottom:1px solid #1f2937;padding:10px 14px;font-size:.68rem;color:#f97316;font-weight:900;letter-spacing:.08em;text-transform:uppercase;}
+.gurd-cols{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.gurd-col{padding:12px 14px;}
+.gurd-col:first-child{border-right:1px solid #1f2937;}
+.gurd-col-title{font-size:.62rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+.gurd-item{font-size:.65rem;color:#9ca3af;line-height:1.5;padding:5px 0;border-bottom:1px solid #0f172a;display:flex;gap:6px;align-items:flex-start;}
+.gurd-item:last-child{border-bottom:none;}
+.gurd-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+
+/* FES vs ARDS table */
+.vs-table{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.vs-row{display:flex;border-bottom:1px solid #1f2937;}
+.vs-row:last-child{border-bottom:none;}
+.vs-cell{flex:1;padding:8px 10px;font-size:.63rem;line-height:1.5;color:#9ca3af;}
+.vs-cell.label{flex:.8;color:#4b5563;font-weight:900;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;background:#070712;}
+.vs-head{display:flex;background:#070712;}
+.vs-head .vs-cell{font-weight:900;text-transform:uppercase;font-size:.6rem;letter-spacing:.08em;}
+
+/* Management ladder */
+.ladder{margin-bottom:12px;}
+.rung{display:flex;gap:10px;margin-bottom:6px;align-items:flex-start;}
+.rung-badge{min-width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;flex-shrink:0;}
+.rung-content{flex:1;background:#0a0a1a;border:1px solid #1f2937;border-radius:8px;padding:10px 12px;}
+.rung-title{font-size:.67rem;font-weight:900;color:#e5e7eb;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em;}
+.rung-body{font-size:.67rem;color:#9ca3af;line-height:1.6;}
+.rung-body b{color:#e5e7eb;}
+
+/* Pearl */
+.pearl{background:#0a0a1a;border-left:3px solid #f97316;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#f97316;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#9ca3af;line-height:1.6;}
+.pearl-a b{color:#e5e7eb;}
+
+/* Callout */
+.callout{background:rgba(249,115,22,.06);border:1px solid #f97316;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f97316;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+.callout-item .wrong{color:#f87171;text-decoration:line-through;}
+.callout-item .right{color:#4ade80;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #0f172a;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-btn" href="index.html">← BACK TO ALGORITHMS</a>
+
+  <div class="header">
+    <div class="icon">🦴</div>
+    <h1>Fat Embolism Syndrome</h1>
+    <div class="sub">Diagnosis · Pathophysiology · ARDS Management</div>
+  </div>
+
+  <!-- CLASSIC TRIAD -->
+  <div class="section">
+    <p class="section-title">🔺 Classic Triad</p>
+    <div class="triad">
+      <div class="triad-col">
+        <div class="triad-head">🫁</div>
+        <div class="triad-label">Respiratory</div>
+        <div class="triad-body">
+          <div class="triad-item"><b>Hypoxaemia</b></div>
+          <div class="triad-item">PaO₂/FiO₂ &lt;200</div>
+          <div class="triad-item">Bilateral infiltrates CXR</div>
+        </div>
+      </div>
+      <div class="triad-col">
+        <div class="triad-head">🧠</div>
+        <div class="triad-label">Cerebral</div>
+        <div class="triad-body">
+          <div class="triad-item"><b>Confusion</b></div>
+          <div class="triad-item">Low GCS / irritability</div>
+          <div class="triad-item">Coma (severe)</div>
+        </div>
+      </div>
+      <div class="triad-col">
+        <div class="triad-head">🔴</div>
+        <div class="triad-label">Petechiae</div>
+        <div class="triad-body">
+          <div class="triad-item"><b>Axillary/conjunctival</b></div>
+          <div class="triad-item">Purpuric rash</div>
+          <div class="triad-item">Pathognomonic</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <b class="orange">Timing:</b> Symptoms appear <b>24–72 hours</b> after long bone or pelvic fracture. Early presentation (&lt;12h) is thromboembolic; delayed presentation (days) reflects biochemical/inflammatory cascade. Incidence: <b>1–3%</b> of isolated long bone fractures, up to <b>10%</b> with bilateral femoral fractures.
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMELINE / PHASES -->
+  <div class="section">
+    <p class="section-title">⏱ Pathophysiological Timeline</p>
+    <div class="phase-wrap">
+      <div class="phase">
+        <div class="phase-time">Hours 1–12</div>
+        <div class="phase-title">Mechanical Phase</div>
+        <div class="phase-body">Fat droplets enter venous circulation from fracture → shower of emboli → small vessel occlusion → pulmonary HTN → right heart strain</div>
+      </div>
+      <div class="phase">
+        <div class="phase-time">24–72h</div>
+        <div class="phase-title">Biochemical Phase</div>
+        <div class="phase-body">Serum lipase hydrolyses fat → free fatty acids + triglycerides → oxidative stress → endothelial injury → ARDS, coagulopathy, DIC</div>
+      </div>
+      <div class="phase">
+        <div class="phase-time">Days</div>
+        <div class="phase-title">Inflammatory Phase</div>
+        <div class="phase-body">DAMPs release → systemic inflammatory response → multi-organ dysfunction. Cerebral fat emboli → neurological deterioration independent of hypoxia</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TWO THEORIES -->
+  <div class="section">
+    <p class="section-title">🔬 Pathophysiology — Two Theories</p>
+    <div class="theory-grid">
+      <div class="theory" style="border-color:#f97316;">
+        <div class="theory-head" style="background:rgba(249,115,22,.12);color:#f97316;">Theory 1 — Mechanical</div>
+        <div class="theory-body">
+          <div class="theory-step">Long bone fracture → fat droplets mobilised from marrow</div>
+          <div class="theory-step">Enter venous circulation → reach pulmonary vasculature</div>
+          <div class="theory-step">Occlude small pulmonary vessels → V/Q mismatch</div>
+          <div class="theory-step">Pulmonary HTN → right heart strain → haemodynamic compromise</div>
+          <div class="theory-step">Paradoxical emboli through PFO → cerebral/systemic</div>
+        </div>
+      </div>
+      <div class="theory" style="border-color:#c084fc;">
+        <div class="theory-head" style="background:rgba(192,132,252,.12);color:#c084fc;">Theory 2 — Biochemical</div>
+        <div class="theory-body">
+          <div class="theory-step">Serum lipase activated → hydrolyses fat emboli in situ</div>
+          <div class="theory-step">Free fatty acids + triglycerides released locally</div>
+          <div class="theory-step">Oxidative stress → reactive oxygen species</div>
+          <div class="theory-step">Endothelial injury → capillary leak → pulmonary oedema</div>
+          <div class="theory-step">Procoagulant/inflammatory cascade → ARDS, DIC</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b>Reality:</b> Both mechanisms operate simultaneously. The mechanical phase explains early haemodynamic compromise; the biochemical phase explains the delayed ARDS picture and why severity is disproportionate to the embolic burden alone.</div>
+    </div>
+  </div>
+
+  <!-- GURD CRITERIA -->
+  <div class="section">
+    <p class="section-title">📋 Gurd & Wilson Diagnostic Criteria</p>
+    <div class="gurd">
+      <div class="gurd-rule">Diagnosis: 1 Major + 2 Minor &nbsp;|&nbsp; OR: 4 Minor + Macroglobulinaemia</div>
+      <div class="gurd-cols">
+        <div class="gurd-col">
+          <div class="gurd-col-title" style="color:#f97316;">Major Criteria</div>
+          <div class="gurd-item"><div class="gurd-dot" style="background:#f97316;"></div><span>Petechiae / purpuric rash (axillary, conjunctival)</span></div>
+          <div class="gurd-item"><div class="gurd-dot" style="background:#f97316;"></div><span>Respiratory insufficiency — PaO₂/FiO₂ &lt;200, bilateral infiltrates</span></div>
+          <div class="gurd-item"><div class="gurd-dot" style="background:#f97316;"></div><span>Cerebral signs — confusion, low GCS, coma, irritability</span></div>
+          <div class="gurd-item"><div class="gurd-dot" style="background:#f97316;"></div><span>Pulmonary oedema on CXR</span></div>
+        </div>
+        <div class="gurd-col">
+          <div class="gurd-col-title" style="color:#9ca3af;">Minor Criteria</div>
+          <div class="gurd-item"><div class="gurd-dot" style="background:#6b7280;"></div><span>Fever &gt;38.5°C</span></div>
+          <div class="gurd-item"><div class="gurd-dot" style="background:#6b7280;"></div><span>Tachycardia &gt;120</span></div>
+          <div class="gurd-item"><div class="gurd-dot" style="background:#6b7280;"></div><span>Hypotension</span></div>
+          <div class="gurd-item"><div class="gurd-dot" style="background:#6b7280;"></div><span>Thrombocytopaenia</span></div>
+          <div class="gurd-item"><div class="gurd-dot" style="background:#6b7280;"></div><span>Anaemia — acute Hb drop</span></div>
+          <div class="gurd-item"><div class="gurd-dot" style="background:#6b7280;"></div><span>Fat globules in urine/sputum</span></div>
+          <div class="gurd-item"><div class="gurd-dot" style="background:#6b7280;"></div><span>High ESR</span></div>
+          <div class="gurd-item"><div class="gurd-dot" style="background:#6b7280;"></div><span>Acidosis</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FES vs ARDS -->
+  <div class="section">
+    <p class="section-title">⚖️ FES vs ARDS — Viva Discriminator</p>
+    <div class="vs-table">
+      <div class="vs-head">
+        <div class="vs-cell label"> </div>
+        <div class="vs-cell" style="color:#f97316;">FES-ARDS</div>
+        <div class="vs-cell" style="color:#60a5fa;">Generic ARDS</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Context</div>
+        <div class="vs-cell">Long bone / pelvic fracture 24–72h prior</div>
+        <div class="vs-cell">Variable — sepsis, aspiration, trauma</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Petechiae</div>
+        <div class="vs-cell" style="color:#f97316;">Classic — axillary/conjunctival</div>
+        <div class="vs-cell">Absent</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Neurology</div>
+        <div class="vs-cell">Early, prominent — direct cerebral emboli</div>
+        <div class="vs-cell">Late — secondary to hypoxia</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Fat globules</div>
+        <div class="vs-cell" style="color:#f97316;">Urine, sputum, retinal vessels</div>
+        <div class="vs-cell">Absent</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Specific Rx</div>
+        <div class="vs-cell" style="color:#4ade80;">Early fracture fixation — stops embolisation</div>
+        <div class="vs-cell">Treat underlying cause</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANAGEMENT -->
+  <div class="section">
+    <p class="section-title">🎯 Management</p>
+
+    <div class="callout">
+      <div class="callout-title">FES-Specific — Most Important</div>
+      <div class="callout-item"><b>Early fracture fixation</b> — the single most important intervention. Reaming and fixation stops ongoing fat embolisation from the fracture site. Every hour of delay = continued embolisation.</div>
+      <div class="callout-item"><b>Corticosteroids</b> — controversial. Methylprednisolone may reduce severity if given prophylactically in high-risk patients (bilateral femoral fractures). Not standard of care but referenced in exam context.</div>
+    </div>
+
+    <div class="ladder">
+      <div class="rung">
+        <div class="rung-badge" style="background:rgba(249,115,22,.15);color:#f97316;border:1px solid #f97316;">01</div>
+        <div class="rung-content">
+          <div class="rung-title">Lung Protective Ventilation</div>
+          <div class="rung-body"><b>TV 6 ml/kg IBW</b> · Plateau pressure &lt;30 cmH₂O · <b>Driving pressure &lt;15 cmH₂O</b> · PEEP titrated individually · Permissive hypercapnia (PaCO₂ up to 55–60)</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-badge" style="background:rgba(249,115,22,.15);color:#f97316;border:1px solid #f97316;">02</div>
+        <div class="rung-content">
+          <div class="rung-title">Prone Positioning</div>
+          <div class="rung-body">PaO₂/FiO₂ <b>&lt;150</b> despite optimised PEEP for &gt;12h → prone for <b>≥16 hours/session</b>. PROSEVA trial (Guérin, NEJM 2013): 28-day mortality 32% → 16%.</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-badge" style="background:rgba(249,115,22,.12);color:#f97316;border:1px solid #f97316;">03</div>
+        <div class="rung-content">
+          <div class="rung-title">Neuromuscular Blockade</div>
+          <div class="rung-body">Cisatracurium for refractory dyssynchrony or hypoxaemia. Not routine for all ARDS (ROSE trial questioned routine use). Use for specific indications.</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-badge" style="background:rgba(249,115,22,.08);color:#f97316;border:1px solid #f97316;">04</div>
+        <div class="rung-content">
+          <div class="rung-title">ECMO</div>
+          <div class="rung-body">Rescue therapy when conventional ventilation fails. PaO₂/FiO₂ &lt;80 despite optimal settings for &gt;6h. Refer to ECMO-capable centre early — don't wait until unsalvageable.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: What is Purtscher's retinopathy?</div>
+      <div class="pearl-a">Fundoscopic finding in FES — fat emboli visible in retinal vessels, with cotton-wool spots and flame haemorrhages. Pathognomonic of fat embolism reaching the systemic circulation via paradoxical embolism through a patent foramen ovale or overwhelmed pulmonary filtration. Classic viva trap — always mention this when listing minor criteria.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: PF ratio is 120. Does this meet Berlin ARDS criteria and what severity?</div>
+      <div class="pearl-a">Yes — bilateral infiltrates + PF &lt;200 + non-cardiac cause + onset within 1 week. <b>Severe ARDS</b> (Berlin: mild 200–300, moderate 100–200, severe &lt;100). Triggers proning protocol.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why does early fracture fixation reduce FES severity?</div>
+      <div class="pearl-a">The fracture site is the ongoing source of fat embolisation. Intact marrow under pressure continuously releases fat into the venous circulation. Reaming and fixation eliminates the source — mechanical containment stops embolisation regardless of what's already in circulation.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Driving pressure vs plateau pressure — which is more predictive of mortality in ARDS?</div>
+      <div class="pearl-a">Driving pressure (= plateau pressure − PEEP). Amato et al. (NEJM 2015) showed driving pressure &gt;15 cmH₂O independently associated with mortality even when TV and plateau were within "safe" limits. Current target: <b>driving pressure &lt;15 cmH₂O</b>, preferably &lt;13.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    GURD & WILSON 1974 · PROSEVA (GUÉRIN ET AL NEJM 2013) · AMATO ET AL NEJM 2015<br>
+    BERLIN DEFINITION ARDS 2012 · ATLS 10TH ED · ESSENTIALS OF TRAUMA ANAESTHESIA<br>
+    ACURASYS TRIAL · ROSE TRIAL · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>
