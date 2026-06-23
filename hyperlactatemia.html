@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hyperlactataemia | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060612;color:#fff;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.back-btn{display:inline-block;margin-bottom:16px;font-size:.6rem;color:#4b5563;text-decoration:none;letter-spacing:.1em;border:1px solid #1f2937;padding:5px 12px;}
+.back-btn:hover{color:#facc15;border-color:#facc15;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #1f2937;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.2rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#facc15;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#4b5563;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#4b5563;margin-bottom:10px;padding-left:4px;}
+.card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-title{font-size:.8rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.card-body{font-size:.75rem;color:#9ca3af;line-height:1.7;}
+.card-body b{color:#e5e7eb;}
+.red{color:#f87171;} .green{color:#4ade80;} .amber{color:#facc15;} .blue{color:#60a5fa;} .pink{color:#f43f5e;}
+
+/* Threshold meter */
+.meter-wrap{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:18px;margin-bottom:12px;}
+.meter-title{font-size:.65rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#facc15;margin-bottom:14px;text-align:center;}
+.meter-bar{display:flex;height:34px;border-radius:6px;overflow:hidden;margin-bottom:6px;}
+.meter-seg{flex:1;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:900;letter-spacing:.05em;}
+.meter-labels{display:flex;font-size:.58rem;color:#6b7280;}
+.meter-labels span{flex:1;text-align:center;}
+.meter-detail{display:flex;gap:8px;margin-top:14px;}
+.meter-col{flex:1;background:#070712;border-radius:6px;padding:10px;font-size:.62rem;color:#9ca3af;line-height:1.5;border-top:3px solid;}
+.meter-col b{display:block;font-size:.68rem;color:#e5e7eb;margin-bottom:3px;}
+
+/* Branch grid - classification */
+.branch-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.branch-col{border-radius:10px;border:1px solid;overflow:hidden;}
+.branch-head{padding:10px 12px;font-size:.72rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;}
+.branch-body{background:#070712;padding:10px 12px;}
+.branch-item{font-size:.66rem;color:#9ca3af;line-height:1.5;padding:6px 0;border-bottom:1px solid #0f172a;}
+.branch-item:last-child{border-bottom:none;}
+.branch-item b{color:#e5e7eb;display:block;font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px;}
+
+/* Timeline */
+.timeline{position:relative;padding-left:26px;margin-bottom:6px;}
+.timeline::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:#1f2937;}
+.t-step{position:relative;margin-bottom:16px;}
+.t-step::before{content:'';position:absolute;left:-26px;top:3px;width:14px;height:14px;border-radius:50%;background:#060612;border:2px solid #facc15;}
+.t-time{font-size:.6rem;font-weight:900;letter-spacing:.1em;color:#facc15;margin-bottom:3px;}
+.t-text{font-size:.7rem;color:#9ca3af;line-height:1.6;}
+.t-text b{color:#e5e7eb;}
+
+/* Compare table */
+.vs-table{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.vs-row{display:flex;border-bottom:1px solid #1f2937;}
+.vs-row:last-child{border-bottom:none;}
+.vs-cell{flex:1;padding:9px 12px;font-size:.65rem;line-height:1.5;color:#9ca3af;}
+.vs-cell.label{flex:.7;color:#4b5563;font-weight:900;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;background:#070712;}
+.vs-head{display:flex;background:#070712;}
+.vs-head .vs-cell{font-weight:900;text-transform:uppercase;font-size:.62rem;letter-spacing:.08em;}
+
+/* Callout */
+.callout{background:rgba(250,204,21,.06);border:1px solid #facc15;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#facc15;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.6;padding:5px 0;}
+.callout-item b{color:#fff;}
+.callout-item .wrong{color:#f87171;text-decoration:line-through;}
+.callout-item .right{color:#4ade80;}
+
+/* Pearl */
+.pearl{background:#0a0a1a;border-left:3px solid #facc15;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#facc15;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#9ca3af;line-height:1.6;}
+.pearl-a b{color:#e5e7eb;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #0f172a;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-btn" href="index.html">← BACK TO ALGORITHMS</a>
+
+  <div class="header">
+    <div class="icon">🩸</div>
+    <h1>Hyperlactataemia</h1>
+    <div class="sub">Lactate Physiology & Monitoring in Trauma</div>
+  </div>
+
+  <!-- DEFINITION + METER -->
+  <div class="section">
+    <p class="section-title">📖 Definition & Thresholds</p>
+    <div class="card">
+      <div class="card-body">
+        Lactate is the end-product of <b>anaerobic glycolysis</b> — pyruvate is reduced to lactate by lactate dehydrogenase when mitochondrial oxidative metabolism cannot keep pace with pyruvate production. It is cleared mainly by the <b>liver</b> (Cori cycle) and, to a lesser extent, the kidneys.
+      </div>
+    </div>
+
+    <div class="meter-wrap">
+      <div class="meter-title">Blood Lactate — Severity Bands</div>
+      <div class="meter-bar">
+        <div class="meter-seg" style="background:rgba(74,222,128,.18);color:#4ade80;">NORMAL</div>
+        <div class="meter-seg" style="background:rgba(250,204,21,.18);color:#facc15;">HYPERLACTATAEMIA</div>
+        <div class="meter-seg" style="background:rgba(248,113,113,.18);color:#f87171;">LACTIC ACIDOSIS</div>
+      </div>
+      <div class="meter-labels"><span>&lt; 2 mmol/L</span><span>2 – 4(–5) mmol/L</span><span>&gt; 4–5 mmol/L</span></div>
+      <div class="meter-detail">
+        <div class="meter-col" style="border-color:#4ade80;"><b>Normal</b>Resting production ≈ clearance. No acid-base disturbance.</div>
+        <div class="meter-col" style="border-color:#facc15;"><b>Hyperlactataemia</b>Mild–moderate rise, <b>no</b> accompanying metabolic acidosis.</div>
+        <div class="meter-col" style="border-color:#f87171;"><b>Lactic acidosis</b>Raised lactate <b>+</b> metabolic acidosis (pH &lt;7.35).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COHEN-WOODS CLASSIFICATION -->
+  <div class="section">
+    <p class="section-title">🧬 Cohen–Woods Classification (1976)</p>
+    <div class="branch-grid">
+      <div class="branch-col" style="border-color:#f87171;">
+        <div class="branch-head" style="background:rgba(248,113,113,.12);color:#f87171;">Type A</div>
+        <div class="branch-body">
+          <div class="branch-item"><b>Mechanism</b>Clinically evident tissue hypoxia / hypoperfusion → forced anaerobic glycolysis</div>
+          <div class="branch-item"><b>Causes</b>All shock states — hypovolaemic, cardiogenic, obstructive, septic · severe hypoxaemia · regional ischaemia (limb/mesenteric) · seizures · strenuous exercise</div>
+        </div>
+      </div>
+      <div class="branch-col" style="border-color:#60a5fa;">
+        <div class="branch-head" style="background:rgba(96,165,250,.12);color:#60a5fa;">Type B</div>
+        <div class="branch-body">
+          <div class="branch-item"><b>B1 · Disease</b>Liver disease, malignancy, diabetes, renal failure, thiamine deficiency</div>
+          <div class="branch-item"><b>B2 · Drugs/toxins</b>Metformin/biguanides, isoniazid, propylene glycol, β-agonists, propofol, linezolid, NRTIs, cyanide</div>
+          <div class="branch-item"><b>B3 · Inborn error</b>Mitochondrial myopathies, congenital enzyme defects</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:#60a5fa;">
+      <div class="card-body">
+        <b class="blue">Discriminator — lactate:pyruvate ratio.</b> Elevated L:P ratio → true tissue hypoxia driving anaerobic glycolysis (Type A). Normal L:P ratio with high lactate → impaired oxidative metabolism without hypoxia (Type B).
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMON MIX-UPS -->
+  <div class="section">
+    <p class="section-title">⚠️ Common Mix-Ups (Examiner Traps)</p>
+    <div class="callout">
+      <div class="callout-title">Check yourself before the viva</div>
+      <div class="callout-item">It's <b>Cohen–Woods</b>, not "Wood & Cohen" — Cohen RD & Woods HF, 1976.</div>
+      <div class="callout-item"><span class="wrong">Mannitol</span> is <b>not</b> a Type B cause — it causes a <b>metabolic alkalosis</b>. The classic biguanide is <span class="right">metformin</span>.</div>
+      <div class="callout-item">Hyperlactataemia begins at <b>&gt;2 mmol/L</b>, not 6 — don't shift the cut-off.</div>
+      <div class="callout-item">Septic shock is filed under Type A by convention, but mechanistically it's <b>mixed</b> — catecholamine-driven aerobic glycolysis and impaired hepatic clearance (Type B mechanisms) contribute alongside any true hypoperfusion.</div>
+    </div>
+  </div>
+
+  <!-- ROLE IN TRAUMA -->
+  <div class="section">
+    <p class="section-title">🎯 Role of Lactate Monitoring in Trauma</p>
+    <div class="timeline">
+      <div class="t-step">
+        <div class="t-time">ON ARRIVAL</div>
+        <div class="t-text">Admission lactate is an independent <b>prognostic marker</b> — higher initial values track with injury severity and mortality risk.</div>
+      </div>
+      <div class="t-step">
+        <div class="t-time">SERIAL — 6H / 12H / 24H</div>
+        <div class="t-text">Trend matters more than a single value. <b>Time to lactate clearance/normalisation</b> correlates strongly with survival (Abramson et al., J Trauma 1993).</div>
+      </div>
+      <div class="t-step">
+        <div class="t-time">RESUSCITATION ENDPOINT</div>
+        <div class="t-text">Used alongside base deficit to <b>titrate ongoing resuscitation</b> — failure to clear suggests inadequate volume, ongoing haemorrhage, or both.</div>
+      </div>
+      <div class="t-step">
+        <div class="t-time">OCCULT HYPOPERFUSION</div>
+        <div class="t-text">HR/BP can normalise while lactate stays elevated — this <b>discordance</b> flags ongoing tissue hypoperfusion masked by compensated vitals, and should prompt further resuscitation/work-up rather than reassurance.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LACTATE VS BASE DEFICIT -->
+  <div class="section">
+    <p class="section-title">⚖️ Lactate vs Base Deficit</p>
+    <div class="vs-table">
+      <div class="vs-head">
+        <div class="vs-cell label"> </div>
+        <div class="vs-cell" style="color:#facc15;">Lactate</div>
+        <div class="vs-cell" style="color:#60a5fa;">Base Deficit</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Reflects</div>
+        <div class="vs-cell">Anaerobic metabolism directly</div>
+        <div class="vs-cell">Net metabolic acid burden (lactate + others)</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Confounders</div>
+        <div class="vs-cell">Liver dysfunction (↓clearance), some drugs</div>
+        <div class="vs-cell">Hyperchloraemia from saline, renal failure</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Availability</div>
+        <div class="vs-cell">VBG/ABG, point-of-care</div>
+        <div class="vs-cell">ABG — immediate, widely available</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Use</div>
+        <div class="vs-cell">Complementary — neither replaces the other</div>
+        <div class="vs-cell">Best used together as resuscitation endpoints</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMINER PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Vitals normalise but 6h lactate is still 3.5 mmol/L — what does this tell you?</div>
+      <div class="pearl-a"><b>Occult hypoperfusion.</b> Normal HR/BP do not guarantee adequate tissue perfusion — compensatory mechanisms can mask ongoing shock. A non-clearing lactate should trigger reassessment for occult haemorrhage and continued targeted resuscitation, not reassurance.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Is sepsis-related hyperlactataemia always due to tissue hypoxia?</div>
+      <div class="pearl-a">No. While conventionally filed under Type A, septic shock lactate rise is multifactorial: true hypoperfusion in some tissue beds, plus catecholamine-driven accelerated aerobic glycolysis and reduced hepatic clearance — Type B-like mechanisms operating in parallel.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What lactate threshold features in the Sepsis-3 definition of septic shock?</div>
+      <div class="pearl-a">Lactate &gt;2 mmol/L despite adequate fluid resuscitation, combined with the need for vasopressors to maintain MAP ≥65 mmHg (Singer et al., JAMA 2016).</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: How would you distinguish Type A from Type B lactic acidosis at the bedside?</div>
+      <div class="pearl-a">Clinical context first — is there evidence of shock/hypoxaemia? Then biochemically, an elevated lactate:pyruvate ratio supports Type A; a normal ratio with high lactate points to Type B (drug, disease, or inborn error driving production/clearance independent of oxygen delivery).</div>
+    </div>
+  </div>
+
+  <div class="source">
+    COHEN & WOODS 1976 · ABRAMSON ET AL J TRAUMA 1993 · SINGER ET AL JAMA 2016 (SEPSIS-3)<br>
+    ATLS 10TH ED · SURVIVING SEPSIS CAMPAIGN · CORE CONCEPTS CRITICAL CARE 2026 · ESSENTIALS OF TRAUMA ANAESTHESIA
+  </div>
+
+</div>
+</body>
+</html>
