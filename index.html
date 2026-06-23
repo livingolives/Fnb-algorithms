@@ -1,484 +1,333 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TraumaDog — Dr. Wilson</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#06040a;--gold:#c9a84c;--gold-bright:#f0c040;--gold-dim:#7a5e20;
-  --red:#8b0000;--red-bright:#cc2200;--surface:#0e0a14;--border:#2a1f0a;
-  --text:#c8b89a;--dim:#5a4a2a;--bright:#f5e8c0;
-  --serif:'Cinzel',serif;--body:'Exo 2',sans-serif;
-}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;}
+body{background:#060612;color:#fff;font-family:'Courier New',monospace;min-height:100vh;}
+.hero{text-align:center;padding:48px 20px 32px;border-bottom:1px solid #1f2937;}
+.ankh{font-size:2.5rem;margin-bottom:12px;display:block;}
+.hero h1{font-size:1.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#facc15;margin-bottom:4px;}
+.hero .byline{font-size:.65rem;color:#4b5563;letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;}
+.hero .tagline{font-size:.75rem;color:#6b7280;font-style:italic;margin-bottom:20px;}
+.stats{display:flex;justify-content:center;gap:24px;margin-bottom:0;}
+.stat{text-align:center;}
+.stat-num{font-size:1.4rem;font-weight:900;color:#facc15;}
+.stat-label{font-size:.55rem;color:#4b5563;letter-spacing:.15em;text-transform:uppercase;}
 
-/* Hieroglyphic border pattern top */
-.top-border{height:6px;background:repeating-linear-gradient(90deg,var(--gold) 0,var(--gold) 8px,transparent 8px,transparent 14px,var(--gold-dim) 14px,var(--gold-dim) 16px,transparent 16px,transparent 22px);}
+.section{padding:24px 16px;}
+.container{max-width:680px;margin:0 auto;}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.section-header .s-icon{font-size:1rem;}
+.section-header h2{font-size:.7rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#facc15;}
+.divider{border:none;border-top:1px solid #1f2937;margin:0 16px;}
 
-/* Hero */
-.hero{
-  padding:40px 20px 30px;
-  background:radial-gradient(ellipse at top,rgba(201,168,76,.08) 0%,transparent 70%);
-  text-align:center;border-bottom:1px solid var(--border);
-  position:relative;overflow:hidden;
-}
-.hero::before{
-  content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(201,168,76,.02) 40px,rgba(201,168,76,.02) 41px);
-  pointer-events:none;
-}
+/* Algorithm cards */
+.algo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.algo-card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:14px;text-decoration:none;display:flex;flex-direction:column;gap:6px;transition:border-color .2s;}
+.algo-card:hover{border-color:#facc15;}
+.algo-card .a-icon{font-size:1.4rem;}
+.algo-card .a-title{font-size:.72rem;font-weight:900;color:#e5e7eb;letter-spacing:.04em;line-height:1.3;}
+.algo-card .a-tags{font-size:.58rem;color:#6b7280;line-height:1.5;}
+.algo-card .a-badge{font-size:.52rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;border-radius:3px;align-self:flex-start;margin-top:2px;}
+.badge-airway{background:rgba(248,113,113,.12);color:#f87171;border:1px solid #f87171;}
+.badge-shock{background:rgba(250,204,21,.12);color:#facc15;border:1px solid #facc15;}
+.badge-neuro{background:rgba(96,165,250,.12);color:#60a5fa;border:1px solid #60a5fa;}
+.badge-icu{background:rgba(74,222,128,.12);color:#4ade80;border:1px solid #4ade80;}
+.badge-obs{background:rgba(244,63,94,.12);color:#f43f5e;border:1px solid #f43f5e;}
+.badge-acidbase{background:rgba(96,165,250,.12);color:#60a5fa;border:1px solid #60a5fa;}
+.badge-lactate{background:rgba(250,204,21,.12);color:#facc15;border:1px solid #facc15;}
+.badge-fes{background:rgba(249,115,22,.12);color:#f97316;border:1px solid #f97316;}
 
-/* Doberman SVG */
-.dog-wrap{margin:0 auto 16px;width:120px;height:120px;position:relative;}
+/* Calculators card — full width */
+.calc-card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:14px;text-decoration:none;display:flex;align-items:center;gap:14px;margin-top:10px;transition:border-color .2s;}
+.calc-card:hover{border-color:#facc15;}
+.calc-card .c-icon{font-size:1.8rem;}
+.calc-card .c-text{}
+.calc-card .c-title{font-size:.75rem;font-weight:900;color:#e5e7eb;margin-bottom:3px;}
+.calc-card .c-sub{font-size:.6rem;color:#6b7280;}
+.calc-card .c-arrow{margin-left:auto;color:#facc15;font-size:1rem;}
 
-.site-name{
-  font-family:var(--serif);font-size:2.8rem;font-weight:900;
-  letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold-bright);
-  text-shadow:0 0 30px rgba(240,192,64,.4),0 2px 4px rgba(0,0,0,.8);
-  margin-bottom:6px;
-}
-.site-sub{
-  font-family:var(--serif);font-size:.7rem;letter-spacing:.3em;
-  color:var(--gold-dim);text-transform:uppercase;margin-bottom:14px;
-}
-.tagline{
-  font-family:var(--serif);font-size:1rem;font-style:italic;
-  color:var(--gold);letter-spacing:.08em;margin-bottom:6px;
-}
-.tagline-sub{font-size:.65rem;color:var(--dim);letter-spacing:.2em;text-transform:uppercase;}
-
-/* Gold divider */
-.divider{display:flex;align-items:center;gap:10px;padding:16px 20px;}
-.divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}
-.divider-icon{color:var(--gold);font-size:.9rem;}
-
-/* Section title */
-.sec-title{
-  font-family:var(--serif);font-size:.65rem;letter-spacing:.25em;
-  text-transform:uppercase;color:var(--gold-dim);
-  padding:0 20px;margin-bottom:12px;
-}
-
-/* Cards */
-.cards{padding:0 14px;}
-.algo-card{
-  display:block;text-decoration:none;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:6px;padding:15px 18px;margin-bottom:9px;
-  transition:all .2s;position:relative;overflow:hidden;
-}
-.algo-card::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:transparent;transition:background .2s;
-}
-.algo-card:hover{border-color:var(--gold-dim);transform:translateX(3px);}
-.algo-card:hover::before{background:var(--gold);}
-.ct{display:flex;align-items:center;gap:10px;margin-bottom:5px;}
-.ci{font-size:1.2rem;flex-shrink:0;}
-.cn{font-family:var(--serif);font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;}
-.cs{font-size:.7rem;color:var(--dim);line-height:1.5;margin-bottom:8px;}
-.tags{display:flex;flex-wrap:wrap;gap:5px;}
-.tag{font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:2px;border:1px solid;}
-
-/* Special simulator card */
-.sim-card{
-  display:block;text-decoration:none;
-  background:linear-gradient(135deg,#0a0614,#0e0a1a);
-  border:1px solid #3a1f6a;border-radius:6px;padding:16px 18px;
-  margin-bottom:9px;transition:all .2s;
-}
-.sim-card:hover{border-color:#6a3faa;transform:translateX(3px);}
-.sim-badge{font-family:var(--serif);font-size:.48rem;letter-spacing:.15em;padding:2px 8px;background:rgba(138,75,255,.15);border:1px solid #6a3faa;color:#a78bfa;display:inline-block;margin-bottom:7px;text-transform:uppercase;}
-.sim-title{font-family:var(--serif);font-size:.95rem;color:#c084fc;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;}
-.sim-sub{font-size:.7rem;color:var(--dim);line-height:1.5;margin-bottom:9px;}
-.sim-tags{display:flex;flex-wrap:wrap;gap:5px;}
-.sim-tag{font-size:.5rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border:1px solid;border-radius:2px;}
-
-/* Coming soon */
-.cs-card{
-  background:var(--surface);border:1px dashed #1a1408;
-  border-radius:6px;padding:12px 18px;margin-bottom:7px;opacity:.55;
-}
-.cs-badge{font-family:var(--serif);font-size:.42rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-dim);border:1px solid var(--border);padding:1px 6px;display:inline-block;margin-bottom:5px;}
-.cs-title{font-size:.78rem;color:#3a3020;font-family:var(--serif);letter-spacing:.04em;}
-.cs-sub{font-size:.62rem;color:#2a2010;margin-top:3px;}
+/* Simulators */
+.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sim-card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:14px;text-decoration:none;display:flex;flex-direction:column;gap:5px;transition:border-color .2s;position:relative;}
+.sim-card:hover{border-color:#facc15;}
+.sim-card .live-badge{position:absolute;top:10px;right:10px;font-size:.5rem;font-weight:900;letter-spacing:.1em;background:rgba(74,222,128,.15);color:#4ade80;border:1px solid #4ade80;padding:2px 6px;border-radius:3px;}
+.sim-card .soon-badge{position:absolute;top:10px;right:10px;font-size:.5rem;font-weight:900;letter-spacing:.1em;background:rgba(107,114,128,.15);color:#6b7280;border:1px solid #6b7280;padding:2px 6px;border-radius:3px;}
+.sim-card .s-icon{font-size:1.4rem;}
+.sim-card .s-title{font-size:.72rem;font-weight:900;color:#e5e7eb;}
+.sim-card .s-sub{font-size:.6rem;color:#6b7280;line-height:1.5;}
 
 /* Quiz card */
-.quiz-card{
-  display:block;text-decoration:none;
-  background:linear-gradient(135deg,#0a0800,#140c00);
-  border:1px solid var(--gold-dim);border-radius:6px;
-  padding:16px 18px;margin-bottom:9px;transition:all .2s;
-}
-.quiz-card:hover{border-color:var(--gold);transform:translateX(3px);}
-.quiz-title{font-family:var(--serif);font-size:.95rem;color:var(--gold-bright);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;}
-.quiz-sub{font-size:.7rem;color:var(--dim);line-height:1.5;margin-bottom:8px;}
-.grades{display:flex;gap:6px;flex-wrap:wrap;}
-.grade{font-size:.5rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:2px;}
+.quiz-card{background:#0a0a1a;border:1px solid #facc15;border-radius:10px;padding:20px;text-decoration:none;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;transition:background .2s;}
+.quiz-card:hover{background:rgba(250,204,21,.05);}
+.quiz-card .q-icon{font-size:1.8rem;}
+.quiz-card .q-title{font-size:.85rem;font-weight:900;color:#facc15;letter-spacing:.1em;text-transform:uppercase;}
+.quiz-card .q-sub{font-size:.65rem;color:#9ca3af;}
+.quiz-card .q-ranks{display:flex;gap:10px;font-size:.62rem;color:#6b7280;flex-wrap:wrap;justify-content:center;}
 
-/* Stats */
-.stats{display:flex;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:0 0 20px;}
-.stat{flex:1;padding:14px 8px;text-align:center;border-right:1px solid var(--border);}
-.stat:last-child{border-right:none;}
-.sn{font-family:var(--serif);font-size:1.4rem;font-weight:900;color:var(--gold-bright);display:block;}
-.sl{font-size:.5rem;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;}
+/* Fellowship cases */
+.cases-card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:16px;text-decoration:none;display:flex;align-items:center;gap:14px;transition:border-color .2s;}
+.cases-card:hover{border-color:#facc15;}
+.cases-card .cc-icon{font-size:1.8rem;}
+.cases-card .cc-text{}
+.cases-card .cc-title{font-size:.75rem;font-weight:900;color:#e5e7eb;margin-bottom:4px;}
+.cases-card .cc-sub{font-size:.6rem;color:#6b7280;line-height:1.6;}
+.cases-card .cc-arrow{margin-left:auto;color:#facc15;font-size:1rem;}
+
+/* About / lore section */
+.lore{background:#070712;border-top:1px solid #1f2937;border-bottom:1px solid #1f2937;padding:28px 16px;text-align:center;}
+.lore .hiero{font-size:1rem;color:#374151;letter-spacing:.15em;margin-bottom:16px;}
+.lore h3{font-size:.75rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#facc15;margin-bottom:12px;}
+.lore p{font-size:.68rem;color:#6b7280;line-height:1.8;max-width:560px;margin:0 auto 12px;}
+.lore .quote{font-size:.7rem;color:#9ca3af;font-style:italic;border-left:2px solid #facc15;padding-left:12px;margin:16px auto;max-width:400px;text-align:left;}
+.lore .attribution{font-size:.58rem;color:#374151;letter-spacing:.1em;text-transform:uppercase;}
 
 /* Footer */
-.footer{
-  text-align:center;padding:24px 20px;
-  border-top:1px solid var(--border);margin-top:10px;
-}
-.footer p{font-size:.58rem;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;line-height:2;}
-.bottom-border{height:6px;background:repeating-linear-gradient(90deg,var(--gold) 0,var(--gold) 8px,transparent 8px,transparent 14px,var(--gold-dim) 14px,var(--gold-dim) 16px,transparent 16px,transparent 22px);}
+.footer{padding:20px 16px;text-align:center;}
+.footer .f-link{display:inline-block;font-size:.62rem;color:#4b5563;text-decoration:none;border:1px solid #1f2937;padding:8px 16px;border-radius:6px;letter-spacing:.08em;transition:all .2s;}
+.footer .f-link:hover{color:#facc15;border-color:#facc15;}
+.footer .f-source{font-size:.55rem;color:#1f2937;letter-spacing:.1em;margin-top:12px;}
+.footer .f-note{font-size:.6rem;color:#374151;margin-top:8px;}
 </style>
 </head>
 <body>
 
-<div class="top-border"></div>
-
 <!-- HERO -->
 <div class="hero">
-
-  <!-- Pharaoh Doberman SVG -->
-  <div class="dog-wrap">
-    <svg viewBox="0 0 120 120" style="width:100%;height:100%;">
-      <!-- Pharaoh crown (Nemes headdress) -->
-      <path d="M30 42 Q28 20 40 12 L60 8 L80 12 Q92 20 90 42" fill="#c9a84c" stroke="#7a5e20" stroke-width="1"/>
-      <path d="M30 42 L22 65 Q20 75 24 78" fill="#c9a84c" stroke="#7a5e20" stroke-width="1"/>
-      <path d="M90 42 L98 65 Q100 75 96 78" fill="#c9a84c" stroke="#7a5e20" stroke-width="1"/>
-      <!-- Crown stripe -->
-      <line x1="30" y1="42" x2="90" y2="42" stroke="#7a5e20" stroke-width="1.5"/>
-      <line x1="32" y1="50" x2="88" y2="50" stroke="#7a5e20" stroke-width="1"/>
-      <!-- Uraeus (cobra) -->
-      <path d="M58 8 Q55 2 60 0 Q65 2 62 8" fill="#c9a84c" stroke="#7a5e20" stroke-width="1"/>
-      <!-- Head -->
-      <ellipse cx="60" cy="58" rx="26" ry="24" fill="#1a1210" stroke="#3a2a1a" stroke-width="1.5"/>
-      <!-- Snout -->
-      <path d="M46 64 Q50 72 60 74 Q70 72 74 64" fill="#120e0c" stroke="#2a1a10" stroke-width="1"/>
-      <!-- Eyes — fierce, gold -->
-      <ellipse cx="50" cy="54" rx="6" ry="5" fill="#0a0806"/>
-      <ellipse cx="50" cy="54" rx="4" ry="3.5" fill="#c9a84c"/>
-      <ellipse cx="50" cy="54" rx="2.5" ry="2.5" fill="#060402"/>
-      <ellipse cx="70" cy="54" rx="6" ry="5" fill="#0a0806"/>
-      <ellipse cx="70" cy="54" rx="4" ry="3.5" fill="#c9a84c"/>
-      <ellipse cx="70" cy="54" rx="2.5" ry="2.5" fill="#060402"/>
-      <!-- Gold eye shine -->
-      <circle cx="51.5" cy="52.5" r="1" fill="#f0c040" opacity=".8"/>
-      <circle cx="71.5" cy="52.5" r="1" fill="#f0c040" opacity=".8"/>
-      <!-- Doberman markings -->
-      <ellipse cx="55" cy="67" rx="4" ry="3" fill="#3a2010" opacity=".6"/>
-      <ellipse cx="65" cy="67" rx="4" ry="3" fill="#3a2010" opacity=".6"/>
-      <!-- Nose -->
-      <ellipse cx="60" cy="68" rx="5" ry="3.5" fill="#0a0806" stroke="#1a1210" stroke-width="1"/>
-      <!-- Ears — pointed, upright -->
-      <path d="M36 42 L28 18 L44 36 Z" fill="#1a1210" stroke="#3a2a1a" stroke-width="1"/>
-      <path d="M84 42 L92 18 L76 36 Z" fill="#1a1210" stroke="#3a2a1a" stroke-width="1"/>
-      <!-- Collar — gold with ankh -->
-      <rect x="38" y="78" width="44" height="8" rx="4" fill="#c9a84c" stroke="#7a5e20" stroke-width="1"/>
-      <text x="60" y="85" text-anchor="middle" font-family="serif" font-size="7" fill="#3a2a00">☥</text>
-      <!-- Body suggestion -->
-      <path d="M42 86 Q35 95 38 110 L82 110 Q85 95 78 86" fill="#1a1210" stroke="#3a2a1a" stroke-width="1"/>
-      <!-- Gold chest marking -->
-      <path d="M50 90 Q60 95 70 90 Q68 102 60 105 Q52 102 50 90" fill="#c9a84c" opacity=".3"/>
-    </svg>
-  </div>
-
-  <div class="site-name">TraumaDog</div>
-  <div class="site-sub">Dr. Livingston Sharon Wilson · FNB Trauma Anaesthesia</div>
+  <span class="ankh">☥</span>
+  <h1>TraumaDog</h1>
+  <div class="byline">Dr. Livingston Sharon Wilson · FNB Trauma Anaesthesia</div>
   <div class="tagline">"Broken bones come with broken souls"</div>
-  <div class="tagline-sub">Trauma Anaesthesia & Critical Care · FNB Exit 2026</div>
+  <div class="stats">
+    <div class="stat"><div class="stat-num">15</div><div class="stat-label">Algorithms</div></div>
+    <div class="stat"><div class="stat-num">4</div><div class="stat-label">Simulators</div></div>
+    <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Quickies</div></div>
+  </div>
 </div>
 
-<!-- STATS -->
-<div class="stats">
-  <div class="stat"><span class="sn">12</span><span class="sl">Algorithms</span></div>
-  <div class="stat"><span class="sn">4</span><span class="sl">Simulators</span></div>
-  <div class="stat"><span class="sn">∞</span><span class="sl">Quickies</span></div>
-</div>
+<hr class="divider">
 
 <!-- ALGORITHMS -->
-<div class="divider"><div class="divider-line"></div><div class="divider-icon">☥</div><div class="divider-line"></div></div>
-<p class="sec-title">📋 Clinical Decision Algorithms</p>
-<div class="cards">
-
-  <a class="algo-card" href="maxfax_airway_algorithm.html" style="border-color:#3a1010">
-    <div class="ct"><span class="ci">☠</span><span class="cn" style="color:#f87171">Maxillofacial Trauma</span></div>
-    <div class="cs">AFOI · RSI · Modified RSI · CICO · Surgical Airway · Le Fort classifications</div>
-    <div class="tags">
-      <span class="tag" style="border-color:#f87171;color:#f87171">Airway</span>
-      <span class="tag" style="border-color:#f87171;color:#f87171">NAP4</span>
-      <span class="tag" style="border-color:#f87171;color:#f87171">Emergency</span>
+<div class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="s-icon">📋</span>
+      <h2>Clinical Decision Algorithms</h2>
     </div>
-  </a>
+    <div class="algo-grid">
 
-  <a class="algo-card" href="sodium_algorithm.html" style="border-color:#0a2030">
-    <div class="ct"><span class="ci">⚗️</span><span class="cn" style="color:#4fc3f7">Sodium Disorders</span></div>
-    <div class="cs">Hyponatraemia · Hypernatraemia · SIADH · DI · DDAVP · ODS prevention</div>
-    <div class="tags">
-      <span class="tag" style="border-color:#4fc3f7;color:#4fc3f7">ICU</span>
-      <span class="tag" style="border-color:#4fc3f7;color:#4fc3f7">Electrolytes</span>
-      <span class="tag" style="border-color:#4fc3f7;color:#4fc3f7">TBI</span>
+      <a class="algo-card" href="maxfax_airway_algorithm.html">
+        <span class="a-icon">☠️</span>
+        <div class="a-title">Maxillofacial Trauma</div>
+        <div class="a-tags">AFOI · RSI · Modified RSI · CICO · Surgical Airway · Le Fort classifications</div>
+        <span class="a-badge badge-airway">Airway · NAP4</span>
+      </a>
+
+      <a class="algo-card" href="sodium_algorithm.html">
+        <span class="a-icon">⚗️</span>
+        <div class="a-title">Sodium Disorders</div>
+        <div class="a-tags">Hyponatraemia · Hypernatraemia · SIADH · DI · DDAVP · ODS prevention</div>
+        <span class="a-badge badge-icu">ICU · Electrolytes · TBI</span>
+      </a>
+
+      <a class="algo-card" href="thoracic_trauma.html">
+        <span class="a-icon">🫁</span>
+        <div class="a-title">Thoracic Trauma</div>
+        <div class="a-tags">ATLS Deadly Dozen · 6 immediate killers · 6 hidden killers · EDT</div>
+        <span class="a-badge badge-shock">Thoracic · ATLS 10th Ed</span>
+      </a>
+
+      <a class="algo-card" href="vasopressors.html">
+        <span class="a-icon">💉</span>
+        <div class="a-title">Vasopressors in Shock</div>
+        <div class="a-tags">Norad vs vasopressin vs phenylephrine · Receptor profiles · Shock type selection</div>
+        <span class="a-badge badge-shock">Shock · Pharmacology</span>
+      </a>
+
+      <a class="algo-card" href="haemorrhagic_shock.html">
+        <span class="a-icon">🩸</span>
+        <div class="a-title">Haemorrhagic Shock & DCR</div>
+        <div class="a-tags">Class I–IV · 1:1:1 MTP · Lethal triad · TXA · ATC · Permissive hypotension</div>
+        <span class="a-badge badge-shock">DCR · MTP · CRASH-2</span>
+      </a>
+
+      <a class="algo-card" href="tbi_management.html">
+        <span class="a-icon">🧠</span>
+        <div class="a-title">TBI Management</div>
+        <div class="a-tags">Monroe-Kellie · CPP targets · ICP tiers (SIBICC) · Secondary insults · DECRA vs RESCUE-ICP</div>
+        <span class="a-badge badge-neuro">TBI · ICP · BTF 4th Ed</span>
+      </a>
+
+      <a class="algo-card" href="spinal_cord_injury.html">
+        <span class="a-icon">🦴</span>
+        <div class="a-title">Spinal Cord Injury</div>
+        <div class="a-tags">Neurogenic vs spinal shock · MAP 85–90 · NEXUS · Canadian C-Spine · SCIWORA · Paediatric</div>
+        <span class="a-badge badge-neuro">Spinal · Neurogenic Shock</span>
+      </a>
+
+      <a class="algo-card" href="reboa.html">
+        <span class="a-icon">🫀</span>
+        <div class="a-title">REBOA</div>
+        <div class="a-tags">Zone I · II · III · REBOA vs EDT decision ladder · Reperfusion injury · Time limits</div>
+        <span class="a-badge badge-shock">Endovascular · Haemorrhage</span>
+      </a>
+
+      <a class="algo-card" href="coagulopathy.html">
+        <span class="a-icon">🔬</span>
+        <div class="a-title">Coagulopathy in Trauma</div>
+        <div class="a-tags">ATC vs RAC vs DIC · TEG/ROTEM · EXTEM/INTEM/FIBTEM · Cascade vs cell-based</div>
+        <span class="a-badge badge-shock">ATC · TEG/ROTEM · TXA</span>
+      </a>
+
+      <a class="algo-card" href="trauma_pregnancy.html">
+        <span class="a-icon">🤰</span>
+        <div class="a-title">Trauma in Pregnancy</div>
+        <div class="a-tags">Physiological changes · Aortocaval compression · PMCS 4-min rule · Kleihauer-Betke</div>
+        <span class="a-badge badge-obs">Obstetric · PMCS · WOMAN Trial</span>
+      </a>
+
+      <a class="algo-card" href="burns.html">
+        <span class="a-icon">🔥</span>
+        <div class="a-title">Burns Resuscitation</div>
+        <div class="a-tags">Rule of Nines · Parkland formula · CO poisoning · Escharotomy · Inhalation injury</div>
+        <span class="a-badge badge-shock">Burns · Parkland · ABA Guidelines</span>
+      </a>
+
+      <a class="algo-card" href="hyperlactatemia.html">
+        <span class="a-icon">🩸</span>
+        <div class="a-title">Hyperlactataemia</div>
+        <div class="a-tags">Cohen–Woods classification · Type A vs B · L:P ratio · Serial monitoring · Occult hypoperfusion</div>
+        <span class="a-badge badge-lactate">Lactate · Trauma · Resuscitation</span>
+      </a>
+
+      <a class="algo-card" href="stewart-acidbase.html">
+        <span class="a-icon">⚗️</span>
+        <div class="a-title">Stewart Acid-Base</div>
+        <div class="a-tags">HH flaws · SID · Atot · Hyperchloraemic acidosis · Corrected AG · Figge formula · Fluid SID comparison</div>
+        <span class="a-badge badge-acidbase">Stewart · SID · Saline</span>
+      </a>
+
+      <a class="algo-card" href="crush_syndrome.html">
+        <span class="a-icon">⚡</span>
+        <div class="a-title">Crush Syndrome</div>
+        <div class="a-tags">Rhabdomyolysis · Myoglobinuria · AKI · Hyperkalaemia · Compartment syndrome</div>
+        <span class="a-badge badge-icu">Crush · Rhabdo · AKI</span>
+      </a>
+
+      <a class="algo-card" href="fat-embolism.html">
+        <span class="a-icon">🦴</span>
+        <div class="a-title">Fat Embolism Syndrome</div>
+        <div class="a-tags">Classic triad · Gurd criteria · Mechanical vs biochemical · Berlin ARDS · PROSEVA · Early fixation</div>
+        <span class="a-badge badge-fes">FES · ARDS · Fracture</span>
+      </a>
+
     </div>
-  </a>
 
-  <a class="algo-card" href="thoracic_trauma.html" style="border-color:#3a1800">
-    <div class="ct"><span class="ci">🫁</span><span class="cn" style="color:#fb923c">Thoracic Trauma</span></div>
-    <div class="cs">ATLS Deadly Dozen · 6 immediate killers · 6 hidden killers · EDT</div>
-    <div class="tags">
-      <span class="tag" style="border-color:#fb923c;color:#fb923c">Thoracic</span>
-      <span class="tag" style="border-color:#fb923c;color:#fb923c">ATLS 10th Ed</span>
-    </div>
-  </a>
-
-  <a class="algo-card" href="vasopressors.html" style="border-color:#3a0a30">
-    <div class="ct"><span class="ci">💉</span><span class="cn" style="color:#e879f9">Vasopressors in Shock</span></div>
-    <div class="cs">Norad vs vasopressin vs phenylephrine · Receptor profiles · Shock type selection</div>
-    <div class="tags">
-      <span class="tag" style="border-color:#e879f9;color:#e879f9">Shock</span>
-      <span class="tag" style="border-color:#e879f9;color:#e879f9">Pharmacology</span>
-    </div>
-  </a>
-
-  <a class="algo-card" href="haemorrhagic_shock.html" style="border-color:#3a0808">
-    <div class="ct"><span class="ci">🩸</span><span class="cn" style="color:#f87171">Haemorrhagic Shock & DCR</span></div>
-    <div class="cs">Class I–IV · 1:1:1 MTP · Lethal triad · TXA · ATC · Permissive hypotension</div>
-    <div class="tags">
-      <span class="tag" style="border-color:#f87171;color:#f87171">DCR</span>
-      <span class="tag" style="border-color:#f87171;color:#f87171">MTP</span>
-      <span class="tag" style="border-color:#f87171;color:#f87171">CRASH-2</span>
-    </div>
-  </a>
-
-  <a class="algo-card" href="tbi_management.html" style="border-color:#1a1040">
-    <div class="ct"><span class="ci">🧠</span><span class="cn" style="color:#818cf8">TBI Management</span></div>
-    <div class="cs">Monroe-Kellie · CPP targets · ICP tiers (SIBICC) · Secondary insults · DECRA vs RESCUE-ICP</div>
-    <div class="tags">
-      <span class="tag" style="border-color:#818cf8;color:#818cf8">TBI</span>
-      <span class="tag" style="border-color:#818cf8;color:#818cf8">ICP</span>
-      <span class="tag" style="border-color:#818cf8;color:#818cf8">BTF 4th Ed</span>
-    </div>
-  </a>
-
-  <a class="algo-card" href="spinal_cord_injury.html" style="border-color:#0a2a1a">
-    <div class="ct"><span class="ci">🦴</span><span class="cn" style="color:#34d399">Spinal Cord Injury</span></div>
-    <div class="cs">Neurogenic vs spinal shock · MAP 85–90 · NEXUS · Canadian C-Spine · SCIWORA · Paediatric</div>
-    <div class="tags">
-      <span class="tag" style="border-color:#34d399;color:#34d399">Spinal</span>
-      <span class="tag" style="border-color:#34d399;color:#34d399">Neurogenic Shock</span>
-    </div>
-  </a>
-
-  <a class="algo-card" href="reboa.html" style="border-color:#3a0814">
-    <div class="ct"><span class="ci">🫀</span><span class="cn" style="color:#f43f5e">REBOA</span></div>
-    <div class="cs">Zone I · II · III · REBOA vs EDT decision ladder · Reperfusion injury · Time limits</div>
-    <div class="tags">
-      <span class="tag" style="border-color:#f43f5e;color:#f43f5e">Endovascular</span>
-      <span class="tag" style="border-color:#f43f5e;color:#f43f5e">Haemorrhage</span>
-    </div>
-  </a>
-
-  <a class="algo-card" href="coagulopathy.html" style="border-color:#0a2a20">
-    <div class="ct"><span class="ci">🔬</span><span class="cn" style="color:#34d399">Coagulopathy in Trauma</span></div>
-    <div class="cs">ATC vs RAC vs DIC · TEG/ROTEM · EXTEM/INTEM/FIBTEM/HEPTEM · Cascade vs cell-based</div>
-    <div class="tags">
-      <span class="tag" style="border-color:#34d399;color:#34d399">ATC</span>
-      <span class="tag" style="border-color:#34d399;color:#34d399">TEG/ROTEM</span>
-      <span class="tag" style="border-color:#34d399;color:#34d399">TXA</span>
-    </div>
-  </a>
-
-  <a class="algo-card" href="trauma_pregnancy.html" style="border-color:#3a0a28">
-    <div class="ct"><span class="ci">🤰</span><span class="cn" style="color:#f472b6">Trauma in Pregnancy</span></div>
-    <div class="cs">Physiological changes · Aortocaval compression · PMCS 4-min rule · Kleihauer-Betke</div>
-    <div class="tags">
-      <span class="tag" style="border-color:#f472b6;color:#f472b6">Obstetric</span>
-      <span class="tag" style="border-color:#f472b6;color:#f472b6">PMCS</span>
-      <span class="tag" style="border-color:#f472b6;color:#f472b6">WOMAN Trial</span>
-    </div>
-  </a>
-
-  <a class="algo-card" href="burns.html" style="border-color:#3a1500">
-    <div class="ct"><span class="ci">🔥</span><span class="cn" style="color:#fb923c">Burns Resuscitation</span></div>
-    <div class="cs">Rule of Nines · Parkland formula · CO poisoning · Escharotomy · Inhalation injury</div>
-    <div class="tags">
-      <span class="tag" style="border-color:#fb923c;color:#fb923c">Burns</span>
-      <span class="tag" style="border-color:#fb923c;color:#fb923c">Parkland</span>
-      <span class="tag" style="border-color:#fb923c;color:#fb923c">ABA Guidelines</span>
-    </div>
-  </a>
-
+    <!-- CALCULATORS -->
+    <a class="calc-card" href="calculators.html">
+      <span class="c-icon">🧮</span>
+      <div class="c-text">
+        <div class="c-title">Trauma Labs & Calculators</div>
+        <div class="c-sub">Shock Index · RTS/ISS · MTP Trigger · Blood Loss · ABG Analyser · GFR · Paediatric Drug Doses</div>
+      </div>
+      <span class="c-arrow">→</span>
+    </a>
+  </div>
 </div>
 
-  <!-- CALCULATORS -->
-  <a class="algo-card" href="calculators.html" style="border-color:#1a3050">
-    <div class="card-top">
-      <span class="card-icon">🧮</span>
-      <span class="card-title" style="color:#60a5fa">Trauma Labs</span>
-    </div>
-    <div class="card-subtitle">Shock Index · RTS/ISS · MTP Trigger · Blood Loss · ABG Analyser · GFR · Paediatric Drug Doses</div>
-    <div class="card-tags">
-      <span class="tag" style="border-color:#60a5fa;color:#60a5fa">Calculators</span>
-      <span class="tag" style="border-color:#60a5fa;color:#60a5fa">ABG</span>
-      <span class="tag" style="border-color:#60a5fa;color:#60a5fa">Paediatric</span>
-    </div>
-    <div class="card-arrow">→</div>
-  </a>
+<hr class="divider">
 
-<!-- SIMULATOR -->
-<div class="divider"><div class="divider-line"></div><div class="divider-icon">☥</div><div class="divider-line"></div></div>
-<p class="sec-title">🎮 Clinical Simulators</p>
-<div class="cards">
-
-  <a class="sim-card" href="simulator.html">
-    <div class="sim-badge">LIVE · POINT & CLICK</div>
-    <div class="sim-title">🏥 OR Simulator</div>
-    <div class="sim-sub">Tap objects in the OR — patient, monitor, drug trolley, ventilator, ODP. Red herrings waste time. Wrong decisions crash the patient.</div>
-    <div class="sim-tags">
-      <span class="sim-tag" style="border-color:#c084fc;color:#c084fc">Bronchospasm</span>
-      <span class="sim-tag" style="border-color:#ffbe00;color:#ffbe00">Tube Displacement</span>
-      <span class="sim-tag" style="border-color:#ff3d4a;color:#ff3d4a">Intraop Arrest</span>
-      <span class="sim-tag" style="border-color:#4db8ff;color:#4db8ff">ATLS Survey</span>
+<!-- SIMULATORS -->
+<div class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="s-icon">🎮</span>
+      <h2>Clinical Simulators</h2>
     </div>
-  </a>
+    <div class="sim-grid">
 
-  <div class="cs-card">
-    <div class="cs-badge">COMING SOON</div>
-    <div class="cs-title">🚑 Mass Casualty Triage Simulator</div>
-    <div class="cs-sub">Sort patients, make triage decisions, get scored — START/SALT methodology</div>
+      <a class="sim-card" href="simulator.html">
+        <span class="live-badge">LIVE</span>
+        <span class="s-icon">🏥</span>
+        <div class="s-title">OR Simulator · Point & Click</div>
+        <div class="s-sub">Tap objects in the OR. Wrong decisions crash the patient. Bronchospasm · Tube Displacement · Intraop Arrest</div>
+      </a>
+
+      <a class="sim-card" href="traumadog-index.html">
+        <span class="live-badge">LIVE</span>
+        <span class="s-icon">📁</span>
+        <div class="s-title">Fellowship Cases</div>
+        <div class="s-sub">TBI in Pregnancy · Neurogenic Shock · Mechanical Valve + OHS · NDM VAP — flowcharts, viva Q&A</div>
+      </a>
+
+      <div class="sim-card">
+        <span class="soon-badge">COMING SOON</span>
+        <span class="s-icon">🚑</span>
+        <div class="s-title">Mass Casualty Triage</div>
+        <div class="s-sub">Sort patients, make triage decisions, get scored — START/SALT methodology</div>
+      </div>
+
+      <div class="sim-card">
+        <span class="soon-badge">COMING SOON</span>
+        <span class="s-icon">📖</span>
+        <div class="s-title">The Trauma Novel</div>
+        <div class="s-sub">An interactive narrative by Dr. Wilson — clinical decisions drive the story</div>
+      </div>
+
+    </div>
   </div>
-
-  <div class="cs-card">
-    <div class="cs-badge">COMING SOON</div>
-    <div class="cs-title">📖 The Trauma Novel — Interactive Story</div>
-    <div class="cs-sub">An interactive narrative written by Dr. Wilson — clinical decisions drive the story</div>
-  </div>
-
 </div>
+
+<hr class="divider">
 
 <!-- QUIZ -->
-<div class="divider"><div class="divider-line"></div><div class="divider-icon">☥</div><div class="divider-line"></div></div>
-<p class="sec-title">🧠 Test Yourself</p>
-<div class="cards">
-
-  <a class="quiz-card" href="quiz.html">
-    <div class="quiz-title">👑 The TraumaDog Challenge</div>
-    <div class="quiz-sub">5 questions. No hints. No mercy. Find out where you rank in the pack.</div>
-    <div class="grades">
-      <span class="grade" style="background:rgba(100,100,100,.1);border:1px solid #374151;color:#6b7280;">🐶 Puppy</span>
-      <span class="grade" style="background:rgba(201,168,76,.08);border:1px solid var(--gold-dim);color:var(--gold);">🐕 Big Dog</span>
-      <span class="grade" style="background:rgba(201,168,76,.12);border:1px solid var(--gold);color:var(--gold-bright);">🐕‍🦺 Top Dog</span>
-      <span class="grade" style="background:rgba(240,192,64,.15);border:1px solid var(--gold-bright);color:#fff;">👑 Grand Dog</span>
+<div class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="s-icon">🧠</span>
+      <h2>Test Yourself</h2>
     </div>
-  </a>
-
-</div>
-
-<!-- CASES -->
-<div class="divider"><div class="divider-line"></div><div class="divider-icon">☥</div><div class="divider-line"></div></div>
-<p class="sec-title">📁 Fellowship Cases</p>
-<div class="cards">
-  <a class="algo-card" href="traumadog-index.html" style="border-color:#7c3aed">
-    <div class="card-top">
-      <span class="card-icon">🐕</span>
-      <span class="card-title" style="color:#a78bfa">TraumaDog — Fellowship Cases</span>
-    </div>
-    <div class="card-subtitle">TBI in Pregnancy · Neurogenic Shock · Mechanical Valve + OHS · NDM VAP — flowcharts, drug tables, viva Q&A</div>
-    <div class="card-tags">
-      <span class="tag">4 Cases</span>
-      <span class="tag">Composite</span>
-      <span class="tag">Viva Q&A</span>
-      <span class="tag">Flowcharts</span>
-    </div>
-    <div class="card-arrow">→</div>
-  </a>
-</div>
-
-<!-- ABOUT -->
-<div class="divider"><div class="divider-line"></div><div class="divider-icon">𓁹</div><div class="divider-line"></div></div>
-<p class="sec-title">𓂀 About TraumaDog</p>
-<div class="cards">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:20px 18px;margin-bottom:9px;position:relative;overflow:hidden;">
-
-    <!-- Decorative hieroglyphic strip -->
-    <div style="font-size:1rem;letter-spacing:.3em;color:var(--gold-dim);text-align:center;margin-bottom:16px;opacity:.6;">
-      𓂀 𓅃 𓆣 𓇯 𓈖 𓊪 𓋴 𓌀 𓍢 𓎛 𓏏 𓁹 𓆙 𓂀
-    </div>
-
-    <!-- Anubis icon -->
-    <div style="text-align:center;margin-bottom:14px;">
-      <svg viewBox="0 0 80 100" style="width:60px;height:75px;display:inline-block;">
-        <!-- Anubis jackal head -->
-        <ellipse cx="40" cy="35" rx="18" ry="16" fill="#1a1210" stroke="#c9a84c" stroke-width="1.5"/>
-        <!-- Long snout -->
-        <path d="M28 40 Q22 46 20 52 Q24 54 28 50 Q32 48 36 44" fill="#1a1210" stroke="#c9a84c" stroke-width="1"/>
-        <!-- Ears — tall pointed jackal ears -->
-        <path d="M28 24 L22 6 L34 20 Z" fill="#1a1210" stroke="#c9a84c" stroke-width="1"/>
-        <path d="M52 24 L58 6 L46 20 Z" fill="#1a1210" stroke="#c9a84c" stroke-width="1"/>
-        <!-- Eye -->
-        <ellipse cx="45" cy="32" rx="4" ry="3" fill="#c9a84c"/>
-        <ellipse cx="45" cy="32" rx="2" ry="2" fill="#060402"/>
-        <circle cx="46" cy="31" r=".8" fill="#f0c040"/>
-        <!-- Headdress -->
-        <rect x="24" y="22" width="32" height="5" rx="2" fill="#c9a84c" opacity=".6"/>
-        <!-- Body - seated figure suggestion -->
-        <rect x="32" y="51" width="16" height="25" rx="3" fill="#1a1210" stroke="#c9a84c" stroke-width="1"/>
-        <!-- Staff (Was sceptre) -->
-        <line x1="58" y1="18" x2="58" y2="80" stroke="#c9a84c" stroke-width="2"/>
-        <path d="M54 18 Q58 14 62 18" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
-        <!-- Ankh -->
-        <text x="20" y="90" font-family="serif" font-size="16" fill="#c9a84c">☥</text>
-      </svg>
-    </div>
-
-    <div style="font-family:'Cinzel',serif;font-size:.9rem;color:var(--gold-bright);text-align:center;letter-spacing:.1em;margin-bottom:12px;">
-      𓁹 ANUBIS & THE ANAESTHETIST 𓁹
-    </div>
-
-    <div style="font-size:.78rem;color:var(--text);line-height:1.9;margin-bottom:14px;">
-      In ancient Egyptian mythology, <span style="color:var(--gold);">Anubis</span> — the jackal-headed god — was the <em>psychopomp</em>: the divine guide of souls across the threshold between the living world and the realm of the dead. He did not choose who died. He simply ensured that those who crossed over did so with dignity, guided safely through the unknown.
-    </div>
-
-    <div style="font-size:.78rem;color:var(--text);line-height:1.9;margin-bottom:14px;">
-      The anaesthetist walks a strikingly similar path. Every time a patient crosses the threshold of consciousness — surrendering awareness, sensation, and control — it is the anaesthetist who stands at the border. <span style="color:var(--gold);">We guide them in. We guide them out.</span> The journey through anaesthesia is, in many ways, a controlled passage through the unknown: a temporary dissolution of self, held safely in our hands.
-    </div>
-
-    <div style="font-size:.78rem;color:var(--text);line-height:1.9;margin-bottom:14px;">
-      Unlike Anubis, we do not guide people to the afterlife. <span style="color:var(--gold-bright);">And it is a very bad day when we do.</span> Instead, our purpose is a smooth, peaceful perioperative course — into the deep, and back again, with the patient intact in body and in soul.
-    </div>
-
-    <div style="font-size:.78rem;color:var(--text);line-height:1.9;margin-bottom:16px;">
-      Trauma anaesthesia adds another dimension entirely. These patients arrive broken — sometimes shattered — in body and in spirit. The trauma anaesthetist must hold the physiological chaos together long enough for healing to begin. <span style="color:var(--gold);">Broken bones come with broken souls.</span> We treat both.
-    </div>
-
-    <!-- Gold quote box -->
-    <div style="border:1px solid var(--gold-dim);background:rgba(201,168,76,.05);padding:12px 16px;border-radius:4px;text-align:center;margin-bottom:14px;">
-      <div style="font-family:'Cinzel',serif;font-size:.85rem;color:var(--gold);font-style:italic;line-height:1.8;">
-        "He who guides the living through the unknown<br>bears the same duty as he who guides the dead —<br>to carry the soul safely across."
+    <a class="quiz-card" href="quiz.html">
+      <span class="q-icon">👑</span>
+      <div class="q-title">The TraumaDog Challenge</div>
+      <div class="q-sub">5 questions. No hints. No mercy. Find out where you rank in the pack.</div>
+      <div class="q-ranks">
+        <span>🐶 Puppy</span>
+        <span>🐕 Big Dog</span>
+        <span>🐕‍🦺 Top Dog</span>
+        <span>👑 Grand Dog</span>
       </div>
-      <div style="font-size:.55rem;color:var(--dim);letter-spacing:.15em;margin-top:6px;">— ADAPTED FROM EGYPTIAN FUNERARY TEXTS</div>
-    </div>
-
-    <div style="font-size:.72rem;color:var(--dim);line-height:1.7;">
-      <span style="color:var(--gold-dim);">TraumaDog</span> was built during one month of FNB Exit Examination preparation in Trauma Anaesthesia and Critical Care. It is a collection of algorithms, simulators, and clinical cases — made by a doctor who got confused while studying, and decided to build something instead of just reading.
-    </div>
-
-    <!-- Hieroglyphic footer strip -->
-    <div style="font-size:1rem;letter-spacing:.3em;color:var(--gold-dim);text-align:center;margin-top:16px;opacity:.4;">
-      𓂀 𓅃 𓆣 𓇯 𓈖 𓊪 𓋴 𓌀 𓍢 𓎛 𓏏 𓁹 𓆙 𓂀
-    </div>
+    </a>
   </div>
+</div>
+
+<hr class="divider">
+
+<!-- LORE -->
+<div class="lore">
+  <div class="hiero">𓂀 𓅃 𓆣 𓇯 𓈖 𓊪 𓋴 𓌀 𓍢 𓎛 𓏏 𓁹 𓆙 𓂀</div>
+  <h3>𓁹 Anubis & The Anaesthetist 𓁹</h3>
+  <p>In ancient Egyptian mythology, Anubis — the jackal-headed god — was the <em>psychopomp</em>: the divine guide of souls across the threshold between the living world and the realm of the dead. He did not choose who died. He simply ensured that those who crossed over did so with dignity, guided safely through the unknown.</p>
+  <p>The anaesthetist walks a strikingly similar path. Every time a patient crosses the threshold of consciousness — surrendering awareness, sensation, and control — it is the anaesthetist who stands at the border. We guide them in. We guide them out.</p>
+  <p>Trauma anaesthesia adds another dimension entirely. These patients arrive broken — sometimes shattered — in body and in spirit. The trauma anaesthetist must hold the physiological chaos together long enough for healing to begin. Broken bones come with broken souls. We treat both.</p>
+  <div class="quote">
+    "He who guides the living through the unknown bears the same duty as he who guides the dead — to carry the soul safely across."
+  </div>
+  <div class="attribution">— Adapted from Egyptian Funerary Texts</div>
+  <br>
+  <p style="font-size:.62rem;color:#374151;">TraumaDog was built during one month of FNB Exit Examination preparation in Trauma Anaesthesia and Critical Care. Made by a doctor who got confused while studying, and decided to build something instead of just reading.</p>
+  <div class="hiero" style="margin-top:16px;">𓂀 𓅃 𓆣 𓇯 𓈖 𓊪 𓋴 𓌀 𓍢 𓎛 𓏏 𓁹 𓆙 𓂀</div>
 </div>
 
 <!-- FOOTER -->
-<div style="text-align:center;padding:24px 20px 8px;"><a href="feedback.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:8px;border:1px solid #7a6230;background:#161b22;color:#c9a84c;text-decoration:none;font-family:Space Grotesk,sans-serif;font-size:14px;font-weight:600;">✉️ Feedback &amp; Report a Mistake</a></div><div class="footer">
-  <p>BASED ON ATLS 10TH ED · BTF 4TH ED · NAP4 · CORE CONCEPTS CRITICAL CARE 2026</p>
-  <p style="margin-top:8px;color:#2a1f0a">"Important algorithms made when confused while studying lol" 😂</p>
+<div class="footer">
+  <a class="f-link" href="feedback.html">✉️ Feedback & Report a Mistake</a>
+  <div class="f-source">BASED ON ATLS 10TH ED · BTF 4TH ED · NAP4 · CORE CONCEPTS CRITICAL CARE 2026 · STEWART 1981 · COHEN-WOODS 1976</div>
+  <div class="f-note">"Important algorithms made when confused while studying lol" 😂</div>
 </div>
-<div class="bottom-border"></div>
 
 </body>
 </html>
