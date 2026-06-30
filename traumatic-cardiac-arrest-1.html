@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traumatic Cardiac Arrest | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060612;color:#fff;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.back-btn{display:inline-block;margin-bottom:16px;font-size:.6rem;color:#4b5563;text-decoration:none;letter-spacing:.1em;border:1px solid #1f2937;padding:5px 12px;}
+.back-btn:hover{color:#a855f7;border-color:#a855f7;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #1f2937;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.2rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#a855f7;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#4b5563;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#4b5563;margin-bottom:10px;padding-left:4px;}
+.card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#9ca3af;line-height:1.7;}
+.card-body b{color:#e5e7eb;}
+.purple{color:#a855f7;} .red{color:#f87171;} .green{color:#4ade80;} .amber{color:#facc15;} .blue{color:#60a5fa;}
+
+/* TCA vs Medical arrest comparison */
+.vs-table{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.vs-row{display:flex;border-bottom:1px solid #1f2937;}
+.vs-row:last-child{border-bottom:none;}
+.vs-cell{flex:1;padding:9px 12px;font-size:.63rem;line-height:1.5;color:#9ca3af;}
+.vs-cell.label{flex:.8;color:#4b5563;font-weight:900;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;background:#070712;}
+.vs-head{display:flex;background:#070712;}
+.vs-head .vs-cell{font-weight:900;text-transform:uppercase;font-size:.6rem;letter-spacing:.08em;}
+
+/* HITS grid */
+.hits-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.hit{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;overflow:hidden;}
+.hit-head{padding:10px 12px;display:flex;align-items:center;gap:8px;}
+.hit-letter{font-size:1.4rem;font-weight:900;color:#a855f7;min-width:24px;}
+.hit-name{font-size:.7rem;font-weight:900;color:#e5e7eb;text-transform:uppercase;letter-spacing:.06em;}
+.hit-body{background:#070712;padding:10px 12px;}
+.hit-cause{font-size:.65rem;color:#9ca3af;line-height:1.5;margin-bottom:6px;}
+.hit-fix{font-size:.65rem;color:#4ade80;font-weight:900;line-height:1.5;}
+.hit-fix::before{content:'→ ';}
+
+/* EDT decision matrix */
+.matrix{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.matrix-head{background:rgba(168,85,247,.08);border-bottom:1px solid #1f2937;padding:10px 14px;}
+.matrix-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#a855f7;}
+.matrix-row{display:flex;border-bottom:1px solid #1f2937;}
+.matrix-row:last-child{border-bottom:none;}
+.matrix-cell{flex:1;padding:9px 12px;font-size:.63rem;line-height:1.5;color:#9ca3af;}
+.matrix-cell.label{flex:.9;color:#4b5563;font-weight:900;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;background:#070712;}
+.matrix-head-row{display:flex;background:#070712;}
+.matrix-head-row .matrix-cell{font-weight:900;text-transform:uppercase;font-size:.6rem;letter-spacing:.06em;}
+.go{color:#4ade80;font-weight:900;}
+.no{color:#f87171;font-weight:900;}
+.maybe{color:#facc15;font-weight:900;}
+
+/* EDT steps */
+.steps{margin-bottom:12px;}
+.step{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;}
+.step-num{min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;background:rgba(168,85,247,.12);border:1px solid #a855f7;color:#a855f7;flex-shrink:0;}
+.step-content{flex:1;background:#0a0a1a;border:1px solid #1f2937;border-radius:8px;padding:10px 12px;}
+.step-title{font-size:.67rem;font-weight:900;color:#e5e7eb;margin-bottom:3px;letter-spacing:.05em;text-transform:uppercase;}
+.step-body{font-size:.68rem;color:#9ca3af;line-height:1.6;}
+.step-body b{color:#e5e7eb;}
+
+/* Cardiac repair ladder */
+.repair-ladder{margin-bottom:12px;}
+.repair-rung{display:flex;gap:10px;margin-bottom:6px;align-items:center;}
+.repair-priority{min-width:28px;height:28px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:900;flex-shrink:0;}
+.repair-content{flex:1;background:#0a0a1a;border:1px solid #1f2937;border-radius:8px;padding:9px 12px;}
+.repair-title{font-size:.67rem;font-weight:900;color:#e5e7eb;margin-bottom:2px;}
+.repair-body{font-size:.65rem;color:#9ca3af;line-height:1.5;}
+
+/* Callout */
+.callout{background:rgba(168,85,247,.06);border:1px solid #a855f7;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#a855f7;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+.callout-item .wrong{color:#f87171;text-decoration:line-through;}
+.callout-item .right{color:#4ade80;}
+
+/* Pearl */
+.pearl{background:#0a0a1a;border-left:3px solid #a855f7;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#a855f7;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#9ca3af;line-height:1.6;}
+.pearl-a b{color:#e5e7eb;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #0f172a;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-btn" href="index.html">← BACK TO ALGORITHMS</a>
+
+  <div class="header">
+    <div class="icon">💀</div>
+    <h1>Traumatic Cardiac Arrest</h1>
+    <div class="sub">TCA · EDT · Reversible Causes · Aortic Cross-Clamping</div>
+  </div>
+
+  <!-- TCA vs MEDICAL -->
+  <div class="section">
+    <p class="section-title">⚡ TCA vs Medical Cardiac Arrest</p>
+    <div class="card">
+      <div class="card-body">
+        TCA is a <b>mechanically caused arrest</b> — the heart is structurally or haemodynamically prevented from functioning. External CPR alone generates negligible output in an empty, hypovolaemic, or obstructed heart. The priority is <b>fixing the cause</b>, not compressing the chest.
+      </div>
+    </div>
+    <div class="vs-table">
+      <div class="vs-head">
+        <div class="vs-cell label"> </div>
+        <div class="vs-cell" style="color:#a855f7;">Traumatic Arrest</div>
+        <div class="vs-cell" style="color:#60a5fa;">Medical Arrest</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Primary cause</div>
+        <div class="vs-cell">Haemorrhage, tamponade, tension PTX, hypoxia</div>
+        <div class="vs-cell">VF/VT, ACS, PE, electrolyte</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">CPR priority</div>
+        <div class="vs-cell" style="color:#f87171;">Deprioritised — empty heart gets nothing from compressions</div>
+        <div class="vs-cell" style="color:#4ade80;">Immediate — buys time for defib/drugs</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">First action</div>
+        <div class="vs-cell">Fix reversible cause — bilateral thoracostomies, airway, haemorrhage control</div>
+        <div class="vs-cell">Compressions + early defibrillation</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Adrenaline</div>
+        <div class="vs-cell" style="color:#f87171;">Avoid or use sparingly — worsens vasoconstriction in hypovolaemia</div>
+        <div class="vs-cell" style="color:#4ade80;">Standard — 1mg every 3–5 min</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Futility</div>
+        <div class="vs-cell">20 minutes without ROSC</div>
+        <div class="vs-cell">30+ minutes (longer for hypothermic)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HITS -->
+  <div class="section">
+    <p class="section-title">🎯 Reversible Causes — HITS Mnemonic</p>
+    <div class="hits-grid">
+      <div class="hit">
+        <div class="hit-head">
+          <div class="hit-letter">H</div>
+          <div class="hit-name">Hypovolaemia</div>
+        </div>
+        <div class="hit-body">
+          <div class="hit-cause">Haemorrhage → empty ventricle → no output regardless of rhythm</div>
+          <div class="hit-fix">Haemorrhage control (tourniquet, EDT, REBOA) · Massive transfusion · permissive hypotension once ROSC</div>
+        </div>
+      </div>
+      <div class="hit">
+        <div class="hit-head">
+          <div class="hit-letter">I</div>
+          <div class="hit-name">↑ Intrathoracic Pressure</div>
+        </div>
+        <div class="hit-body">
+          <div class="hit-cause">Tension pneumothorax → mediastinal shift → IVC compression → cardiac arrest</div>
+          <div class="hit-fix">Bilateral finger thoracostomies within 10 seconds — do NOT wait for CXR</div>
+        </div>
+      </div>
+      <div class="hit">
+        <div class="hit-head">
+          <div class="hit-letter">T</div>
+          <div class="hit-name">Tamponade</div>
+        </div>
+        <div class="hit-body">
+          <div class="hit-cause">Pericardial collection → diastolic compression → obstructive shock → arrest</div>
+          <div class="hit-fix">Pericardiocentesis (bridge) or EDT pericardiotomy (definitive)</div>
+        </div>
+      </div>
+      <div class="hit">
+        <div class="hit-head">
+          <div class="hit-letter">S</div>
+          <div class="hit-name">Severe Hypoxia</div>
+        </div>
+        <div class="hit-body">
+          <div class="hit-cause">Airway obstruction, haemopneumothorax, flail chest → hypoxic arrest</div>
+          <div class="hit-fix">Definitive airway (RSI/surgical) · ventilate with 100% O₂ · drain haemopneumothorax</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b class="purple">Order of priorities in TCA:</b> Airway → bilateral thoracostomies → haemorrhage control → EDT if indicated. CPR continues throughout but does <b>not</b> precede reversible cause treatment. Address all four simultaneously where possible — most TCA has multiple contributing causes.</div>
+    </div>
+  </div>
+
+  <!-- EDT MATRIX -->
+  <div class="section">
+    <p class="section-title">🏥 EDT Decision Matrix</p>
+    <div class="matrix">
+      <div class="matrix-head">
+        <div class="matrix-title">Emergency Department Thoracotomy — Indications by Mechanism & Downtime</div>
+      </div>
+      <div class="matrix-head-row">
+        <div class="matrix-cell label">Mechanism</div>
+        <div class="matrix-cell">Signs of Life Present</div>
+        <div class="matrix-cell">No Signs of Life</div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-cell label">Penetrating Thoracic</div>
+        <div class="matrix-cell"><span class="go">✓ EDT</span> — highest survival</div>
+        <div class="matrix-cell"><span class="go">✓ EDT</span> if downtime <b>≤15 min</b></div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-cell label">Penetrating Non-Thoracic</div>
+        <div class="matrix-cell"><span class="go">✓ EDT</span></div>
+        <div class="matrix-cell"><span class="maybe">Consider</span> if downtime <b>≤5 min</b></div>
+      </div>
+      <div class="matrix-row">
+        <div class="matrix-cell label">Blunt Trauma</div>
+        <div class="matrix-cell"><span class="maybe">Selective</span> — case by case</div>
+        <div class="matrix-cell"><span class="no">✗ NOT recommended</span> — survival ~0%</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b>Signs of life</b> = any of: pupillary response · spontaneous movement · organised cardiac activity on monitor · detectable pulse or BP. Even one sign justifies EDT. <b>Blunt TCA</b> without signs of life — injury pattern is diffuse and non-correctable through anterolateral thoracotomy; ATLS and EAST guidelines advise against.</div>
+    </div>
+  </div>
+
+  <!-- EDT STEPS -->
+  <div class="section">
+    <p class="section-title">🔪 EDT — What You Achieve (4 Goals)</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Relieve Cardiac Tamponade</div>
+          <div class="step-body">Anterolateral thoracotomy → pericardiotomy (incise anterior to phrenic nerve, longitudinally) → evacuate clot → immediate decompression of obstructive shock.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Open Cardiac Massage</div>
+          <div class="step-body">Generates <b>3× better cardiac output</b> than external CPR. Two-handed or single-handed biventricular compression. Allows direct assessment of cardiac activity and filling.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Control Intrathoracic Haemorrhage</div>
+          <div class="step-body">Direct pressure, vascular clamping, cardiac wound repair. Hilar cross-clamp for massive pulmonary haemorrhage (twist lung on its hilum).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Descending Aortic Cross-Clamp</div>
+          <div class="step-body">Redistributes blood to coronary and cerebral circulation. Reduces subdiaphragmatic haemorrhage. <b>Maximum safe time: &lt;30 minutes.</b> Beyond 30–60 min → spinal cord ischaemia via artery of Adamkiewicz (T9–T12). Target: clamp as bridge to theatre, release as soon as haemorrhage controlled.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARDIAC WOUND REPAIR -->
+  <div class="section">
+    <p class="section-title">🫀 Cardiac Wound Repair — Priority Ladder</p>
+    <div class="repair-ladder">
+      <div class="repair-rung">
+        <div class="repair-priority" style="background:rgba(168,85,247,.15);color:#a855f7;border:1px solid #a855f7;">1</div>
+        <div class="repair-content">
+          <div class="repair-title">Finger Occlusion</div>
+          <div class="repair-body">Immediate — thumb or finger directly over laceration. Stops bleeding, buys time, no tools required.</div>
+        </div>
+      </div>
+      <div class="repair-rung">
+        <div class="repair-priority" style="background:rgba(168,85,247,.12);color:#a855f7;border:1px solid #a855f7;">2</div>
+        <div class="repair-content">
+          <div class="repair-title">Horizontal Mattress Sutures</div>
+          <div class="repair-body">2-0 or 3-0 prolene. Primary repair. Sutures placed parallel to coronary vessels to avoid inadvertent ligation.</div>
+        </div>
+      </div>
+      <div class="repair-rung">
+        <div class="repair-priority" style="background:rgba(168,85,247,.08);color:#a855f7;border:1px solid #a855f7;">3</div>
+        <div class="repair-content">
+          <div class="repair-title">Skin Staples</div>
+          <div class="repair-body">Rapid temporary closure if prolene unavailable. Genuine damage control option. Bridge to OR.</div>
+        </div>
+      </div>
+      <div class="repair-rung">
+        <div class="repair-priority" style="background:rgba(168,85,247,.06);color:#a855f7;border:1px solid #a855f7;">4</div>
+        <div class="repair-content">
+          <div class="repair-title">Foley Catheter Balloon</div>
+          <div class="repair-body">For larger or irregular lacerations — insert through wound, inflate balloon, apply traction to tamponade from inside. Effective bridge for complex injuries.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:#a855f7;">
+      <div class="card-body">
+        <b class="purple">Why RV is more forgiving than LV:</b><br><br>
+        <b>Wall thickness:</b> RV ~3–4mm vs LV ~8–11mm. Sutures hold better in thicker muscle — LV repairs are technically harder.<br><br>
+        <b>Pressure:</b> RV systolic ~25 mmHg vs LV ~120 mmHg. RV suture line faces 5× less hydraulic stress per systole — far lower dehiscence risk, more time before exsanguination, better survival.
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMINER TRAPS -->
+  <div class="section">
+    <p class="section-title">⚠️ Examiner Traps</p>
+    <div class="callout">
+      <div class="callout-title">Don't fall for these</div>
+      <div class="callout-item"><span class="wrong">CPR first in penetrating TCA</span> → <span class="right">Fix the cause first — bilateral thoracostomies, airway, EDT. CPR continues alongside but does not take priority.</span></div>
+      <div class="callout-item"><span class="wrong">Commotio cordis is a reversible cause of TCA</span> → <span class="right">It's a cause of arrest, not a treatable cause during resuscitation. HITS: Hypovolaemia, ↑Intrathoracic pressure, Tamponade, Severe hypoxia.</span></div>
+      <div class="callout-item"><span class="wrong">EDT in blunt TCA with no signs of life</span> → <span class="right">Survival essentially zero. ATLS/EAST guidelines advise against. Don't crack the chest for blunt arrest.</span></div>
+      <div class="callout-item"><span class="wrong">Aortic cross-clamp is safe up to 60 minutes</span> → <span class="right">Target &lt;30 minutes. 30–60 is the absolute outer limit. &gt;60 minutes → near-certain paraplegia.</span></div>
+      <div class="callout-item"><span class="wrong">Adrenaline 1mg as in ACLS</span> → <span class="right">Avoid or use sparingly in TCA — worsens vasoconstriction in hypovolaemia, increases myocardial oxygen demand on a stunned heart.</span></div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why is external CPR ineffective in haemorrhagic TCA?</div>
+      <div class="pearl-a">External compressions generate cardiac output by compressing a blood-filled ventricle. In hypovolaemic arrest, the ventricle is empty — no blood to eject. Compressions also cannot address the underlying cause (haemorrhage, tamponade, tension PTX). Fixing the mechanism is the only intervention that can restore output.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What is the artery of Adamkiewicz and why does it matter in aortic cross-clamping?</div>
+      <div class="pearl-a">The arteria radicularis magna — the dominant blood supply to the lower two-thirds of the spinal cord. Arises from the aorta at T9–T12 in most patients. Descending aortic cross-clamp occludes it → anterior spinal artery syndrome → paraplegia with preserved posterior column function. Maximum safe clamp time <b>&lt;30 minutes</b> to minimise this risk.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Signs of life in TCA — name them all.</div>
+      <div class="pearl-a">Pupillary response · spontaneous movement · organised cardiac activity on monitor · detectable pulse · measurable BP. Even one sign present = signs of life present = EDT indicated within mechanism-specific downtime limits.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: When do you cross-clamp the hilum rather than the descending aorta in EDT?</div>
+      <div class="pearl-a">Massive pulmonary haemorrhage — when the source is the lung rather than systemic. Hilar twist (rotating the lung 180° on its hilum) or hilar clamp controls both pulmonary arterial and venous bleeding simultaneously. Descending aortic cross-clamp does not control pulmonary haemorrhage.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    ATLS 10TH ED · EAST GUIDELINES EDT · RESUSCITATIVE THORACOTOMY GUIDELINES<br>
+    RHEE ET AL J TRAUMA 2000 · SEAMON ET AL J TRAUMA 2012<br>
+    ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>

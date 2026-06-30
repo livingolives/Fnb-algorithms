@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emergency Laparotomy & DCL | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060612;color:#fff;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.back-btn{display:inline-block;margin-bottom:16px;font-size:.6rem;color:#4b5563;text-decoration:none;letter-spacing:.1em;border:1px solid #1f2937;padding:5px 12px;}
+.back-btn:hover{color:#e11d48;border-color:#e11d48;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #1f2937;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.2rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#e11d48;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#4b5563;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#4b5563;margin-bottom:10px;padding-left:4px;}
+.card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#9ca3af;line-height:1.7;}
+.card-body b{color:#e5e7eb;}
+.rose{color:#e11d48;} .red{color:#f87171;} .green{color:#4ade80;} .amber{color:#facc15;} .blue{color:#60a5fa;}
+
+/* Scenario box */
+.scenario{background:#070712;border:1px solid #e11d48;border-radius:10px;padding:16px;margin-bottom:16px;}
+.scenario-title{font-size:.62rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#e11d48;margin-bottom:10px;}
+.vitals{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+.vital{background:#0a0a1a;border:1px solid #1f2937;border-radius:5px;padding:4px 8px;font-size:.63rem;}
+.vital span{color:#4b5563;margin-right:3px;}
+.vital b{color:#e5e7eb;}
+.vital.crit b{color:#f87171;}
+.scenario-body{font-size:.67rem;color:#9ca3af;line-height:1.6;}
+
+/* DCL phases */
+.phases{display:flex;gap:0;margin-bottom:12px;border-radius:10px;overflow:hidden;border:1px solid #1f2937;}
+.phase{flex:1;padding:14px 10px;background:#0a0a1a;position:relative;}
+.phase:not(:last-child){border-right:1px solid #1f2937;}
+.phase-num{font-size:1.2rem;font-weight:900;color:#e11d48;margin-bottom:4px;}
+.phase-title{font-size:.67rem;font-weight:900;color:#e5e7eb;margin-bottom:5px;letter-spacing:.04em;text-transform:uppercase;}
+.phase-body{font-size:.61rem;color:#9ca3af;line-height:1.5;}
+.phase-time{font-size:.58rem;font-weight:900;color:#e11d48;margin-top:5px;letter-spacing:.08em;}
+
+/* Induction card */
+.induction-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.drug-card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;overflow:hidden;}
+.drug-head{padding:8px 12px;font-size:.67rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.drug-body{background:#070712;padding:10px 12px;font-size:.63rem;color:#9ca3af;line-height:1.6;}
+.drug-body b{color:#e5e7eb;}
+.drug-dose{font-size:.7rem;font-weight:900;color:#e11d48;margin-bottom:4px;}
+
+/* Targets table */
+.targets{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.target-row{display:flex;border-bottom:1px solid #1f2937;}
+.target-row:last-child{border-bottom:none;}
+.target-cell{flex:1;padding:9px 12px;font-size:.63rem;line-height:1.5;color:#9ca3af;}
+.target-cell.label{flex:.7;color:#4b5563;font-weight:900;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;background:#070712;}
+.target-head{display:flex;background:#070712;}
+.target-head .target-cell{font-weight:900;text-transform:uppercase;font-size:.6rem;letter-spacing:.06em;}
+.wrong-val{color:#f87171;text-decoration:line-through;font-size:.58rem;}
+.right-val{color:#4ade80;font-weight:900;}
+
+/* Triggers grid */
+.triggers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.trigger{background:#0a0a1a;border-radius:8px;padding:10px 12px;border:1px solid #1f2937;}
+.trigger-val{font-size:.8rem;font-weight:900;color:#e11d48;margin-bottom:3px;}
+.trigger-label{font-size:.62rem;color:#9ca3af;line-height:1.4;}
+
+/* Return criteria */
+.return-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.rc{background:#0a0a1a;border:1px solid #1f2937;border-radius:8px;padding:10px;text-align:center;}
+.rc-val{font-size:.8rem;font-weight:900;color:#4ade80;margin-bottom:3px;}
+.rc-label{font-size:.58rem;color:#6b7280;letter-spacing:.06em;text-transform:uppercase;}
+
+/* MAP phases */
+.map-phases{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.map-phase{border-radius:8px;border:1px solid;overflow:hidden;text-align:center;}
+.map-phase-head{padding:8px;font-size:.6rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.map-phase-body{background:#070712;padding:8px;font-size:.65rem;color:#9ca3af;line-height:1.5;}
+.map-phase-body b{display:block;font-size:.8rem;font-weight:900;margin-bottom:3px;}
+
+/* Callout */
+.callout{background:rgba(225,29,72,.06);border:1px solid #e11d48;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#e11d48;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+.callout-item .wrong{color:#f87171;text-decoration:line-through;}
+.callout-item .right{color:#4ade80;}
+
+/* Pearl */
+.pearl{background:#0a0a1a;border-left:3px solid #e11d48;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#e11d48;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#9ca3af;line-height:1.6;}
+.pearl-a b{color:#e5e7eb;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #0f172a;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-btn" href="index.html">← BACK TO ALGORITHMS</a>
+
+  <div class="header">
+    <div class="icon">🔪</div>
+    <h1>Emergency Laparotomy & DCL</h1>
+    <div class="sub">Damage Control Surgery · Anaesthetic Induction · Intraoperative Targets</div>
+  </div>
+
+  <!-- SCENARIO -->
+  <div class="section">
+    <p class="section-title">🚨 Clinical Scenario</p>
+    <div class="scenario">
+      <div class="scenario-title">32M · RTA · Emergency Laparotomy in 10 minutes</div>
+      <div class="vitals">
+        <div class="vital crit"><span>BP</span><b>80/50</b></div>
+        <div class="vital crit"><span>HR</span><b>138</b></div>
+        <div class="vital crit"><span>Temp</span><b>35.2°C</b></div>
+        <div class="vital crit"><span>RR</span><b>28</b></div>
+        <div class="vital"><span>GCS</span><b>14</b></div>
+        <div class="vital crit"><span>Hb</span><b>6.2</b></div>
+        <div class="vital crit"><span>INR</span><b>2.3</b></div>
+        <div class="vital crit"><span>pH</span><b>7.18</b></div>
+        <div class="vital crit"><span>BE</span><b>−12</b></div>
+        <div class="vital crit"><span>Lactate</span><b>8.4</b></div>
+      </div>
+      <div class="scenario-body">FAST positive — free fluid abdomen. Unstable pelvis. MTP activated. <b>Lethal triad present:</b> Acidosis + Hypothermia + (Developing) Coagulopathy. This patient needs <b>damage control, not definitive surgery.</b></div>
+    </div>
+  </div>
+
+  <!-- DCL THREE PHASES -->
+  <div class="section">
+    <p class="section-title">🔄 Damage Control Surgery — Three Phases</p>
+    <div class="card">
+      <div class="card-body"><b>Definition:</b> A staged surgical strategy in physiologically compromised polytrauma — abbreviated initial surgery to control haemorrhage and contamination, followed by ICU resuscitation to correct the lethal triad, then planned definitive surgery once physiology is restored.</div>
+    </div>
+    <div class="phases">
+      <div class="phase">
+        <div class="phase-num">I</div>
+        <div class="phase-title">DCL — Control</div>
+        <div class="phase-body">Haemorrhage control (packing, vascular clamping). Contamination control (bowel stapling, not anastomosis). Temporary abdominal closure (VAC/Bogota bag).</div>
+        <div class="phase-time">TARGET &lt;60 MIN</div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">II</div>
+        <div class="phase-title">ICU — Resuscitate</div>
+        <div class="phase-body">Correct lethal triad. MTP completion. Warming. Ventilate. Optimise coagulation. Target physiological normalisation.</div>
+        <div class="phase-time">24–72 HOURS</div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">III</div>
+        <div class="phase-title">Relook — Definitive</div>
+        <div class="phase-body">Unpack, reassess. Definitive repair — bowel anastomosis, vascular reconstruction. Fascial closure if possible.</div>
+        <div class="phase-time">WHEN CRITERIA MET</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INDUCTION -->
+  <div class="section">
+    <p class="section-title">💉 Anaesthetic Induction — Shocked Patient</p>
+    <div class="card">
+      <div class="card-body"><b>RSI is mandatory</b> — full stomach assumed in all trauma. Aspiration risk. Video laryngoscopy (C-MAC/Glidescope) as first choice — not backup. Pre-oxygenate with BVM if SpO₂ dropping. Minimise apnoeic time.</div>
+    </div>
+    <div class="induction-grid">
+      <div class="drug-card">
+        <div class="drug-head" style="background:rgba(225,29,72,.1);color:#e11d48;">Ketamine</div>
+        <div class="drug-body">
+          <div class="drug-dose">1–2 mg/kg IV</div>
+          <b>Use:</b> First choice in haemodynamic compromise.<br><br>
+          Sympathomimetic → ↑HR, ↑BP via catecholamine release.<br>
+          Analgesia + anaesthesia in one agent.<br>
+          Preserves airway reflexes at sub-anaesthetic doses.<br>
+          Bronchodilation — useful if reactive airways.
+        </div>
+      </div>
+      <div class="drug-card">
+        <div class="drug-head" style="background:rgba(248,113,113,.1);color:#f87171;">Etomidate</div>
+        <div class="drug-body">
+          <div class="drug-dose">0.2–0.3 mg/kg IV</div>
+          <b>Caution:</b> Adrenocortical suppression after single dose — suppresses cortisol for 24–48h. Significant in shock patients with relative adrenal insufficiency. Many trauma centres avoid. Use only if ketamine contraindicated.
+        </div>
+      </div>
+      <div class="drug-card">
+        <div class="drug-head" style="background:rgba(96,165,250,.1);color:#60a5fa;">Rocuronium</div>
+        <div class="drug-body">
+          <div class="drug-dose">1.2 mg/kg IV</div>
+          <b>Use:</b> Preferred NMBD for RSI in trauma. High dose achieves RSI conditions equivalent to suxamethonium within 60 seconds.<br><br>
+          Reversible with sugammadex 16 mg/kg if cannot intubate/ventilate.
+        </div>
+      </div>
+      <div class="drug-card">
+        <div class="drug-head" style="background:rgba(248,113,113,.1);color:#f87171;">Suxamethonium</div>
+        <div class="drug-body">
+          <div class="drug-dose">1.5 mg/kg IV</div>
+          <b>Caution:</b> Use with awareness — hyperkalaemia risk if denervation injury (SCI, burns, crush). In pure haemorrhagic shock without these — still acceptable if rocuronium unavailable. Cannot be reversed.
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b class="rose">Drug dose reductions in shock:</b> Induction agents at 30–50% of standard dose — reduced cardiac output means slower circulation time and higher brain concentration per dose. A shocked patient on 80mg/kg ketamine will behave like a normal patient on 200mg/kg. Titrate carefully — haemodynamic collapse on induction is survivable; awareness is not ideal but preferable to cardiac arrest.</div>
+    </div>
+  </div>
+
+  <!-- MAP PHASES -->
+  <div class="section">
+    <p class="section-title">🩺 MAP Targets — Changes During Operation</p>
+    <div class="map-phases">
+      <div class="map-phase" style="border-color:#f87171;">
+        <div class="map-phase-head" style="background:rgba(248,113,113,.1);color:#f87171;">Pre-Haemostasis</div>
+        <div class="map-phase-body"><b style="color:#f87171;">MAP 50–65</b>Permissive hypotension. Higher MAP → more bleeding. Don't chase normal BP until bleeding controlled.</div>
+      </div>
+      <div class="map-phase" style="border-color:#4ade80;">
+        <div class="map-phase-head" style="background:rgba(74,222,128,.1);color:#4ade80;">Post-Haemostasis</div>
+        <div class="map-phase-body"><b style="color:#4ade80;">MAP &gt;65</b>Restore perfusion once source controlled. Now aggressively resuscitate.</div>
+      </div>
+      <div class="map-phase" style="border-color:#facc15;">
+        <div class="map-phase-head" style="background:rgba(250,204,21,.1);color:#facc15;">If TBI Coexists</div>
+        <div class="map-phase-body"><b style="color:#facc15;">MAP &gt;80</b>Permissive hypotension CONTRAINDICATED. CPP must be maintained throughout.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRAOPERATIVE TARGETS -->
+  <div class="section">
+    <p class="section-title">🎯 Intraoperative Targets</p>
+    <div class="targets">
+      <div class="target-head">
+        <div class="target-cell label">Parameter</div>
+        <div class="target-cell" style="color:#f87171;">Common Error</div>
+        <div class="target-cell" style="color:#4ade80;">Correct Target</div>
+      </div>
+      <div class="target-row">
+        <div class="target-cell label">MAP</div>
+        <div class="target-cell"><span class="wrong-val">&gt;65 throughout</span></div>
+        <div class="target-cell"><span class="right-val">50–65</span> pre-haemostasis · &gt;65 after</div>
+      </div>
+      <div class="target-row">
+        <div class="target-cell label">Temperature</div>
+        <div class="target-cell"><span class="wrong-val">37.5°C</span></div>
+        <div class="target-cell"><span class="right-val">&gt;36°C</span> — warm fluids, forced air warming, theatre temp ↑</div>
+      </div>
+      <div class="target-row">
+        <div class="target-cell label">pH</div>
+        <div class="target-cell"><span class="wrong-val">&gt;7.35</span></div>
+        <div class="target-cell"><span class="right-val">&gt;7.2</span> intraoperatively — 7.35 is ICU target post-DCL</div>
+      </div>
+      <div class="target-row">
+        <div class="target-cell label">Haemoglobin</div>
+        <div class="target-cell"><span class="wrong-val">&gt;10 g/dL</span></div>
+        <div class="target-cell"><span class="right-val">&gt;8 g/dL</span> — higher if cardiac disease or TBI (&gt;10)</div>
+      </div>
+      <div class="target-row">
+        <div class="target-cell label">INR</div>
+        <div class="target-cell"><span class="wrong-val">1.0</span></div>
+        <div class="target-cell"><span class="right-val">&lt;1.5</span> — unachievable to normalise during active haemorrhage</div>
+      </div>
+      <div class="target-row">
+        <div class="target-cell label">Calcium</div>
+        <div class="target-cell"><span class="wrong-val">Often forgotten</span></div>
+        <div class="target-cell"><span class="right-val">iCa &gt;1.1</span> — massive transfusion chelates Ca²⁺. Replace actively.</div>
+      </div>
+      <div class="target-row">
+        <div class="target-cell label">Fibrinogen</div>
+        <div class="target-cell"><span class="wrong-val">Often forgotten</span></div>
+        <div class="target-cell"><span class="right-val">&gt;2 g/L</span> — replace with cryoprecipitate or fibrinogen concentrate</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DCL TRIGGERS -->
+  <div class="section">
+    <p class="section-title">🚨 Triggers to Call Damage Control</p>
+    <div class="triggers">
+      <div class="trigger">
+        <div class="trigger-val">pH &lt;7.2</div>
+        <div class="trigger-label">Severe acidosis — enzyme failure imminent</div>
+      </div>
+      <div class="trigger">
+        <div class="trigger-val">Temp &lt;35°C</div>
+        <div class="trigger-label">Hypothermia — coagulation cascade fails</div>
+      </div>
+      <div class="trigger">
+        <div class="trigger-val">INR &gt;1.5</div>
+        <div class="trigger-label">Coagulopathy — can't stop bleeding surgically</div>
+      </div>
+      <div class="trigger">
+        <div class="trigger-val">Lactate &gt;5</div>
+        <div class="trigger-label">Ongoing hypoperfusion despite resuscitation</div>
+      </div>
+      <div class="trigger">
+        <div class="trigger-val">&gt;10 units pRBC</div>
+        <div class="trigger-label">Massive transfusion — physiological reserve exhausted</div>
+      </div>
+      <div class="trigger">
+        <div class="trigger-val">&gt;90 min OR time</div>
+        <div class="trigger-label">Prolonged surgery compounds physiological deterioration</div>
+      </div>
+    </div>
+    <div class="card" style="border-color:#e11d48;">
+      <div class="card-body"><b class="rose">The most important trigger:</b> "The patient is dying on the table." When the anaesthetist recognises physiological irreversibility and the surgeon cannot achieve haemostasis — pack, close, and go to ICU. A living patient with packed abdomen is better than a dead patient with a perfect anastomosis.</div>
+    </div>
+  </div>
+
+  <!-- RETURN TO THEATRE CRITERIA -->
+  <div class="section">
+    <p class="section-title">✅ Return to Theatre — Criteria for Definitive Surgery</p>
+    <div class="return-grid">
+      <div class="rc">
+        <div class="rc-val">&gt;36°C</div>
+        <div class="rc-label">Temperature</div>
+      </div>
+      <div class="rc">
+        <div class="rc-val">&gt;7.35</div>
+        <div class="rc-label">pH</div>
+      </div>
+      <div class="rc">
+        <div class="rc-val">&lt;2 mmol/L</div>
+        <div class="rc-label">Lactate</div>
+      </div>
+      <div class="rc">
+        <div class="rc-val">&lt;1.5</div>
+        <div class="rc-label">INR</div>
+      </div>
+      <div class="rc">
+        <div class="rc-val">&gt;−6</div>
+        <div class="rc-label">Base Excess</div>
+      </div>
+      <div class="rc">
+        <div class="rc-val">24–72h</div>
+        <div class="rc-label">Timing</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">Aim for definitive surgery at <b>48 hours</b> ideally — earlier if physiology restored quickly, later if still correcting. Beyond <b>72 hours</b> without fascial closure — risk of loss of fascial domain, fistula formation, and abdominal wall reconstruction increases significantly.</div>
+    </div>
+  </div>
+
+  <!-- EXAMINER TRAPS -->
+  <div class="section">
+    <p class="section-title">⚠️ Examiner Traps</p>
+    <div class="callout">
+      <div class="callout-title">Don't fall for these</div>
+      <div class="callout-item"><span class="wrong">Maintain MAP &gt;65 throughout</span> → <span class="right">Permissive hypotension MAP 50–65 until haemorrhage controlled — higher MAP drives more bleeding.</span></div>
+      <div class="callout-item"><span class="wrong">Target Hb &gt;10 g/dL intraoperatively</span> → <span class="right">&gt;8 g/dL for young patient without cardiac disease or TBI.</span></div>
+      <div class="callout-item"><span class="wrong">Target pH &gt;7.35 intraoperatively</span> → <span class="right">&gt;7.2 is the working target during active haemorrhage — 7.35 is the ICU target post-DCL.</span></div>
+      <div class="callout-item"><span class="wrong">Etomidate safe in all trauma patients</span> → <span class="right">Single dose suppresses adrenocortical axis 24–48h. Avoid in shocked patients with relative adrenal insufficiency — use ketamine instead.</span></div>
+      <div class="callout-item"><span class="wrong">Permissive hypotension in TBI + haemorrhage</span> → <span class="right">MAP &gt;80 if TBI coexists. CPP cannot be compromised. Simultaneous TBI + haemorrhage is the most physiologically challenging scenario in trauma anaesthesia.</span></div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why reduce induction agent dose in shocked patients?</div>
+      <div class="pearl-a">Reduced cardiac output → slower circulation time → drug reaches the brain in higher effective concentration per administered dose. Additionally, the blood-brain barrier may be disrupted. Standard doses cause profound cardiovascular depression. Rule: give 30–50% of normal dose, titrate to effect, have vasopressor drawn up before induction.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: TBI + haemorrhagic shock — what is the single most difficult management conflict?</div>
+      <div class="pearl-a">Permissive hypotension (standard for haemorrhagic shock) vs mandatory normotension/hypertension (required for CPP maintenance in TBI). Resolution: maintain MAP &gt;80 throughout — accept higher transfusion requirement and surgical haemorrhage to protect the brain. TBI mortality from cerebral ischaemia outweighs marginal increase in haemorrhage from higher MAP in most cases.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What does "damage control" mean — and where did the concept originate?</div>
+      <div class="pearl-a">The term originates from the US Navy — damage control is the emergency procedure to keep a ship afloat after catastrophic damage, prioritising survival over perfection. Rotondo et al. (J Trauma 1993) applied the concept to surgery: abbreviated initial procedure to prevent death from physiological exhaustion, accepting an incomplete repair in exchange for a living patient.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What is the role of tranexamic acid in emergency laparotomy?</div>
+      <div class="pearl-a">Give within 3 hours of injury (CRASH-2 trial). 1g IV over 10 min loading, then 1g over 8 hours. Inhibits fibrinolysis — prevents clot breakdown. After 3 hours, TXA may be harmful (promotes pathological clotting without benefit). Do not wait to give — if in doubt and within window, give immediately.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    ROTONDO ET AL J TRAUMA 1993 (DCL ORIGINAL) · ATLS 10TH ED<br>
+    CRASH-2 TRIAL (LANCET 2010) · PROPPR TRIAL (HOLCOMB, JAMA 2015)<br>
+    ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026<br>
+    DAMAGE CONTROL RESUSCITATION GUIDELINES · BTF 4TH EDITION
+  </div>
+
+</div>
+</body>
+</html>

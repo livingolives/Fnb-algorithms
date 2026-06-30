@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sepsis & Septic Shock | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#060612;color:#fff;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.back-btn{display:inline-block;margin-bottom:16px;font-size:.6rem;color:#4b5563;text-decoration:none;letter-spacing:.1em;border:1px solid #1f2937;padding:5px 12px;}
+.back-btn:hover{color:#14b8a6;border-color:#14b8a6;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #1f2937;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.2rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#14b8a6;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#4b5563;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#4b5563;margin-bottom:10px;padding-left:4px;}
+.card{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#9ca3af;line-height:1.7;}
+.card-body b{color:#e5e7eb;}
+.teal{color:#14b8a6;} .red{color:#f87171;} .green{color:#4ade80;} .amber{color:#facc15;} .blue{color:#60a5fa;}
+
+/* Definition boxes */
+.def-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.def-box{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;overflow:hidden;}
+.def-head{padding:10px 12px;font-size:.7rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.def-body{background:#070712;padding:10px 12px;font-size:.65rem;color:#9ca3af;line-height:1.6;}
+.def-body b{color:#e5e7eb;}
+.def-box-full{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+
+/* SOFA table */
+.sofa{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.sofa-row{display:flex;border-bottom:1px solid #1f2937;}
+.sofa-row:last-child{border-bottom:none;}
+.sofa-cell{flex:1;padding:8px 10px;font-size:.62rem;line-height:1.5;color:#9ca3af;}
+.sofa-cell.label{flex:.8;color:#4b5563;font-weight:900;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;background:#070712;}
+.sofa-head{display:flex;background:#070712;}
+.sofa-head .sofa-cell{font-weight:900;text-transform:uppercase;font-size:.6rem;letter-spacing:.06em;}
+
+/* Hour-1 bundle */
+.bundle{margin-bottom:12px;}
+.bundle-item{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;}
+.bundle-num{min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;background:rgba(20,184,166,.12);border:1px solid #14b8a6;color:#14b8a6;flex-shrink:0;}
+.bundle-content{flex:1;background:#0a0a1a;border:1px solid #1f2937;border-radius:8px;padding:10px 12px;}
+.bundle-title{font-size:.67rem;font-weight:900;color:#e5e7eb;margin-bottom:3px;letter-spacing:.05em;text-transform:uppercase;}
+.bundle-body{font-size:.68rem;color:#9ca3af;line-height:1.6;}
+.bundle-body b{color:#e5e7eb;}
+
+/* Vasopressor ladder */
+.vp-table{background:#0a0a1a;border:1px solid #1f2937;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.vp-row{display:flex;border-bottom:1px solid #1f2937;}
+.vp-row:last-child{border-bottom:none;}
+.vp-cell{flex:1;padding:8px 10px;font-size:.62rem;line-height:1.5;color:#9ca3af;}
+.vp-cell.step{flex:.3;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:900;color:#14b8a6;background:#070712;}
+.vp-head{display:flex;background:#070712;}
+.vp-head .vp-cell{font-weight:900;text-transform:uppercase;font-size:.6rem;letter-spacing:.06em;}
+
+/* VAP bundle */
+.vap-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.vap-item{background:#0a0a1a;border:1px solid #1f2937;border-radius:8px;padding:10px 12px;}
+.vap-num{font-size:.6rem;font-weight:900;color:#14b8a6;margin-bottom:4px;letter-spacing:.1em;}
+.vap-title{font-size:.67rem;font-weight:900;color:#e5e7eb;margin-bottom:3px;}
+.vap-body{font-size:.62rem;color:#9ca3af;line-height:1.5;}
+
+/* NDM callout */
+.callout{background:rgba(248,113,113,.06);border:1px solid #f87171;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+.callout-item .wrong{color:#f87171;text-decoration:line-through;}
+.callout-item .right{color:#4ade80;}
+
+/* Lactate section */
+.lactate-box{background:#0a0a1a;border:1px solid #14b8a6;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.lactate-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#14b8a6;margin-bottom:8px;}
+.lactate-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.lactate-item b{color:#fff;}
+
+/* Pearl */
+.pearl{background:#0a0a1a;border-left:3px solid #14b8a6;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#14b8a6;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#9ca3af;line-height:1.6;}
+.pearl-a b{color:#e5e7eb;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #0f172a;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-btn" href="index.html">← BACK TO ALGORITHMS</a>
+
+  <div class="header">
+    <div class="icon">🦠</div>
+    <h1>Sepsis & Septic Shock</h1>
+    <div class="sub">Sepsis-3 · Hour-1 Bundle · Vasopressors · VAP · NDM</div>
+  </div>
+
+  <!-- DEFINITIONS -->
+  <div class="section">
+    <p class="section-title">📖 Sepsis-3 Definitions (Singer et al., JAMA 2016)</p>
+    <div class="card">
+      <div class="card-body">
+        Sepsis-3 <b>removed SIRS criteria</b> entirely. The focus shifted from the inflammatory response to <b>organ dysfunction</b> as the defining feature. A patient can have sepsis without meeting SIRS criteria, and SIRS alone does not constitute sepsis.
+      </div>
+    </div>
+    <div class="def-grid">
+      <div class="def-box">
+        <div class="def-head" style="background:rgba(20,184,166,.1);color:#14b8a6;">Sepsis</div>
+        <div class="def-body">Life-threatening <b>organ dysfunction</b> caused by dysregulated host response to infection.<br><br><b>Criterion:</b> Acute SOFA score increase <b>≥2 points</b> above baseline.<br><br>Not just infection — organ dysfunction is the defining feature.</div>
+      </div>
+      <div class="def-box">
+        <div class="def-head" style="background:rgba(248,113,113,.1);color:#f87171;">Septic Shock</div>
+        <div class="def-body">Sepsis + <b>both</b> of:<br><br>① Vasopressor to maintain MAP <b>≥65 mmHg</b><br>② Lactate <b>>2 mmol/L</b> despite adequate fluid resuscitation.<br><br>28-day mortality >40%.</div>
+      </div>
+    </div>
+    <div class="def-box-full">
+      <div class="def-head" style="background:#070712;color:#facc15;">qSOFA — Bedside Screening Tool</div>
+      <div class="def-body">Score ≥2 → suspect sepsis, escalate assessment. <b>Not diagnostic</b> — triggers full SOFA evaluation.<br><br>
+        <b>R</b>espiratory rate ≥22/min (1 point) &nbsp;·&nbsp;
+        <b>A</b>ltered mentation — GCS &lt;15 (1 point) &nbsp;·&nbsp;
+        <b>S</b>BP ≤100 mmHg (1 point)
+      </div>
+    </div>
+  </div>
+
+  <!-- SOFA -->
+  <div class="section">
+    <p class="section-title">📊 SOFA Score — Organ Systems</p>
+    <div class="sofa">
+      <div class="sofa-head">
+        <div class="sofa-cell label">System</div>
+        <div class="sofa-cell">Parameter</div>
+        <div class="sofa-cell">Score 1–4</div>
+      </div>
+      <div class="sofa-row">
+        <div class="sofa-cell label">Respiratory</div>
+        <div class="sofa-cell">PaO₂/FiO₂ ratio</div>
+        <div class="sofa-cell">&lt;400 → 1 · &lt;300 → 2 · &lt;200 → 3 · &lt;100 → 4</div>
+      </div>
+      <div class="sofa-row">
+        <div class="sofa-cell label">Coagulation</div>
+        <div class="sofa-cell">Platelets (×10³/μL)</div>
+        <div class="sofa-cell">&lt;150→1 · &lt;100→2 · &lt;50→3 · &lt;20→4</div>
+      </div>
+      <div class="sofa-row">
+        <div class="sofa-cell label">Liver</div>
+        <div class="sofa-cell">Bilirubin (μmol/L)</div>
+        <div class="sofa-cell">20–32→1 · 33–101→2 · 102–204→3 · >204→4</div>
+      </div>
+      <div class="sofa-row">
+        <div class="sofa-cell label">Cardiovascular</div>
+        <div class="sofa-cell">MAP / vasopressors</div>
+        <div class="sofa-cell">MAP&lt;70→1 · Dopa≤5→2 · Dopa>5/Nad≤0.1→3 · Nad>0.1→4</div>
+      </div>
+      <div class="sofa-row">
+        <div class="sofa-cell label">CNS</div>
+        <div class="sofa-cell">GCS</div>
+        <div class="sofa-cell">13–14→1 · 10–12→2 · 6–9→3 · &lt;6→4</div>
+      </div>
+      <div class="sofa-row">
+        <div class="sofa-cell label">Renal</div>
+        <div class="sofa-cell">Creatinine / UO</div>
+        <div class="sofa-cell">110–170→1 · 171–299→2 · 300–440→3 · >440→4</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOUR-1 BUNDLE -->
+  <div class="section">
+    <p class="section-title">⏱ Hour-1 Bundle (SSC 2018, retained in 2026)</p>
+    <div class="bundle">
+      <div class="bundle-item">
+        <div class="bundle-num">1</div>
+        <div class="bundle-content">
+          <div class="bundle-title">Measure Lactate</div>
+          <div class="bundle-body">Initial lactate measurement. <b>Remeasure if >2 mmol/L</b> — confirms elevation is real, catches trajectory, and fulfils septic shock definition criterion post-fluids. Target normalisation to &lt;2 mmol/L.</div>
+        </div>
+      </div>
+      <div class="bundle-item">
+        <div class="bundle-num">2</div>
+        <div class="bundle-content">
+          <div class="bundle-title">Blood Cultures Before Antibiotics</div>
+          <div class="bundle-body">At least 2 sets (aerobic + anaerobic). Do <b>not</b> delay antibiotics >45 minutes waiting for cultures — but draw cultures first if possible.</div>
+        </div>
+      </div>
+      <div class="bundle-item">
+        <div class="bundle-num">3</div>
+        <div class="bundle-content">
+          <div class="bundle-title">Broad Spectrum Antibiotics</div>
+          <div class="bundle-body">Within <b>1 hour</b> of sepsis recognition. Every hour of delay in antibiotics increases mortality by ~7%. Cover likely pathogens based on source — don't wait for cultures.</div>
+        </div>
+      </div>
+      <div class="bundle-item">
+        <div class="bundle-num">4</div>
+        <div class="bundle-content">
+          <div class="bundle-title">30 ml/kg Crystalloid Bolus</div>
+          <div class="bundle-body">For hypotension <b>OR</b> lactate ≥4 mmol/L. Balanced crystalloids preferred (Plasma-Lyte, RL) over 0.9% saline — hyperchloraemic acidosis risk. Reassess after each bolus — don't give blindly.</div>
+        </div>
+      </div>
+      <div class="bundle-item">
+        <div class="bundle-num">5</div>
+        <div class="bundle-content">
+          <div class="bundle-title">Vasopressors If Hypotensive</div>
+          <div class="bundle-body">If MAP &lt;65 during or after fluid resuscitation. <b>Noradrenaline first line.</b> Start early — don't wait to finish the full 30ml/kg if patient is profoundly hypotensive.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VASOPRESSOR LADDER -->
+  <div class="section">
+    <p class="section-title">💉 Vasopressor Escalation in Septic Shock</p>
+    <div class="vp-table">
+      <div class="vp-head">
+        <div class="vp-cell step"> </div>
+        <div class="vp-cell" style="color:#14b8a6;">Agent & Dose</div>
+        <div class="vp-cell" style="color:#14b8a6;">Mechanism & Rationale</div>
+      </div>
+      <div class="vp-row">
+        <div class="vp-cell step">1</div>
+        <div class="vp-cell"><b>Noradrenaline</b><br>0.01–3 mcg/kg/min</div>
+        <div class="vp-cell">α1 >> β1 → ↑SVR → ↑MAP. First line GRADE 1B. Maintains CO without excessive tachycardia.</div>
+      </div>
+      <div class="vp-row">
+        <div class="vp-cell step">2</div>
+        <div class="vp-cell"><b>Vasopressin</b><br>0.03 units/min (fixed)</div>
+        <div class="vp-cell">V1 receptor → non-adrenergic vasoconstriction. Restores depleted endogenous vasopressin. Noradrenaline-sparing effect. VASST trial. Not weight-based.</div>
+      </div>
+      <div class="vp-row">
+        <div class="vp-cell step">3</div>
+        <div class="vp-cell"><b>Adrenaline</b><br>0.01–3 mcg/kg/min</div>
+        <div class="vp-cell">α + β1 → ↑SVR + ↑CO. Add for refractory shock or when cardiac output support needed. Raises lactate independently — confounds monitoring.</div>
+      </div>
+      <div class="vp-row">
+        <div class="vp-cell step">4</div>
+        <div class="vp-cell"><b>Hydrocortisone</b><br>200 mg/day IV</div>
+        <div class="vp-cell">Vasopressor-refractory shock — restores adrenoceptor sensitivity. ADRENAL trial. Not for all sepsis — only when >2 vasopressors failing.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b class="teal">Why vasopressin second (not more noradrenaline):</b> Prolonged septic shock depletes endogenous ADH stores — relative vasopressin deficiency develops. Vasopressin acts on V1 receptors completely independent of catecholamine receptors — adding it restores a second vasoconstrictor pathway rather than saturating an already-stimulated α1 system. Allows noradrenaline dose reduction.</div>
+    </div>
+  </div>
+
+  <!-- LACTATE MONITORING -->
+  <div class="section">
+    <p class="section-title">📈 Lactate-Guided Resuscitation</p>
+    <div class="lactate-box">
+      <div class="lactate-title">Lactate Clearance Target</div>
+      <div class="lactate-item"><b>Target:</b> >10% reduction at 6 hours — validated as resuscitation endpoint.</div>
+      <div class="lactate-item"><b>Normalisation target:</b> &lt;2 mmol/L — clearance >10% is a good trend but not endpoint. Continue resuscitation until normalised.</div>
+      <div class="lactate-item"><b>LACTATE trial (Jones, JAMA 2010):</b> Lactate clearance-guided resuscitation <b>non-inferior</b> to ScvO₂-guided therapy. Removed mandatory central line requirement from SSC bundle.</div>
+      <div class="lactate-item"><b>ScvO₂ trap in sepsis:</b> High ScvO₂ (&gt;70%) can indicate <b>cellular dysoxia</b> — mitochondrial dysfunction means O₂ cannot be utilised even when delivered. ScvO₂ normal ≠ adequate resuscitation in sepsis.</div>
+      <div class="lactate-item"><b>EGDT (Rivers, NEJM 2001):</b> Original ScvO₂-guided protocol. Superseded by ARISE/ProCESS/ProMISe (2014–15) — EGDT not superior to usual care. ScvO₂ remains useful monitoring tool, not mandatory protocol.</div>
+    </div>
+  </div>
+
+  <!-- VAP -->
+  <div class="section">
+    <p class="section-title">🫁 VAP — Definition & Prevention Bundle</p>
+    <div class="card">
+      <div class="card-body">
+        <b>VAP definition:</b> New or progressive pulmonary infiltrate on CXR + ≥2 of: fever >38.3°C, purulent secretions, WCC >12 or &lt;4 × 10⁹/L, occurring <b>>48 hours after intubation</b>. CPIS score ≥6 supports diagnosis. Confirmed by BAL/quantitative cultures.
+      </div>
+    </div>
+    <div class="vap-grid">
+      <div class="vap-item">
+        <div class="vap-num">IHI BUNDLE 01</div>
+        <div class="vap-title">Head of Bed 30–45°</div>
+        <div class="vap-body">Reduces microaspiration of subglottic secretions. Continuous, not just during feeds.</div>
+      </div>
+      <div class="vap-item">
+        <div class="vap-num">IHI BUNDLE 02</div>
+        <div class="vap-title">Daily Sedation Vacation + SBT</div>
+        <div class="vap-body">Reduces ventilator days → reduces VAP exposure time. Spontaneous breathing trial daily.</div>
+      </div>
+      <div class="vap-item">
+        <div class="vap-num">IHI BUNDLE 03</div>
+        <div class="vap-title">Peptic Ulcer Prophylaxis</div>
+        <div class="vap-body">PPI or H2 blocker. Reduces stress ulceration — indirect VAP benefit via reduced aspiration of gastric acid.</div>
+      </div>
+      <div class="vap-item">
+        <div class="vap-num">IHI BUNDLE 04</div>
+        <div class="vap-title">DVT Prophylaxis</div>
+        <div class="vap-body">LMWH or compression devices. Reduces PE risk in ventilated patients.</div>
+      </div>
+      <div class="vap-item">
+        <div class="vap-num">IHI BUNDLE 05</div>
+        <div class="vap-title">Oral Chlorhexidine</div>
+        <div class="vap-body">0.12% CHX mouthwash. Reduces oropharyngeal colonisation → reduces microaspiration of pathogens.</div>
+      </div>
+      <div class="vap-item">
+        <div class="vap-num">ADD-ON</div>
+        <div class="vap-title">Subglottic Drainage + Cuff Pressure</div>
+        <div class="vap-body">Specialised ETT with subglottic suction port. Cuff pressure 20–30 cmH₂O — prevents microaspiration around cuff.</div>
+      </div>
+    </div>
+    <div class="callout" style="border-color:#facc15;background:rgba(250,204,21,.04);">
+      <div class="callout-title" style="color:#facc15;">⚠ Routine ETT Change — Not Recommended</div>
+      <div class="callout-item"><span class="wrong">Change ETT at Day 7 routinely</span> → <span class="right">No evidence base. Carries procedural risk. Not in any validated bundle.</span></div>
+      <div class="callout-item"><b>Early tracheostomy at Day 7–10</b> — is evidence-based for patients requiring prolonged ventilation. Reduces sedation, ventilator days, potentially VAP. This is different from routine ETT swap.</div>
+    </div>
+  </div>
+
+  <!-- NDM -->
+  <div class="section">
+    <p class="section-title">🧬 NDM — New Delhi Metallo-beta-lactamase</p>
+    <div class="callout">
+      <div class="callout-title">⚠ Critical — Carbapenem Resistance</div>
+      <div class="callout-item">NDM is a <b>carbapenemase</b> — it hydrolyses and destroys the beta-lactam ring of ALL carbapenems. <span class="wrong">Meropenem</span> will not work against NDM-positive organisms.</div>
+      <div class="callout-item"><span class="wrong">Meropenem for NDM Acinetobacter</span> → <span class="right">Giving carbapenem to carbapenemase-producing organism = giving penicillin to MRSA.</span></div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <b class="red">Treatment options for NDM-positive organisms:</b><br><br>
+        <b>Ceftazidime-avibactam + Aztreonam</b> — preferred combination. Avibactam inhibits NDM → restores aztreonam activity. Current first choice where available.<br><br>
+        <b>Colistin/Polymyxin B</b> — last resort. Nephrotoxic, neurotoxic. Often only option in resource-limited settings.<br><br>
+        <b>Cefiderocol</b> — newer siderophore cephalosporin. Active against NDM. Increasing use.<br><br>
+        <b>Fosfomycin</b> — combination therapy adjunct.<br><br>
+        <b>Tigecycline</b> — bacteriostatic, poor lung penetration. Adjunct only — not monotherapy for VAP.
+      </div>
+    </div>
+  </div>
+
+  <!-- SSC 2026 UPDATES -->
+  <div class="section">
+    <p class="section-title">🆕 SSC 2026 — Key Updates (Prescott et al., Crit Care Med 2026)</p>
+    <div class="card" style="border-color:#14b8a6;">
+      <div class="card-body">
+        <b class="teal">129 statements total — 46 new. Major changes from 2021:</b>
+      </div>
+    </div>
+    <div class="vap-grid">
+      <div class="vap-item" style="border-color:#14b8a6;">
+        <div class="vap-num" style="color:#14b8a6;">SCREENING</div>
+        <div class="vap-title">Prehospital Screening</div>
+        <div class="vap-body">Standardised screening tools now recommended in prehospital setting. Early identification before hospital arrival explicitly encouraged.</div>
+      </div>
+      <div class="vap-item" style="border-color:#14b8a6;">
+        <div class="vap-num" style="color:#14b8a6;">RESPIRATORY</div>
+        <div class="vap-title">High-Flow Nasal Cannula First</div>
+        <div class="vap-body">HFNC now preferred initial device for sepsis-associated respiratory failure over standard O₂. Awake proning considered alongside HFNC.</div>
+      </div>
+      <div class="vap-item" style="border-color:#14b8a6;">
+        <div class="vap-num" style="color:#14b8a6;">VENTILATION</div>
+        <div class="vap-title">TV 6–8 ml/kg Without Lung Injury</div>
+        <div class="vap-body">Higher TV (6–8 ml/kg) now suggested in absence of lung injury — vs strict 6 ml/kg previously. Lung injury still requires 6 ml/kg IBW.</div>
+      </div>
+      <div class="vap-item" style="border-color:#14b8a6;">
+        <div class="vap-num" style="color:#14b8a6;">ANTIPYRETICS</div>
+        <div class="vap-title">Against Routine Antipyretics</div>
+        <div class="vap-body">New recommendation <b>against</b> routine antipyretics for improving clinical outcomes. May be used for symptom relief only — fever may be beneficial to host defence.</div>
+      </div>
+      <div class="vap-item" style="border-color:#14b8a6;">
+        <div class="vap-num" style="color:#14b8a6;">ADJUNCTS</div>
+        <div class="vap-title">Against Probiotics & Beta-Blockers</div>
+        <div class="vap-body">New recommendations <b>against</b> routine probiotics and beta-blockers for treatment of sepsis and septic shock.</div>
+      </div>
+      <div class="vap-item" style="border-color:#14b8a6;">
+        <div class="vap-num" style="color:#14b8a6;">POST-SEPSIS</div>
+        <div class="vap-title">Structured Follow-Up</div>
+        <div class="vap-body">New emphasis on transitions of care — post-discharge structured support, mental health services for survivors, pharmacist-led medication reconciliation.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b>What hasn't changed:</b> Sepsis-3 definitions remain. Noradrenaline first-line vasopressor. Blood cultures before antibiotics. 30ml/kg crystalloid for hypotension/lactate ≥4. Lactate monitoring as resuscitation endpoint. Hour-1 bundle framework retained.</div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: What did Sepsis-3 remove from the definition?</div>
+      <div class="pearl-a">SIRS criteria entirely. Temperature, WCC, heart rate, respiratory rate — none of these are required for Sepsis-3 diagnosis. Organ dysfunction (SOFA ≥2) replaced the SIRS-based definition. A patient can have sepsis without SIRS, and SIRS without sepsis.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: ScvO₂ is 78% — is your septic shock patient adequately resuscitated?</div>
+      <div class="pearl-a">Not necessarily. High ScvO₂ in sepsis can reflect <b>cellular dysoxia</b> — mitochondrial dysfunction means tissues cannot extract or utilise oxygen even when delivered. Normal ScvO₂ with persistently elevated lactate means the problem is at the cellular level, not the delivery level. Lactate trend is the better endpoint.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why does adrenaline confound lactate monitoring in septic shock?</div>
+      <div class="pearl-a">Adrenaline stimulates β₂ adrenoceptors on skeletal muscle → accelerated aerobic glycolysis → increased lactate production independent of tissue hypoxia. A rising lactate on adrenaline infusion may be a drug effect, not worsening shock — making lactate clearance unreliable as a resuscitation endpoint when adrenaline is running.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What is the vasopressin dose in septic shock and why is it not weight-based?</div>
+      <div class="pearl-a"><b>0.03 units/min fixed dose</b> — not weight-based. Vasopressin in septic shock is used to restore depleted endogenous ADH (replacement dose), not as a titrated vasoconstrictor. The VASST trial used this fixed dose. Higher doses cause coronary and mesenteric vasoconstriction — the therapeutic window is narrow.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    PRESCOTT ET AL CRIT CARE MED 2026 (SSC 2026) · SINGER ET AL JAMA 2016 (SEPSIS-3)<br>
+    JONES ET AL JAMA 2010 (LACTATE TRIAL) · VASST TRIAL · ADRENAL TRIAL<br>
+    ARISE · PROCESS · PROMISE TRIALS 2014–15 · RIVERS NEJM 2001 (EGDT)<br>
+    ATLS 10TH ED · CORE CONCEPTS CRITICAL CARE 2026 · IHI VAP BUNDLE
+  </div>
+
+</div>
+</body>
+</html>
