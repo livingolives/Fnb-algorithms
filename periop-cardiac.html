@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perioperative Cardiac Risk | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:16px;display:flex;flex-direction:column;align-items:center;}
+.container{width:100%;max-width:680px;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#fbbf24;border-color:#fbbf24;}
+.header{text-align:center;padding:24px 0 18px;border-bottom:1px solid #2d2d42;margin-bottom:20px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#f59e0b;margin-bottom:4px;}
+.header p{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;margin-top:4px;}
+
+/* Mode toggle */
+.mode-bar{display:flex;gap:8px;margin-bottom:16px;}
+.mode-btn{flex:1;padding:8px;border-radius:6px;font-size:.65rem;font-weight:900;font-family:'Courier New',monospace;cursor:pointer;border:1px solid;letter-spacing:.08em;text-transform:uppercase;transition:all .2s;}
+.mode-active{background:rgba(245,158,11,.15);border-color:#f59e0b;color:#f59e0b;}
+.mode-inactive{background:#14142a;border-color:#2d2d42;color:#6b7280;}
+
+.card{border-radius:12px;padding:16px 18px;margin-bottom:10px;border:2px solid;background:#14142a;}
+.card h2{font-size:1.1rem;font-weight:900;margin-bottom:4px;}
+.card .subtitle{font-size:.72rem;color:#9ca3af;margin-bottom:12px;}
+.badge{display:inline-block;font-size:.58rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;padding:3px 8px;border-radius:4px;border:1px solid;margin-bottom:8px;}
+.section-lbl{font-size:.6rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;margin:10px 0 6px;color:#6b7280;}
+.item{display:flex;align-items:flex-start;gap:8px;font-size:.77rem;margin-bottom:5px;line-height:1.55;color:#d1d5db;}
+.step-item{display:flex;align-items:flex-start;gap:8px;font-size:.77rem;margin-bottom:6px;line-height:1.55;color:#d1d5db;}
+.snum{font-size:.65rem;font-weight:900;padding:1px 6px;border-radius:3px;flex-shrink:0;margin-top:1px;background:#1f2937;color:#f59e0b;}
+.pearl{border-radius:8px;padding:10px 12px;margin-top:12px;border:1px solid;}
+.pearl-lbl{font-size:.6rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.pearl p{font-size:.75rem;color:#d1d5db;line-height:1.55;}
+.fact-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0;}
+.fact-box{border-radius:6px;padding:8px 10px;border:1px solid;}
+.fact-lbl{font-size:.55rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
+.fact-val{font-size:.82rem;font-weight:900;}
+
+/* Options */
+.options{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.opt-btn{width:100%;text-align:left;padding:12px 16px;border-radius:8px;font-size:.77rem;font-weight:700;font-family:'Courier New',monospace;cursor:pointer;border:1px solid;transition:all .15s;line-height:1.4;}
+.opt-btn:hover{transform:translateX(3px);}
+.btn-amber{background:#451a00;border-color:#d97706;color:#fcd34d;}
+.btn-amber:hover{background:#78350f;}
+.btn-red{background:#450a0a;border-color:#dc2626;color:#fca5a5;}
+.btn-red:hover{background:#7f1d1d;}
+.btn-green{background:#052e16;border-color:#16a34a;color:#86efac;}
+.btn-green:hover{background:#14532d;}
+.btn-default{background:#1f2937;border-color:#4b5563;color:#e5e7eb;}
+.btn-default:hover{background:#374151;}
+.btn-blue{background:#0c1a3a;border-color:#3b82f6;color:#93c5fd;}
+.btn-blue:hover{background:#1e3a5f;}
+
+.nav{display:flex;gap:10px;margin-top:4px;}
+.nav-btn{flex:1;padding:10px;border-radius:8px;font-size:.77rem;font-weight:700;font-family:'Courier New',monospace;cursor:pointer;border:1px solid;transition:all .15s;}
+.btn-back{background:#1f2937;border-color:#374151;color:#d1d5db;}
+.btn-back:hover{background:#374151;}
+.btn-restart{background:#111827;border-color:#1f2937;color:#6b7280;}
+.btn-restart:hover{color:#d1d5db;background:#1f2937;}
+.breadcrumb{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px;min-height:18px;}
+.crumb{font-size:.58rem;padding:2px 7px;border-radius:10px;background:#1f2937;color:#9ca3af;}
+
+/* Quiz mode */
+.quiz-q{background:#14142a;border:2px solid #f59e0b;border-radius:10px;padding:16px;margin-bottom:12px;}
+.quiz-q .q-num{font-size:.6rem;font-weight:900;color:#f59e0b;letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px;}
+.quiz-q .q-text{font-size:.82rem;color:#f3f4f6;line-height:1.6;font-weight:700;}
+.quiz-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
+.quiz-opt{width:100%;text-align:left;padding:10px 14px;border-radius:8px;font-size:.75rem;font-family:'Courier New',monospace;cursor:pointer;border:1px solid #2d2d42;background:#1f2937;color:#d1d5db;transition:all .15s;}
+.quiz-opt:hover{border-color:#f59e0b;color:#fcd34d;}
+.quiz-opt.correct{background:#052e16;border-color:#16a34a;color:#86efac;}
+.quiz-opt.wrong{background:#450a0a;border-color:#dc2626;color:#fca5a5;}
+.quiz-explain{background:#0d0d1a;border-left:3px solid #f59e0b;border-radius:0 8px 8px 0;padding:12px 14px;margin-bottom:12px;font-size:.73rem;color:#c5c9d6;line-height:1.6;}
+.quiz-explain b{color:#f3f4f6;}
+.quiz-score{text-align:center;padding:20px;background:#14142a;border-radius:10px;border:2px solid #f59e0b;margin-bottom:12px;}
+.quiz-score .s-num{font-size:2rem;font-weight:900;color:#f59e0b;}
+.quiz-score .s-label{font-size:.7rem;color:#9ca3af;letter-spacing:.1em;text-transform:uppercase;}
+.quiz-score .s-msg{font-size:.8rem;color:#c5c9d6;margin-top:8px;}
+
+/* Table */
+.t{width:100%;border-collapse:collapse;margin:8px 0;}
+.t td,.t th{padding:6px 8px;font-size:.67rem;border:1px solid #2d2d42;text-align:left;color:#d1d5db;}
+.t th{background:#111827;color:#9ca3af;font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;}
+
+/* Timeline */
+.tl{position:relative;padding-left:22px;margin:10px 0;}
+.tl::before{content:'';position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:#374151;}
+.tl-item{position:relative;margin-bottom:12px;}
+.tl-item::before{content:'';position:absolute;left:-22px;top:2px;width:12px;height:12px;border-radius:50%;background:#f59e0b;border:2px solid #0d0d1a;}
+.tl-time{font-size:.58rem;font-weight:900;color:#f59e0b;letter-spacing:.08em;text-transform:uppercase;}
+.tl-text{font-size:.73rem;color:#d1d5db;line-height:1.5;margin-top:2px;}
+
+.footer-src{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:20px;margin-bottom:8px;}
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="home-btn" href="index.html">☥ Home</a>
+  <div class="header">
+    <h1>💛 Perioperative Cardiac Risk</h1>
+    <p>RCRI · Sgarbossa · Intraoperative MI · Periop Optimisation</p>
+  </div>
+
+  <div class="mode-bar">
+    <button class="mode-btn mode-active" id="btn-algo" onclick="switchMode('algo')">📋 ALGORITHM</button>
+    <button class="mode-btn mode-inactive" id="btn-quiz" onclick="switchMode('quiz')">🧠 QUIZ ME</button>
+  </div>
+
+  <div id="algo-mode">
+    <div class="breadcrumb" id="breadcrumb"></div>
+    <div id="app"></div>
+  </div>
+
+  <div id="quiz-mode" style="display:none;">
+    <div id="quiz-app"></div>
+  </div>
+
+  <div class="footer-src">RCRI — LEE ET AL CIRCULATION 1999 · FOCUS TRIAL NEJM 2011 · MINT TRIAL NEJM 2023 · VISION TRIAL · REGAIN NEJM 2021 · SGARBOSSA NEJM 1996 · AAGBI GUIDELINES</div>
+</div>
+
+<script>
+// =================== ALGORITHM ===================
+const nodes = {
+  start: {
+    color:"#f59e0b", type:"scenario",
+    text:"55M — Pre-op Assessment",
+    subtitle:"Elective aortic aneurysm repair · EF 35% · Cr 180 µmol/L · RCRI?",
+    content:[
+      {type:"label",text:"📋 Pre-op findings:"},
+      {type:"item",icon:"▸",col:"#fca5a5",text:"EF 35% on echo — moderate LV dysfunction"},
+      {type:"item",icon:"▸",col:"#fca5a5",text:"Creatinine 180 µmol/L — CKD stage 3"},
+      {type:"item",icon:"▸",col:"#fca5a5",text:"Elective major vascular surgery"},
+      {type:"item",icon:"▸",col:"#fca5a5",text:"On ramipril, beta-blocker, aspirin"},
+      {type:"label",text:"⚖️ RCRI Calculation:"}
+    ],
+    table:{
+      headers:["RCRI Variable","Present?","Points"],
+      rows:[
+        ["High-risk surgery (vascular/intrathoracic)","✓","1"],
+        ["Ischaemic heart disease","Assumed — check","1"],
+        ["Congestive heart failure","EF 35% → YES","1"],
+        ["Cerebrovascular disease","Check history","0"],
+        ["Diabetes on insulin","Check","0"],
+        ["Creatinine >177 µmol/L (2.0 mg/dL)","180 µmol/L → YES","1"]
+      ]
+    },
+    content2:[
+      {type:"item",icon:"▸",col:"#f87171",text:"Minimum RCRI score: 3 → HIGH cardiac risk (>5% MACE risk). If IHD also present → score 4."}
+    ],
+    pearl:"RCRI ≥3 = major adverse cardiac event risk >5%. This patient should NOT go to theatre today on the SHO's say-so. Formal cardiology review, echo optimisation, and possibly stress testing are required first.",
+    options:[
+      {label:"Continue to Induction Strategy →",next:"induction"},
+      {label:"View RCRI Reference Table →",next:"rcri_table"}
+    ]
+  },
+
+  rcri_table:{
+    color:"#60a5fa", type:"reference",
+    text:"RCRI — Lee Index (1999)",
+    subtitle:"Revised Cardiac Risk Index · Lee et al., Circulation 1999",
+    content:[
+      {type:"label",text:"📊 Six variables — 1 point each:"},
+      {type:"step",n:1,text:"High-risk surgery — intraperitoneal, intrathoracic, suprainguinal vascular"},
+      {type:"step",n:2,text:"History of ischaemic heart disease — prior MI, angina, positive stress test, nitrates"},
+      {type:"step",n:3,text:"History of congestive heart failure"},
+      {type:"step",n:4,text:"History of cerebrovascular disease — stroke or TIA"},
+      {type:"step",n:5,text:"Diabetes mellitus requiring insulin"},
+      {type:"step",n:6,text:"Creatinine >177 µmol/L (2.0 mg/dL)"}
+    ],
+    fact_grid:[
+      {label:"Score 0",value:"0.4% MACE",color:"#4ade80",border:"#4ade80"},
+      {label:"Score 1",value:"0.9% MACE",color:"#4ade80",border:"#4ade80"},
+      {label:"Score 2",value:"6.6% MACE",color:"#fbbf24",border:"#fbbf24"},
+      {label:"Score ≥3",value:">11% MACE",color:"#f87171",border:"#f87171"}
+    ],
+    content2:[
+      {type:"item",icon:"⚠",col:"#f87171",text:"Age is NOT a variable — common exam error"},
+      {type:"item",icon:"⚠",col:"#f87171",text:"Valvular disease is NOT a variable — that's the older Goldman index (1977)"}
+    ],
+    pearl:"MACE = Major Adverse Cardiac Event (MI, cardiac death, non-fatal cardiac arrest). Score ≥3 warrants cardiology review before elective major surgery.",
+    options:[{label:"Continue to Induction →",next:"induction"}]
+  },
+
+  induction:{
+    color:"#dc2626", type:"critical",
+    text:"INDUCTION — EF 35% + Ramipril + CKD",
+    subtitle:"Simultaneous cardiac and renal protection required",
+    content:[
+      {type:"label",text:"💉 ACE Inhibitor on day of surgery:"},
+      {type:"item",icon:"▸",col:"#f87171",text:"Ramipril on day of surgery → HOLD. VISION trial: ACEi morning of major surgery → increased intraoperative hypotension + AKI. Stop 24h before."},
+      {type:"label",text:"🎯 Haemodynamic targets — two systems simultaneously:"},
+      {type:"item",icon:"▸",col:"#fbbf24",text:"CARDIAC: MAP >70 mmHg — maintain coronary perfusion pressure. EF 35% → low reserve, cannot tolerate hypotension. Target HR 50–70 — tachycardia = disaster (↑demand, ↓diastolic filling)."},
+      {type:"item",icon:"▸",col:"#60a5fa",text:"RENAL: MAP >70 mmHg — renal autoregulation impaired in CKD. Avoid NSAIDS, nephrotoxic drugs. Monitor UO 0.5ml/kg/hr minimum. Avoid hyperchloraemic acidosis (saline) — use Plasma-Lyte or RL."},
+      {type:"label",text:"💉 Induction agents — EF 35%:"},
+      {type:"item",icon:"▸",col:"#fca5a5",text:"Avoid propofol at full dose — vasodilation + negative inotropy = catastrophic in low EF. Use ketamine (sympathomimetic) or etomidate (most haemodynamically stable) at 30–50% doses."},
+      {type:"item",icon:"▸",col:"#fca5a5",text:"Etomidate: most haemodynamically stable induction agent. Caution: single dose suppresses adrenocortical axis 24–48h. Acceptable trade-off in high cardiac risk."},
+      {type:"item",icon:"▸",col:"#86efac",text:"Have vasopressor drawn before induction. Phenylephrine for hypotension — but if bradycardic add noradrenaline. Vasopressin if ACEi-refractory hypotension."}
+    ],
+    pearl:"VISION trial (Devereaux, Lancet 2012): ACEi/ARB on morning of surgery increased risk of intraoperative hypotension AND postoperative AKI. Hold ACEi 24h before major surgery unless stopping creates rebound haemodynamic instability (severe HF).",
+    options:[
+      {label:"ST Depression Develops on ECG →",next:"st_depression"},
+      {label:"Proceed to monitoring setup →",next:"monitoring"}
+    ]
+  },
+
+  monitoring:{
+    color:"#8b5cf6", type:"info",
+    text:"MONITORING — HIGH CARDIAC RISK",
+    subtitle:"5-lead ECG + TOE = gold standard for intraoperative ischaemia detection",
+    content:[
+      {type:"label",text:"📡 Minimum standard monitoring:"},
+      {type:"step",n:1,text:"Arterial line — radial, non-dominant. Beat-to-beat BP, continuous waveform, ABG access. Place BEFORE induction."},
+      {type:"step",n:2,text:"5-lead ECG with ST monitoring — leads II + V5 detect 95% of intraoperative ischaemia (Kaplan & Thys). V5 alone detects ~75%."},
+      {type:"step",n:3,text:"SpO₂, EtCO₂, Temperature, UO via urinary catheter"},
+      {type:"step",n:4,text:"TOE (Transoesophageal Echo) — detects regional wall motion abnormalities BEFORE ST changes appear on ECG. Earliest sign of myocardial ischaemia. Gold standard in high-risk cardiac surgery."},
+      {type:"label",text:"🩺 PPV validity in this patient:"},
+      {type:"item",icon:"▸",col:"#fbbf24",text:"PPV valid if: fully mechanically ventilated, sinus rhythm, TV >8ml/kg, no spontaneous breaths, closed chest."},
+      {type:"item",icon:"▸",col:"#f87171",text:"PPV invalid: open chest/abdomen, arrhythmia, spontaneous breathing, low TV (lung protective). Use EEOT or PLR + EtCO₂ instead."}
+    ],
+    pearl:"TOE wall motion abnormality precedes ST changes by 1–2 minutes in experimental coronary occlusion. In high-risk cases, TOE is not optional — it's the earliest warning system you have.",
+    options:[{label:"ST Depression Develops →",next:"st_depression"}]
+  },
+
+  st_depression:{
+    color:"#f43f5e", type:"emergency",
+    text:"NEW ST DEPRESSION — INTRAOPERATIVELY",
+    subtitle:"Demand ischaemia vs supply ischaemia — assess before deciding",
+    content:[
+      {type:"label",text:"🔍 Decision framework — cause + response = action:"},
+      {type:"item",icon:"▸",col:"#fbbf24",text:"Is this DEMAND ischaemia? Tachycardia + hypotension at induction → ↑O₂ demand + ↓coronary perfusion → subendocardial ischaemia. Potentially reversible."},
+      {type:"item",icon:"▸",col:"#f87171",text:"Is this SUPPLY ischaemia? Coronary plaque rupture, thrombosis → fixed obstruction. Won't resolve with haemodynamic correction."},
+      {type:"label",text:"⚡ Immediate management:"},
+      {type:"step",n:1,text:"FiO₂ to 100%"},
+      {type:"step",n:2,text:"Treat hypotension → vasopressor (noradrenaline)"},
+      {type:"step",n:3,text:"Treat tachycardia → esmolol 0.5mg/kg (short-acting, titratable, reversible). NOT metoprolol — too long-acting in an unstable patient"},
+      {type:"step",n:4,text:"Deepen anaesthesia carefully — reduces sympathetic drive"},
+      {type:"step",n:5,text:"Check TOE — new wall motion abnormality = supply ischaemia until proven otherwise"},
+      {type:"label",text:"✅ Decision:"},
+      {type:"item",icon:"▸",col:"#86efac",text:"ST normalises with haemodynamic correction → demand ischaemia, cautiously proceed with heightened vigilance"},
+      {type:"item",icon:"▸",col:"#f87171",text:"ST worsens or persists → ABORT. Wake patient, transfer to CCU, cardiology review. Do not proceed into 3-hour major surgery with evolving ischaemia."}
+    ],
+    pearl:"The decision to proceed is dynamic — it's not binary. Respond to treatment first, then decide. An anaesthetist who proceeds blindly with worsening ST in a 3-hour case is making a potentially fatal error.",
+    options:[
+      {label:"VF Arrest Occurs →",next:"vf_arrest"},
+      {label:"New LBBB develops →",next:"lbbb"}
+    ]
+  },
+
+  vf_arrest:{
+    color:"#dc2626", type:"emergency",
+    text:"INTRAOPERATIVE VF ARREST",
+    subtitle:"What's different from out-of-hospital cardiac arrest?",
+    content:[
+      {type:"label",text:"⚡ Key differences from standard ACLS:"},
+      {type:"item",icon:"▸",col:"#f87171",text:"DEFIBRILLATE IMMEDIATELY — you SEE VF the moment it starts on the monitor. No 2 minutes CPR first. Every second of VF without shock reduces survival by ~10%."},
+      {type:"item",icon:"▸",col:"#fbbf24",text:"Identify reversible intraoperative causes — 4Hs: hypoxia, hypovolaemia, hyperkalaemia (blood products), hypothermia. 4Ts: tension PTX, tamponade, thrombosis (PE/coronary), toxins (anaesthetic overdose)."},
+      {type:"item",icon:"▸",col:"#60a5fa",text:"Open chest → internal cardiac massage immediately — 3× better cardiac output than external CPR."},
+      {type:"item",icon:"▸",col:"#86efac",text:"Stop all volatile agents — myocardial depressant. Switch to TIVA (propofol + ketamine)."},
+      {type:"item",icon:"▸",col:"#fca5a5",text:"Vasopressin 1 unit IV or adrenaline 1mg IV — standard ACLS drugs. Consider calcium (2.5–5ml 10% CaCl₂) if massive transfusion preceding arrest."}
+    ],
+    pearl:"In the OR you have a massive advantage over out-of-hospital arrest: you know the rhythm immediately, you have IV access already, you have drugs drawn, and the defibrillator is in the room. Use that advantage — shock first, identify cause, fix it.",
+    options:[{label:"ROSC achieved → New LBBB →",next:"lbbb"}]
+  },
+
+  lbbb:{
+    color:"#f59e0b", type:"critical",
+    text:"NEW LBBB POST-ARREST — SGARBOSSA CRITERIA",
+    subtitle:"New LBBB = STEMI equivalent until proven otherwise",
+    content:[
+      {type:"label",text:"📊 Sgarbossa Criteria (NEJM 1996) — MI diagnosis in LBBB:"},
+      {type:"step",n:1,text:"ST elevation ≥1mm CONCORDANT with QRS (same direction) — most specific. Score 5. Alone is diagnostic."},
+      {type:"step",n:2,text:"ST depression ≥1mm in V1–V3 — score 3."},
+      {type:"step",n:3,text:"ST elevation ≥5mm DISCORDANT with QRS (opposite direction) — score 2."},
+      {type:"item",icon:"▸",col:"#f87171",text:"Score ≥3 = high probability of acute MI"},
+      {type:"item",icon:"▸",col:"#fbbf24",text:"Modified Sgarbossa (Smith): ST/S wave ratio >0.25 (excessively discordant) — more sensitive than absolute 5mm"},
+      {type:"label",text:"⚡ Next 5 minutes:"},
+      {type:"step",n:1,text:"Call for help — senior anaesthetist, cardiologist, activate cath lab"},
+      {type:"step",n:2,text:"12-lead ECG — document, apply Sgarbossa formally"},
+      {type:"step",n:3,text:"Stabilise haemodynamics — vasopressor, MAP >70"},
+      {type:"step",n:4,text:"Hb target 10 g/dL — MINT trial 2023: liberal strategy reduces 30-day mortality in ACS"},
+      {type:"step",n:5,text:"PPCI activation — door-to-balloon target <90 minutes"}
+    ],
+    pearl:"MINT trial (Ducrocq, NEJM 2023): In ACS patients, liberal transfusion strategy (Hb >10) reduced 30-day all-cause mortality vs restrictive (Hb >8). This reverses the general restrictive rule for cardiac patients specifically.",
+    options:[{label:"Open Abdomen + PPCI Dilemma →",next:"dilemma"}]
+  },
+
+  dilemma:{
+    color:"#10b981", type:"dilemma",
+    text:"THE HARDEST QUESTION — Open Abdomen + PPCI",
+    subtitle:"Haemorrhage control vs myocardial reperfusion — competing urgencies",
+    content:[
+      {type:"label",text:"⚖️ Two sides of the dilemma:"},
+      {type:"item",icon:"▸",col:"#f87171",text:"CATH LAB FIRST risk: anticoagulation (heparin + antiplatelet for PPCI) + open abdomen = catastrophic haemorrhage. Uncontrolled bleeding will kill the patient during the procedure."},
+      {type:"item",icon:"▸",col:"#60a5fa",text:"DELAY TO CATH LAB risk: every 30 minutes of continued coronary occlusion = loss of ~120 million cardiomyocytes. Extended delay worsens long-term cardiac function irreversibly."},
+      {type:"label",text:"✅ The correct answer — Damage Control Cardiac:"},
+      {type:"step",n:1,text:"Ask surgeon to pack and temporary closure (Bogota bag / VAC) — same principles as abdominal DCL"},
+      {type:"step",n:2,text:"Transfer to cath lab with open abdomen if haemorrhage controlled"},
+      {type:"step",n:3,text:"Minimise anticoagulation during PPCI — use bivalirudin (shorter half-life than heparin) where possible"},
+      {type:"step",n:4,text:"RETURN to theatre for definitive closure after PPCI when coagulopathy corrected"},
+      {type:"label",text:"🌉 Bridge while organising cath lab:"},
+      {type:"item",icon:"▸",col:"#fbbf24",text:"Vasopressors — maintain MAP >70 for coronary perfusion"},
+      {type:"item",icon:"▸",col:"#fbbf24",text:"Esmolol for tachycardia if haemodynamically tolerated — NOT propranolol or metoprolol"},
+      {type:"item",icon:"▸",col:"#fbbf24",text:"TOE — monitor LV function real-time"},
+      {type:"item",icon:"▸",col:"#fbbf24",text:"FiO₂ 100%, Hb 10 g/dL target"},
+      {type:"item",icon:"▸",col:"#fbbf24",text:"Do NOT give beta-blocker if haemodynamically unstable post-arrest"}
+    ],
+    pearl:"This scenario has no clean answer in guidelines. The principle is damage control applied to the cardiac situation — control what's immediately lethal (haemorrhage), then address what's causing delayed mortality (coronary occlusion). Same logic as DCL + definitive surgery in two stages.",
+    options:[{label:"🔄 Restart Algorithm",next:"start",restart:true}]
+  }
+};
+
+let history=[], current="start";
+
+function rc(content){
+  let h='';
+  content.forEach(c=>{
+    if(c.type==="label") h+=`<div class="section-lbl">${c.text}</div>`;
+    else if(c.type==="item") h+=`<div class="item"><span style="color:${c.col}">${c.icon}</span><span>${c.text}</span></div>`;
+    else if(c.type==="step") h+=`<div class="step-item"><span class="snum">${c.n}</span><span>${c.text}</span></div>`;
+  });
+  return h;
+}
+
+function rt(table){
+  let h=`<table class="t"><tr>`;
+  table.headers.forEach(hh=>h+=`<th>${hh}</th>`);
+  h+=`</tr>`;
+  table.rows.forEach(row=>{h+=`<tr>`;row.forEach(cell=>h+=`<td>${cell}</td>`);h+=`</tr>`;});
+  h+=`</table>`;
+  return h;
+}
+
+function render(){
+  const n=nodes[current], app=document.getElementById('app'), bc=n.color;
+  let h=`<div class="card" style="border-color:${bc}">`;
+  h+=`<div class="badge" style="border-color:${bc};color:${bc}">${n.type}</div>`;
+  h+=`<h2 style="color:${bc}">${n.text}</h2>`;
+  if(n.subtitle) h+=`<div class="subtitle">${n.subtitle}</div>`;
+  if(n.content) h+=rc(n.content);
+  if(n.table) h+=rt(n.table);
+  if(n.content2) h+=rc(n.content2);
+  if(n.fact_grid){
+    h+=`<div class="fact-grid">`;
+    n.fact_grid.forEach(f=>h+=`<div class="fact-box" style="border-color:${f.border}"><div class="fact-lbl" style="color:${f.color}">${f.label}</div><div class="fact-val" style="color:${f.color}">${f.value}</div></div>`);
+    h+=`</div>`;
+  }
+  if(n.pearl) h+=`<div class="pearl" style="border-color:${bc};background:${bc}11"><div class="pearl-lbl" style="color:${bc}">💡 Key Concept</div><p>${n.pearl}</p></div>`;
+  h+=`</div>`;
+  h+=`<div class="options">`;
+  n.options.forEach(opt=>{
+    let cls='btn-default';
+    if(opt.style==='red') cls='btn-red';
+    else if(opt.style==='green') cls='btn-green';
+    else if(opt.style==='amber') cls='btn-amber';
+    else if(opt.style==='blue') cls='btn-blue';
+    h+=`<button class="opt-btn ${cls}" onclick="goTo('${opt.next}',${!!opt.restart})">${opt.label}</button>`;
+  });
+  h+=`</div>`;
+  h+=`<div class="nav">`;
+  if(history.length>0) h+=`<button class="nav-btn btn-back" onclick="goBack()">← Back</button>`;
+  h+=`<button class="nav-btn btn-restart" onclick="restartAlgo()">⟲ Restart</button></div>`;
+  app.innerHTML=h;
+  renderBC();
+}
+
+function renderBC(){
+  const bc=document.getElementById('breadcrumb');
+  let h='';
+  [...history,current].forEach(k=>h+=`<span class="crumb">${nodes[k].text.split(' ').slice(0,3).join(' ')}</span>`);
+  bc.innerHTML=h;
+}
+
+function goTo(k,isR){
+  if(isR){restartAlgo();return;}
+  history.push(current);current=k;window.scrollTo(0,0);render();
+}
+function goBack(){if(history.length>0){current=history.pop();window.scrollTo(0,0);render();}}
+function restartAlgo(){history=[];current='start';window.scrollTo(0,0);render();}
+
+// =================== QUIZ ===================
+const questions=[
+  {
+    q:"RCRI score ≥3 corresponds to what approximate MACE risk?",
+    opts:["<1%","2-3%",">5-11%","20-30%"],
+    ans:2,
+    explain:"RCRI ≥3 corresponds to >5-11% MACE risk. Lee et al., Circulation 1999. This is the threshold for mandatory cardiology review before elective major surgery."
+  },
+  {
+    q:"Which of the following is NOT a variable in the RCRI (Lee Index)?",
+    opts:["Age >70","High-risk surgery","History of heart failure","Creatinine >177 µmol/L"],
+    ans:0,
+    explain:"Age is NOT an RCRI variable — a very common exam error. The 6 variables are: high-risk surgery, IHD, CCF, CVD, insulin-dependent DM, and creatinine >177 µmol/L. Age was in the older Goldman index (1977) but not the RCRI."
+  },
+  {
+    q:"HPV is triggered by which of the following?",
+    opts:["Arterial PaO₂ <8 kPa","Alveolar PAO₂ (local)","Mixed venous PO₂","Systemic hypercapnia"],
+    ans:1,
+    explain:"HPV is triggered by LOCAL ALVEOLAR PAO₂ — not arterial PaO₂. The sensor is pulmonary vascular smooth muscle responding to alveolar oxygen tension. This distinction is a classic FNB examiner trap."
+  },
+  {
+    q:"The MINT trial (2023) changed transfusion strategy in which specific patient group?",
+    opts:["Paediatric trauma","Septic shock","Acute coronary syndrome","Post-cardiac surgery"],
+    ans:2,
+    explain:"MINT trial (Ducrocq, NEJM 2023): In ACS patients, liberal transfusion (Hb >10 g/dL) reduced 30-day mortality compared to restrictive (Hb >8). This reverses the general 'restrictive is best' rule for cardiac patients."
+  },
+  {
+    q:"Most specific Sgarbossa criterion for MI in LBBB:",
+    opts:["ST elevation >5mm discordant","ST depression V1-V3 >1mm","ST elevation ≥1mm CONCORDANT with QRS","New T-wave inversion"],
+    ans:2,
+    explain:"Concordant ST elevation ≥1mm (same direction as QRS) scores 5 points and is the most specific Sgarbossa criterion — alone it is essentially diagnostic of acute MI in LBBB. Discordant ST elevation >5mm (score 2) is less specific."
+  },
+  {
+    q:"An end-expiratory occlusion test (EEOT) is invalidated by:",
+    opts:["Low tidal volumes","Any spontaneous respiratory effort","Arterial line placement","High heart rate"],
+    ans:1,
+    explain:"Spontaneous respiratory effort generates negative intrathoracic pressure, increasing venous return and mimicking the preload effect the EEOT is trying to detect — making it uninterpretable. The patient must be fully passive on the ventilator."
+  },
+  {
+    q:"CVP is unreliable in abdominal trauma because:",
+    opts:["Blood loss reduces it unpredictably","Raised IAP transmits to IVC, falsely elevating CVP","Trauma activates RAAS raising CVP","Hypothermia increases cardiac compliance"],
+    ans:1,
+    explain:"Haemoperitoneum → raised intraabdominal pressure → transmitted to IVC → mechanically elevates CVP independent of true right heart filling. A 'normal' or 'high' CVP in abdominal trauma can coexist with severe hypovolaemia — treating it would be dangerous."
+  },
+  {
+    q:"The VISION trial showed ACE inhibitors on morning of surgery cause:",
+    opts:["Reduced AKI risk","Increased SVR and hypertension","Increased intraoperative hypotension and AKI","Reduced 30-day mortality"],
+    ans:2,
+    explain:"VISION trial (Devereaux, Lancet 2012): ACEi/ARB taken on morning of major non-cardiac surgery significantly increased intraoperative hypotension and postoperative AKI. Current guidance: hold ACEi 24h before elective major surgery."
+  }
+];
+
+let qIdx=0, score=0, answered=false;
+
+function renderQuiz(){
+  const qa=document.getElementById('quiz-app');
+  if(qIdx>=questions.length){
+    const pct=Math.round(score/questions.length*100);
+    let msg=pct>=80?"Distinction level — strong.":pct>=60?"Pass level — review the misses.":"Below pass — restudy the mechanisms.";
+    qa.innerHTML=`<div class="quiz-score">
+      <div class="s-num">${score}/${questions.length}</div>
+      <div class="s-label">Final Score · ${pct}%</div>
+      <div class="s-msg">${msg}</div>
+    </div>
+    <div class="options">
+      <button class="opt-btn btn-amber" onclick="restartQuiz()">🔄 Restart Quiz</button>
+      <button class="opt-btn btn-default" onclick="switchMode('algo')">📋 Back to Algorithm</button>
+    </div>`;
+    return;
+  }
+  const q=questions[qIdx];
+  let h=`<div class="quiz-q"><div class="q-num">Question ${qIdx+1} of ${questions.length}</div><div class="q-text">${q.q}</div></div>`;
+  h+=`<div class="quiz-opts">`;
+  q.opts.forEach((opt,i)=>{
+    h+=`<button class="quiz-opt" id="qopt-${i}" onclick="answerQ(${i})">${String.fromCharCode(65+i)}. ${opt}</button>`;
+  });
+  h+=`</div><div id="quiz-explain" style="display:none"></div>`;
+  h+=`<div id="quiz-next" style="display:none"><div class="options"><button class="opt-btn btn-amber" onclick="nextQ()">Next Question →</button></div></div>`;
+  qa.innerHTML=h;
+  answered=false;
+}
+
+function answerQ(i){
+  if(answered) return;
+  answered=true;
+  const q=questions[qIdx];
+  const opts=document.querySelectorAll('.quiz-opt');
+  opts.forEach((btn,idx)=>{
+    btn.disabled=true;
+    if(idx===q.ans) btn.classList.add('correct');
+    else if(idx===i && i!==q.ans) btn.classList.add('wrong');
+  });
+  if(i===q.ans) score++;
+  const exp=document.getElementById('quiz-explain');
+  exp.innerHTML=`<b>${i===q.ans?'✓ Correct':'✗ Incorrect'} — </b>${q.explain}`;
+  exp.style.display='block';
+  document.getElementById('quiz-next').style.display='block';
+}
+
+function nextQ(){qIdx++;renderQuiz();}
+function restartQuiz(){qIdx=0;score=0;answered=false;renderQuiz();}
+
+function switchMode(mode){
+  const algoEl=document.getElementById('algo-mode');
+  const quizEl=document.getElementById('quiz-mode');
+  const btnA=document.getElementById('btn-algo');
+  const btnQ=document.getElementById('btn-quiz');
+  if(mode==='algo'){
+    algoEl.style.display='block';quizEl.style.display='none';
+    btnA.className='mode-btn mode-active';btnQ.className='mode-btn mode-inactive';
+  } else {
+    algoEl.style.display='none';quizEl.style.display='block';
+    btnQ.className='mode-btn mode-active';btnA.className='mode-btn mode-inactive';
+    renderQuiz();
+  }
+}
+
+render();
+</script>
+</body>
+</html>

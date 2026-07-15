@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAST / eFAST | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#22d3ee;border-color:#22d3ee;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.2rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;color:#22d3ee;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.cyan{color:#22d3ee;} .red{color:#f87171;} .green{color:#4ade80;} .amber{color:#fbbf24;} .blue{color:#60a5fa;}
+
+/* Body schematic */
+.body-map{display:flex;justify-content:center;margin:16px 0;padding:20px;background:#0a0a18;border-radius:10px;border:1px solid #2d2d42;}
+.torso{position:relative;width:150px;height:280px;}
+.torso-body{position:absolute;left:35px;top:40px;width:80px;height:180px;background:#1a1a35;border:2px solid #374151;border-radius:30px 30px 20px 20px;}
+.torso-head{position:absolute;left:57px;top:0;width:36px;height:40px;background:#1a1a35;border:2px solid #374151;border-radius:50%;}
+.torso-leg{position:absolute;top:215px;width:28px;height:60px;background:#1a1a35;border:2px solid #374151;border-radius:8px;}
+.leg-l{left:45px;} .leg-r{left:77px;}
+.probe{position:absolute;width:20px;height:20px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:900;cursor:pointer;background:#0d0d1a;}
+.p1{left:65px;top:52px;border-color:#f87171;color:#f87171;}
+.p2{left:30px;top:95px;border-color:#fbbf24;color:#fbbf24;}
+.p3{left:100px;top:95px;border-color:#4ade80;color:#4ade80;}
+.p4{left:65px;top:150px;border-color:#60a5fa;color:#60a5fa;}
+.pl{left:20px;top:130px;border-color:#22d3ee;color:#22d3ee;}
+.pr{left:110px;top:130px;border-color:#22d3ee;color:#22d3ee;}
+.map-legend{font-size:.58rem;color:#9ca3af;margin-top:12px;line-height:1.8;}
+
+/* View cards */
+.view-card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;margin-bottom:10px;border-left:4px solid;}
+.view-head{padding:10px 14px;display:flex;align-items:center;gap:10px;}
+.view-num{font-size:1.1rem;font-weight:900;}
+.view-name{font-size:.75rem;font-weight:900;color:#f3f4f6;letter-spacing:.04em;text-transform:uppercase;}
+.view-body{background:#0a0a18;padding:10px 14px;}
+.view-row{font-size:.66rem;color:#c5c9d6;line-height:1.6;padding:4px 0;border-bottom:1px solid #1a1a30;}
+.view-row:last-child{border-bottom:none;}
+.view-row b{color:#f3f4f6;}
+
+/* Decision flowchart */
+.flow{margin-bottom:12px;}
+.flow-node{background:#14142a;border:2px solid;border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.flow-q{font-size:.72rem;font-weight:900;color:#f3f4f6;margin-bottom:8px;}
+.flow-branches{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.flow-branch{border-radius:8px;padding:10px;font-size:.65rem;line-height:1.5;}
+.flow-branch b{display:block;font-size:.68rem;margin-bottom:3px;}
+
+/* Limitations grid */
+.lim-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.lim-item{background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;}
+.lim-title{font-size:.66rem;font-weight:900;color:#f87171;margin-bottom:3px;}
+.lim-body{font-size:.62rem;color:#a3a8b8;line-height:1.5;}
+
+/* eFAST callout */
+.callout{background:rgba(34,211,238,.06);border:1px solid #22d3ee;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#22d3ee;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+
+/* Pearl */
+.pearl{background:#14142a;border-left:3px solid #22d3ee;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#22d3ee;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="home-btn" href="index.html">☥ Home</a>
+
+  <div class="header">
+    <div class="icon">📡</div>
+    <h1>FAST / eFAST</h1>
+    <div class="sub">Focused Assessment with Sonography for Trauma</div>
+  </div>
+
+  <!-- DEFINITION -->
+  <div class="section">
+    <p class="section-title">📖 Definition</p>
+    <div class="card">
+      <div class="card-body">
+        <b>FAST</b> = Focused Assessment with Sonography for Trauma. A rapid bedside ultrasound to detect <b>free fluid</b> (assumed to be blood in trauma) in the peritoneal cavity and pericardium. <b>eFAST</b> (extended) adds bilateral thoracic views for pneumothorax and haemothorax. It answers one question fast: <b>is there free fluid where there shouldn't be?</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY MAP -->
+  <div class="section">
+    <p class="section-title">🎯 Probe Positions</p>
+    <div class="body-map">
+      <svg viewBox="0 0 320 380" width="100%" style="max-width:340px;">
+        <!-- Body outline -->
+        <path d="M160 20
+          C176 20 188 32 188 48
+          C188 60 182 68 178 72
+          C196 76 210 84 214 104
+          L222 168
+          C224 180 216 186 208 182
+          L200 150
+          L198 210
+          C198 230 202 250 200 280
+          C199 300 202 320 200 350
+          C199 362 188 364 184 352
+          L172 250
+          L160 250
+          L148 352
+          C144 364 133 362 132 350
+          C130 320 133 300 132 280
+          C130 250 134 230 134 210
+          L132 150
+          L124 182
+          C116 186 108 180 110 168
+          L118 104
+          C122 84 136 76 154 72
+          C150 68 144 60 144 48
+          C144 32 156 20 160 20 Z"
+          fill="#171730" stroke="#3d3d5c" stroke-width="2"/>
+        <!-- Ribcage hint -->
+        <path d="M138 110 Q160 122 182 110" fill="none" stroke="#2d2d48" stroke-width="1.5"/>
+        <path d="M136 124 Q160 138 184 124" fill="none" stroke="#2d2d48" stroke-width="1.5"/>
+        <path d="M135 138 Q160 152 185 138" fill="none" stroke="#2d2d48" stroke-width="1.5"/>
+        <!-- midline -->
+        <line x1="160" y1="90" x2="160" y2="210" stroke="#2d2d48" stroke-width="1" stroke-dasharray="3,3"/>
+
+        <!-- Probe 1: Subxiphoid -->
+        <circle cx="160" cy="150" r="13" fill="#0d0d1a" stroke="#f87171" stroke-width="2.5"/>
+        <text x="160" y="155" font-size="13" font-weight="bold" fill="#f87171" text-anchor="middle" font-family="Courier New">1</text>
+
+        <!-- Probe 2: Right hepatorenal (patient's right = image left) -->
+        <circle cx="120" cy="165" r="13" fill="#0d0d1a" stroke="#fbbf24" stroke-width="2.5"/>
+        <text x="120" y="170" font-size="13" font-weight="bold" fill="#fbbf24" text-anchor="middle" font-family="Courier New">2</text>
+
+        <!-- Probe 3: Left perisplenic (patient's left = image right) -->
+        <circle cx="200" cy="160" r="13" fill="#0d0d1a" stroke="#4ade80" stroke-width="2.5"/>
+        <text x="200" y="165" font-size="13" font-weight="bold" fill="#4ade80" text-anchor="middle" font-family="Courier New">3</text>
+
+        <!-- Probe 4: Suprapubic -->
+        <circle cx="160" cy="205" r="13" fill="#0d0d1a" stroke="#60a5fa" stroke-width="2.5"/>
+        <text x="160" y="210" font-size="13" font-weight="bold" fill="#60a5fa" text-anchor="middle" font-family="Courier New">4</text>
+
+        <!-- Thoracic T left -->
+        <circle cx="118" cy="128" r="11" fill="#0d0d1a" stroke="#22d3ee" stroke-width="2.5"/>
+        <text x="118" y="132" font-size="11" font-weight="bold" fill="#22d3ee" text-anchor="middle" font-family="Courier New">T</text>
+        <!-- Thoracic T right -->
+        <circle cx="202" cy="128" r="11" fill="#0d0d1a" stroke="#22d3ee" stroke-width="2.5"/>
+        <text x="202" y="132" font-size="11" font-weight="bold" fill="#22d3ee" text-anchor="middle" font-family="Courier New">T</text>
+
+        <!-- R / L body markers -->
+        <text x="95" y="105" font-size="10" fill="#6b7280" font-family="Courier New" font-weight="bold">R</text>
+        <text x="222" y="105" font-size="10" fill="#6b7280" font-family="Courier New" font-weight="bold">L</text>
+      </svg>
+    </div>
+    <div class="map-legend">
+      <span style="color:#f87171;">● 1 Subxiphoid (pericardium)</span><br>
+      <span style="color:#fbbf24;">● 2 Right hepatorenal (Morison's pouch)</span><br>
+      <span style="color:#4ade80;">● 3 Left perisplenic</span><br>
+      <span style="color:#60a5fa;">● 4 Suprapubic (pouch of Douglas)</span><br>
+      <span style="color:#22d3ee;">● T Thoracic views — eFAST extension</span>
+    </div>
+  </div>
+
+  <!-- THE VIEWS -->
+  <div class="section">
+    <p class="section-title">🔍 The Four Core Views + Thoracic</p>
+
+    <div class="view-card" style="border-left-color:#f87171;">
+      <div class="view-head"><span class="view-num" style="color:#f87171;">1</span><span class="view-name">Subxiphoid / Pericardial</span></div>
+      <div class="view-body">
+        <div class="view-row"><b>Looks for:</b> Pericardial effusion, cardiac tamponade</div>
+        <div class="view-row"><b>Window:</b> Probe under xiphisternum, angled up toward left shoulder — four-chamber cardiac view</div>
+        <div class="view-row"><b>Positive:</b> Anechoic (black) stripe around the heart within the pericardium</div>
+      </div>
+    </div>
+
+    <div class="view-card" style="border-left-color:#fbbf24;">
+      <div class="view-head"><span class="view-num" style="color:#fbbf24;">2</span><span class="view-name">Right Hepatorenal — Morison's Pouch</span></div>
+      <div class="view-body">
+        <div class="view-row"><b>Looks for:</b> Free intraperitoneal blood</div>
+        <div class="view-row"><b>Window:</b> Right mid-axillary line, between liver and right kidney</div>
+        <div class="view-row"><b>KEY:</b> Most dependent part of peritoneal cavity in a supine patient — blood pools here FIRST. Highest-yield single view.</div>
+        <div class="view-row"><b>Positive:</b> Anechoic stripe between liver and kidney (hepatorenal recess)</div>
+      </div>
+    </div>
+
+    <div class="view-card" style="border-left-color:#4ade80;">
+      <div class="view-head"><span class="view-num" style="color:#4ade80;">3</span><span class="view-name">Left Perisplenic</span></div>
+      <div class="view-body">
+        <div class="view-row"><b>Looks for:</b> Free blood between spleen and diaphragm / splenorenal recess</div>
+        <div class="view-row"><b>Window:</b> Left posterior axillary line — "knuckles to the bed", probe more posterior and superior than the right</div>
+        <div class="view-row"><b>Positive:</b> Anechoic stripe above spleen (subphrenic) or splenorenal space</div>
+      </div>
+    </div>
+
+    <div class="view-card" style="border-left-color:#60a5fa;">
+      <div class="view-head"><span class="view-num" style="color:#60a5fa;">4</span><span class="view-name">Suprapubic / Pelvic</span></div>
+      <div class="view-body">
+        <div class="view-row"><b>Looks for:</b> Free blood in most dependent pelvic recess</div>
+        <div class="view-row"><b>Window:</b> Above pubic symphysis, bladder as acoustic window</div>
+        <div class="view-row"><b>Male:</b> Rectovesical pouch &nbsp;·&nbsp; <b>Female:</b> Rectouterine pouch of Douglas</div>
+        <div class="view-row"><b>Positive:</b> Anechoic fluid posterior to bladder</div>
+      </div>
+    </div>
+
+    <div class="view-card" style="border-left-color:#22d3ee;">
+      <div class="view-head"><span class="view-num" style="color:#22d3ee;">T</span><span class="view-name">Thoracic — eFAST Extension</span></div>
+      <div class="view-body">
+        <div class="view-row"><b>Pneumothorax:</b> Loss of lung sliding, absent comet-tail artefacts, "barcode/stratosphere sign" on M-mode (vs normal "seashore sign")</div>
+        <div class="view-row"><b>Haemothorax:</b> Anechoic fluid above the diaphragm at the lung bases</div>
+        <div class="view-row"><b>Why it matters:</b> Catches immediately life-threatening chest pathology basic FAST misses. Always mention eFAST in a viva.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DECISION -->
+  <div class="section">
+    <p class="section-title">🔀 FAST Result → Decision</p>
+    <div class="flow">
+      <div class="flow-node" style="border-color:#f87171;">
+        <div class="flow-q">Positive FAST — is the patient haemodynamically stable?</div>
+        <div class="flow-branches">
+          <div class="flow-branch" style="background:rgba(248,113,113,.1);color:#fca5a5;">
+            <b>UNSTABLE</b>Straight to theatre → laparotomy. NO CT — cannot safely scan a crashing patient.
+          </div>
+          <div class="flow-branch" style="background:rgba(74,222,128,.1);color:#86efac;">
+            <b>STABLE</b>CT with contrast → characterise & grade injury, plan definitive management.
+          </div>
+        </div>
+      </div>
+      <div class="flow-node" style="border-color:#60a5fa;">
+        <div class="flow-q">Negative FAST — but still unstable with abdominal mechanism?</div>
+        <div class="flow-branches">
+          <div class="flow-branch" style="background:rgba(96,165,250,.1);color:#93c5fd;">
+            <b>DON'T TRUST IT</b>Negative FAST does NOT exclude injury — retroperitoneal, hollow viscus, early bleed.
+          </div>
+          <div class="flow-branch" style="background:rgba(251,191,36,.1);color:#fcd34d;">
+            <b>NEXT</b>Repeat FAST, CT if stabilisable, or theatre. Check "blood on floor + 4 more".
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIMITATIONS -->
+  <div class="section">
+    <p class="section-title">⚠️ Limitations — Know These Cold</p>
+    <div class="lim-grid">
+      <div class="lim-item">
+        <div class="lim-title">Can't identify fluid type</div>
+        <div class="lim-body">Blood vs urine vs ascites vs bowel content vs effusion — FAST shows fluid, not what it is.</div>
+      </div>
+      <div class="lim-item">
+        <div class="lim-title">Misses retroperitoneum</div>
+        <div class="lim-body">Pancreatic, duodenal, renal, aorta/IVC, pelvic fracture bleeds — the classic blind spot.</div>
+      </div>
+      <div class="lim-item">
+        <div class="lim-title">Needs ~200ml fluid</div>
+        <div class="lim-body">Small or early bleeds fall below detection threshold — hence false negatives.</div>
+      </div>
+      <div class="lim-item">
+        <div class="lim-title">Operator dependent</div>
+        <div class="lim-body">Sensitivity varies widely with skill and experience.</div>
+      </div>
+      <div class="lim-item">
+        <div class="lim-title">Poor for hollow viscus</div>
+        <div class="lim-body">Bowel & diaphragmatic injuries poorly detected — needs CT.</div>
+      </div>
+      <div class="lim-item">
+        <div class="lim-title">Can't grade injury</div>
+        <div class="lim-body">Positive tells you fluid is present, not the source or severity.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b class="amber">Image quality degraded by:</b> obesity, subcutaneous emphysema, bowel gas, large body habitus. A technically difficult scan is not a negative scan.</div>
+    </div>
+  </div>
+
+  <!-- CLINICAL PRINCIPLE -->
+  <div class="section">
+    <p class="section-title">🩸 "Blood on the Floor and Four More"</p>
+    <div class="callout">
+      <div class="callout-title">Five sites of fatal haemorrhage</div>
+      <div class="callout-item"><b>On the floor</b> — external: scalp, open fractures, wounds, scene loss</div>
+      <div class="callout-item"><b>1. Chest</b> — each hemithorax holds 1.5–2L (30–40% blood volume)</div>
+      <div class="callout-item"><b>2. Abdomen</b> — several litres; what FAST detects</div>
+      <div class="callout-item"><b>3. Pelvis / retroperitoneum</b> — 3–4L into a space FAST can't see</div>
+      <div class="callout-item"><b>4. Long bones</b> — closed femur 1–1.5L; bilateral femurs exsanguinate with clean sheets</div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Which single FAST view is highest yield and why?</div>
+      <div class="pearl-a">Right hepatorenal (Morison's pouch) — it's the most dependent part of the peritoneal cavity in a supine patient, so free intraperitoneal blood collects there first. Highest sensitivity of the individual views.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Positive FAST + unstable — do you CT first?</div>
+      <div class="pearl-a">No. Unstable + positive FAST → theatre for laparotomy immediately. CT is for the stable patient to characterise injury. Never send a crashing patient to the scanner ("the doughnut of death").</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Negative FAST — does it exclude significant intraabdominal injury?</div>
+      <div class="pearl-a">No. FAST needs ~200ml fluid, misses retroperitoneal and hollow viscus injury, and is operator dependent. A negative FAST in ongoing clinical suspicion warrants repeat scanning, CT, or laparotomy based on haemodynamics.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: How does eFAST detect pneumothorax?</div>
+      <div class="pearl-a">Absence of lung sliding and comet-tail artefacts at the pleural line. On M-mode, normal lung shows the "seashore sign"; pneumothorax shows the "barcode" or "stratosphere sign". More sensitive than supine CXR for occult pneumothorax.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    ATLS 10TH ED · EFAST — KIRKPATRICK ET AL J TRAUMA 2004<br>
+    ROZYCKI ET AL — FAST VALIDATION · RCEM / FAMUS GUIDELINES<br>
+    ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Percutaneous Tracheostomy | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#34d399;border-color:#34d399;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.15rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#34d399;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.green{color:#34d399;} .red{color:#f87171;} .amber{color:#fbbf24;} .blue{color:#60a5fa;}
+
+.diagram-box{background:#0a0a18;border:1px solid #2d2d42;border-radius:10px;padding:18px;margin-bottom:12px;text-align:center;}
+.diagram-title{font-size:.6rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#34d399;margin-bottom:14px;}
+.diagram-caption{font-size:.62rem;color:#9ca3af;line-height:1.5;margin-top:12px;text-align:left;}
+
+/* Contraindications */
+.ci-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.ci-col{border-radius:10px;border:1px solid;overflow:hidden;}
+.ci-head{padding:10px 12px;font-size:.7rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.ci-body{background:#0a0a18;padding:10px 12px;}
+.ci-item{font-size:.64rem;color:#c5c9d6;line-height:1.5;padding:4px 0;border-bottom:1px solid #1a1a30;}
+.ci-item:last-child{border-bottom:none;}
+
+/* Steps */
+.steps{margin-bottom:12px;}
+.step{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;}
+.step-num{min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;background:rgba(52,211,153,.12);border:1px solid #34d399;color:#34d399;flex-shrink:0;}
+.step-content{flex:1;background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;}
+.step-title{font-size:.67rem;font-weight:900;color:#f3f4f6;margin-bottom:3px;letter-spacing:.05em;text-transform:uppercase;}
+.step-body{font-size:.67rem;color:#a3a8b8;line-height:1.6;}
+.step-body b{color:#c5c9d6;}
+
+/* Complications */
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.comp-col{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;}
+.comp-head{padding:9px 12px;font-size:.68rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.comp-body{background:#0a0a18;padding:9px 12px;}
+.comp-item{font-size:.62rem;color:#c5c9d6;line-height:1.5;padding:3px 0;}
+
+/* Callout */
+.callout{background:rgba(248,113,113,.06);border:1px solid #f87171;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+
+/* DOPES */
+.dopes{background:#14142a;border:1px solid #fbbf24;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.dopes-row{display:flex;border-bottom:1px solid #2d2d42;align-items:center;}
+.dopes-row:last-child{border-bottom:none;}
+.dopes-letter{width:44px;font-size:1.1rem;font-weight:900;color:#fbbf24;text-align:center;padding:8px;flex-shrink:0;background:#0a0a18;}
+.dopes-text{padding:8px 12px;font-size:.66rem;color:#c5c9d6;line-height:1.5;}
+.dopes-text b{color:#f3f4f6;}
+
+/* Pearl */
+.pearl{background:#14142a;border-left:3px solid #34d399;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#34d399;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="home-btn" href="index.html">☥ Home</a>
+
+  <div class="header">
+    <div class="icon">🫁</div>
+    <h1>Percutaneous Dilatational Tracheostomy</h1>
+    <div class="sub">PDT · Anatomy · Seldinger Technique · Complications</div>
+  </div>
+
+  <!-- ANATOMY DIAGRAM -->
+  <div class="section">
+    <p class="section-title">🧬 Surgical Anatomy & Insertion Level</p>
+    <div class="diagram-box">
+      <div class="diagram-title">Anterior Neck — Sagittal View</div>
+      <svg viewBox="0 0 300 340" width="100%" style="max-width:300px;">
+        <!-- Skin/soft tissue outline -->
+        <path d="M60 20 L60 320" stroke="#3d3d5c" stroke-width="1.5" fill="none"/>
+        <text x="20" y="24" font-size="9" fill="#6b7280" font-family="Courier New">HEAD ↑</text>
+        <text x="20" y="330" font-size="9" fill="#6b7280" font-family="Courier New">CHEST ↓</text>
+
+        <!-- Hyoid -->
+        <ellipse cx="130" cy="45" rx="34" ry="9" fill="#2d2d48" stroke="#4b5563" stroke-width="1.5"/>
+        <text x="180" y="48" font-size="9" fill="#9ca3af" font-family="Courier New">Hyoid</text>
+
+        <!-- Thyroid cartilage -->
+        <path d="M108 62 L152 62 L158 96 L102 96 Z" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+        <text x="180" y="82" font-size="9" fill="#9ca3af" font-family="Courier New">Thyroid</text>
+        <text x="180" y="93" font-size="9" fill="#9ca3af" font-family="Courier New">cartilage</text>
+
+        <!-- Cricothyroid membrane -->
+        <rect x="106" y="98" width="52" height="10" fill="#f87171" opacity="0.35"/>
+        <text x="180" y="107" font-size="8.5" fill="#fca5a5" font-family="Courier New">Cricothyroid</text>
+        <text x="180" y="117" font-size="8.5" fill="#fca5a5" font-family="Courier New">membrane</text>
+
+        <!-- Cricoid cartilage -->
+        <path d="M104 110 L160 110 L160 130 L104 130 Z" fill="#4b5563" stroke="#6b7280" stroke-width="1.5"/>
+        <text x="180" y="124" font-size="9" fill="#9ca3af" font-family="Courier New">Cricoid</text>
+
+        <!-- Tracheal rings -->
+        <g>
+          <rect x="108" y="136" width="48" height="12" rx="6" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+          <text x="180" y="145" font-size="8.5" fill="#9ca3af" font-family="Courier New">Ring 1</text>
+
+          <!-- Insertion window between ring 1-2 and 2-3 -->
+          <rect x="108" y="150" width="48" height="14" rx="6" fill="#34d399" opacity="0.3" stroke="#34d399" stroke-width="2"/>
+          <text x="180" y="160" font-size="8.5" fill="#34d399" font-weight="bold" font-family="Courier New">Ring 2</text>
+
+          <rect x="108" y="166" width="48" height="14" rx="6" fill="#34d399" opacity="0.3" stroke="#34d399" stroke-width="2"/>
+          <text x="180" y="176" font-size="8.5" fill="#34d399" font-weight="bold" font-family="Courier New">Ring 3</text>
+
+          <rect x="108" y="182" width="48" height="12" rx="6" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+          <text x="180" y="191" font-size="8.5" fill="#9ca3af" font-family="Courier New">Ring 4</text>
+
+          <rect x="108" y="196" width="48" height="12" rx="6" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+          <rect x="108" y="210" width="48" height="12" rx="6" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+        </g>
+
+        <!-- Insertion arrow -->
+        <line x1="45" y1="164" x2="105" y2="164" stroke="#34d399" stroke-width="2.5" marker-end="url(#arrow)"/>
+        <text x="8" y="158" font-size="9" fill="#34d399" font-weight="bold" font-family="Courier New">INSERT</text>
+        <text x="8" y="180" font-size="8" fill="#34d399" font-family="Courier New">2nd–3rd</text>
+
+        <!-- Thyroid gland isthmus -->
+        <ellipse cx="132" cy="180" rx="30" ry="16" fill="#f87171" opacity="0.15" stroke="#f87171" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="180" y="210" font-size="8" fill="#fca5a5" font-family="Courier New">Thyroid isthmus</text>
+        <text x="180" y="220" font-size="8" fill="#fca5a5" font-family="Courier New">(may overlie)</text>
+
+        <!-- Sternal notch -->
+        <path d="M104 300 L160 300 L145 316 L119 316 Z" fill="#2d2d48" stroke="#4b5563" stroke-width="1.5"/>
+        <text x="168" y="312" font-size="8.5" fill="#9ca3af" font-family="Courier New">Sternal notch</text>
+
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0 0 L6 3 L0 6 Z" fill="#34d399"/>
+          </marker>
+        </defs>
+      </svg>
+      <div class="diagram-caption">
+        <b style="color:#34d399;">Insertion between 1st–2nd or 2nd–3rd tracheal rings, in the midline.</b><br>
+        Too high (cricoid/1st ring) → subglottic stenosis. Too low → tracheo-innominate artery erosion. The thyroid isthmus may overlie the site and be a source of bleeding.
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTRAINDICATIONS -->
+  <div class="section">
+    <p class="section-title">🚫 Contraindications</p>
+    <div class="ci-grid">
+      <div class="ci-col" style="border-color:#f87171;">
+        <div class="ci-head" style="background:rgba(248,113,113,.12);color:#f87171;">Absolute</div>
+        <div class="ci-body">
+          <div class="ci-item">Uncontrolled / uncorrectable coagulopathy</div>
+          <div class="ci-item">Infection at insertion site</div>
+          <div class="ci-item">Unable to identify landmarks</div>
+          <div class="ci-item">Children (small airway) — relative in some texts</div>
+          <div class="ci-item">Lack of trained operator / equipment</div>
+        </div>
+      </div>
+      <div class="ci-col" style="border-color:#fbbf24;">
+        <div class="ci-head" style="background:rgba(251,191,36,.12);color:#fbbf24;">Relative</div>
+        <div class="ci-body">
+          <div class="ci-item">Obesity / short neck / difficult anatomy</div>
+          <div class="ci-item">Correctable coagulopathy</div>
+          <div class="ci-item">High vent requirement (PEEP >10, FiO₂ >0.6)</div>
+          <div class="ci-item"><b style="color:#fca5a5;">Raised ICP</b> — procedure spikes ICP (coughing, ↑CO₂)</div>
+          <div class="ci-item">C-spine injury (can't extend neck)</div>
+          <div class="ci-item">Previous neck surgery/radiation, goitre, high innominate artery</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b class="amber">In the TBI patient specifically:</b> raised ICP is the key concern. Coughing and hypercapnia during the procedure spike ICP. Optimise ICP first, deepen sedation, paralyse, and control ventilation to avoid PaCO₂ surges.</div>
+    </div>
+  </div>
+
+  <!-- SELDINGER TECHNIQUE DIAGRAM -->
+  <div class="section">
+    <p class="section-title">🪡 Seldinger Technique — Step by Step</p>
+    <div class="diagram-box">
+      <div class="diagram-title">Modified Seldinger (Ciaglia Single Dilator)</div>
+      <svg viewBox="0 0 320 220" width="100%" style="max-width:320px;">
+        <!-- Trachea lumen reference for all panels -->
+        <!-- Panel 1: Needle -->
+        <g>
+          <text x="8" y="16" font-size="9" fill="#34d399" font-weight="bold" font-family="Courier New">1. NEEDLE</text>
+          <rect x="10" y="30" width="60" height="30" rx="4" fill="#1a1a35" stroke="#4b5563" stroke-width="1.5"/>
+          <line x1="70" y1="20" x2="42" y2="42" stroke="#f87171" stroke-width="2"/>
+          <circle cx="40" cy="45" r="2" fill="#34d399"/>
+          <text x="10" y="74" font-size="7" fill="#9ca3af" font-family="Courier New">Puncture midline,</text>
+          <text x="10" y="83" font-size="7" fill="#9ca3af" font-family="Courier New">aspirate air</text>
+        </g>
+        <!-- Panel 2: Guidewire -->
+        <g>
+          <text x="118" y="16" font-size="9" fill="#34d399" font-weight="bold" font-family="Courier New">2. GUIDEWIRE</text>
+          <rect x="120" y="30" width="60" height="30" rx="4" fill="#1a1a35" stroke="#4b5563" stroke-width="1.5"/>
+          <path d="M175 18 Q160 30 150 45 T148 58" stroke="#fbbf24" stroke-width="2" fill="none"/>
+          <text x="120" y="74" font-size="7" fill="#9ca3af" font-family="Courier New">J-wire through</text>
+          <text x="120" y="83" font-size="7" fill="#9ca3af" font-family="Courier New">needle, remove needle</text>
+        </g>
+        <!-- Panel 3: Dilator -->
+        <g>
+          <text x="228" y="16" font-size="9" fill="#34d399" font-weight="bold" font-family="Courier New">3. DILATE</text>
+          <rect x="230" y="30" width="60" height="30" rx="4" fill="#1a1a35" stroke="#4b5563" stroke-width="1.5"/>
+          <path d="M288 18 L255 45" stroke="#60a5fa" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M283 20 Q258 40 250 52" stroke="#fbbf24" stroke-width="1.5" fill="none"/>
+          <text x="228" y="74" font-size="7" fill="#9ca3af" font-family="Courier New">Curved dilator over</text>
+          <text x="228" y="83" font-size="7" fill="#9ca3af" font-family="Courier New">wire, single pass</text>
+        </g>
+        <!-- Panel 4: Tube insertion -->
+        <g>
+          <text x="8" y="120" font-size="9" fill="#34d399" font-weight="bold" font-family="Courier New">4. TUBE</text>
+          <rect x="10" y="134" width="130" height="40" rx="4" fill="#1a1a35" stroke="#4b5563" stroke-width="1.5"/>
+          <path d="M135 120 L80 152" stroke="#34d399" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <ellipse cx="82" cy="153" rx="8" ry="5" fill="#34d399" opacity="0.4"/>
+          <text x="10" y="188" font-size="7" fill="#9ca3af" font-family="Courier New">Load trache tube on dilator,</text>
+          <text x="10" y="197" font-size="7" fill="#9ca3af" font-family="Courier New">rail-road over wire into trachea</text>
+        </g>
+        <!-- Panel 5: Confirm -->
+        <g>
+          <text x="165" y="120" font-size="9" fill="#34d399" font-weight="bold" font-family="Courier New">5. CONFIRM</text>
+          <rect x="167" y="134" width="130" height="40" rx="4" fill="#1a1a35" stroke="#4b5563" stroke-width="1.5"/>
+          <circle cx="232" cy="154" r="14" fill="none" stroke="#34d399" stroke-width="2"/>
+          <path d="M226 154 L230 160 L240 148" stroke="#34d399" stroke-width="2.5" fill="none"/>
+          <text x="167" y="188" font-size="7" fill="#9ca3af" font-family="Courier New">Remove wire+dilator, inflate</text>
+          <text x="167" y="197" font-size="7" fill="#9ca3af" font-family="Courier New">cuff, confirm EtCO₂ + scope</text>
+        </g>
+      </svg>
+      <div class="diagram-caption">
+        Throughout: <b style="color:#34d399;">continuous bronchoscopy</b> via the withdrawn ETT confirms midline puncture between correct rings and that wire/dilator/tube enter the true lumen — not the posterior wall or a false passage.
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Preparation</div>
+          <div class="step-body">Position — neck extended (shoulder roll) unless C-spine injury. Pre-oxygenate 100%. Deepen sedation + paralyse. Withdraw ETT under bronchoscopic vision so cuff sits just below cords. Identify landmarks: cricoid → 1st–3rd rings, midline.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Needle Puncture</div>
+          <div class="step-body">Introducer needle midline between 1st–2nd or 2nd–3rd rings, aspirating for air to confirm tracheal entry. Bronchoscope confirms midline and level, avoids posterior wall.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Guidewire (Seldinger)</div>
+          <div class="step-body">J-tipped guidewire passed through needle into trachea, directed caudally. Needle removed, wire remains. Everything now rail-roads over this wire.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Dilatation</div>
+          <div class="step-body">Guiding catheter over wire, then progressive dilatation. <b>Ciaglia single tapered dilator</b> (most common) or <b>Griggs forceps</b> technique. Tract dilated to size of tracheostomy tube.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">Tube Insertion & Confirmation</div>
+          <div class="step-body">Tracheostomy tube loaded on dilator, rail-roaded over wire into trachea. Remove wire + dilator. Inflate cuff. <b>Confirm: EtCO₂ trace, bilateral air entry, bronchoscopic view of tube in lumen.</b> Only then remove the ETT fully.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY BRONCHOSCOPY -->
+  <div class="section">
+    <p class="section-title">🔬 Why Bronchoscopy is Non-Negotiable</p>
+    <div class="card" style="border-color:#34d399;">
+      <div class="card-body">
+        Continuous fibreoptic bronchoscopy through the withdrawn ETT is what makes PDT safer than a blind technique. It prevents:
+        <br><br>
+        • <b>Posterior tracheal wall perforation</b> → tracheo-oesophageal fistula<br>
+        • <b>False passage</b> — confirms wire/dilator/tube in true lumen<br>
+        • <b>Wrong level</b> — confirms puncture between correct rings, midline<br>
+        • <b>Paratracheal placement</b> → vascular injury<br><br>
+        Ultrasound is increasingly used pre-procedure to identify midline, vessels (anterior jugular veins, high innominate artery), and thyroid isthmus.
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLICATIONS -->
+  <div class="section">
+    <p class="section-title">⚠️ Complications</p>
+    <div class="comp-grid">
+      <div class="comp-col">
+        <div class="comp-head" style="background:rgba(248,113,113,.12);color:#f87171;">Early / Intraoperative</div>
+        <div class="comp-body">
+          <div class="comp-item">▸ Haemorrhage (thyroid isthmus, ant. jugular veins)</div>
+          <div class="comp-item">▸ False passage / posterior wall injury</div>
+          <div class="comp-item">▸ Loss of airway / accidental extubation</div>
+          <div class="comp-item">▸ Hypoxia</div>
+          <div class="comp-item">▸ Pneumothorax / pneumomediastinum</div>
+          <div class="comp-item">▸ Subcutaneous emphysema</div>
+          <div class="comp-item">▸ Cuff puncture by needle</div>
+        </div>
+      </div>
+      <div class="comp-col">
+        <div class="comp-head" style="background:rgba(251,146,60,.12);color:#fb923c;">Late</div>
+        <div class="comp-body">
+          <div class="comp-item">▸ Tracheal stenosis</div>
+          <div class="comp-item">▸ Tracheomalacia</div>
+          <div class="comp-item">▸ Tube occlusion (mucus plug)</div>
+          <div class="comp-item">▸ Tracheo-oesophageal fistula</div>
+          <div class="comp-item">▸ <b style="color:#fca5a5;">Tracheo-innominate fistula</b></div>
+          <div class="comp-item">▸ Stomal infection / granuloma</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">⚡ Tracheo-Innominate Artery Fistula — Know This Cold</div>
+      <div class="callout-item">Occurs if tube placed too low or tip erodes the innominate (brachiocephalic) artery. Presents <b>1–6 weeks</b> post-procedure.</div>
+      <div class="callout-item"><b>Sentinel bleed</b> (small herald bleed) precedes massive exsanguinating haemorrhage — never ignore a small tracheostomy bleed.</div>
+      <div class="callout-item"><b>Management:</b> hyperinflate cuff to tamponade → <b>Utley manoeuvre</b> (finger in stoma, press artery anteriorly against sternum) → immediate surgery. Mortality very high.</div>
+    </div>
+  </div>
+
+  <!-- DOPES -->
+  <div class="section">
+    <p class="section-title">🚨 Desaturation During PDT — DOPES</p>
+    <div class="card">
+      <div class="card-body">Capnograph loss + desaturation during a <b>shared-airway procedure</b>. Stop the procedure, take airway control, hand-ventilate 100% O₂, use the bronchoscope to see where tube and trachea actually are. Work through DOPES:</div>
+    </div>
+    <div class="dopes">
+      <div class="dopes-row"><div class="dopes-letter">D</div><div class="dopes-text"><b>Displacement</b> — ETT withdrawn too far / accidental extubation. Most likely — check first.</div></div>
+      <div class="dopes-row"><div class="dopes-letter">O</div><div class="dopes-text"><b>Obstruction</b> — tube blocked, cuff punctured by needle → massive leak, cuff herniation.</div></div>
+      <div class="dopes-row"><div class="dopes-letter">P</div><div class="dopes-text"><b>Pneumothorax</b> — tension, from posterior wall injury or high insertion.</div></div>
+      <div class="dopes-row"><div class="dopes-letter">E</div><div class="dopes-text"><b>Equipment</b> — circuit disconnection, capnograph line kinked, ventilator fault.</div></div>
+      <div class="dopes-row"><div class="dopes-letter">S</div><div class="dopes-text"><b>Stacking</b> — breath stacking / auto-PEEP (less likely in this context).</div></div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b class="red">In PDT specifically:</b> displacement and cuff puncture are the two most likely causes — the airway is being actively manipulated and a needle is entering near the cuff. If you cannot ventilate via the existing tube, fully re-intubate past the puncture or convert to surgical airway.</div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: PDT vs surgical tracheostomy — advantages of percutaneous?</div>
+      <div class="pearl-a">Bedside (no transfer to theatre), faster, smaller incision, lower stomal infection and bleeding rates, better cosmesis, cost-effective. Surgical preferred for difficult anatomy, emergency, coagulopathy, or paediatric.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Which tracheal level and why not higher or lower?</div>
+      <div class="pearl-a">Between 1st–2nd or 2nd–3rd rings. Higher (cricoid/1st ring) risks subglottic stenosis. Lower risks tracheo-innominate artery erosion and difficult tube angulation.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: A patient 3 weeks post-tracheostomy has a small bleed from the stoma. Significance?</div>
+      <div class="pearl-a">Sentinel bleed of tracheo-innominate fistula until proven otherwise. Even a small herald bleed mandates urgent investigation — it precedes catastrophic haemorrhage. Hyperinflate cuff, Utley manoeuvre, immediate surgical review.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why is PDT relatively contraindicated in raised ICP?</div>
+      <div class="pearl-a">Coughing and hypercapnia during the procedure raise intrathoracic pressure and PaCO₂ → cerebral vasodilation → ICP spikes. In a TBI patient, optimise ICP first, ensure deep sedation and paralysis, and control ventilation tightly to prevent CO₂ surges.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    CIAGLIA ET AL CHEST 1985 (PDT ORIGINAL) · GRIGGS TECHNIQUE<br>
+    ATLS 10TH ED · INTENSIVE CARE SOCIETY TRACHEOSTOMY GUIDELINES<br>
+    ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>

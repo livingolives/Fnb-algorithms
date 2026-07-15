@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESP Block vs Epidural | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#fb7185;border-color:#fb7185;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#fb7185;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.rose{color:#fb7185;} .red{color:#f87171;} .green{color:#4ade80;} .amber{color:#fbbf24;} .cyan{color:#22d3ee;}
+
+.diagram-box{background:#0a0a18;border:1px solid #2d2d42;border-radius:10px;padding:18px;margin-bottom:12px;text-align:center;}
+.diagram-title{font-size:.6rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#fb7185;margin-bottom:14px;}
+.diagram-caption{font-size:.62rem;color:#9ca3af;line-height:1.6;margin-top:12px;text-align:left;}
+
+/* Nerve anatomy explainer */
+.anat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.anat-col{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;}
+.anat-head{padding:9px 12px;font-size:.68rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.anat-body{background:#0a0a18;padding:9px 12px;}
+.anat-item{font-size:.63rem;color:#c5c9d6;line-height:1.5;padding:3px 0;}
+
+/* VS table */
+.vs-table{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.vs-row{display:flex;border-bottom:1px solid #2d2d42;}
+.vs-row:last-child{border-bottom:none;}
+.vs-cell{flex:1;padding:9px 12px;font-size:.65rem;line-height:1.5;color:#c5c9d6;}
+.vs-cell.label{flex:.8;color:#6b7280;font-weight:900;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;background:#0a0a18;}
+.vs-head{display:flex;background:#0a0a18;}
+.vs-head .vs-cell{font-weight:900;text-transform:uppercase;font-size:.6rem;letter-spacing:.06em;}
+
+/* Barrier grid */
+.barrier-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.barrier-item{background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;border-left:3px solid #f87171;}
+.barrier-title{font-size:.65rem;font-weight:900;color:#f3f4f6;margin-bottom:3px;}
+.barrier-body{font-size:.6rem;color:#a3a8b8;line-height:1.5;}
+
+/* Case study box */
+.case-box{background:rgba(251,113,133,.06);border:2px solid #fb7185;border-radius:10px;padding:16px;margin-bottom:12px;}
+.case-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#fb7185;margin-bottom:10px;}
+.case-vitals{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.case-vital{background:#0a0a18;border:1px solid #2d2d42;border-radius:5px;padding:4px 8px;font-size:.63rem;}
+.case-vital span{color:#6b7280;margin-right:3px;}
+.case-vital b{color:#f3f4f6;}
+
+/* BLUE protocol steps */
+.blue-steps{margin-bottom:12px;}
+.blue-step{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;}
+.blue-num{min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;background:rgba(34,211,238,.12);border:1px solid #22d3ee;color:#22d3ee;flex-shrink:0;}
+.blue-content{flex:1;background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;}
+.blue-title{font-size:.67rem;font-weight:900;color:#f3f4f6;margin-bottom:3px;letter-spacing:.05em;text-transform:uppercase;}
+.blue-body{font-size:.67rem;color:#a3a8b8;line-height:1.6;}
+.blue-body b{color:#c5c9d6;}
+
+/* Sign cards */
+.sign-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.sign-card{background:#0a0a18;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;text-align:center;}
+.sign-name{font-size:.65rem;font-weight:900;margin-bottom:4px;}
+.sign-meaning{font-size:.6rem;color:#9ca3af;line-height:1.4;}
+
+/* Pearl */
+.pearl{background:#14142a;border-left:3px solid #fb7185;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#fb7185;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="home-btn" href="index.html">☥ Home</a>
+
+  <div class="header">
+    <div class="icon">🩹</div>
+    <h1>ESP Block vs Thoracic Epidural</h1>
+    <div class="sub">Rib Fracture Analgesia · BLUE Protocol Worked Case</div>
+  </div>
+
+  <!-- ANATOMY -->
+  <div class="section">
+    <p class="section-title">🧬 Anatomical Target — Erector Spinae Plane</p>
+    <div class="diagram-box">
+      <div class="diagram-title">Paraspinal Cross-Section — T5 Level</div>
+      <svg viewBox="0 0 340 260" width="100%" style="max-width:340px;">
+        <!-- Vertebral body -->
+        <ellipse cx="170" cy="200" rx="34" ry="26" fill="#374151" stroke="#4b5563" stroke-width="1.5"/>
+        <text x="170" y="205" font-size="8" fill="#9ca3af" font-family="Courier New" text-anchor="middle">Vertebral</text>
+        <text x="170" y="215" font-size="8" fill="#9ca3af" font-family="Courier New" text-anchor="middle">body</text>
+
+        <!-- Spinous process -->
+        <path d="M164 174 L176 174 L172 130 L168 130 Z" fill="#4b5563" stroke="#6b7280" stroke-width="1.5"/>
+        <text x="170" y="120" font-size="8" fill="#9ca3af" font-family="Courier New" text-anchor="middle">Spinous process</text>
+        <text x="170" y="110" font-size="7.5" fill="#6b7280" font-family="Courier New" text-anchor="middle">(midline landmark)</text>
+
+        <!-- Transverse processes -->
+        <path d="M136 190 L90 178 L92 188 L138 200 Z" fill="#60a5fa" stroke="#3b82f6" stroke-width="1.5"/>
+        <path d="M204 190 L250 178 L248 188 L202 200 Z" fill="#60a5fa" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="70" y="172" font-size="7.5" fill="#93c5fd" font-family="Courier New" text-anchor="middle">Transverse</text>
+        <text x="70" y="182" font-size="7.5" fill="#93c5fd" font-family="Courier New" text-anchor="middle">process</text>
+
+        <!-- Erector spinae muscle -->
+        <path d="M100 90 Q170 70 240 90 L245 175 Q170 155 95 175 Z" fill="#7c3aed" opacity="0.25" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="170" y="100" font-size="8.5" fill="#c4b5fd" font-weight="bold" font-family="Courier New" text-anchor="middle">Erector Spinae Muscle</text>
+
+        <!-- LA injectate -->
+        <ellipse cx="95" cy="182" rx="34" ry="12" fill="#4ade80" opacity="0.35" stroke="#4ade80" stroke-width="2" stroke-dasharray="3,2" transform="rotate(-15 95 182)"/>
+        <text x="60" y="228" font-size="7.5" fill="#86efac" font-family="Courier New" text-anchor="middle">LA injected here</text>
+        <text x="60" y="238" font-size="7.5" fill="#86efac" font-family="Courier New" text-anchor="middle">(deep to ES muscle,</text>
+        <text x="60" y="248" font-size="7.5" fill="#86efac" font-family="Courier New" text-anchor="middle">superficial to TP)</text>
+
+        <!-- Needle -->
+        <line x1="30" y1="30" x2="90" y2="175" stroke="#f3f4f6" stroke-width="1.5" stroke-dasharray="2,2"/>
+        <text x="30" y="22" font-size="8" fill="#f3f4f6" font-family="Courier New" text-anchor="middle">needle (2–3cm lateral</text>
+        <text x="30" y="12" font-size="7.5" fill="#f3f4f6" font-family="Courier New" text-anchor="middle">to spinous process)</text>
+
+        <!-- Spread arrows to paravertebral space -->
+        <path d="M100 190 Q80 200 70 205" stroke="#fbbf24" stroke-width="1.5" fill="none" marker-end="url(#arr2)"/>
+        <text x="30" y="212" font-size="7" fill="#fcd34d" font-family="Courier New" text-anchor="middle">spread to</text>
+        <text x="30" y="222" font-size="7" fill="#fcd34d" font-family="Courier New" text-anchor="middle">paravertebral</text>
+        <text x="30" y="232" font-size="7" fill="#fcd34d" font-family="Courier New" text-anchor="middle">space → ventral rami</text>
+
+        <defs>
+          <marker id="arr2" markerWidth="6" markerHeight="6" refX="4" refY="2" orient="auto">
+            <path d="M0 0 L4 2 L0 4 Z" fill="#fbbf24"/>
+          </marker>
+        </defs>
+      </svg>
+      <div class="diagram-caption">
+        Injection deep to erector spinae muscle, superficial to the transverse process (TP). LA tracks through costotransverse foramina to the paravertebral space, reaching <b style="color:#fbbf24;">ventral rami</b> (intercostal nerves — motor to intercostals + sensory to chest wall) — this is what relieves rib fracture pain and reduces splinting.
+      </div>
+    </div>
+  </div>
+
+  <!-- ROOT vs RAMUS CLARIFICATION -->
+  <div class="section">
+    <p class="section-title">⚠️ Common Confusion — Root vs Ramus</p>
+    <div class="anat-grid">
+      <div class="anat-col">
+        <div class="anat-head" style="background:rgba(96,165,250,.12);color:#60a5fa;">Inside Spinal Cord/Foramen</div>
+        <div class="anat-body">
+          <div class="anat-item">Dorsal root = <b style="color:#93c5fd;">sensory only</b></div>
+          <div class="anat-item">Ventral root = <b style="color:#93c5fd;">motor only</b></div>
+          <div class="anat-item">These fuse inside the foramen</div>
+        </div>
+      </div>
+      <div class="anat-col">
+        <div class="anat-head" style="background:rgba(251,191,36,.12);color:#fbbf24;">After Exiting Foramen</div>
+        <div class="anat-body">
+          <div class="anat-item">Dorsal ramus = <b style="color:#fcd34d;">mixed</b> — paraspinal muscles + back skin</div>
+          <div class="anat-item">Ventral ramus = <b style="color:#fcd34d;">mixed</b> — intercostal muscles + chest wall skin</div>
+          <div class="anat-item">Both carry motor AND sensory fibres</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">The dorsal=sensory/ventral=motor rule applies only to <b>roots</b> inside the spinal canal. Once they fuse into the mixed spinal nerve and split into rami, <b>both rami are mixed nerves</b> — the distinction becomes anatomical territory (back vs chest wall), not function.</div>
+    </div>
+  </div>
+
+  <!-- VS EPIDURAL -->
+  <div class="section">
+    <p class="section-title">⚖️ ESP Block vs Thoracic Epidural</p>
+    <div class="vs-table">
+      <div class="vs-head">
+        <div class="vs-cell label"> </div>
+        <div class="vs-cell" style="color:#fb7185;">ESP Block</div>
+        <div class="vs-cell" style="color:#60a5fa;">Thoracic Epidural</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Sympathectomy</div>
+        <div class="vs-cell" style="color:#4ade80;">None — fascial plane block</div>
+        <div class="vs-cell" style="color:#f87171;">Yes — hypotension risk, dangerous in occult hypovolaemia</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Coagulopathy</div>
+        <div class="vs-cell" style="color:#4ade80;">Safer — superficial injection</div>
+        <div class="vs-cell" style="color:#f87171;">Contraindicated — epidural haematoma risk</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Positioning</div>
+        <div class="vs-cell" style="color:#4ade80;">Supine or lateral — easy in trauma</div>
+        <div class="vs-cell" style="color:#f87171;">Needs sitting/flexed spine — hard if acutely painful</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Motor block</div>
+        <div class="vs-cell" style="color:#4ade80;">Minimal — preserves lower limb function</div>
+        <div class="vs-cell" style="color:#fbbf24;">Can cause lower limb weakness, urinary retention</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Technical difficulty</div>
+        <div class="vs-cell" style="color:#4ade80;">Simpler US-guided landmark (transverse process)</div>
+        <div class="vs-cell" style="color:#fbbf24;">Technically demanding, needs cooperation</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EPIDURAL BARRIERS -->
+  <div class="section">
+    <p class="section-title">🚫 Practical Barriers to Epidural in Acute Trauma</p>
+    <div class="barrier-grid">
+      <div class="barrier-item">
+        <div class="barrier-title">Coagulopathy</div>
+        <div class="barrier-body">ATC, anticoagulant use, post-MTP — very common in trauma. Epidural haematoma risk unacceptable.</div>
+      </div>
+      <div class="barrier-item">
+        <div class="barrier-title">Haemodynamic instability</div>
+        <div class="barrier-body">Sympathectomy on top of unrecognised hypovolaemia can precipitate cardiovascular collapse.</div>
+      </div>
+      <div class="barrier-item">
+        <div class="barrier-title">Inability to position</div>
+        <div class="barrier-body">Acutely painful, distressed, or intoxicated patients often cannot sit/flex the spine.</div>
+      </div>
+      <div class="barrier-item">
+        <div class="barrier-title">Unclear spinal status</div>
+        <div class="barrier-body">Spinal injury not yet excluded makes neuraxial placement risky until cleared.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKED CASE: BLUE PROTOCOL -->
+  <div class="section">
+    <p class="section-title">📋 Worked Case — What ESP Block Does NOT Fix</p>
+    <div class="case-box">
+      <div class="case-title">55M · Unilateral Rib Fractures 4–9 · ESP Block at T5 Performed</div>
+      <div class="case-vitals">
+        <div class="case-vital"><span>Pain score</span><b>2/10 — good</b></div>
+        <div class="case-vital"><span>SpO₂ at 6h</span><b>93% RA</b></div>
+        <div class="case-vital"><span>RR</span><b>Still elevated</b></div>
+      </div>
+      <div class="card-body" style="padding:0;">
+        <b class="rose">Key insight:</b> good analgesia does NOT guarantee good oxygenation. ESP block controls pain and reduces splinting-related hypoventilation — but does NOT treat a mechanical (pneumothorax) or parenchymal (pulmonary contusion) cause of hypoxia. Persistent hypoxia despite good pain scores means you must look beyond the block.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <b>Two differentials to consider:</b><br><br>
+        <b class="cyan">1. Pneumothorax</b> — either from the original rib fracture (bony spike lacerating pleura) or procedure-related (rare with ESP given the plane is superficial to pleura, but recognised).<br><br>
+        <b class="cyan">2. Pulmonary contusion</b> — alveolar flooding by inflammatory fluid/blood from the underlying lung injury → V/Q mismatch → hypoxia independent of pain control. Often <b>worsens over 24–48h</b> — hypoxia at 6h may reflect evolving contusion, not block failure.
+      </div>
+    </div>
+  </div>
+
+  <!-- BLUE PROTOCOL -->
+  <div class="section">
+    <p class="section-title">🔵 BLUE Protocol — Bedside Lung Ultrasound in Emergency</p>
+    <div class="card">
+      <div class="card-body">Developed by Lichtenstein for undifferentiated acute respiratory failure — <b>not trauma-specific</b>, but the same sonographic signs apply directly to trauma chest injury assessment. Rapid, bedside, radiation-free — ideal next step in this exact scenario.</div>
+    </div>
+
+    <div class="sign-grid">
+      <div class="sign-card" style="border:1px solid #f87171;">
+        <div class="sign-name" style="color:#f87171;">Absent Lung Sliding</div>
+        <div class="sign-meaning">Pleural layers not moving against each other — suggests pneumothorax</div>
+      </div>
+      <div class="sign-card" style="border:1px solid #f87171;">
+        <div class="sign-name" style="color:#f87171;">Barcode / Stratosphere Sign</div>
+        <div class="sign-meaning">M-mode — straight horizontal lines instead of granular pattern. Confirms pneumothorax</div>
+      </div>
+      <div class="sign-card" style="border:1px solid #4ade80;">
+        <div class="sign-name" style="color:#4ade80;">Seashore Sign</div>
+        <div class="sign-meaning">M-mode — granular pattern below pleural line. Normal, excludes PTX at that point</div>
+      </div>
+      <div class="sign-card" style="border:1px solid #fbbf24;">
+        <div class="sign-name" style="color:#fbbf24;">Comet-Tail / B-Lines</div>
+        <div class="sign-meaning">Vertical artefacts from pleural line — interstitial fluid/oedema, consistent with contusion</div>
+      </div>
+      <div class="sign-card" style="border:1px solid #fbbf24;grid-column:span 2;">
+        <div class="sign-name" style="color:#fbbf24;">Subpleural Consolidation</div>
+        <div class="sign-meaning">Hypoechoic, tissue-like pattern with air bronchograms — supports pulmonary contusion/consolidation</div>
+      </div>
+    </div>
+
+    <div class="blue-steps">
+      <div class="blue-step">
+        <div class="blue-num">1</div>
+        <div class="blue-content">
+          <div class="blue-title">Clinical Reassessment</div>
+          <div class="blue-body">Reduced air entry + hyperresonance → pneumothorax pattern. Crepitations → contusion pattern.</div>
+        </div>
+      </div>
+      <div class="blue-step">
+        <div class="blue-num">2</div>
+        <div class="blue-content">
+          <div class="blue-title">Lung Ultrasound (BLUE Protocol)</div>
+          <div class="blue-body">Check for lung sliding, M-mode signs, B-lines, subpleural consolidation as above.</div>
+        </div>
+      </div>
+      <div class="blue-step">
+        <div class="blue-num">3</div>
+        <div class="blue-content">
+          <div class="blue-title">ABG + CXR</div>
+          <div class="blue-body">Assess PaO₂/FiO₂ ratio, degree of shunt. Confirm findings radiographically if time allows.</div>
+        </div>
+      </div>
+      <div class="blue-step">
+        <div class="blue-num">4</div>
+        <div class="blue-content">
+          <div class="blue-title">Management Branch</div>
+          <div class="blue-body"><b>Pneumothorax</b> → chest drain.<br><b>Contusion</b> → supportive: lung-protective ventilation if intubation needed, judicious fluids (avoid over-resuscitation — worsens contusion oedema), consider HFNC/CPAP to avoid intubation, physiotherapy, continue the ESP block to enable effective coughing and secretion clearance.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: ESP block gives good pain relief but patient is still hypoxic — has the block failed?</div>
+      <div class="pearl-a">No — the block is working exactly as intended (analgesia). Persistent hypoxia despite good pain control means a separate mechanical or parenchymal problem exists — pneumothorax or pulmonary contusion. Don't conflate analgesic success with respiratory adequacy; they are two different endpoints.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why might pulmonary contusion hypoxia worsen over the first 24-48 hours despite good analgesia?</div>
+      <div class="pearl-a">Contusion is an evolving injury — ongoing alveolar haemorrhage and inflammatory oedema accumulate over the first 1-2 days, independent of pain control. This is why serial reassessment (not a single check) matters in rib fracture patients.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Level selection for ESP block — how do you choose?</div>
+      <div class="pearl-a">Target the midpoint of the fractured rib segment, or the level of maximal tenderness. For ribs 4–9, that's typically T5. Identify the spinous process at that level as your midline/level marker, then move needle entry 2–3cm lateral to reach the transverse process — your actual target, injecting just superficial to it.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    FORERO ET AL — ESP BLOCK ORIGINAL DESCRIPTION, REG ANESTH PAIN MED 2016<br>
+    LICHTENSTEIN — BLUE PROTOCOL, CHEST 2008<br>
+    ATLS 10TH ED · ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>
