@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATLS Primary & Secondary Survey | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#fbbf24;border-color:#fbbf24;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.15rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#fbbf24;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.amber{color:#fbbf24;} .red{color:#f87171;} .green{color:#4ade80;} .blue{color:#60a5fa;}
+
+/* ABCDE letters */
+.abcde{margin-bottom:12px;}
+.letter-card{display:flex;gap:12px;margin-bottom:8px;align-items:flex-start;}
+.letter-badge{min-width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:900;flex-shrink:0;background:rgba(251,191,36,.12);border:2px solid #fbbf24;color:#fbbf24;}
+.letter-content{flex:1;background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;}
+.letter-title{font-size:.72rem;font-weight:900;color:#f3f4f6;margin-bottom:4px;letter-spacing:.04em;text-transform:uppercase;}
+.letter-body{font-size:.67rem;color:#a3a8b8;line-height:1.6;}
+.letter-body b{color:#c5c9d6;}
+
+/* Immediate vs hidden */
+.threat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.threat-col{border-radius:10px;border:1px solid;overflow:hidden;}
+.threat-head{padding:10px 12px;font-size:.68rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.threat-body{background:#0a0a18;padding:10px 12px;}
+.threat-item{font-size:.63rem;color:#c5c9d6;line-height:1.7;padding:3px 0;display:flex;gap:6px;align-items:flex-start;}
+.threat-num{min-width:16px;color:#6b7280;}
+
+/* Shock table */
+.shock-table{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.shock-row{display:flex;border-bottom:1px solid #2d2d42;}
+.shock-row:last-child{border-bottom:none;}
+.shock-cell{flex:1;padding:8px 10px;font-size:.6rem;line-height:1.5;color:#c5c9d6;}
+.shock-cell.label{flex:.5;color:#6b7280;font-weight:900;font-size:.58rem;letter-spacing:.05em;text-transform:uppercase;background:#0a0a18;}
+.shock-head{display:flex;background:#0a0a18;}
+.shock-head .shock-cell{font-weight:900;text-transform:uppercase;font-size:.58rem;letter-spacing:.05em;color:#6b7280;}
+
+/* AMPLE */
+.ample-grid{display:grid;grid-template-columns:1fr;gap:6px;margin-bottom:12px;}
+.ample-item{display:flex;gap:10px;align-items:center;background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:8px 12px;}
+.ample-letter{min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:900;background:rgba(74,222,128,.15);color:#4ade80;border:1px solid #4ade80;flex-shrink:0;}
+.ample-text{font-size:.68rem;color:#c5c9d6;}
+.ample-text b{color:#f3f4f6;}
+
+/* Secondary survey checklist */
+.checklist{margin-bottom:12px;}
+.check-item{display:flex;gap:8px;font-size:.68rem;color:#c5c9d6;line-height:1.6;padding:5px 0;border-bottom:1px solid #1a1a30;}
+.check-item:last-child{border-bottom:none;}
+.check-item b{color:#f3f4f6;}
+
+/* IPPA */
+.ippa-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.ippa-item{background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;}
+.ippa-title{font-size:.65rem;font-weight:900;color:#fbbf24;margin-bottom:4px;}
+.ippa-body{font-size:.62rem;color:#a3a8b8;line-height:1.5;}
+
+/* eFAST views */
+.efast-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:12px;}
+.efast-item{background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;border-left:3px solid #60a5fa;}
+.efast-title{font-size:.65rem;font-weight:900;color:#f3f4f6;margin-bottom:3px;}
+.efast-body{font-size:.62rem;color:#a3a8b8;line-height:1.5;}
+
+/* Log roll */
+.logroll-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.logroll-item{background:#0a0a18;border:1px solid #2d2d42;border-radius:8px;padding:10px;text-align:center;}
+.logroll-role{font-size:.65rem;font-weight:900;color:#4ade80;margin-bottom:3px;}
+.logroll-count{font-size:1.1rem;font-weight:900;color:#f3f4f6;}
+
+/* Callout */
+.callout{background:rgba(248,113,113,.06);border:1px solid #f87171;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+
+/* Pearl */
+.pearl{background:#14142a;border-left:3px solid #fbbf24;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#fbbf24;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="home-btn" href="index.html">☥ Home</a>
+
+  <div class="header">
+    <div class="icon">🚨</div>
+    <h1>ATLS Primary & Secondary Survey</h1>
+    <div class="sub">ATLS 10th Ed · Separate Exam Station</div>
+  </div>
+
+  <!-- PRIMARY SURVEY -->
+  <div class="section">
+    <p class="section-title">📋 Primary Survey — ABCDE</p>
+    <div class="abcde">
+      <div class="letter-card">
+        <div class="letter-badge">A</div>
+        <div class="letter-content">
+          <div class="letter-title">Airway with C-Spine Protection</div>
+          <div class="letter-body">Assess patency, look for obstruction, listen for stridor. C-spine immobilised throughout — manual in-line stabilisation before collar if uncertain.</div>
+        </div>
+      </div>
+      <div class="letter-card">
+        <div class="letter-badge">B</div>
+        <div class="letter-content">
+          <div class="letter-title">Breathing with Ventilation</div>
+          <div class="letter-body">Expose chest fully. Look for <b>tension pneumothorax</b>: tracheal shift, distended neck veins, absent breath sounds, hyperresonant percussion. Assess rate, symmetry, effort.</div>
+        </div>
+      </div>
+      <div class="letter-card">
+        <div class="letter-badge">C</div>
+        <div class="letter-content">
+          <div class="letter-title">Circulation with Haemorrhage Control</div>
+          <div class="letter-body">Identify and control exsanguinating external wounds (direct pressure, tourniquet). <b>Establish IV access, send bloods, initiate resuscitation/blood products.</b> Assess pulse, cap refill, skin colour.</div>
+        </div>
+      </div>
+      <div class="letter-card">
+        <div class="letter-badge">D</div>
+        <div class="letter-content">
+          <div class="letter-title">Disability</div>
+          <div class="letter-body"><b>GCS</b> (or AVPU rapid screen). <b>Pupils</b> — size, reactivity, compare both sides. Gross motor/sensory screen.</div>
+        </div>
+      </div>
+      <div class="letter-card">
+        <div class="letter-badge">E</div>
+        <div class="letter-content">
+          <div class="letter-title">Exposure / Environment</div>
+          <div class="letter-body">Fully undress patient. <b>Log roll</b> with C-spine control + apply pelvic binder if indicated. Prevent hypothermia — warm blankets/fluids immediately after exposure.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMMEDIATE VS HIDDEN SIX -->
+  <div class="section">
+    <p class="section-title">🫁 Chest Injuries — Immediate Six vs Hidden Six</p>
+    <div class="threat-grid">
+      <div class="threat-col" style="border-color:#f87171;">
+        <div class="threat-head" style="background:rgba(248,113,113,.12);color:#f87171;">Immediate — Primary Survey</div>
+        <div class="threat-body">
+          <div class="threat-item"><span class="threat-num">1</span>Airway obstruction</div>
+          <div class="threat-item"><span class="threat-num">2</span>Tension pneumothorax</div>
+          <div class="threat-item"><span class="threat-num">3</span>Open pneumothorax</div>
+          <div class="threat-item"><span class="threat-num">4</span>Massive haemothorax</div>
+          <div class="threat-item"><span class="threat-num">5</span>Flail chest</div>
+          <div class="threat-item"><span class="threat-num">6</span>Cardiac tamponade</div>
+        </div>
+      </div>
+      <div class="threat-col" style="border-color:#fbbf24;">
+        <div class="threat-head" style="background:rgba(251,191,36,.12);color:#fbbf24;">Hidden — Secondary Survey</div>
+        <div class="threat-body">
+          <div class="threat-item"><span class="threat-num">1</span>Simple pneumothorax</div>
+          <div class="threat-item"><span class="threat-num">2</span>Haemothorax</div>
+          <div class="threat-item"><span class="threat-num">3</span>Pulmonary contusion</div>
+          <div class="threat-item"><span class="threat-num">4</span>Tracheobronchial injury</div>
+          <div class="threat-item"><span class="threat-num">5</span>Blunt cardiac injury</div>
+          <div class="threat-item"><span class="threat-num">6</span>Traumatic aortic disruption</div>
+          <div class="threat-item"><span class="threat-num">7</span>Diaphragmatic injury</div>
+          <div class="threat-item"><span class="threat-num">8</span>Blunt oesophageal rupture</div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">⚠ Most Commonly Forgotten</div>
+      <div class="callout-item"><b>Airway obstruction</b> and <b>open pneumothorax</b> are the two immediate-six items most often left out when reciting from memory. Drill this list until it's automatic.</div>
+    </div>
+  </div>
+
+  <!-- SHOCK CLASSIFICATION -->
+  <div class="section">
+    <p class="section-title">🩸 Haemorrhagic Shock Classification</p>
+    <div class="shock-table">
+      <div class="shock-head">
+        <div class="shock-cell label">Class</div>
+        <div class="shock-cell">Blood Loss</div>
+        <div class="shock-cell">SBP</div>
+        <div class="shock-cell">Mental Status</div>
+      </div>
+      <div class="shock-row">
+        <div class="shock-cell label" style="color:#4ade80;">I</div>
+        <div class="shock-cell">&lt;15%</div>
+        <div class="shock-cell">Normal</div>
+        <div class="shock-cell">Slightly anxious</div>
+      </div>
+      <div class="shock-row">
+        <div class="shock-cell label" style="color:#fbbf24;">II</div>
+        <div class="shock-cell">15–30%</div>
+        <div class="shock-cell">Normal</div>
+        <div class="shock-cell">Mildly anxious</div>
+      </div>
+      <div class="shock-row">
+        <div class="shock-cell label" style="color:#fb923c;">III</div>
+        <div class="shock-cell"><b style="color:#fed7aa;">30–40%</b></div>
+        <div class="shock-cell">Decreased</div>
+        <div class="shock-cell">Confused</div>
+      </div>
+      <div class="shock-row">
+        <div class="shock-cell label" style="color:#f87171;">IV</div>
+        <div class="shock-cell">&gt;40%</div>
+        <div class="shock-cell">Decreased</div>
+        <div class="shock-cell">Confused/lethargic</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">70kg adult, blood volume ≈ <b>70ml/kg ≈ 5L.</b> Class III = 30-40% loss ≈ <b>1.5-2L.</b> ATLS does not specify an exact SBP number for each class — states "decreased" for III/IV vs "normal" for I/II. Don't over-specify a number the table itself doesn't give.</div>
+    </div>
+  </div>
+
+  <!-- ADJUNCTS TO PRIMARY SURVEY -->
+  <div class="section">
+    <p class="section-title">🔧 Adjuncts to Primary Survey</p>
+    <div class="card">
+      <div class="card-body">A distinct, formally named ATLS section — separate from the ABCDE letters themselves. Examiners ask this standalone: <b>"name the adjuncts to primary survey."</b></div>
+    </div>
+    <div class="checklist">
+      <div class="check-item">▸ <b>Monitoring</b> — continuous ECG, pulse oximetry, BP, EtCO₂ if intubated</div>
+      <div class="check-item">▸ <b>Urinary catheter</b> — assess output/resuscitation adequacy. <b>Contraindicated</b> if blood at meatus, high-riding/boggy prostate, scrotal haematoma, or pelvic fracture — do retrograde urethrogram first</div>
+      <div class="check-item">▸ <b>Gastric catheter</b> — decompresses stomach, reduces aspiration risk. Use <b>orogastric, not nasogastric</b>, if suspected base of skull fracture (cribriform plate injury risk)</div>
+      <div class="check-item">▸ <b>Trauma series X-rays</b> — chest, pelvis (± lateral C-spine; many centres now proceed straight to CT instead of plain film series)</div>
+      <div class="check-item">▸ <b>FAST/eFAST</b> — adjunct to circulation assessment, performed during primary survey</div>
+      <div class="check-item">▸ <b>ABG + lactate</b> — assess adequacy of resuscitation and ventilation</div>
+      <div class="check-item">▸ <b>Consider need for transfer</b> if local capability is exceeded — arrange early, don't wait until deterioration</div>
+    </div>
+  </div>
+
+  <!-- ADJUNCTS TO SECONDARY SURVEY -->
+  <div class="section">
+    <p class="section-title">🔧 Adjuncts to Secondary Survey</p>
+    <div class="checklist">
+      <div class="check-item">▸ <b>Detailed imaging</b> as indicated by findings — CT head/C-spine/chest/abdomen/pelvis, specific limb films</div>
+      <div class="check-item">▸ <b>Specialist consultation</b> as injuries are identified — neurosurgery, orthopaedics, OMFS etc.</div>
+      <div class="check-item">▸ <b>Ongoing monitoring and reassessment</b> — vital signs, urine output, response to interventions</div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">⚠ Exam Structure Reminder</div>
+      <div class="callout-item">"Adjuncts" are a formally separate ATLS category from the primary/secondary survey steps themselves — if asked to "describe the primary survey," adjuncts are typically a follow-up question, not automatically included unless specifically asked to "include adjuncts."</div>
+    </div>
+  </div>
+
+  <!-- GCS THRESHOLD -->
+  <div class="section">
+    <div class="card" style="border-color:#fbbf24;">
+      <div class="card-body"><b class="amber">GCS ≤8 → Intubate.</b> Threshold for securing the airway due to risk of aspiration and loss of airway reflexes. Say "≤8" not just "=8" — applies to GCS 8, 7, 6... down to 3.</div>
+    </div>
+  </div>
+
+  <!-- SECONDARY SURVEY TIMING -->
+  <div class="section">
+    <p class="section-title">⏱ Secondary Survey — Timing</p>
+    <div class="card" style="border-color:#4ade80;">
+      <div class="card-body"><b class="green">Secondary survey begins only AFTER the primary survey is complete and resuscitation is underway</b> — not before, and not run as a simultaneous parallel process. Continuous reassessment of primary survey findings happens throughout the secondary survey, but the secondary survey itself does not start until ABCDE has been addressed and the patient is stabilising.</div>
+    </div>
+  </div>
+
+  <!-- AMPLE -->
+  <div class="section">
+    <p class="section-title">📖 AMPLE History</p>
+    <div class="ample-grid">
+      <div class="ample-item"><div class="ample-letter">A</div><div class="ample-text"><b>Allergies</b></div></div>
+      <div class="ample-item"><div class="ample-letter">M</div><div class="ample-text"><b>Medications</b> — current</div></div>
+      <div class="ample-item"><div class="ample-letter">P</div><div class="ample-text"><b>Past medical/surgical history</b></div></div>
+      <div class="ample-item"><div class="ample-letter">L</div><div class="ample-text"><b>Last meal</b> — aspiration risk timing</div></div>
+      <div class="ample-item"><div class="ample-letter">E</div><div class="ample-text"><b>Events</b> preceding the injury — mechanism</div></div>
+    </div>
+  </div>
+
+  <!-- SECONDARY SURVEY DETAIL -->
+  <div class="section">
+    <p class="section-title">🔍 Secondary Survey — Head to Toe Checklist</p>
+    <div class="checklist">
+      <div class="check-item">▸ Reassess all primary survey findings continuously</div>
+      <div class="check-item">▸ Remove constricting rings/jewellery at fingers before swelling progresses</div>
+      <div class="check-item">▸ <b>Scalp</b> — laceration, boggy swelling. <b>Ear/nose</b> — CSF leak, bleeding (basal skull #). <b>Oral</b> — missing teeth (aspiration risk)</div>
+      <div class="check-item">▸ <b>Meatus</b> — blood at urethral meatus suggests urethral injury; do NOT catheterise until excluded</div>
+      <div class="check-item">▸ <b>During log roll:</b> examine spine for stepoff/tenderness, anal region for bleeding/tone (spinal injury, penetrating rectal injury)</div>
+      <div class="check-item">▸ <b>Deglove/retroperitoneal signs:</b> <b>Cullen's sign</b> (periumbilical ecchymosis), <b>Grey Turner's sign</b> (flank ecchymosis), <b>Fox's sign</b> (scrotal/inguinal ecchymosis) — all suggest retroperitoneal haemorrhage</div>
+      <div class="check-item">▸ Full limb exam — deformity, pulses, compartments, neurovascular status distal to any fracture</div>
+    </div>
+  </div>
+
+  <!-- LOG ROLL -->
+  <div class="section">
+    <p class="section-title">🔄 Log Roll Technique</p>
+    <div class="logroll-grid">
+      <div class="logroll-item"><div class="logroll-role">Minimum Team</div><div class="logroll-count">4–5</div></div>
+      <div class="logroll-item"><div class="logroll-role">Command</div><div class="logroll-count">"On 3"</div></div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b>1 at head</b> — controls airway/C-spine, gives the count, coordinates the roll. <b>2 at each side</b> (or 1 side + 1 at pelvis/legs) — roll the torso as one unit. <b>1 at foot end</b> if pelvic binder being applied simultaneously. On count of 3, entire body turns as a single unit — no independent movement of spine segments.</div>
+    </div>
+  </div>
+
+  <!-- IPPA CHEST EXAM -->
+  <div class="section">
+    <p class="section-title">🩺 Secondary Survey Chest — IPPA</p>
+    <div class="ippa-grid">
+      <div class="ippa-item">
+        <div class="ippa-title">Inspection</div>
+        <div class="ippa-body">Raised JVP → tamponade. Hemithorax appears full → haemothorax.</div>
+      </div>
+      <div class="ippa-item">
+        <div class="ippa-title">Palpation</div>
+        <div class="ippa-body">Tenderness, crepitus, flail segment, subcutaneous emphysema.</div>
+      </div>
+      <div class="ippa-item">
+        <div class="ippa-title">Auscultation</div>
+        <div class="ippa-body">Muffled heart sounds → tamponade. Reduced breath sounds → pneumo/haemothorax.</div>
+      </div>
+      <div class="ippa-item">
+        <div class="ippa-title">Percussion</div>
+        <div class="ippa-body">Hyperresonant → pneumothorax. Dull → haemothorax.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EFAST -->
+  <div class="section">
+    <p class="section-title">📡 eFAST — Integrated During Survey</p>
+    <div class="efast-grid">
+      <div class="efast-item">
+        <div class="efast-title">Subxiphoid / Pericardial</div>
+        <div class="efast-body">Pericardial effusion, cardiac tamponade — <b>diastolic RV collapse</b> is the key echo sign.</div>
+      </div>
+      <div class="efast-item">
+        <div class="efast-title">Hepatorenal (Morison's Pouch)</div>
+        <div class="efast-body">Collection between liver and right kidney — most dependent, highest yield view.</div>
+      </div>
+      <div class="efast-item">
+        <div class="efast-title">Splenic</div>
+        <div class="efast-body">Collection between spleen and diaphragm.</div>
+      </div>
+      <div class="efast-item">
+        <div class="efast-title">Infraumbilical / Pelvic</div>
+        <div class="efast-body">Collection between rectum and urinary bladder (rectovesical/rectouterine pouch).</div>
+      </div>
+      <div class="efast-item">
+        <div class="efast-title">Bilateral Thoracic (R & L)</div>
+        <div class="efast-body">Haemothorax detection — fluid above diaphragm. Plus lung sliding for pneumothorax.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">Full eFAST detail, decision algorithm, and limitations covered on the dedicated <a href="fast-efast.html" style="color:#60a5fa;">FAST/eFAST page.</a></div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: What's the difference between the "immediate six" and "hidden six" chest injuries?</div>
+      <div class="pearl-a">Immediate six are identified and treated on primary survey — they kill within minutes if missed (airway obstruction, tension/open pneumothorax, massive haemothorax, flail chest, tamponade). Hidden six are found on secondary survey — serious but not immediately lethal in the same timeframe (simple pneumothorax, haemothorax, pulmonary contusion, tracheobronchial injury, blunt cardiac injury, aortic disruption, plus diaphragmatic and oesophageal injury).</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Blood at the urethral meatus — what do you NOT do?</div>
+      <div class="pearl-a">Do not attempt urethral catheterisation until urethral injury is excluded (retrograde urethrogram). Catheterising a transected urethra can convert a partial injury into a complete one.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Name the three cutaneous signs of retroperitoneal haemorrhage.</div>
+      <div class="pearl-a">Cullen's sign (periumbilical ecchymosis), Grey Turner's sign (flank ecchymosis), Fox's sign (scrotal/inguinal ligament ecchymosis). All are late signs — may take hours to days to appear, do not rule out retroperitoneal bleed if absent early.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    ATLS 10TH EDITION — AMERICAN COLLEGE OF SURGEONS<br>
+    ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>

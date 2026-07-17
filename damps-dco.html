@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAMPs & DCO | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#fb923c;border-color:#fb923c;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#fb923c;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.orange{color:#fb923c;} .red{color:#f87171;} .green{color:#4ade80;}
+
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.vs-col{border-radius:10px;border:1px solid;overflow:hidden;}
+.vs-head{padding:10px 12px;font-size:.72rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.vs-body{background:#0a0a18;padding:10px 12px;}
+.vs-item{font-size:.63rem;color:#c5c9d6;line-height:1.6;padding:4px 0;border-bottom:1px solid #1a1a30;}
+.vs-item:last-child{border-bottom:none;}
+
+.damp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.damp-item{background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;border-left:3px solid #fb923c;}
+.damp-title{font-size:.65rem;font-weight:900;color:#f3f4f6;margin-bottom:3px;}
+.damp-body{font-size:.6rem;color:#a3a8b8;line-height:1.5;}
+
+.flow{margin-bottom:12px;}
+.flow-step{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.flow-box{flex:1;background:#14142a;border-radius:6px;padding:8px 10px;font-size:.63rem;color:#c5c9d6;line-height:1.4;border:1px solid #2d2d42;}
+.flow-box b{color:#f3f4f6;}
+.flow-arrow{color:#fb923c;font-size:1rem;flex-shrink:0;}
+
+.hit-timeline{position:relative;padding-left:22px;margin:10px 0;}
+.hit-timeline::before{content:'';position:absolute;left:6px;top:4px;bottom:4px;width:2px;background:#374151;}
+.hit-item{position:relative;margin-bottom:14px;}
+.hit-item::before{content:'';position:absolute;left:-22px;top:2px;width:12px;height:12px;border-radius:50%;background:#fb923c;border:2px solid #0d0d1a;}
+.hit-time{font-size:.58rem;font-weight:900;color:#fb923c;letter-spacing:.08em;text-transform:uppercase;}
+.hit-text{font-size:.73rem;color:#d1d5db;line-height:1.5;margin-top:2px;}
+.hit-text b{color:#f3f4f6;}
+
+.case-box{background:rgba(251,146,60,.06);border:2px solid #fb923c;border-radius:10px;padding:16px;margin-bottom:12px;}
+.case-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#fb923c;margin-bottom:10px;}
+
+.callout{background:rgba(248,113,113,.06);border:1px solid #f87171;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+.callout-item .wrong{color:#f87171;text-decoration:line-through;}
+.callout-item .right{color:#4ade80;}
+
+.pearl{background:#14142a;border-left:3px solid #fb923c;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#fb923c;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="home-btn" href="index.html">☥ Home</a>
+
+  <div class="header">
+    <div class="icon">🧬</div>
+    <h1>DAMPs & Damage Control Orthopaedics</h1>
+    <div class="sub">Danger Signals · Second Hit Theory · Timing of Definitive Surgery</div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">⚔️ DAMPs vs PAMPs</p>
+    <div class="vs-grid">
+      <div class="vs-col" style="border-color:#fb923c;">
+        <div class="vs-head" style="background:rgba(251,146,60,.12);color:#fb923c;">DAMPs</div>
+        <div class="vs-body">
+          <div class="vs-item"><b>D</b>amage-<b>A</b>ssociated <b>M</b>olecular <b>P</b>attern<b>s</b></div>
+          <div class="vs-item">Endogenous — from your OWN damaged/necrotic cells</div>
+          <div class="vs-item">Trigger: tissue trauma, surgery, ischaemia</div>
+          <div class="vs-item">No infection required</div>
+        </div>
+      </div>
+      <div class="vs-col" style="border-color:#60a5fa;">
+        <div class="vs-head" style="background:rgba(96,165,250,.12);color:#60a5fa;">PAMPs</div>
+        <div class="vs-body">
+          <div class="vs-item"><b>P</b>athogen-<b>A</b>ssociated <b>M</b>olecular <b>P</b>attern<b>s</b></div>
+          <div class="vs-item">Exogenous — from bacteria/pathogens (e.g. LPS/endotoxin)</div>
+          <div class="vs-item">Trigger: true infection, sepsis</div>
+          <div class="vs-item">Requires a pathogen</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b class="orange">The clinical trap:</b> both converge on the same receptors and downstream pathway — the innate immune system cannot distinguish "danger from bacteria" from "danger from tissue damage." A polytrauma patient without any infection can spike fevers, tachycardia, and meet SIRS criteria — looking septic without being septic.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🧪 Four Key DAMPs</p>
+    <div class="damp-grid">
+      <div class="damp-item">
+        <div class="damp-title">Mitochondrial DNA (mtDNA)</div>
+        <div class="damp-body">Mitochondria are evolutionarily bacterial in origin — mtDNA is recognised by the same receptor (TLR9) as bacterial DNA. The direct mechanistic link between trauma and a sepsis-like response.</div>
+      </div>
+      <div class="damp-item">
+        <div class="damp-title">HMGB1</div>
+        <div class="damp-body">Nuclear protein released from necrotic cells. Binds RAGE and TLR4.</div>
+      </div>
+      <div class="damp-item">
+        <div class="damp-title">Heat Shock Proteins</div>
+        <div class="damp-body">Released from stressed/dying cells. Activate TLR2/TLR4.</div>
+      </div>
+      <div class="damp-item">
+        <div class="damp-title">ATP</div>
+        <div class="damp-body">Released from damaged cells. Signals via P2X7 purinergic receptors → inflammasome activation.</div>
+      </div>
+    </div>
+    <div class="card"><div class="card-body">Broader category also includes: S100 proteins, hyaluronan fragments, uric acid.</div></div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🔬 The Shared Pathway</p>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-box"><b>DAMPs</b> released from damaged tissue</div></div>
+      <div class="flow-step" style="justify-content:center;"><span class="flow-arrow">↓</span></div>
+      <div class="flow-step"><div class="flow-box">Bind <b>Toll-like Receptors</b> — TLR4 and TLR9 (same as PAMPs)</div></div>
+      <div class="flow-step" style="justify-content:center;"><span class="flow-arrow">↓</span></div>
+      <div class="flow-step"><div class="flow-box">Activates <b>NF-κB</b></div></div>
+      <div class="flow-step" style="justify-content:center;"><span class="flow-arrow">↓</span></div>
+      <div class="flow-step"><div class="flow-box">Pro-inflammatory cytokines — <b>IL-6, IL-1β, TNF-α</b></div></div>
+      <div class="flow-step" style="justify-content:center;"><span class="flow-arrow">↓</span></div>
+      <div class="flow-step"><div class="flow-box" style="border-color:#f87171;color:#fca5a5;">Same cascade as sepsis — SIRS without infection</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🎯 The Second Hit Theory</p>
+    <div class="hit-timeline">
+      <div class="hit-item">
+        <div class="hit-time">First Hit — The Trauma Itself</div>
+        <div class="hit-text">Initial injury releases DAMPs → primes the innate immune system → systemic inflammatory response begins.</div>
+      </div>
+      <div class="hit-item">
+        <div class="hit-time">Vulnerable Window</div>
+        <div class="hit-text">Immune system already activated. Roughly the first <b>2–4 days</b> post-injury.</div>
+      </div>
+      <div class="hit-item">
+        <div class="hit-time">Second Hit — Major Surgery Too Early</div>
+        <div class="hit-text">Fresh tissue trauma from definitive surgery releases more DAMPs on an already-primed system → risk of exaggerated response — ARDS, MODS.</div>
+      </div>
+      <div class="hit-item">
+        <div class="hit-time">Resolution — Day 5–10</div>
+        <div class="hit-text">Inflammatory surge settles. Definitive fixation now safer. Some centres individualise via IL-6, procalcitonin, or clinical trajectory rather than a fixed day.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">📋 Worked Case</p>
+    <div class="case-box">
+      <div class="case-title">RTA · Maxillary + Left Tibial Fracture · Monday 8pm</div>
+      <div class="card-body" style="padding:0;">
+        <b class="orange">Monday 8pm:</b> Damage control ex-fix to tibia performed immediately — haemorrhage/contamination control, not the "second hit" surgery.<br><br>
+        <b class="orange">Tuesday morning:</b> OMFS wants definitive maxillary fixation — <b>deferred.</b> Still within the peak inflammatory window from Monday's trauma.<br><br>
+        <b class="green">Correct answer:</b> defer definitive fixation ~5-6 days, until the inflammatory surge settles.
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">⚠ Don't Misread DCO</div>
+      <div class="callout-item"><span class="wrong">No surgery at all after Day 0</span> → <span class="right">Damage control surgery still proceeds immediately. Only major DEFINITIVE reconstructive surgery is deferred.</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why can trauma patients meet SIRS without infection?</div>
+      <div class="pearl-a">DAMPs activate the same TLR4/TLR9 → NF-κB → cytokine pathway PAMPs use in sepsis. Tissue damage and infection converge on an identical inflammatory cascade.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why is mtDNA such an effective DAMP?</div>
+      <div class="pearl-a">Mitochondria derive from bacteria (endosymbiotic theory) — mtDNA retains bacterial-like unmethylated CpG motifs recognised by TLR9, the same receptor detecting bacterial DNA.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What determines definitive fixation timing beyond a fixed day count?</div>
+      <div class="pearl-a">Inflammatory marker trends (IL-6, procalcitonin) and clinical trajectory increasingly individualise timing. 5–10 days is a practical guideline, not an absolute cutoff.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    ZHANG ET AL — CIRCULATING MITOCHONDRIAL DAMPs, NATURE 2010<br>
+    PAPE ET AL — DAMAGE CONTROL ORTHOPAEDICS, J TRAUMA 2002<br>
+    ATLS 10TH ED · ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>

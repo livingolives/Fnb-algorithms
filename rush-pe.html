@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RUSH Protocol & Massive PE | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#38bdf8;border-color:#38bdf8;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#38bdf8;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.blue{color:#38bdf8;} .red{color:#f87171;} .green{color:#4ade80;} .amber{color:#fbbf24;} .purple{color:#a78bfa;}
+
+/* Three windows */
+.window-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.window-card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;text-align:center;}
+.window-head{padding:10px 8px;font-size:.68rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.window-icon{font-size:1.4rem;margin-top:6px;}
+.window-body{background:#0a0a18;padding:8px;font-size:.6rem;color:#9ca3af;line-height:1.5;}
+
+/* Main RUSH table */
+.rush-table{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.rush-row{display:flex;border-bottom:1px solid #2d2d42;}
+.rush-row:last-child{border-bottom:none;}
+.rush-cell{flex:1;padding:9px 10px;font-size:.62rem;line-height:1.5;color:#c5c9d6;}
+.rush-cell.label{flex:.85;color:#f3f4f6;font-weight:900;font-size:.63rem;background:#0a0a18;}
+.rush-head{display:flex;background:#0a0a18;}
+.rush-head .rush-cell{font-weight:900;text-transform:uppercase;font-size:.58rem;letter-spacing:.06em;color:#6b7280;}
+
+/* Obstructive causes grid */
+.obs-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px;}
+.obs-card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;border-left:4px solid;}
+.obs-head{padding:10px 14px;display:flex;align-items:center;gap:10px;}
+.obs-icon{font-size:1.3rem;}
+.obs-name{font-size:.72rem;font-weight:900;color:#f3f4f6;letter-spacing:.04em;text-transform:uppercase;}
+.obs-body{background:#0a0a18;padding:10px 14px;}
+.obs-row{font-size:.65rem;color:#c5c9d6;line-height:1.6;padding:4px 0;}
+.obs-row b{color:#f3f4f6;}
+
+/* Pump tank pipes explainer */
+.ptp-flow{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;justify-content:center;}
+.ptp-box{background:#0a0a18;border:2px solid;border-radius:8px;padding:10px 14px;text-align:center;min-width:90px;}
+.ptp-arrow{color:#6b7280;font-size:1.2rem;}
+.ptp-label{font-size:.6rem;font-weight:900;text-transform:uppercase;}
+.ptp-sub{font-size:.55rem;color:#9ca3af;margin-top:2px;}
+
+/* Case study */
+.case-box{background:rgba(56,189,248,.06);border:2px solid #38bdf8;border-radius:10px;padding:16px;margin-bottom:12px;}
+.case-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#38bdf8;margin-bottom:10px;}
+.case-vitals{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.case-vital{background:#0a0a18;border:1px solid #2d2d42;border-radius:5px;padding:4px 8px;font-size:.63rem;}
+.case-vital span{color:#6b7280;margin-right:3px;}
+.case-vital b{color:#f3f4f6;}
+
+/* Echo signs grid */
+.echo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.echo-item{background:#0a0a18;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;}
+.echo-title{font-size:.64rem;font-weight:900;margin-bottom:3px;}
+.echo-body{font-size:.6rem;color:#9ca3af;line-height:1.5;}
+
+/* Comparison callout */
+.callout{background:rgba(248,113,113,.06);border:1px solid #f87171;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+.callout-item .wrong{color:#f87171;text-decoration:line-through;}
+.callout-item .right{color:#4ade80;}
+
+/* Management ladder */
+.ladder{margin-bottom:12px;}
+.rung{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;}
+.rung-badge{min-width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:900;flex-shrink:0;}
+.rung-content{flex:1;background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;}
+.rung-title{font-size:.67rem;font-weight:900;color:#f3f4f6;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em;}
+.rung-body{font-size:.66rem;color:#a3a8b8;line-height:1.6;}
+.rung-body b{color:#c5c9d6;}
+
+/* Contraindications */
+.ci-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.ci-col{border-radius:10px;border:1px solid;overflow:hidden;}
+.ci-head{padding:9px 12px;font-size:.68rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.ci-body{background:#0a0a18;padding:9px 12px;}
+.ci-item{font-size:.62rem;color:#c5c9d6;line-height:1.5;padding:3px 0;}
+
+/* Pearl */
+.pearl{background:#14142a;border-left:3px solid #38bdf8;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#38bdf8;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="home-btn" href="index.html">☥ Home</a>
+
+  <div class="header">
+    <div class="icon">🎯</div>
+    <h1>RUSH Protocol & Massive PE</h1>
+    <div class="sub">Rapid Ultrasound for Shock · Pump-Tank-Pipes · PE in Trauma</div>
+  </div>
+
+  <!-- WHAT IS RUSH -->
+  <div class="section">
+    <p class="section-title">📖 RUSH — Rapid Ultrasound for SHock</p>
+    <div class="card">
+      <div class="card-body"><b class="blue">Not</b> "Rapid Ultrasound for Haemorrhage" — a common exam error. RUSH is a general bedside ultrasound protocol to rapidly differentiate the <b>type</b> of undifferentiated shock: hypovolaemic, cardiogenic, obstructive, or distributive.</div>
+    </div>
+    <div class="window-grid">
+      <div class="window-card" style="border-color:#f87171;">
+        <div class="window-head" style="background:rgba(248,113,113,.12);color:#f87171;">PUMP<div class="window-icon">🫀</div></div>
+        <div class="window-body">Heart — contractility, effusion, RV strain</div>
+      </div>
+      <div class="window-card" style="border-color:#60a5fa;">
+        <div class="window-head" style="background:rgba(96,165,250,.12);color:#60a5fa;">TANK<div class="window-icon">🧊</div></div>
+        <div class="window-body">IVC — volume status, preload</div>
+      </div>
+      <div class="window-card" style="border-color:#4ade80;">
+        <div class="window-head" style="background:rgba(74,222,128,.12);color:#4ade80;">PIPES<div class="window-icon">🩸</div></div>
+        <div class="window-body">Aorta (rule out AAA/dissection) + femoral vein (DVT screen)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN TABLE -->
+  <div class="section">
+    <p class="section-title">📊 RUSH Findings by Shock Type</p>
+    <div class="rush-table">
+      <div class="rush-head">
+        <div class="rush-cell label">Type</div>
+        <div class="rush-cell">Pump (Heart)</div>
+        <div class="rush-cell">Tank (IVC)</div>
+        <div class="rush-cell">Pipes</div>
+      </div>
+      <div class="rush-row">
+        <div class="rush-cell label" style="color:#fbbf24;">Hypovolaemic</div>
+        <div class="rush-cell">Hyperdynamic — "kissing ventricles"</div>
+        <div class="rush-cell">Collapsed, flat</div>
+        <div class="rush-cell">Collapsed, small aorta</div>
+      </div>
+      <div class="rush-row">
+        <div class="rush-cell label" style="color:#f87171;">Cardiogenic</div>
+        <div class="rush-cell">Hypokinetic, dilated chambers</div>
+        <div class="rush-cell">Full / distended</div>
+        <div class="rush-cell">Compensatory vasoconstriction or normal</div>
+      </div>
+      <div class="rush-row">
+        <div class="rush-cell label" style="color:#a78bfa;">Obstructive</div>
+        <div class="rush-cell">Normal (or strain signs — see below)</div>
+        <div class="rush-cell">Distended</div>
+        <div class="rush-cell">Collapsed (arterial side)</div>
+      </div>
+      <div class="rush-row">
+        <div class="rush-cell label" style="color:#4ade80;">Distributive/Septic</div>
+        <div class="rush-cell">Normal / hyperdynamic (early)</div>
+        <div class="rush-cell">Normal / full</div>
+        <div class="rush-cell">Vasodilated</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY OBSTRUCTIVE PATTERN -->
+  <div class="section">
+    <p class="section-title">🔬 Why Tank Distended but Pipes Collapsed in Obstructive Shock</p>
+    <div class="ptp-flow">
+      <div class="ptp-box" style="border-color:#60a5fa;">
+        <div class="ptp-label" style="color:#60a5fa;">TANK</div>
+        <div class="ptp-sub">Venous, pre-obstruction<br>Blood dams up behind block<br>→ DISTENDED</div>
+      </div>
+      <div class="ptp-arrow">⛔</div>
+      <div class="ptp-box" style="border-color:#a78bfa;">
+        <div class="ptp-label" style="color:#a78bfa;">OBSTRUCTION</div>
+        <div class="ptp-sub">Tamponade / tension PTX<br>/ massive PE</div>
+      </div>
+      <div class="ptp-arrow">→</div>
+      <div class="ptp-box" style="border-color:#4ade80;">
+        <div class="ptp-label" style="color:#4ade80;">PIPES</div>
+        <div class="ptp-sub">Arterial, post-obstruction<br>Starved of forward flow<br>→ compensatory vasoconstriction<br>→ COLLAPSED</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">Think of the obstruction as a <b class="purple">clamp on cardiac output</b>: everything behind it backs up (tank distended), everything in front of it is starved (pipes collapsed) — same peripheral vasoconstriction physiology as hypovolaemia, but from a mechanical block rather than true volume loss. <b>IVC is the discriminator:</b> collapsed in hypovolaemia, distended in obstruction.</div>
+    </div>
+  </div>
+
+  <!-- OBSTRUCTIVE CAUSES -->
+  <div class="section">
+    <p class="section-title">🚨 Obstructive Shock — Three Causes RUSH Differentiates</p>
+    <div class="obs-grid">
+      <div class="obs-card" style="border-color:#f87171;">
+        <div class="obs-head" style="background:rgba(248,113,113,.1);"><span class="obs-icon">🫁</span><span class="obs-name" style="color:#f87171;">Tension Pneumothorax</span></div>
+        <div class="obs-body">
+          <div class="obs-row"><b>Absent lung sliding</b></div>
+          <div class="obs-row">M-mode: <b>barcode / stratosphere sign</b> (vs normal seashore sign)</div>
+        </div>
+      </div>
+      <div class="obs-card" style="border-color:#fbbf24;">
+        <div class="obs-head" style="background:rgba(251,191,36,.1);"><span class="obs-icon">🫀</span><span class="obs-name" style="color:#fbbf24;">Cardiac Tamponade</span></div>
+        <div class="obs-body">
+          <div class="obs-row">Pericardial effusion visualised</div>
+          <div class="obs-row"><b>Diastolic RV collapse</b> — external pressure compresses thin-walled RV when its pressure is lowest</div>
+          <div class="obs-row">Distended neck veins, distended IVC</div>
+        </div>
+      </div>
+      <div class="obs-card" style="border-color:#a78bfa;">
+        <div class="obs-head" style="background:rgba(167,139,250,.1);"><span class="obs-icon">🔴</span><span class="obs-name" style="color:#a78bfa;">Abdominal Compartment Syndrome</span></div>
+        <div class="obs-body">
+          <div class="obs-row">Not a direct visual sign like the other two — diagnosed primarily by <b>IAP measurement</b></div>
+          <div class="obs-row">Ultrasound supports via <b>VEXUS scoring</b> — hepatic/portal vein Doppler changes as a consequence of raised IAP</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASSIVE PE CASE -->
+  <div class="section">
+    <p class="section-title">🎯 Worked Case — Massive PE in Trauma</p>
+    <div class="case-box">
+      <div class="case-title">Polytrauma · Day 4 Post-Op · Sudden Desaturation, Hypotension, Raised JVP</div>
+      <div class="case-vitals">
+        <div class="case-vital"><span>Onset</span><b>Sudden</b></div>
+        <div class="case-vital"><span>JVP</span><b>Raised</b></div>
+        <div class="case-vital"><span>SpO₂</span><b>Falling</b></div>
+        <div class="case-vital"><span>BP</span><b>Hypotensive</b></div>
+      </div>
+      <div class="card-body" style="padding:0;">Classic obstructive shock pattern — RUSH is the immediate bedside diagnostic step alongside standard ABCDE reassessment (tube position, ventilator pressures to also exclude pneumothorax as a mimicking cause).</div>
+    </div>
+  </div>
+
+  <!-- ECHO SIGNS PE -->
+  <div class="section">
+    <p class="section-title">🫀 RUSH Findings — Massive PE</p>
+    <div class="echo-grid">
+      <div class="echo-item" style="border-color:#f87171;">
+        <div class="echo-title" style="color:#f87171;">RV Dilatation</div>
+        <div class="echo-body">RV:LV ratio &gt;1 — pressure overload from clot obstructing outflow. NOT collapse — that's the tamponade sign.</div>
+      </div>
+      <div class="echo-item" style="border-color:#fbbf24;">
+        <div class="echo-title" style="color:#fbbf24;">D-Shaped LV</div>
+        <div class="echo-body">Interventricular septum flattens/bows into LV from RV pressure overload — makes LV cross-section look "D" shaped. It's the septum causing this, not the RV itself.</div>
+      </div>
+      <div class="echo-item" style="border-color:#a78bfa;">
+        <div class="echo-title" style="color:#a78bfa;">McConnell's Sign</div>
+        <div class="echo-body">RV free wall akinesia with <b>preserved apical contraction</b> — specific sign for acute PE, distinguishes from chronic RV strain.</div>
+      </div>
+      <div class="echo-item" style="border-color:#60a5fa;">
+        <div class="echo-title" style="color:#60a5fa;">IVC Distended</div>
+        <div class="echo-body">Back-pressure from obstructed RV outflow — classic obstructive "tank" pattern.</div>
+      </div>
+      <div class="echo-item" style="border-color:#4ade80;grid-column:span 2;">
+        <div class="echo-title" style="color:#4ade80;">Pipes — Femoral Vein Non-Compressible</div>
+        <div class="echo-body">DVT source identified at the groin — same probe position doubles as embolic source screen while assessing "pipes."</div>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="callout-title">⚠ Don't Confuse Obstructive Causes</div>
+      <div class="callout-item"><span class="wrong">RV diastolic collapse in massive PE</span> → <span class="right">That's tamponade. PE causes RV dilatation/strain from internal pressure overload, not external compression.</span></div>
+    </div>
+  </div>
+
+  <!-- THROMBOLYSIS DILEMMA -->
+  <div class="section">
+    <p class="section-title">⚖️ The Trauma-Specific Thrombolysis Dilemma</p>
+    <div class="card">
+      <div class="card-body">Recent major surgery/trauma (<b>within 10 days</b>, some sources cite up to 3 weeks) is a <b>RELATIVE, not absolute,</b> contraindication to systemic thrombolysis. Day 4 post-op sits well within this window.</div>
+    </div>
+    <div class="card" style="border-color:#38bdf8;">
+      <div class="card-body"><b class="blue">The actual dilemma:</b> untreated massive PE with shock carries very high mortality. Relative contraindications CAN be overridden in a life-threatening massive PE — it becomes a genuine risk-benefit judgement made under time pressure, not simply deferred to committee. Absolute contraindications cannot be overridden.</div>
+    </div>
+
+    <div class="ci-grid">
+      <div class="ci-col" style="border-color:#f87171;">
+        <div class="ci-head" style="background:rgba(248,113,113,.12);color:#f87171;">Absolute CI to Lysis</div>
+        <div class="ci-body">
+          <div class="ci-item">Active internal bleeding</div>
+          <div class="ci-item">Prior intracranial haemorrhage</div>
+          <div class="ci-item">Known intracranial tumour/AVM</div>
+          <div class="ci-item">Ischaemic stroke within 3 months</div>
+          <div class="ci-item">Suspected aortic dissection</div>
+        </div>
+      </div>
+      <div class="ci-col" style="border-color:#fbbf24;">
+        <div class="ci-head" style="background:rgba(251,191,36,.12);color:#fbbf24;">Relative CI (Overridable)</div>
+        <div class="ci-body">
+          <div class="ci-item">Major surgery/trauma within 10 days</div>
+          <div class="ci-item">Recent GI bleed</div>
+          <div class="ci-item">Uncontrolled hypertension</div>
+          <div class="ci-item">Pregnancy</div>
+          <div class="ci-item">Age &gt;75</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANAGEMENT LADDER -->
+  <div class="section">
+    <p class="section-title">🎯 Management if Thrombolysis Avoided</p>
+    <div class="ladder">
+      <div class="rung">
+        <div class="rung-badge" style="background:rgba(96,165,250,.15);color:#60a5fa;border:1px solid #60a5fa;">1</div>
+        <div class="rung-content">
+          <div class="rung-title">Anticoagulation Alone</div>
+          <div class="rung-body"><b>Unfractionated heparin infusion</b> — preferred in unstable/high-bleeding-risk patients as short-acting and reversible with protamine if bleeding occurs or urgent surgery needed.</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-badge" style="background:rgba(74,222,128,.15);color:#4ade80;border:1px solid #4ade80;">2</div>
+        <div class="rung-content">
+          <div class="rung-title">Catheter-Directed Therapy</div>
+          <div class="rung-body"><b>Catheter-directed thrombolysis (CDT)</b> — low-dose lysis delivered directly into the clot via IR, significantly reduced bleeding risk vs systemic lysis. Often the answer when systemic lysis too risky but clot burden reduction still needed.<br><b>Mechanical thrombectomy</b> — aspiration devices (FlowTriever, Penumbra), no lytic drug at all.</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-badge" style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid #fbbf24;">3</div>
+        <div class="rung-content">
+          <div class="rung-title">Surgical Embolectomy</div>
+          <div class="rung-body">For patients failing/unsuitable for the above, particularly with absolute contraindication to any lytic therapy and cardiac surgery available.</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-badge" style="background:rgba(167,139,250,.15);color:#a78bfa;border:1px solid #a78bfa;">4</div>
+        <div class="rung-content">
+          <div class="rung-title">VA-ECMO — Bridge Therapy</div>
+          <div class="rung-body">Refractory shock — buys time for definitive clot management by IR/surgery.</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-badge" style="background:rgba(248,113,113,.15);color:#f87171;border:1px solid #f87171;">+</div>
+        <div class="rung-content">
+          <div class="rung-title">Supportive Care Throughout</div>
+          <div class="rung-body"><b>Careful fluid management</b> — RV already strained, avoid volume overload worsening it. <b>Noradrenaline</b> preferred over aggressive fluids to support RV coronary perfusion pressure.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: What does RUSH actually stand for?</div>
+      <div class="pearl-a"><b>Rapid Ultrasound for SHock</b> — not haemorrhage. A general shock differentiation protocol assessing Pump (heart), Tank (IVC), and Pipes (aorta + femoral vein).</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why is IVC distended but the aorta collapsed in obstructive shock?</div>
+      <div class="pearl-a">The obstruction acts as a clamp on cardiac output. Venous blood dams up behind the block (IVC distended), while the arterial side receives critically reduced forward flow, triggering compensatory vasoconstriction (aorta/pipes collapsed) — same peripheral shutdown physiology as hypovolaemia, different cause.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: RV diastolic collapse vs RV dilatation — which condition, which sign?</div>
+      <div class="pearl-a"><b>Tamponade</b> → RV diastolic collapse (external compression from pericardial fluid). <b>Massive PE</b> → RV dilatation/strain, D-shaped LV, McConnell's sign (internal pressure overload from obstructed outflow). Do not confuse these two obstructive causes.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Can you thrombolyse a massive PE patient 4 days post-laparotomy?</div>
+      <div class="pearl-a">Recent surgery within 10 days is a relative, not absolute, contraindication. In a life-threatening massive PE with shock, the mortality of untreated PE may outweigh the bleeding risk — this becomes a genuine risk-benefit decision, often favouring catheter-directed therapy or even systemic lysis over withholding reperfusion entirely.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    PERERA ET AL — RUSH EXAM, EMERG MED CLIN NORTH AM 2010<br>
+    ESC PULMONARY EMBOLISM GUIDELINES 2019 · ATLS 10TH ED<br>
+    ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>

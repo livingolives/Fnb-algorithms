@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crush Syndrome — Management Algorithm</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #060612; color: #fff;
+  font-family: 'Courier New', monospace;
+  min-height: 100vh; padding: 16px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.container { width: 100%; max-width: 640px; }
+.header { text-align: center; margin-bottom: 20px; padding-top: 8px; }
+.header h1 { font-size: 1.1rem; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; color: #f87171; }
+.header p { font-size: 0.65rem; color: #4b5563; letter-spacing: 0.2em; text-transform: uppercase; margin-top: 4px; }
+
+.card {
+  border-radius: 12px; padding: 16px 18px; margin-bottom: 10px;
+  border: 2px solid; background: #0a0a1a;
+}
+.card h2 { font-size: 1.2rem; font-weight: 900; margin-bottom: 4px; }
+.card .subtitle { font-size: 0.72rem; color: #9ca3af; margin-bottom: 12px; }
+.badge {
+  display: inline-block; font-size: 0.58rem; font-weight: 900;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 4px; border: 1px solid; margin-bottom: 8px;
+}
+.section { font-size: 0.6rem; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; margin: 10px 0 6px; }
+.item { display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; margin-bottom: 5px; line-height: 1.4; }
+.step { display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; margin-bottom: 6px; line-height: 1.4; }
+.step-num { font-size: 0.65rem; font-weight: 900; padding: 1px 5px; border-radius: 3px; flex-shrink: 0; margin-top: 1px; }
+.pearl { border-radius: 8px; padding: 10px 12px; margin-top: 12px; border: 1px solid; }
+.pearl-label { font-size: 0.6rem; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+.pearl p { font-size: 0.76rem; color: #d1d5db; line-height: 1.5; }
+.fact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0; }
+.fact-box { border-radius: 6px; padding: 8px 10px; border: 1px solid; }
+.fact-label { font-size: 0.55rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
+.fact-value { font-size: 0.85rem; font-weight: 900; }
+.divider { height: 1px; background: #1f2937; margin: 12px 0; }
+.options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.opt-btn {
+  width: 100%; text-align: left; padding: 12px 16px; border-radius: 8px;
+  font-size: 0.78rem; font-weight: 700; font-family: 'Courier New', monospace;
+  cursor: pointer; border: 1px solid; transition: all 0.15s; line-height: 1.4;
+}
+.opt-btn:hover { transform: translateX(3px); }
+.btn-red { background: #450a0a; border-color: #dc2626; color: #fca5a5; }
+.btn-red:hover { background: #7f1d1d; }
+.btn-default { background: #1f2937; border-color: #4b5563; color: #e5e7eb; }
+.btn-default:hover { background: #374151; }
+.btn-green { background: #052e16; border-color: #16a34a; color: #86efac; }
+.btn-green:hover { background: #14532d; }
+.btn-orange { background: #431407; border-color: #ea580c; color: #fed7aa; }
+.btn-orange:hover { background: #7c2d12; }
+.nav { display: flex; gap: 10px; margin-top: 4px; }
+.nav-btn { flex: 1; padding: 10px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; font-family: 'Courier New', monospace; cursor: pointer; border: 1px solid; transition: all 0.15s; }
+.btn-back { background: #1f2937; border-color: #374151; color: #d1d5db; }
+.btn-back:hover { background: #374151; }
+.btn-restart { background: #111827; border-color: #1f2937; color: #6b7280; }
+.btn-restart:hover { color: #d1d5db; background: #1f2937; }
+.breadcrumb { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; min-height: 18px; }
+.end-msg { background: #111827; border: 1px solid #374151; border-radius: 8px; padding: 16px; text-align: center; margin-bottom: 12px; }
+.footer { text-align: center; font-size: 0.58rem; color: #1f2937; letter-spacing: 0.2em; margin-top: 20px; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🦴 Crush Syndrome</h1>
+    <p>Management Algorithm · FNB Exit 2026 · Dr. Wilson</p>
+  </div>
+  <div class="breadcrumb" id="breadcrumb"></div>
+  <div id="app"></div>
+  <div class="footer">BASED ON ATLS 10TH ED + ESSENTIALS OF TRAUMA ANAESTHESIA · DR. WILSON</div>
+</div>
+
+<script>
+const nodes = {
+  start: {
+    type: "start", color: "#f87171",
+    text: "CRUSH SYNDROME",
+    subtitle: "Prolonged compression of muscle → ischaemia + reperfusion injury",
+    content: [
+      {type:"label", text:"⚡ Definition:"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"Compression >1 hour → ischaemia → rhabdomyolysis on release"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"Systemic effects from release of intracellular contents"},
+      {type:"label", text:"⚡ Classic scenario:"},
+      {type:"item", icon:"▸", col:"#fef08a", text:"Earthquake/building collapse → prolonged entrapment"},
+      {type:"item", icon:"▸", col:"#fef08a", text:"Road traffic accident with prolonged crushing"},
+      {type:"item", icon:"▸", col:"#fef08a", text:"Tourniquet left on too long"}
+    ],
+    options:[{label:"Begin Assessment →", next:"prehospital"}]
+  },
+  prehospital: {
+    type: "warning", color: "#ef4444",
+    text: "⚠ PRE-HOSPITAL — BEFORE RELEASE!",
+    subtitle: "Critical window — act BEFORE removing compression",
+    content: [
+      {type:"label", text:"🚨 POP THE CORK PHENOMENON:"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"Sudden release → K⁺ + acid + myoglobin flood into circulation"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"Can cause immediate cardiac arrest!"},
+      {type:"label", text:"📋 DO BEFORE RELEASING:"},
+      {type:"step", n:1, text:"IV access + aggressive fluids RUNNING (1-1.5L/hr)"},
+      {type:"step", n:2, text:"NaHCO₃ infusion → alkalinise circulation BEFORE release"},
+      {type:"step", n:3, text:"Calcium gluconate drawn up and ready"},
+      {type:"step", n:4, text:"ECG monitoring + defibrillator pads on"},
+      {type:"step", n:5, text:"Release SLOWLY — not all at once!"}
+    ],
+    pearl: "NEVER rapidly release prolonged crush without preparation! Each minute of preparation saves a life. Inform team: 'We are about to release a crush injury — prepare for cardiac arrest!'",
+    options:[{label:"Crush released safely → Assess patient →", next:"assess"}]
+  },
+  assess: {
+    type: "decision", color: "#f87171",
+    text: "PRIMARY SURVEY + DIAGNOSIS",
+    subtitle: "Simultaneous assessment and resuscitation",
+    content: [
+      {type:"label", text:"⚡ Diagnostic clues:"},
+      {type:"item", icon:"▸", col:"#fef08a", text:"Cola/dark brown urine = MYOGLOBINURIA (pathognomonic!)"},
+      {type:"item", icon:"▸", col:"#fef08a", text:"Dipstick +ve for blood BUT no RBCs on microscopy"},
+      {type:"item", icon:"▸", col:"#fef08a", text:"↑CK (often >10,000 IU/L)"},
+      {type:"item", icon:"▸", col:"#fef08a", text:"↑K⁺, ↓Ca²⁺, ↑uric acid, ↑phosphate"},
+      {type:"label", text:"📋 Investigations:"},
+      {type:"step", n:1, text:"ABG — lactate, pH, base excess"},
+      {type:"step", n:2, text:"FBC, UEC, LFT, coag, CK, LDH"},
+      {type:"step", n:3, text:"Urine myoglobin + osmolality"},
+      {type:"step", n:4, text:"ECG — hyperkalaemia changes"},
+      {type:"step", n:5, text:"Arterial line + central line"}
+    ],
+    options:[
+      {label:"Haemodynamically stable → Medical management", next:"medical"},
+      {label:"Cardiac arrest / Arrythmia → Emergency", next:"emergency"},
+      {label:"Limb symptoms → Compartment syndrome", next:"compartment"}
+    ]
+  },
+  emergency: {
+    type: "emergency", color: "#ef4444",
+    text: "⚠ CARDIAC EMERGENCY",
+    subtitle: "Hyperkalaemia-induced arrhythmia or cardiac arrest",
+    content: [
+      {type:"label", text:"📋 Hyperkalaemia management:"},
+      {type:"step", n:1, text:"Calcium gluconate 10ml of 10% IV — cardioprotective IMMEDIATELY"},
+      {type:"step", n:2, text:"Insulin 10 units + Dextrose 50ml of 50% IV"},
+      {type:"step", n:3, text:"Sodium bicarbonate 50mmol IV"},
+      {type:"step", n:4, text:"Salbutamol 10-20mg nebulised"},
+      {type:"step", n:5, text:"Calcium resonium (oral/PR) — slower but sustained"},
+      {type:"step", n:6, text:"Dialysis if refractory — most effective!"},
+      {type:"label", text:"⚡ Arrest management:"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"Standard ALS — CPR + defibrillation"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"Consider ECMO if refractory arrest"}
+    ],
+    pearl: "In crush syndrome cardiac arrest — think K⁺! Give calcium gluconate EARLY even before K⁺ result is back. The ECG changes (peaked T waves, wide QRS, sine wave) tell you the K⁺ is dangerously high!",
+    options:[{label:"Stabilised → Medical management →", next:"medical"}]
+  },
+  medical: {
+    type: "action", color: "#4fc3f7",
+    text: "MEDICAL MANAGEMENT",
+    subtitle: "The 5 pillars of crush syndrome management",
+    content: [
+      {type:"label", text:"💧 1. Aggressive fluid resuscitation:"},
+      {type:"step", n:1, text:"1-1.5 LITRES per hour initially (much more than normal!)"},
+      {type:"step", n:2, text:"Target UO: 200-300 ml/hr (to flush myoglobin!)"},
+      {type:"step", n:3, text:"Normal saline OR Hartmann's"},
+      {type:"label", text:"🔬 2. Urine alkalinisation:"},
+      {type:"step", n:1, text:"NaHCO₃ infusion — target urine pH >6.5"},
+      {type:"step", n:2, text:"Why? Myoglobin soluble in alkaline urine → excreted!"},
+      {type:"step", n:3, text:"Myoglobin precipitates in acid urine → tubular damage"},
+      {type:"label", text:"⚡ 3. Electrolyte management:"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"Hyperkalaemia → see emergency pathway"},
+      {type:"item", icon:"▸", col:"#f87171", text:"Hypocalcaemia → DO NOT replace routinely!"},
+      {type:"item", icon:"▸", col:"#fef08a", text:"Only give Ca²⁺ if: symptomatic tetany / arrhythmia / severe hyperkalaemia needing cardioprotection"},
+      {type:"label", text:"🔥 4. Treat acidosis:"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"NaHCO₃ if serum pH <7.1 OR urine pH <6.5"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"Target urine pH >6.5 — myoglobin soluble in alkaline urine, prevents Tamm-Horsfall cast formation"},
+      {type:"item", icon:"▸", col:"#f87171", text:"Caution — alkalinisation worsens hypocalcaemia (ionised Ca²⁺ → bound). Monitor closely."},
+      {type:"label", text:"💊 5. Diuretics:"},
+      {type:"item", icon:"▸", col:"#c4b5fd", text:"Mannitol 0.5–1 g/kg IV — four mechanisms:"},
+      {type:"item", icon:"▸", col:"#9ca3af", text:"① Osmotic diuresis — flushes myoglobin casts from tubules"},
+      {type:"item", icon:"▸", col:"#9ca3af", text:"② Free radical scavenger — quenches ·OH from myoglobin Fe²⁺ Fenton reaction (KEY mechanism)"},
+      {type:"item", icon:"▸", col:"#9ca3af", text:"③ Reduces compartment pressure → limits ongoing myonecrosis"},
+      {type:"item", icon:"▸", col:"#9ca3af", text:"④ Rheological — improves renal microcirculation"},
+      {type:"item", icon:"▸", col:"#f87171", text:"Do NOT use frusemide — increases flow but acidifies urine → worsens cast precipitation"}
+    ],
+    pearl: "DO NOT give calcium routinely in crush syndrome! Ca²⁺ deposits in necrotic muscle → worsens damage → paradoxical hypercalcaemia in recovery phase! Only give for symptoms!",
+    options:[
+      {label:"UO adequate → Monitor →", next:"monitor"},
+      {label:"UO <0.5ml/kg/hr for 6hrs → RRT", next:"rrt"},
+      {label:"K⁺ >6.0 / ECG changes → Hyperkalaemia protocol", next:"hyperkalaemia"},
+      {label:"Limb pain/tense → Compartment syndrome", next:"compartment"}
+    ]
+  },
+  compartment: {
+    type: "action", color: "#fb923c",
+    text: "COMPARTMENT SYNDROME",
+    subtitle: "6Ps — Pain, Pressure, Paralysis, Paraesthesia, Pallor, Pulselessness",
+    content: [
+      {type:"label", text:"📋 Diagnosis:"},
+      {type:"item", icon:"▸", col:"#fdba74", text:"Clinical: pain out of proportion + pain on passive stretch"},
+      {type:"item", icon:"▸", col:"#fdba74", text:"Compartment pressure >30 mmHg"},
+      {type:"item", icon:"▸", col:"#fdba74", text:"Delta pressure (MAP - compartment pressure) <30 mmHg → fasciotomy!"},
+      {type:"label", text:"🔪 Treatment:"},
+      {type:"step", n:1, text:"FASCIOTOMY — surgical decompression"},
+      {type:"step", n:2, text:"4-compartment fasciotomy of leg"},
+      {type:"step", n:3, text:"Do NOT wait — permanent nerve/muscle damage within 6hrs!"},
+      {type:"step", n:4, text:"Leave wound open — delayed primary closure at 48-72hrs"},
+      {type:"step", n:5, text:"Wound VAC therapy for open wounds"}
+    ],
+    pearl: "Cannot use tourniquet to diagnose compartment syndrome — it prevents blood flow artificially. Compartment pressure >30mmHg in a hypotensive patient may need fasciotomy even at lower absolute pressures. Use delta pressure!",
+    options:[{label:"Post fasciotomy → Continue medical management →", next:"monitor"}]
+  },
+  hyperkalaemia: {
+    type: "emergency", color: "#f87171",
+    text: "HYPERKALAEMIA MANAGEMENT",
+    subtitle: "K⁺ >6.0 with ECG changes — peaked T waves, wide QRS, sine wave",
+    content: [
+      {type:"label", text:"⚡ 5-Step Protocol (in order):"},
+      {type:"step", n:1, text:"Calcium gluconate 10% — 10ml IV over 10 min → membrane stabilisation. Acts in 2–3 min. Does NOT lower K⁺ — protects myocardium only."},
+      {type:"step", n:2, text:"Insulin 10 units IV + 50ml 50% dextrose → Na/K ATPase → intracellular K⁺ shift. Onset 15–30 min. Most effective single agent."},
+      {type:"step", n:3, text:"Sodium bicarbonate 8.4% 50ml IV → alkalinisation → H⁺/K⁺ exchange → intracellular shift. Onset 15–30 min. Also corrects acidosis."},
+      {type:"step", n:4, text:"Nebulised salbutamol 10–20mg → β₂ → Na/K ATPase → intracellular shift. Onset 30 min. Additive to insulin."},
+      {type:"step", n:5, text:"RRT/Haemodialysis → definitive removal. Essential in AKI — kidneys cannot excrete K⁺. Do not rely on frusemide if renal function compromised."},
+      {type:"label", text:"⚠ Critical distinctions:"},
+      {type:"item", icon:"▸", col:"#f87171", text:"Steps 1 only STABILISES membrane — does NOT lower K⁺"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"Steps 2–4 SHIFT K⁺ intracellularly — temporary, K⁺ will rebound"},
+      {type:"item", icon:"▸", col:"#c4b5fd", text:"Step 5 REMOVES K⁺ — the only definitive treatment"},
+      {type:"item", icon:"▸", col:"#f87171", text:"Do NOT give Ca²⁺ routinely — worsens rebound hypercalcaemia in recovery phase. Only for ECG changes or symptomatic hyperkalaemia."}
+    ],
+    pearl: "In crush syndrome hyperkalaemia — calcium gluconate membrane stabilisation buys you minutes, insulin/dextrose buys you hours, RRT is the cure. Never rely on frusemide when the kidneys are the problem.",
+    options:[{label:"K⁺ controlled → Continue medical management →", next:"medical"}]
+  },
+  rrt: {
+    type: "action", color: "#a78bfa",
+    text: "RENAL REPLACEMENT THERAPY",
+    subtitle: "AKI from myoglobin tubular toxicity",
+    content: [
+      {type:"label", text:"📋 Indications for RRT:"},
+      {type:"item", icon:"▸", col:"#c4b5fd", text:"UO <0.5ml/kg/hr for 6 hours despite fluids"},
+      {type:"item", icon:"▸", col:"#c4b5fd", text:"Refractory hyperkalaemia K⁺ >6.5"},
+      {type:"item", icon:"▸", col:"#c4b5fd", text:"Refractory acidosis pH <7.1"},
+      {type:"item", icon:"▸", col:"#c4b5fd", text:"Fluid overload with pulmonary oedema"},
+      {type:"item", icon:"▸", col:"#c4b5fd", text:"Uraemia — urea >30 mmol/L"},
+      {type:"label", text:"📋 RRT modalities:"},
+      {type:"step", n:1, text:"CRRT (Continuous) — haemodynamically unstable"},
+      {type:"step", n:2, text:"CVVHDF — most common in ICU crush syndrome"},
+      {type:"step", n:3, text:"IHD — haemodynamically stable"},
+      {type:"step", n:4, text:"High-volume haemofiltration — for severe cases"},
+      {type:"label", text:"⚡ Why CRRT preferred:"},
+      {type:"item", icon:"▸", col:"#c4b5fd", text:"Myoglobin = large molecule → CRRT removes better"},
+      {type:"item", icon:"▸", col:"#c4b5fd", text:"Haemodynamic stability maintained"},
+      {type:"item", icon:"▸", col:"#c4b5fd", text:"Continuous electrolyte control!"}
+    ],
+    pearl: "Start RRT EARLY — don't wait for all criteria. In crush syndrome, myoglobin continues to cause ongoing tubular damage. Early RRT removes myoglobin AND corrects electrolytes simultaneously!",
+    options:[{label:"RRT initiated → Continue monitoring →", next:"monitor"}]
+  },
+  monitor: {
+    type: "final", color: "#4ade80",
+    text: "ICU MONITORING & TARGETS",
+    subtitle: "Goals of resuscitation in crush syndrome",
+    content: [
+      {type:"label", text:"📋 Monitoring targets:"},
+      {type:"step", n:1, text:"UO 200-300 ml/hr (myoglobin clearance)"},
+      {type:"step", n:2, text:"Urine pH >6.5 (alkalinisation)"},
+      {type:"step", n:3, text:"pH >7.35 (acidosis correction)"},
+      {type:"step", n:4, text:"K⁺ <5.5 mmol/L"},
+      {type:"step", n:5, text:"Temperature >36°C"},
+      {type:"step", n:6, text:"CK trending down (not rising)"},
+      {type:"label", text:"⚡ Complications to watch:"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"AKI — most common (80% of crush syndrome)"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"DIC — from massive tissue injury"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"ARDS — inflammatory mediator storm"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"MODS — end stage"},
+      {type:"item", icon:"▸", col:"#fca5a5", text:"Hypercalcaemia in RECOVERY phase — Ca²⁺ released from healing muscle!"},
+      {type:"label", text:"📋 When to stop aggressive fluids:"},
+      {type:"item", icon:"▸", col:"#86efac", text:"CK falling + urine clearing + UO adequate"},
+      {type:"item", icon:"▸", col:"#86efac", text:"Risk of fluid overload → pulmonary oedema"},
+      {type:"item", icon:"▸", col:"#86efac", text:"Use VEXUS grading to guide decongestion!"}
+    ],
+    pearl: "RECOVERY PHASE TRAP: As necrotic muscle heals → Ca²⁺ that was deposited gets mobilised back → HYPERCALCAEMIA! This is why we don't give Ca²⁺ routinely — it makes this recovery phase hypercalcaemia worse!"
+  }
+};
+
+let current = "start";
+let history = [];
+
+const typeColors = {
+  start:{bg:"#0a0a1a"}, warning:{bg:"#1a0000"}, decision:{bg:"#0a0a1a"},
+  action:{bg:"#0a0a1a"}, emergency:{bg:"#1a0000"}, final:{bg:"#0a0a1a"}
+};
+const badges = {
+  start:"▶ START", warning:"⚠ CRITICAL", decision:"◈ ASSESS",
+  action:"→ TREATMENT", emergency:"⚠ EMERGENCY", final:"✓ ICU GOALS"
+};
+
+function renderContent(items, color) {
+  let html = '';
+  items.forEach(item => {
+    if (item.type==='label') html += `<p class="section" style="color:${color}">${item.text}</p>`;
+    else if (item.type==='item') html += `<div class="item"><span style="color:${item.col||color}">${item.icon}</span><span style="color:${item.col||'#e5e7eb'}">${item.text}</span></div>`;
+    else if (item.type==='step') html += `<div class="step"><span class="step-num" style="background:${color}22;color:${color}">${item.n}</span><span style="color:#d1d5db">${item.text}</span></div>`;
+  });
+  return html;
+}
+
+function render() {
+  const node = nodes[current];
+  const color = node.color || "#f87171";
+  const bg = typeColors[node.type]?.bg || "#0a0a1a";
+  const app = document.getElementById('app');
+  const bc = document.getElementById('breadcrumb');
+
+  bc.innerHTML = history.map(h => `<span style="font-size:0.62rem;color:#374151">${nodes[h].text.split(' ').slice(0,3).join(' ')} ›</span>`).join('') +
+    (history.length ? `<span style="font-size:0.62rem;color:#6b7280">${node.text.split(' ').slice(0,3).join(' ')}</span>` : '');
+
+  let html = `<div class="card" style="background:${bg};border-color:${color}">`;
+  html += `<div class="badge" style="color:${color};border-color:${color}">${badges[node.type]||'→'}</div>`;
+  html += `<h2 style="color:${color}">${node.text}</h2>`;
+  if (node.subtitle) html += `<p class="subtitle">${node.subtitle}</p>`;
+  if (node.content) html += renderContent(node.content, color);
+  if (node.pearl) html += `<div class="pearl" style="border-color:${color}55;background:${color}08"><div class="pearl-label" style="color:${color}">💡 Examiner Pearl:</div><p>${node.pearl}</p></div>`;
+  html += '</div>';
+
+  if (node.options) {
+    html += '<div class="options">';
+    node.options.forEach(opt => {
+      const cls = opt.color==='red'?'btn-red':opt.color==='green'?'btn-green':opt.color==='orange'?'btn-orange':'btn-default';
+      html += `<button class="opt-btn ${cls}" onclick="go('${opt.next}')">${opt.label}</button>`;
+    });
+    html += '</div>';
+  } else {
+    html += '<div class="end-msg"><div style="color:#4ade80;font-weight:700;font-size:0.85rem">✓ End of pathway</div><div style="color:#6b7280;font-size:0.7rem;margin-top:4px">Review targets and restart</div></div>';
+  }
+
+  html += '<div class="nav">';
+  if (history.length) html += `<button class="nav-btn btn-back" onclick="goBack()">← Back</button>`;
+  html += `<button class="nav-btn btn-restart" onclick="restart()">↺ Restart</button>`;
+  html += '</div>';
+
+  app.innerHTML = html;
+  window.scrollTo(0,0);
+}
+
+function go(next) { history.push(current); current=next; render(); }
+function goBack() { if(history.length){current=history.pop();render();} }
+function restart() { current="start"; history=[]; render(); }
+render();
+</script>
+</body>
+</html>

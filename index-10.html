@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TraumaDog — Dr. Wilson</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;}
+.hero{text-align:center;padding:48px 20px 32px;border-bottom:1px solid #2d2d42;}
+.ankh{font-size:2.5rem;margin-bottom:12px;display:block;}
+.hero h1{font-size:1.7rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#fbbf24;margin-bottom:6px;}
+.hero .byline{font-size:.7rem;color:#9ca3af;letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;}
+.hero .tagline{font-size:.8rem;color:#9ca3af;font-style:italic;margin-bottom:20px;}
+.stats{display:flex;justify-content:center;gap:24px;}
+.stat{text-align:center;}
+.stat-num{font-size:1.5rem;font-weight:900;color:#fbbf24;}
+.stat-label{font-size:.6rem;color:#9ca3af;letter-spacing:.15em;text-transform:uppercase;}
+
+.section{padding:24px 16px;}
+.container{max-width:720px;margin:0 auto;}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.section-header .s-icon{font-size:1.1rem;}
+.section-header h2{font-size:.78rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#fbbf24;}
+.divider{border:none;border-top:1px solid #2d2d42;margin:0 16px;}
+
+.category-block{margin-bottom:22px;}
+.category-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:8px 12px;border-radius:8px;border-left:4px solid;}
+.category-icon{font-size:1.2rem;}
+.category-name{font-size:.78rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;}
+.category-count{font-size:.6rem;color:#9ca3af;margin-left:auto;letter-spacing:.08em;}
+
+.algo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.algo-card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:14px;text-decoration:none;display:flex;flex-direction:column;gap:7px;transition:all .2s;}
+.algo-card:hover{border-color:#fbbf24;background:#1a1a35;}
+.algo-card .a-icon{font-size:1.5rem;}
+.algo-card .a-title{font-size:.76rem;font-weight:900;color:#f9fafb;letter-spacing:.03em;line-height:1.35;}
+.algo-card .a-tags{font-size:.6rem;color:#a3a8b8;line-height:1.55;}
+.algo-card .a-badge{font-size:.55rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:3px;align-self:flex-start;margin-top:2px;}
+
+.calc-card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:14px;text-decoration:none;display:flex;align-items:center;gap:14px;margin-top:10px;transition:all .2s;}
+.calc-card:hover{border-color:#fbbf24;background:#1a1a35;}
+.calc-card .c-icon{font-size:1.9rem;}
+.calc-card .c-title{font-size:.78rem;font-weight:900;color:#f9fafb;margin-bottom:4px;}
+.calc-card .c-sub{font-size:.62rem;color:#a3a8b8;}
+.calc-card .c-arrow{margin-left:auto;color:#fbbf24;font-size:1.1rem;}
+
+.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sim-card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:14px;text-decoration:none;display:flex;flex-direction:column;gap:6px;transition:all .2s;position:relative;}
+.sim-card:hover{border-color:#fbbf24;background:#1a1a35;}
+.sim-card .live-badge{position:absolute;top:10px;right:10px;font-size:.52rem;font-weight:900;letter-spacing:.1em;background:rgba(74,222,128,.18);color:#4ade80;border:1px solid #4ade80;padding:2px 6px;border-radius:3px;}
+.sim-card .soon-badge{position:absolute;top:10px;right:10px;font-size:.52rem;font-weight:900;letter-spacing:.1em;background:rgba(156,163,175,.18);color:#9ca3af;border:1px solid #9ca3af;padding:2px 6px;border-radius:3px;}
+.sim-card .s-icon{font-size:1.5rem;}
+.sim-card .s-title{font-size:.76rem;font-weight:900;color:#f9fafb;}
+.sim-card .s-sub{font-size:.62rem;color:#a3a8b8;line-height:1.55;}
+
+.quiz-card{background:#14142a;border:1px solid #fbbf24;border-radius:10px;padding:20px;text-decoration:none;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;transition:background .2s;}
+.quiz-card:hover{background:#1a1a35;}
+.quiz-card .q-icon{font-size:1.9rem;}
+.quiz-card .q-title{font-size:.88rem;font-weight:900;color:#fbbf24;letter-spacing:.1em;text-transform:uppercase;}
+.quiz-card .q-sub{font-size:.68rem;color:#c5c9d6;}
+.quiz-card .q-ranks{display:flex;gap:10px;font-size:.64rem;color:#9ca3af;flex-wrap:wrap;justify-content:center;}
+
+.lore{background:#0a0a18;border-top:1px solid #2d2d42;border-bottom:1px solid #2d2d42;padding:28px 16px;text-align:center;}
+.lore .hiero{font-size:1rem;color:#4b5563;letter-spacing:.15em;margin-bottom:16px;}
+.lore h3{font-size:.8rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#fbbf24;margin-bottom:12px;}
+.lore p{font-size:.72rem;color:#a3a8b8;line-height:1.8;max-width:560px;margin:0 auto 12px;}
+.lore .quote{font-size:.74rem;color:#c5c9d6;font-style:italic;border-left:2px solid #fbbf24;padding-left:12px;margin:16px auto;max-width:400px;text-align:left;}
+.lore .attribution{font-size:.6rem;color:#6b7280;letter-spacing:.1em;text-transform:uppercase;}
+
+.footer{padding:20px 16px;text-align:center;}
+.footer .f-link{display:inline-block;font-size:.66rem;color:#c5c9d6;text-decoration:none;border:1px solid #2d2d42;padding:9px 18px;border-radius:6px;letter-spacing:.08em;transition:all .2s;}
+.footer .f-link:hover{color:#fbbf24;border-color:#fbbf24;}
+.footer .f-source{font-size:.58rem;color:#4b5563;letter-spacing:.1em;margin-top:12px;}
+.footer .f-note{font-size:.64rem;color:#6b7280;margin-top:8px;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="ankh">☥</span>
+  <h1>TraumaDog</h1>
+  <div class="byline">Dr. Livingston Sharon Wilson · FNB Trauma Anaesthesia</div>
+  <div class="tagline">"Broken bones come with broken souls"</div>
+  <div class="stats">
+    <div class="stat"><div class="stat-num">40</div><div class="stat-label">Algorithms</div></div>
+    <div class="stat"><div class="stat-num">4</div><div class="stat-label">Simulators</div></div>
+    <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Quickies</div></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="s-icon">📋</span>
+      <h2>Clinical Decision Algorithms</h2>
+    </div>
+
+    <div class="category-block">
+      <div class="category-head" style="background:rgba(251,191,36,.1);border-color:#fbbf24;">
+        <span class="category-icon">🚨</span>
+        <span class="category-name" style="color:#fbbf24;">ATLS Core</span>
+        <span class="category-count">2 algorithms</span>
+      </div>
+      <div class="algo-grid">
+        <a class="algo-card" href="atls-survey.html">
+          <span class="a-icon">🚨</span>
+          <div class="a-title">Primary & Secondary Survey</div>
+          <div class="a-tags">ABCDE · Immediate/hidden six · AMPLE · Adjuncts · Shock classes</div>
+          <span class="a-badge" style="background:rgba(251,191,36,.18);color:#fbbf24;border:1px solid #fbbf24;">ATLS · Station</span>
+        </a>
+        <a class="algo-card" href="cxr-atls.html">
+          <span class="a-icon">📷</span>
+          <div class="a-title">Trauma Chest X-Ray</div>
+          <div class="a-tags">Systematic approach · Deep sulcus sign · Widened mediastinum</div>
+          <span class="a-badge" style="background:rgba(251,191,36,.18);color:#fbbf24;border:1px solid #fbbf24;">CXR · Imaging</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="category-block">
+      <div class="category-head" style="background:rgba(248,113,113,.1);border-color:#f87171;">
+        <span class="category-icon">☠️</span>
+        <span class="category-name" style="color:#f87171;">Airway</span>
+        <span class="category-count">3 algorithms</span>
+      </div>
+      <div class="algo-grid">
+        <a class="algo-card" href="maxfax_airway_algorithm.html">
+          <span class="a-icon">☠️</span>
+          <div class="a-title">Maxillofacial Trauma</div>
+          <div class="a-tags">AFOI · RSI · CICO · Surgical Airway · Le Fort classifications</div>
+          <span class="a-badge" style="background:rgba(248,113,113,.18);color:#f87171;border:1px solid #f87171;">Airway · NAP4</span>
+        </a>
+        <a class="algo-card" href="olv.html">
+          <span class="a-icon">🫁</span>
+          <div class="a-title">One-Lung Ventilation</div>
+          <div class="a-tags">DLT vs bronchial blocker · HPV mechanism · Hypoxaemia ladder</div>
+          <span class="a-badge" style="background:rgba(6,182,212,.18);color:#06b6d4;border:1px solid #06b6d4;">OLV · HPV</span>
+        </a>
+        <a class="algo-card" href="cricothyroid.html">
+          <span class="a-icon">🔪</span>
+          <div class="a-title">Cricothyroid Membrane & CICO</div>
+          <div class="a-tags">Anatomy · DAS scalpel-bougie-tube technique</div>
+          <span class="a-badge" style="background:rgba(248,113,113,.18);color:#f87171;border:1px solid #f87171;">CICO · DAS</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="category-block">
+      <div class="category-head" style="background:rgba(251,191,36,.1);border-color:#fbbf24;">
+        <span class="category-icon">🩸</span>
+        <span class="category-name" style="color:#fbbf24;">Shock & Haemorrhage</span>
+        <span class="category-count">10 algorithms</span>
+      </div>
+      <div class="algo-grid">
+        <a class="algo-card" href="vasopressors.html">
+          <span class="a-icon">💉</span>
+          <div class="a-title">Vasopressors in Shock</div>
+          <div class="a-tags">Norad vs vasopressin vs phenylephrine · Receptor profiles</div>
+          <span class="a-badge" style="background:rgba(251,191,36,.18);color:#fbbf24;border:1px solid #fbbf24;">Shock · Pharm</span>
+        </a>
+        <a class="algo-card" href="haemorrhagic_shock.html">
+          <span class="a-icon">🩸</span>
+          <div class="a-title">Haemorrhagic Shock & DCR</div>
+          <div class="a-tags">Class I–IV · 1:1:1 MTP · Lethal triad · TXA · ATC</div>
+          <span class="a-badge" style="background:rgba(251,191,36,.18);color:#fbbf24;border:1px solid #fbbf24;">DCR · CRASH-2</span>
+        </a>
+        <a class="algo-card" href="reboa.html">
+          <span class="a-icon">🫀</span>
+          <div class="a-title">REBOA</div>
+          <div class="a-tags">Zone I · II · III · REBOA vs EDT · Reperfusion injury</div>
+          <span class="a-badge" style="background:rgba(251,191,36,.18);color:#fbbf24;border:1px solid #fbbf24;">Endovascular</span>
+        </a>
+        <a class="algo-card" href="coagulopathy.html">
+          <span class="a-icon">🔬</span>
+          <div class="a-title">Coagulopathy in Trauma</div>
+          <div class="a-tags">ATC vs RAC vs DIC · TEG/ROTEM · TXA</div>
+          <span class="a-badge" style="background:rgba(251,191,36,.18);color:#fbbf24;border:1px solid #fbbf24;">ATC · TEG</span>
+        </a>
+        <a class="algo-card" href="hyperlactatemia.html">
+          <span class="a-icon">🩸</span>
+          <div class="a-title">Hyperlactataemia</div>
+          <div class="a-tags">Cohen–Woods · Type A vs B · L:P ratio</div>
+          <span class="a-badge" style="background:rgba(251,191,36,.18);color:#fbbf24;border:1px solid #fbbf24;">Lactate</span>
+        </a>
+        <a class="algo-card" href="pelvic-fracture.html">
+          <span class="a-icon">🦴</span>
+          <div class="a-title">Pelvic Fracture Haemorrhage</div>
+          <div class="a-tags">Young-Burgess · Tile/AO · PPP vs angio · Interactive</div>
+          <span class="a-badge" style="background:rgba(251,191,36,.18);color:#fbbf24;border:1px solid #fbbf24;">Pelvic · PPP</span>
+        </a>
+        <a class="algo-card" href="emergency-laparotomy.html">
+          <span class="a-icon">🔪</span>
+          <div class="a-title">Emergency Laparotomy & DCL</div>
+          <div class="a-tags">DCS phases · Induction in shock · MAP targets</div>
+          <span class="a-badge" style="background:rgba(251,191,36,.18);color:#fbbf24;border:1px solid #fbbf24;">DCL</span>
+        </a>
+        <a class="algo-card" href="fast-efast.html">
+          <span class="a-icon">📡</span>
+          <div class="a-title">FAST / eFAST</div>
+          <div class="a-tags">4 views · Morison's pouch · Decision algorithm</div>
+          <span class="a-badge" style="background:rgba(34,211,238,.18);color:#22d3ee;border:1px solid #22d3ee;">FAST · US</span>
+        </a>
+        <a class="algo-card" href="liver-injury.html">
+          <span class="a-icon">🫀</span>
+          <div class="a-title">Liver Injury Grading</div>
+          <div class="a-tags">AAST · WSES · Grade IV/V anaesthesia · Pringle manoeuvre</div>
+          <span class="a-badge" style="background:rgba(192,132,252,.18);color:#c084fc;border:1px solid #c084fc;">WSES · Liver</span>
+        </a>
+        <a class="algo-card" href="junctional-haemorrhage.html">
+          <span class="a-icon">🩸</span>
+          <div class="a-title">Junctional Haemorrhage</div>
+          <div class="a-tags">Groin/axilla/neck zones · Junctional tourniquets · Links to REBOA</div>
+          <span class="a-badge" style="background:rgba(234,179,8,.18);color:#eab308;border:1px solid #eab308;">Junctional</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="category-block">
+      <div class="category-head" style="background:rgba(56,189,248,.1);border-color:#38bdf8;">
+        <span class="category-icon">🎯</span>
+        <span class="category-name" style="color:#38bdf8;">Shock Assessment</span>
+        <span class="category-count">1 algorithm</span>
+      </div>
+      <div class="algo-grid">
+        <a class="algo-card" href="rush-pe.html">
+          <span class="a-icon">🎯</span>
+          <div class="a-title">RUSH Protocol & Massive PE</div>
+          <div class="a-tags">Pump-Tank-Pipes · Obstructive shock causes · PE thrombolysis dilemma</div>
+          <span class="a-badge" style="background:rgba(56,189,248,.18);color:#38bdf8;border:1px solid #38bdf8;">RUSH · PE</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="category-block">
+      <div class="category-head" style="background:rgba(251,113,133,.1);border-color:#fb7185;">
+        <span class="category-icon">💉</span>
+        <span class="category-name" style="color:#fb7185;">Regional Anaesthesia</span>
+        <span class="category-count">2 algorithms</span>
+      </div>
+      <div class="algo-grid">
+        <a class="algo-card" href="fascia-iliaca-last.html">
+          <span class="a-icon">💉</span>
+          <div class="a-title">Fascia Iliaca Block & LAST</div>
+          <div class="a-tags">Two-pop technique · NAVEL · Intralipid dosing</div>
+          <span class="a-badge" style="background:rgba(167,139,250,.18);color:#a78bfa;border:1px solid #a78bfa;">RA · LAST</span>
+        </a>
+        <a class="algo-card" href="esp-block.html">
+          <span class="a-icon">🩹</span>
+          <div class="a-title">ESP Block vs Epidural</div>
+          <div class="a-tags">Rib fracture analgesia · BLUE protocol case</div>
+          <span class="a-badge" style="background:rgba(251,113,133,.18);color:#fb7185;border:1px solid #fb7185;">ESP · Rib #</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="category-block">
+      <div class="category-head" style="background:rgba(96,165,250,.1);border-color:#60a5fa;">
+        <span class="category-icon">🧠</span>
+        <span class="category-name" style="color:#60a5fa;">Neurotrauma</span>
+        <span class="category-count">4 algorithms</span>
+      </div>
+      <div class="algo-grid">
+        <a class="algo-card" href="tbi_management.html">
+          <span class="a-icon">🧠</span>
+          <div class="a-title">TBI Management</div>
+          <div class="a-tags">Monroe-Kellie · CPP targets · ICP tiers (SIBICC)</div>
+          <span class="a-badge" style="background:rgba(96,165,250,.18);color:#60a5fa;border:1px solid #60a5fa;">TBI · ICP</span>
+        </a>
+        <a class="algo-card" href="spinal_cord_injury.html">
+          <span class="a-icon">🦴</span>
+          <div class="a-title">Spinal Cord Injury</div>
+          <div class="a-tags">Neurogenic vs spinal shock · MAP 85–90</div>
+          <span class="a-badge" style="background:rgba(96,165,250,.18);color:#60a5fa;border:1px solid #60a5fa;">Spinal</span>
+        </a>
+        <a class="algo-card" href="nexus-cspine.html">
+          <span class="a-icon">🦴</span>
+          <div class="a-title">NEXUS & Canadian C-Spine</div>
+          <div class="a-tags">5 criteria · 3-step decision tree · Age discriminator</div>
+          <span class="a-badge" style="background:rgba(96,165,250,.18);color:#60a5fa;border:1px solid #60a5fa;">NEXUS</span>
+        </a>
+        <a class="algo-card" href="stewart-acidbase.html">
+          <span class="a-icon">⚗️</span>
+          <div class="a-title">Stewart Acid-Base</div>
+          <div class="a-tags">HH flaws · SID · Atot · Corrected AG</div>
+          <span class="a-badge" style="background:rgba(96,165,250,.18);color:#60a5fa;border:1px solid #60a5fa;">Stewart · SID</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="category-block">
+      <div class="category-head" style="background:rgba(74,222,128,.1);border-color:#4ade80;">
+        <span class="category-icon">🫁</span>
+        <span class="category-name" style="color:#4ade80;">ICU & Systemic</span>
+        <span class="category-count">12 algorithms</span>
+      </div>
+      <div class="algo-grid">
+        <a class="algo-card" href="vexus.html">
+          <span class="a-icon">🫘</span>
+          <div class="a-title">VEXUS Score</div>
+          <div class="a-tags">Hepatic/portal/renal Doppler · Congestive AKI mechanism</div>
+          <span class="a-badge" style="background:rgba(56,189,248,.18);color:#38bdf8;border:1px solid #38bdf8;">VEXUS</span>
+        </a>
+        <a class="algo-card" href="dic.html">
+          <span class="a-icon">🩸</span>
+          <div class="a-title">DIC</div>
+          <div class="a-tags">ISTH score · Two phenotypes · vs ATC comparison</div>
+          <span class="a-badge" style="background:rgba(220,38,38,.18);color:#dc2626;border:1px solid #dc2626;">DIC · ISTH</span>
+        </a>
+        <a class="algo-card" href="arterial-waveform.html">
+          <span class="a-icon">📈</span>
+          <div class="a-title">Arterial Waveform Physiology</div>
+          <div class="a-tags">Transducer setup · Damping · Haemorrhagic vs septic changes</div>
+          <span class="a-badge" style="background:rgba(129,140,248,.18);color:#818cf8;border:1px solid #818cf8;">Waveform</span>
+        </a>
+        <a class="algo-card" href="dka-trauma.html">
+          <span class="a-icon">🍬</span>
+          <div class="a-title">DKA in the Trauma Patient</div>
+          <div class="a-tags">Fixed-rate insulin · K⁺ before insulin · Competing priorities</div>
+          <span class="a-badge" style="background:rgba(245,158,11,.18);color:#f59e0b;border:1px solid #f59e0b;">DKA</span>
+        </a>
+        <a class="algo-card" href="damps-dco.html">
+          <span class="a-icon">🧬</span>
+          <div class="a-title">DAMPs & Damage Control Ortho</div>
+          <div class="a-tags">Second hit theory · TLR pathway · DCO timing</div>
+          <span class="a-badge" style="background:rgba(251,146,60,.18);color:#fb923c;border:1px solid #fb923c;">DAMPs · DCO</span>
+        </a>
+        <a class="algo-card" href="sodium_algorithm.html">
+          <span class="a-icon">⚗️</span>
+          <div class="a-title">Sodium Disorders</div>
+          <div class="a-tags">Hyponatraemia · SIADH · DI · DDAVP · ODS</div>
+          <span class="a-badge" style="background:rgba(74,222,128,.18);color:#4ade80;border:1px solid #4ade80;">ICU</span>
+        </a>
+        <a class="algo-card" href="thoracic_trauma.html">
+          <span class="a-icon">🫁</span>
+          <div class="a-title">Thoracic Trauma</div>
+          <div class="a-tags">ATLS Deadly Dozen · 6 immediate + 6 hidden killers</div>
+          <span class="a-badge" style="background:rgba(74,222,128,.18);color:#4ade80;border:1px solid #4ade80;">Thoracic</span>
+        </a>
+        <a class="algo-card" href="crush_syndrome.html">
+          <span class="a-icon">⚡</span>
+          <div class="a-title">Crush Syndrome</div>
+          <div class="a-tags">Rhabdomyolysis · Hyperkalaemia protocol · AKI</div>
+          <span class="a-badge" style="background:rgba(74,222,128,.18);color:#4ade80;border:1px solid #4ade80;">Crush · Rhabdo</span>
+        </a>
+        <a class="algo-card" href="fat-embolism.html">
+          <span class="a-icon">🦴</span>
+          <div class="a-title">Fat Embolism Syndrome</div>
+          <div class="a-tags">Gurd criteria · Berlin ARDS · PROSEVA</div>
+          <span class="a-badge" style="background:rgba(74,222,128,.18);color:#4ade80;border:1px solid #4ade80;">FES · ARDS</span>
+        </a>
+        <a class="algo-card" href="sepsis.html">
+          <span class="a-icon">🦠</span>
+          <div class="a-title">Sepsis & Septic Shock</div>
+          <div class="a-tags">Sepsis-3 · Hour-1 Bundle · VAP · NDM · SSC 2026</div>
+          <span class="a-badge" style="background:rgba(74,222,128,.18);color:#4ade80;border:1px solid #4ade80;">Sepsis · 2026</span>
+        </a>
+        <a class="algo-card" href="pdt.html">
+          <span class="a-icon">🫁</span>
+          <div class="a-title">Percutaneous Tracheostomy</div>
+          <div class="a-tags">Seldinger technique · Tracheo-innominate fistula · DOPES</div>
+          <span class="a-badge" style="background:rgba(52,211,153,.18);color:#34d399;border:1px solid #34d399;">PDT · Airway</span>
+        </a>
+        <a class="algo-card" href="periop-cardiac.html">
+          <span class="a-icon">💛</span>
+          <div class="a-title">Perioperative Cardiac Risk</div>
+          <div class="a-tags">RCRI · Sgarbossa · Intraop MI · Quiz mode included</div>
+          <span class="a-badge" style="background:rgba(245,158,11,.18);color:#f59e0b;border:1px solid #f59e0b;">RCRI · Interactive</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="category-block">
+      <div class="category-head" style="background:rgba(244,63,94,.1);border-color:#f43f5e;">
+        <span class="category-icon">🚨</span>
+        <span class="category-name" style="color:#f43f5e;">Special Situations</span>
+        <span class="category-count">6 algorithms</span>
+      </div>
+      <div class="algo-grid">
+        <a class="algo-card" href="trauma_pregnancy.html">
+          <span class="a-icon">🤰</span>
+          <div class="a-title">Trauma in Pregnancy</div>
+          <div class="a-tags">Aortocaval compression · PMCS 4-min rule</div>
+          <span class="a-badge" style="background:rgba(244,63,94,.18);color:#f43f5e;border:1px solid #f43f5e;">Obstetric</span>
+        </a>
+        <a class="algo-card" href="burns.html">
+          <span class="a-icon">🔥</span>
+          <div class="a-title">Burns Resuscitation</div>
+          <div class="a-tags">Rule of Nines · Parkland · CO poisoning · Inhalation injury</div>
+          <span class="a-badge" style="background:rgba(244,63,94,.18);color:#f43f5e;border:1px solid #f43f5e;">Burns · Parkland</span>
+        </a>
+        <a class="algo-card" href="traumatic-cardiac-arrest.html">
+          <span class="a-icon">💀</span>
+          <div class="a-title">Traumatic Cardiac Arrest</div>
+          <div class="a-tags">HITS mnemonic · EDT decision matrix</div>
+          <span class="a-badge" style="background:rgba(244,63,94,.18);color:#f43f5e;border:1px solid #f43f5e;">TCA · EDT</span>
+        </a>
+        <a class="algo-card" href="bci.html">
+          <span class="a-icon">🫀</span>
+          <div class="a-title">Blunt Cardiac Injury</div>
+          <div class="a-tags">Spectrum · ECG findings (RBBB/AF) · Troponin NPV</div>
+          <span class="a-badge" style="background:rgba(244,63,94,.18);color:#f43f5e;border:1px solid #f43f5e;">BCI · ECG</span>
+        </a>
+        <a class="algo-card" href="diaphragmatic-injury.html">
+          <span class="a-icon">🫁</span>
+          <div class="a-title">Diaphragmatic Injury</div>
+          <div class="a-tags">Collar sign · Dependent viscera · Delayed herniation</div>
+          <span class="a-badge" style="background:rgba(244,63,94,.18);color:#f43f5e;border:1px solid #f43f5e;">Diaphragm</span>
+        </a>
+        <a class="algo-card" href="macklin-effect.html">
+          <span class="a-icon">💨</span>
+          <div class="a-title">Macklin Effect</div>
+          <div class="a-tags">Pneumomediastinum without airway rupture · Diagnosis of exclusion</div>
+          <span class="a-badge" style="background:rgba(6,182,212,.18);color:#06b6d4;border:1px solid #06b6d4;">Macklin</span>
+        </a>
+      </div>
+    </div>
+
+    <a class="calc-card" href="calculators.html">
+      <span class="c-icon">🧮</span>
+      <div>
+        <div class="c-title">Trauma Labs & Calculators</div>
+        <div class="c-sub">Shock Index · RTS/ISS · MTP Trigger · Blood Loss · ABG · GFR · Paediatric Doses</div>
+      </div>
+      <span class="c-arrow">→</span>
+    </a>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="s-icon">🎮</span>
+      <h2>Clinical Simulators</h2>
+    </div>
+    <div class="sim-grid">
+      <a class="sim-card" href="simulator.html">
+        <span class="live-badge">LIVE</span>
+        <span class="s-icon">🏥</span>
+        <div class="s-title">OR Simulator · Point & Click</div>
+        <div class="s-sub">Tap objects in the OR. Wrong decisions crash the patient.</div>
+      </a>
+      <a class="sim-card" href="traumadog-index.html">
+        <span class="live-badge">LIVE</span>
+        <span class="s-icon">📁</span>
+        <div class="s-title">Fellowship Cases</div>
+        <div class="s-sub">TBI in Pregnancy · Neurogenic Shock · NDM VAP</div>
+      </a>
+      <div class="sim-card">
+        <span class="soon-badge">SOON</span>
+        <span class="s-icon">🚑</span>
+        <div class="s-title">Mass Casualty Triage</div>
+        <div class="s-sub">START/SALT methodology, scored decisions</div>
+      </div>
+      <div class="sim-card">
+        <span class="soon-badge">SOON</span>
+        <span class="s-icon">📖</span>
+        <div class="s-title">The Trauma Novel</div>
+        <div class="s-sub">Interactive narrative — clinical decisions drive the story</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="s-icon">🧠</span>
+      <h2>Test Yourself</h2>
+    </div>
+    <a class="quiz-card" href="quiz.html">
+      <span class="q-icon">👑</span>
+      <div class="q-title">The TraumaDog Challenge</div>
+      <div class="q-sub">5 questions. No hints. No mercy. Find out where you rank in the pack.</div>
+      <div class="q-ranks">
+        <span>🐶 Puppy</span><span>🐕 Big Dog</span><span>🐕‍🦺 Top Dog</span><span>👑 Grand Dog</span>
+      </div>
+    </a>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="lore">
+  <div class="hiero">𓂀 𓅃 𓆣 𓇯 𓈖 𓊪 𓋴 𓌀 𓍢 𓎛 𓏏 𓁹 𓆙 𓂀</div>
+  <h3>𓁹 Anubis & The Anaesthetist 𓁹</h3>
+  <p>Anubis — the jackal-headed psychopomp — guided souls across the threshold between the living and the dead, not choosing who died but ensuring safe passage through the unknown.</p>
+  <p>The anaesthetist walks a similar path — every patient who surrenders consciousness crosses a threshold, and we guide them in, and guide them out.</p>
+  <p>Trauma anaesthesia adds another layer: these patients arrive broken — in body and spirit. We hold the physiological chaos together long enough for healing to begin. Broken bones come with broken souls. We treat both.</p>
+  <div class="quote">"He who guides the living through the unknown bears the same duty as he who guides the dead — to carry the soul safely across."</div>
+  <div class="attribution">— Adapted from Egyptian Funerary Texts</div>
+  <br>
+  <p style="font-size:.64rem;color:#6b7280;">TraumaDog was built during one month of FNB Exit Examination preparation in Trauma Anaesthesia and Critical Care.</p>
+  <div class="hiero" style="margin-top:16px;">𓂀 𓅃 𓆣 𓇯 𓈖 𓊪 𓋴 𓌀 𓍢 𓎛 𓏏 𓁹 𓆙 𓂀</div>
+</div>
+
+<div class="footer">
+  <a class="f-link" href="feedback.html">✉️ Feedback & Report a Mistake</a>
+  <div class="f-source">BASED ON ATLS 10TH ED · BTF 4TH ED · NAP4 · CORE CONCEPTS CRITICAL CARE 2026 · STEWART 1981 · COHEN-WOODS 1976</div>
+  <div class="f-note">"Important algorithms made when confused while studying lol" 😂</div>
+</div>
+
+</body>
+</html>

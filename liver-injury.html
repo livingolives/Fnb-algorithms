@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liver Injury Grading | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#c084fc;border-color:#c084fc;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#c084fc;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.purple{color:#c084fc;} .red{color:#f87171;} .green{color:#4ade80;} .amber{color:#fbbf24;}
+
+/* AAST Grading table */
+.aast-table{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.aast-row{display:flex;border-bottom:1px solid #2d2d42;}
+.aast-row:last-child{border-bottom:none;}
+.aast-cell{flex:1;padding:9px 12px;font-size:.65rem;line-height:1.5;color:#c5c9d6;}
+.aast-cell.grade{flex:.3;font-weight:900;font-size:.85rem;display:flex;align-items:center;justify-content:center;background:#0a0a18;}
+.aast-head{display:flex;background:#0a0a18;}
+.aast-head .aast-cell{font-weight:900;text-transform:uppercase;font-size:.58rem;letter-spacing:.06em;color:#6b7280;}
+
+/* WSES concept */
+.wses-flow{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.wses-box{background:#14142a;border:2px solid;border-radius:10px;padding:12px 14px;}
+.wses-title{font-size:.68rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;}
+.wses-body{font-size:.65rem;color:#a3a8b8;line-height:1.5;}
+
+/* Decision matrix */
+.decision-matrix{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.dm-row{display:flex;border-bottom:1px solid #2d2d42;}
+.dm-row:last-child{border-bottom:none;}
+.dm-cell{flex:1;padding:9px 12px;font-size:.63rem;line-height:1.5;color:#c5c9d6;}
+.dm-cell.label{flex:.7;color:#6b7280;font-weight:900;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;background:#0a0a18;}
+.dm-head{display:flex;background:#0a0a18;}
+.dm-head .dm-cell{font-weight:900;text-transform:uppercase;font-size:.6rem;letter-spacing:.06em;}
+
+/* Anaesthesia considerations */
+.anaes-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px;}
+.anaes-card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;border-left:4px solid;}
+.anaes-head{padding:10px 14px;display:flex;align-items:center;gap:10px;}
+.anaes-icon{font-size:1.3rem;}
+.anaes-name{font-size:.72rem;font-weight:900;color:#f3f4f6;letter-spacing:.04em;text-transform:uppercase;}
+.anaes-body{background:#0a0a18;padding:10px 14px;}
+.anaes-row{font-size:.65rem;color:#c5c9d6;line-height:1.6;padding:4px 0;}
+.anaes-row b{color:#f3f4f6;}
+
+/* Callout */
+.callout{background:rgba(248,113,113,.06);border:1px solid #f87171;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+
+/* Pearl */
+.pearl{background:#14142a;border-left:3px solid #c084fc;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#c084fc;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="home-btn" href="index.html">☥ Home</a>
+
+  <div class="header">
+    <div class="icon">🫀</div>
+    <h1>Liver Injury Grading</h1>
+    <div class="sub">AAST · WSES Classification · Grade IV Anaesthesia</div>
+  </div>
+
+  <!-- AAST GRADING -->
+  <div class="section">
+    <p class="section-title">📊 AAST Liver Injury Scale (I–VI)</p>
+    <div class="aast-table">
+      <div class="aast-head">
+        <div class="aast-cell grade">Gr</div>
+        <div class="aast-cell">Injury Description</div>
+      </div>
+      <div class="aast-row">
+        <div class="aast-cell grade" style="color:#4ade80;">I</div>
+        <div class="aast-cell">Subcapsular haematoma &lt;10% surface area OR capsular tear &lt;1cm depth</div>
+      </div>
+      <div class="aast-row">
+        <div class="aast-cell grade" style="color:#4ade80;">II</div>
+        <div class="aast-cell">Subcapsular haematoma 10–50% OR laceration 1–3cm depth</div>
+      </div>
+      <div class="aast-row">
+        <div class="aast-cell grade" style="color:#fbbf24;">III</div>
+        <div class="aast-cell">Subcapsular haematoma &gt;50% OR laceration &gt;3cm depth</div>
+      </div>
+      <div class="aast-row">
+        <div class="aast-cell grade" style="color:#fb923c;">IV</div>
+        <div class="aast-cell">Laceration involving 25–75% of a hepatic lobe OR 1–3 Couinaud segments</div>
+      </div>
+      <div class="aast-row">
+        <div class="aast-cell grade" style="color:#f87171;">V</div>
+        <div class="aast-cell">Laceration &gt;75% of lobe OR &gt;3 segments within a lobe; OR <b style="color:#fca5a5;">juxtahepatic venous injury</b> (retrohepatic vena cava/major hepatic veins)</div>
+      </div>
+      <div class="aast-row">
+        <div class="aast-cell grade" style="color:#dc2626;">VI</div>
+        <div class="aast-cell">Hepatic avulsion — unsurvivable without immediate control</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b class="purple">Grade V is the critical viva point:</b> juxtahepatic venous injury (retrohepatic IVC/major hepatic veins) is the single most lethal liver injury pattern — catastrophic haemorrhage, may require atriocaval shunting.</div>
+    </div>
+  </div>
+
+  <!-- WSES DIFFERENCE -->
+  <div class="section">
+    <p class="section-title">⚖️ WSES — Physiology Trumps Anatomy</p>
+    <div class="card">
+      <div class="card-body">WSES (World Society of Emergency Surgery) reclassifies liver injury by <b>haemodynamic status</b>, not purely anatomical grade like AAST. The key conceptual shift: <b class="purple">a Grade II injury in an unstable patient is managed more aggressively than a Grade IV injury in a stable patient.</b></div>
+    </div>
+    <div class="wses-flow">
+      <div class="wses-box" style="border-color:#4ade80;">
+        <div class="wses-title" style="color:#4ade80;">WSES I — Minor</div>
+        <div class="wses-body">AAST I–II, haemodynamically stable</div>
+      </div>
+      <div class="wses-box" style="border-color:#fbbf24;">
+        <div class="wses-title" style="color:#fbbf24;">WSES II — Moderate</div>
+        <div class="wses-body">AAST III, stable</div>
+      </div>
+      <div class="wses-box" style="border-color:#fb923c;">
+        <div class="wses-title" style="color:#fb923c;">WSES III — Severe</div>
+        <div class="wses-body">AAST IV–V, stable</div>
+      </div>
+      <div class="wses-box" style="border-color:#f87171;">
+        <div class="wses-title" style="color:#f87171;">WSES IV — Severe + Unstable</div>
+        <div class="wses-body"><b>ANY AAST grade</b>, if haemodynamically unstable → mandates immediate operative management regardless of anatomical severity</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTRAST BLUSH DECISION -->
+  <div class="section">
+    <p class="section-title">🩸 Active Extravasation — Changes Everything</p>
+    <div class="decision-matrix">
+      <div class="dm-head">
+        <div class="dm-cell label">Scenario</div>
+        <div class="dm-cell">Management</div>
+      </div>
+      <div class="dm-row">
+        <div class="dm-cell label">Stable, no blush</div>
+        <div class="dm-cell" style="color:#4ade80;">Non-operative management, serial observation</div>
+      </div>
+      <div class="dm-row">
+        <div class="dm-cell label">Stable + active blush</div>
+        <div class="dm-cell" style="color:#fbbf24;"><b>Angioembolisation</b> — blush predicts NOM failure/re-bleeding regardless of current stability</div>
+      </div>
+      <div class="dm-row">
+        <div class="dm-cell label">Unstable, any grade</div>
+        <div class="dm-cell" style="color:#f87171;"><b>Operative management</b> — WSES IV mandate</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b>Key point:</b> active contrast extravasation on CT mandates intervention even in a currently "stable" patient — it indicates ongoing arterial haemorrhage that will very likely progress. Don't be reassured by a normal blood pressure if the CT shows active bleeding.</div>
+    </div>
+  </div>
+
+  <!-- ANAESTHESIA -->
+  <div class="section">
+    <p class="section-title">💉 Anaesthetic Management — Grade IV/V Liver Injury</p>
+    <div class="anaes-grid">
+      <div class="anaes-card" style="border-color:#f87171;">
+        <div class="anaes-head" style="background:rgba(248,113,113,.1);"><span class="anaes-icon">🩸</span><span class="anaes-name" style="color:#f87171;">Compounded Coagulopathy</span></div>
+        <div class="anaes-body">
+          <div class="anaes-row">The liver is <b>both the site of injury AND the organ manufacturing clotting factors</b> — a damaged liver cannot replace consumed factors as effectively. Unique vicious cycle not present in, e.g., splenic injury.</div>
+          <div class="anaes-row">Anticipate <b>more severe coagulopathy than blood loss alone predicts.</b> TEG/ROTEM-guided factor replacement essential — target fibrinogen &gt;1.5–2g/L, replace calcium and platelets proactively.</div>
+        </div>
+      </div>
+      <div class="anaes-card" style="border-color:#60a5fa;">
+        <div class="anaes-head" style="background:rgba(96,165,250,.1);"><span class="anaes-icon">💊</span><span class="anaes-name" style="color:#60a5fa;">Drug Selection — Hepatic Independence</span></div>
+        <div class="anaes-body">
+          <div class="anaes-row"><b>Atracurium</b> (Hofmann elimination — organ-independent) over rocuronium/vecuronium (hepatic clearance)</div>
+          <div class="anaes-row"><b>Remifentanil</b> (plasma esterase metabolism) over fentanyl/morphine (hepatic metabolism)</div>
+          <div class="anaes-row">Matters less in a single acute trauma case than chronic liver failure, but still the correct principle to state</div>
+        </div>
+      </div>
+      <div class="anaes-card" style="border-color:#c084fc;">
+        <div class="anaes-head" style="background:rgba(192,132,252,.1);"><span class="anaes-icon">🔪</span><span class="anaes-name" style="color:#c084fc;">Surgical Manoeuvres to Anticipate</span></div>
+        <div class="anaes-body">
+          <div class="anaes-row"><b>Pringle manoeuvre</b> — portal triad clamping to control inflow bleeding. Watch for haemodynamic changes on clamp/unclamp application and release.</div>
+          <div class="anaes-row"><b>Perihepatic packing</b> — same damage control principles as abdominal/pelvic DCL. Anticipate staged return to theatre.</div>
+          <div class="anaes-row"><b>Retrohepatic caval injury (Grade V)</b> — catastrophic haemorrhage; may require <b>atriocaval shunting</b> in extreme cases. Have massive transfusion capability ready before knife-to-skin.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HAEMODYNAMIC TARGETS -->
+  <div class="section">
+    <p class="section-title">🎯 Haemodynamic Targets</p>
+    <div class="card">
+      <div class="card-body">
+        Permissive hypotension until haemostasis — target <b>MAP ~65 mmHg, SBP 80–90 mmHg</b> (not the 80–90 MAP used for TBI — don't conflate the two targets). If concurrent TBI present, CPP/MAP targets take priority over permissive hypotension — same conflict discussed in your emergency laparotomy page.
+      </div>
+    </div>
+  </div>
+
+  <!-- CALLOUT -->
+  <div class="section">
+    <div class="callout">
+      <div class="callout-title">⚠ Examiner Traps</div>
+      <div class="callout-item">Confusing AAST (pure anatomy) with WSES (anatomy + physiology) — WSES is what actually drives the operative vs non-operative decision</div>
+      <div class="callout-item">Assuming a "stable" patient with active blush can be safely observed — active extravasation overrides current haemodynamic reassurance</div>
+      <div class="callout-item">Using TBI's MAP 80–90 target for a pure liver injury without TBI — liver trauma alone targets permissive hypotension, not high MAP</div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: What does WSES add that AAST doesn't have?</div>
+      <div class="pearl-a">Haemodynamic status as a classification dimension. WSES IV means "unstable" regardless of anatomical AAST grade, and mandates immediate operative management — physiology overrides anatomy in the decision to operate.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why is liver trauma coagulopathy worse than expected from blood loss alone?</div>
+      <div class="pearl-a">The liver synthesises clotting factors. When it's the injured organ, its capacity to replace consumed factors is itself compromised — a vicious cycle unique to hepatic and to a lesser extent pancreatic trauma, not seen with splenic or renal injury.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What is the most lethal pattern of liver injury and why?</div>
+      <div class="pearl-a">Grade V juxtahepatic venous injury — involvement of the retrohepatic IVC or major hepatic veins. Massive, difficult-to-control haemorrhage from a location that's surgically challenging to access. May require atriocaval shunting as a last resort.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    COCCOLINI ET AL — WSES LIVER TRAUMA GUIDELINES, WORLD J EMERG SURG 2020<br>
+    AAST ORGAN INJURY SCALING — MOORE ET AL<br>
+    ATLS 10TH ED · ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>

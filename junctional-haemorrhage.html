@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Junctional Haemorrhage | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#eab308;border-color:#eab308;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#eab308;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.yellow{color:#eab308;} .red{color:#f87171;} .green{color:#4ade80;} .blue{color:#60a5fa;}
+
+.ref-banner{background:rgba(96,165,250,.08);border:1px solid #60a5fa;border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.ref-banner a{color:#60a5fa;font-weight:900;text-decoration:none;}
+.ref-banner a:hover{text-decoration:underline;}
+
+/* Body zones */
+.zone-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px;}
+.zone-card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;border-left:4px solid;}
+.zone-head{padding:10px 14px;display:flex;align-items:center;gap:10px;}
+.zone-icon{font-size:1.3rem;}
+.zone-name{font-size:.72rem;font-weight:900;color:#f3f4f6;letter-spacing:.04em;text-transform:uppercase;}
+.zone-body{background:#0a0a18;padding:10px 14px;}
+.zone-row{font-size:.65rem;color:#c5c9d6;line-height:1.6;padding:4px 0;}
+.zone-row b{color:#f3f4f6;}
+
+/* Device comparison */
+.device-table{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.device-row{display:flex;border-bottom:1px solid #2d2d42;}
+.device-row:last-child{border-bottom:none;}
+.device-cell{flex:1;padding:9px 12px;font-size:.63rem;line-height:1.5;color:#c5c9d6;}
+.device-cell.label{flex:.6;color:#6b7280;font-weight:900;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;background:#0a0a18;}
+.device-head{display:flex;background:#0a0a18;}
+.device-head .device-cell{font-weight:900;text-transform:uppercase;font-size:.6rem;letter-spacing:.06em;}
+
+/* Limb vs junctional comparison */
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.comp-col{border-radius:10px;border:1px solid;overflow:hidden;}
+.comp-head{padding:9px 12px;font-size:.68rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;}
+.comp-body{background:#0a0a18;padding:9px 12px;}
+.comp-item{font-size:.6rem;color:#c5c9d6;line-height:1.5;padding:3px 0;}
+
+/* Callout */
+.callout{background:rgba(248,113,113,.06);border:1px solid #f87171;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+.callout-item .wrong{color:#f87171;text-decoration:line-through;}
+.callout-item .right{color:#4ade80;}
+
+/* Pearl */
+.pearl{background:#14142a;border-left:3px solid #eab308;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#eab308;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="home-btn" href="index.html">☥ Home</a>
+
+  <div class="header">
+    <div class="icon">🩸</div>
+    <h1>Junctional Haemorrhage</h1>
+    <div class="sub">Surface Zones · Junctional Tourniquets · When Standard TQ Fails</div>
+  </div>
+
+  <div class="ref-banner">
+    <span>🔗</span>
+    <span style="font-size:.68rem;color:#c5c9d6;">For internal aortic occlusion zones and REBOA technique, see the dedicated <a href="reboa.html">REBOA page</a> — do not confuse the two zone systems (explained below).</span>
+  </div>
+
+  <!-- DEFINITION -->
+  <div class="section">
+    <p class="section-title">📖 Definition</p>
+    <div class="card">
+      <div class="card-body">Junctional haemorrhage = bleeding at anatomical junctions between the torso and limbs/head — locations where standard limb tourniquets <b>cannot be applied effectively</b> because the vessels are too proximal, too deep, or there's no complete bony ring to compress against.</div>
+    </div>
+  </div>
+
+  <!-- CRITICAL DISTINCTION -->
+  <div class="section">
+    <p class="section-title">⚠️ Two Different Zone Systems — Don't Confuse Them</p>
+    <div class="callout">
+      <div class="callout-title">Common Exam Error</div>
+      <div class="callout-item"><b>Junctional zones</b> (this page) = <b>external, surface anatomical locations</b> — groin, axilla, neck. Where you apply an external compression device.</div>
+      <div class="callout-item"><b>REBOA aortic zones</b> (Zone I/II/III — see REBOA page) = <b>internal, intravascular locations</b> inside the aorta itself, defined by which branch vessels sit above/below the balloon. Where you place a catheter.</div>
+      <div class="callout-item">These are <b>completely different classification systems</b> for <b>completely different interventions.</b> Stating REBOA's Zone I-III when asked about junctional anatomical zones is a guaranteed mark loss.</div>
+    </div>
+  </div>
+
+  <!-- SURFACE JUNCTIONAL ZONES -->
+  <div class="section">
+    <p class="section-title">🎯 The Three Junctional Zones (Surface Anatomy)</p>
+    <div class="zone-grid">
+      <div class="zone-card" style="border-color:#eab308;">
+        <div class="zone-head" style="background:rgba(234,179,8,.1);"><span class="zone-icon">🦵</span><span class="zone-name" style="color:#eab308;">Zone 1 — Groin / Inguinal</span></div>
+        <div class="zone-body">
+          <div class="zone-row"><b>Vessels:</b> Femoral artery and vein</div>
+          <div class="zone-row"><b>Why standard TQ fails:</b> too proximal — no distal bony ring below the injury to compress against once above mid-thigh</div>
+        </div>
+      </div>
+      <div class="zone-card" style="border-color:#60a5fa;">
+        <div class="zone-head" style="background:rgba(96,165,250,.1);"><span class="zone-icon">💪</span><span class="zone-name" style="color:#60a5fa;">Zone 2 — Axilla</span></div>
+        <div class="zone-body">
+          <div class="zone-row"><b>Vessels:</b> Axillary artery and vein</div>
+          <div class="zone-row"><b>Why standard TQ fails:</b> vessels run against the ribcage/chest wall — no limb bone to compress against at this level</div>
+        </div>
+      </div>
+      <div class="zone-card" style="border-color:#f87171;">
+        <div class="zone-head" style="background:rgba(248,113,113,.1);"><span class="zone-icon">🧠</span><span class="zone-name" style="color:#f87171;">Zone 3 — Neck</span></div>
+        <div class="zone-body">
+          <div class="zone-row"><b>Vessels:</b> Carotid, subclavian at base of neck</div>
+          <div class="zone-row"><b>Why standard TQ fails:</b> circumferential neck compression would occlude the airway — impossible to apply a conventional tourniquet</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">Some classifications add a <b>pelvic/perineal junction</b> as a fourth zone.</div>
+    </div>
+  </div>
+
+  <!-- WHY LIMB TOURNIQUETS FAIL -->
+  <div class="section">
+    <p class="section-title">🔧 Why Standard Limb Tourniquets Don't Work Here</p>
+    <div class="comp-grid">
+      <div class="comp-col" style="border-color:#4ade80;">
+        <div class="comp-head" style="background:rgba(74,222,128,.1);color:#4ade80;">Limb Tourniquet</div>
+        <div class="comp-body">
+          <div class="comp-item">Circumferential compression</div>
+          <div class="comp-item">Compresses soft tissue against a complete bony ring</div>
+          <div class="comp-item">No major body cavity behind the compression point</div>
+          <div class="comp-item">Reliable, reproducible occlusion</div>
+        </div>
+      </div>
+      <div class="comp-col" style="border-color:#f87171;">
+        <div class="comp-head" style="background:rgba(248,113,113,.1);color:#f87171;">Junctional Zone</div>
+        <div class="comp-body">
+          <div class="comp-item">No complete bony ring available</div>
+          <div class="comp-item">Vessels run close to major body cavities (pelvis, thorax, abdomen)</div>
+          <div class="comp-item">Relies on focal compression against a specific bony landmark only</div>
+          <div class="comp-item">Less reliable, harder to apply under time pressure</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b class="yellow">This limitation is exactly why REBOA emerged</b> as the preferred solution for proximal junctional/truncal haemorrhage that external devices struggle to control reliably.</div>
+    </div>
+  </div>
+
+  <!-- DEVICES -->
+  <div class="section">
+    <p class="section-title">🩹 Junctional Tourniquet Devices</p>
+    <div class="device-table">
+      <div class="device-head">
+        <div class="device-cell label">Device</div>
+        <div class="device-cell">Target Zone / Mechanism</div>
+      </div>
+      <div class="device-row">
+        <div class="device-cell label">CRoC</div>
+        <div class="device-cell">Combat Ready Clamp — groin/junctional compression via C-shaped clamp against pelvic brim</div>
+      </div>
+      <div class="device-row">
+        <div class="device-cell label">JETT</div>
+        <div class="device-cell">Junctional Emergency Treatment Tool — pelvic/groin device with dual pressure pads</div>
+      </div>
+      <div class="device-row">
+        <div class="device-cell label">SAM Junctional TQ</div>
+        <div class="device-cell">Inflatable bladder system — compresses femoral or axillary vessels externally against bone</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b>All three rely on direct focal compression against a specific bony landmark</b> (e.g. pelvic brim) rather than true circumferential occlusion — the fundamental limitation vs a limb tourniquet.</div>
+    </div>
+  </div>
+
+  <!-- LINK TO REBOA -->
+  <div class="section">
+    <p class="section-title">🔗 When External Devices Fail — REBOA</p>
+    <div class="card" style="border-color:#eab308;">
+      <div class="card-body">
+        For groin/pelvic junctional haemorrhage uncontrolled by external junctional tourniquets, <b>REBOA Zone III</b> (below the lowest renal artery, above the aortic bifurcation) is the escalation — occludes the distal aorta supplying the pelvis and lower limbs while preserving renal, mesenteric, and upper limb perfusion.<br><br>
+        Full REBOA zone anatomy, technique, and the REBOA vs EDT decision ladder are covered on the <a href="reboa.html" style="color:#eab308;">dedicated REBOA page</a> — this page focuses specifically on the external/surface junctional zones and devices that precede that escalation.
+      </div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: What makes a haemorrhage "junctional" rather than just proximal limb bleeding?</div>
+      <div class="pearl-a">The absence of a complete bony ring to compress against — groin, axilla, and neck all have vessels running close to major body cavities without the circumferential bony support a standard limb tourniquet relies on.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Junctional zones vs REBOA zones — how do you keep them separate in a viva?</div>
+      <div class="pearl-a">Junctional zones are external, surface anatomical locations (groin/axilla/neck) for compression device placement. REBOA zones are internal, intravascular aortic segments (I/II/III) defined by branch vessel anatomy, for balloon catheter placement. Different classification systems for different interventions — never conflate them.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why can't you just apply a tourniquet to the neck for a junctional carotid injury?</div>
+      <div class="pearl-a">Circumferential neck compression would occlude the airway before achieving vascular control — anatomically and physiologically impossible to apply a conventional tourniquet mechanism at this junction.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    KRAGH ET AL — JUNCTIONAL TOURNIQUET USE, MIL MED 2013<br>
+    ATLS 10TH ED · JOINT TRAUMA SYSTEM CPG — JUNCTIONAL HAEMORRHAGE<br>
+    ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>

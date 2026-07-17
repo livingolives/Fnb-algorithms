@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VEXUS Score | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#38bdf8;border-color:#38bdf8;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#38bdf8;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.sky{color:#38bdf8;} .red{color:#f87171;} .green{color:#4ade80;} .amber{color:#fbbf24;}
+
+.diagram-box{background:#0a0a18;border:1px solid #2d2d42;border-radius:10px;padding:18px;margin-bottom:12px;text-align:center;}
+.diagram-title{font-size:.6rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#38bdf8;margin-bottom:14px;}
+.diagram-caption{font-size:.62rem;color:#9ca3af;line-height:1.6;margin-top:12px;text-align:left;}
+
+.grade-table{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.grade-row{display:flex;border-bottom:1px solid #2d2d42;}
+.grade-row:last-child{border-bottom:none;}
+.grade-cell{flex:1;padding:8px 8px;font-size:.6rem;line-height:1.5;color:#c5c9d6;}
+.grade-cell.label{flex:.4;font-weight:900;font-size:.7rem;text-align:center;background:#0a0a18;}
+.grade-head{display:flex;background:#0a0a18;}
+.grade-head .grade-cell{font-weight:900;text-transform:uppercase;font-size:.55rem;letter-spacing:.04em;color:#6b7280;}
+
+.callout{background:rgba(56,189,248,.06);border:1px solid #38bdf8;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#38bdf8;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+
+.pearl{background:#14142a;border-left:3px solid #38bdf8;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#38bdf8;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="home-btn" href="index.html">☥ Home</a>
+  <div class="header">
+    <div class="icon">🫘</div>
+    <h1>VEXUS Score</h1>
+    <div class="sub">Venous Excess Ultrasound · Grading Venous Congestion</div>
+  </div>
+
+  <div class="section">
+    <div class="card" style="border-color:#38bdf8;">
+      <div class="card-body">VEXUS grades <b class="sky">systemic venous congestion</b> using IVC diameter plus Doppler waveforms in three separate organs — used to identify congestive/cardiorenal AKI and guide de-resuscitation decisions in fluid-overloaded, right-heart-failure, or over-resuscitated trauma/ICU patients.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🎯 Entry Criterion — When to Proceed</p>
+    <div class="card">
+      <div class="card-body">Assess <b>IVC diameter</b> first. <b class="sky">IVC ≥2cm (dilated)</b> → proceed to grade the three Doppler waveforms. If IVC is small/normal, congestion is unlikely — VEXUS grading not needed.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">📡 Three Doppler Waveforms Assessed</p>
+    <div class="diagram-box">
+      <div class="diagram-title">Hepatic Vein — Normal vs Congested</div>
+      <svg viewBox="0 0 360 140" width="100%" style="max-width:360px;">
+        <line x1="10" y1="70" x2="350" y2="70" stroke="#374151" stroke-width="1"/>
+        <text x="90" y="18" font-size="8" fill="#4ade80" text-anchor="middle" font-family="Courier New">NORMAL — S &gt; D</text>
+        <path d="M10,70 L30,70 L40,25 L55,45 L70,70 L85,70 L95,50 L110,60 L125,70 L150,70 L160,25 L175,45 L190,70"
+              fill="none" stroke="#4ade80" stroke-width="2"/>
+        <text x="40" y="20" font-size="7" fill="#86efac" font-family="Courier New">S</text>
+        <text x="95" y="44" font-size="7" fill="#86efac" font-family="Courier New">D</text>
+
+        <text x="270" y="18" font-size="8" fill="#f87171" text-anchor="middle" font-family="Courier New">SEVERE — S reversal</text>
+        <path d="M200,70 L220,70 L230,95 L245,80 L260,70 L275,70 L285,95 L300,80 L315,70 L330,70"
+              fill="none" stroke="#f87171" stroke-width="2"/>
+        <text x="230" y="108" font-size="7" fill="#fca5a5" font-family="Courier New">S reversed</text>
+        <text x="180" y="80" font-size="7" fill="#6b7280" font-family="Courier New">baseline</text>
+      </svg>
+      <div class="diagram-caption">Normal: S-wave (systolic) &gt; D-wave (diastolic) forward flow. Worsening congestion → S-wave blunts, then <b style="color:#f87171;">reverses</b> (flows backward during systole) — most severe hepatic vein finding.</div>
+    </div>
+
+    <div class="diagram-box">
+      <div class="diagram-title">Portal Vein — Continuous vs Pulsatile</div>
+      <svg viewBox="0 0 360 120" width="100%" style="max-width:360px;">
+        <line x1="10" y1="60" x2="350" y2="60" stroke="#374151" stroke-width="1"/>
+        <text x="90" y="18" font-size="8" fill="#4ade80" text-anchor="middle" font-family="Courier New">NORMAL — continuous</text>
+        <path d="M10,60 L190,58" fill="none" stroke="#4ade80" stroke-width="2"/>
+
+        <text x="270" y="18" font-size="8" fill="#f87171" text-anchor="middle" font-family="Courier New">SEVERE — pulsatile &gt;50%</text>
+        <path d="M200,60 L215,30 L230,60 L245,25 L260,60 L275,32 L290,60 L305,28 L320,60 L335,30"
+              fill="none" stroke="#f87171" stroke-width="2"/>
+      </svg>
+      <div class="diagram-caption">Pulsatility fraction = (Vmax−Vmin)/Vmax. Normal: minimal pulsatility, steady flow. Mild: 30-50%. <b style="color:#f87171;">Severe: &gt;50%</b> — cardiac pulsation transmitted through the congested liver into the portal system.</div>
+    </div>
+
+    <div class="diagram-box">
+      <div class="diagram-title">Renal Vein — Continuous → Biphasic → Monophasic</div>
+      <svg viewBox="0 0 360 120" width="100%" style="max-width:360px;">
+        <line x1="10" y1="90" x2="350" y2="90" stroke="#374151" stroke-width="1"/>
+        <text x="60" y="18" font-size="7.5" fill="#4ade80" text-anchor="middle" font-family="Courier New">Continuous</text>
+        <path d="M10,90 L110,88" fill="none" stroke="#4ade80" stroke-width="2"/>
+
+        <text x="190" y="18" font-size="7.5" fill="#fbbf24" text-anchor="middle" font-family="Courier New">Biphasic</text>
+        <path d="M135,90 L150,70 L165,90 L180,90 L195,70 L210,90 L225,90 L240,70 L250,90"
+              fill="none" stroke="#fbbf24" stroke-width="2"/>
+
+        <text x="305" y="18" font-size="7.5" fill="#f87171" text-anchor="middle" font-family="Courier New">Monophasic</text>
+        <path d="M265,90 L280,90 L295,55 L310,90 L325,90 L340,90 L350,55"
+              fill="none" stroke="#f87171" stroke-width="2"/>
+        <text x="295" y="105" font-size="6.5" fill="#fca5a5" text-anchor="middle" font-family="Courier New">flow only in systole,</text>
+        <text x="295" y="113" font-size="6.5" fill="#fca5a5" text-anchor="middle" font-family="Courier New">stops in diastole</text>
+      </svg>
+      <div class="diagram-caption"><b style="color:#f87171;">Monophasic = worst grade.</b> Diastolic flow is lost first — during diastole, right-sided pressures peak and are transmitted backward, halting renal venous outflow. Systole represents the one recurring pressure "dip" that still permits flow. As congestion worsens further, even this narrows.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">📊 Complete Grading Table</p>
+    <div class="grade-table">
+      <div class="grade-head">
+        <div class="grade-cell label">Grade</div>
+        <div class="grade-cell">Hepatic Vein</div>
+        <div class="grade-cell">Portal Vein</div>
+        <div class="grade-cell">Renal Vein</div>
+      </div>
+      <div class="grade-row">
+        <div class="grade-cell label" style="color:#4ade80;">0</div>
+        <div class="grade-cell">Normal (S&gt;D)</div>
+        <div class="grade-cell">Continuous</div>
+        <div class="grade-cell">Continuous</div>
+      </div>
+      <div class="grade-row">
+        <div class="grade-cell label" style="color:#fbbf24;">1 Mild</div>
+        <div class="grade-cell">Mild S blunting</div>
+        <div class="grade-cell">Mild pulsatility 30–50%</div>
+        <div class="grade-cell">Continuous</div>
+      </div>
+      <div class="grade-row">
+        <div class="grade-cell label" style="color:#fb923c;">2 Moderate</div>
+        <div class="grade-cell">Severe S blunting</div>
+        <div class="grade-cell">Severe pulsatility &gt;50%</div>
+        <div class="grade-cell">Biphasic</div>
+      </div>
+      <div class="grade-row">
+        <div class="grade-cell label" style="color:#f87171;">3 Severe</div>
+        <div class="grade-cell">S-wave reversal</div>
+        <div class="grade-cell">Severe pulsatility &gt;50%</div>
+        <div class="grade-cell">Monophasic</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">All require IVC ≥2cm as the entry criterion. Grade determined by the <b>worst</b> of the three waveform findings.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🔬 Why Monophasic Renal Vein = Congestive AKI</p>
+    <div class="callout">
+      <div class="callout-title">The Mechanism</div>
+      <div class="callout-item">Elevated CVP transmits backward through IVC → renal vein → renal parenchyma → raises <b>renal interstitial pressure.</b></div>
+      <div class="callout-item">This directly <b>opposes the glomerular filtration pressure gradient</b> (GFR depends on glomerular capillary pressure minus Bowman's capsule/interstitial pressure).</div>
+      <div class="callout-item">The kidney is effectively <b>compressed by its own back-pressure</b> — congestive/cardiorenal AKI, mechanistically opposite to classic hypovolaemic AKI.</div>
+      <div class="callout-item"><b>Clinical implication:</b> giving more fluid in this state worsens rather than improves urine output — the opposite instinct to volume-depletion AKI.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🎯 Clinical Applications</p>
+    <div class="card">
+      <div class="card-body">
+        • Identifying <b>congestive AKI</b> in over-resuscitated trauma/ICU patients — distinguishing from hypovolaemic AKI<br>
+        • Guiding <b>de-resuscitation/diuresis</b> decisions — objective marker beyond fluid balance charts alone<br>
+        • Right heart failure/tamponade assessment — congestion severity tracking<br>
+        • Post-massive-transfusion patients transitioning from resuscitation to de-resuscitation phase (links directly to your DCR "phase 3" concept)
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: What's the entry criterion before grading VEXUS severity?</div>
+      <div class="pearl-a">IVC diameter ≥2cm. If the IVC is not dilated, significant venous congestion is unlikely and further Doppler grading is not required.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why does diastolic renal venous flow disappear before systolic flow as congestion worsens?</div>
+      <div class="pearl-a">Diastole is when right-sided venous pressures peak (tricuspid valve open, RA/RV pressures rising) — in a congested state this pressure surge is transmitted backward and halts forward renal venous outflow. Systole (tricuspid closed, RA relaxing) represents a transient pressure "dip" that preserves some forward flow longer — hence biphasic (diastole lost first) precedes monophasic (only systolic flow remains) as the worst grade.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Portal vein pulsatility fraction formula?</div>
+      <div class="pearl-a">(Vmax − Vmin) / Vmax. Mild congestion: 30-50%. Severe: &gt;50%. Reflects cardiac pulsation being transmitted through a congested liver into the normally steady-flow portal system.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    BEAUBIEN-SOULIGNY ET AL — VEXUS SCORE, ULTRASOUND J 2020<br>
+    ATLS 10TH ED · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+</div>
+</body>
+</html>
