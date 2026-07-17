@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blunt Cardiac Injury | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#f472b6;border-color:#f472b6;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#f472b6;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.pink{color:#f472b6;} .red{color:#f87171;} .green{color:#4ade80;} .amber{color:#fbbf24;} .blue{color:#60a5fa;}
+
+/* Severity spectrum */
+.spectrum{margin-bottom:12px;}
+.spec-item{display:flex;gap:10px;margin-bottom:6px;align-items:flex-start;}
+.spec-badge{min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:900;flex-shrink:0;}
+.spec-content{flex:1;background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:9px 12px;}
+.spec-title{font-size:.66rem;font-weight:900;color:#f3f4f6;margin-bottom:2px;}
+.spec-body{font-size:.62rem;color:#a3a8b8;line-height:1.5;}
+
+/* ECG diagram box */
+.ecg-box{background:#0a0a18;border:1px solid #2d2d42;border-radius:10px;padding:16px;margin-bottom:12px;}
+.ecg-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;text-align:center;}
+.ecg-caption{font-size:.6rem;color:#9ca3af;line-height:1.5;margin-top:8px;text-align:left;}
+
+/* Screening flow */
+.flow-box{background:#14142a;border:2px solid;border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.flow-title{font-size:.65rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px;}
+.flow-body{font-size:.65rem;color:#a3a8b8;line-height:1.5;}
+.flow-arrow{text-align:center;color:#6b7280;font-size:1.1rem;margin:2px 0;}
+
+/* Monitoring decision */
+.decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.decision-col{border-radius:10px;border:1px solid;overflow:hidden;}
+.decision-head{padding:10px 12px;font-size:.68rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;text-align:center;}
+.decision-body{background:#0a0a18;padding:10px 12px;font-size:.62rem;color:#c5c9d6;line-height:1.6;text-align:center;}
+
+/* Callout */
+.callout{background:rgba(248,113,113,.06);border:1px solid #f87171;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+.callout-item .wrong{color:#f87171;text-decoration:line-through;}
+.callout-item .right{color:#4ade80;}
+
+/* Pearl */
+.pearl{background:#14142a;border-left:3px solid #f472b6;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#f472b6;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="home-btn" href="index.html">☥ Home</a>
+
+  <div class="header">
+    <div class="icon">🫀</div>
+    <h1>Blunt Cardiac Injury</h1>
+    <div class="sub">Spectrum · Screening · ECG Findings · Monitoring</div>
+  </div>
+
+  <!-- CASE -->
+  <div class="section">
+    <div class="card" style="border-color:#f472b6;">
+      <div class="card-body"><b class="pink">Case:</b> Steering wheel injury, head-on MVC, sternal bruising, haemodynamically stable, mild tachycardia. Sternal fracture and rib fractures are <b>associated mechanism markers</b> — they raise suspicion for BCI but are NOT part of the BCI spectrum itself.</div>
+    </div>
+  </div>
+
+  <!-- SPECTRUM -->
+  <div class="section">
+    <p class="section-title">📊 Spectrum of Injury — Mild to Severe</p>
+    <div class="spectrum">
+      <div class="spec-item">
+        <div class="spec-badge" style="background:rgba(74,222,128,.15);color:#4ade80;border:1px solid #4ade80;">1</div>
+        <div class="spec-content">
+          <div class="spec-title">Myocardial Contusion</div>
+          <div class="spec-body">Bruising of myocardium — most common form, often asymptomatic/subclinical.</div>
+        </div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-badge" style="background:rgba(74,222,128,.12);color:#86efac;border:1px solid #86efac;">2</div>
+        <div class="spec-content">
+          <div class="spec-title">Myocardial Stunning / Dysfunction</div>
+          <div class="spec-body">Transient contractile dysfunction, arrhythmias.</div>
+        </div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-badge" style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid #fbbf24;">3</div>
+        <div class="spec-content">
+          <div class="spec-title">Coronary Artery Injury</div>
+          <div class="spec-body">Dissection/thrombosis from blunt force — can cause true myocardial infarction.</div>
+        </div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-badge" style="background:rgba(251,146,60,.15);color:#fb923c;border:1px solid #fb923c;">4</div>
+        <div class="spec-content">
+          <div class="spec-title">Valve / Septal Rupture</div>
+          <div class="spec-body">Structural damage — acute regurgitation, new murmur.</div>
+        </div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-badge" style="background:rgba(248,113,113,.15);color:#f87171;border:1px solid #f87171;">5</div>
+        <div class="spec-content">
+          <div class="spec-title">Cardiac Rupture / Tamponade</div>
+          <div class="spec-body">Free wall rupture — often immediately fatal at scene.</div>
+        </div>
+      </div>
+      <div class="spec-item">
+        <div class="spec-badge" style="background:rgba(167,139,250,.15);color:#a78bfa;border:1px solid #a78bfa;">✦</div>
+        <div class="spec-content">
+          <div class="spec-title">Commotio Cordis — Mechanistically Distinct</div>
+          <div class="spec-body">Precordial impact during the vulnerable repolarisation window (upslope of T wave) triggers VF in a structurally NORMAL heart. Timing-dependent, not force/injury-dependent — not part of the severity spectrum, a separate entity.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREENING -->
+  <div class="section">
+    <p class="section-title">🔍 Screening Pathway</p>
+    <div class="flow-box" style="border-color:#60a5fa;">
+      <div class="flow-title" style="color:#60a5fa;">Step 1 — 12-Lead ECG</div>
+      <div class="flow-body">Initial screening test of choice (EAST guidelines) — NOT troponin first. Look for: new arrhythmia, ST changes, heart block, unexplained sinus tachycardia.</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box" style="border-color:#fbbf24;">
+      <div class="flow-title" style="color:#fbbf24;">Step 2 — Troponin</div>
+      <div class="flow-body">Adjunct to ECG, not a replacement. Assay-specific cutoffs — quote as "above local lab's upper reference limit" rather than a fixed number, since conventional vs high-sensitivity assays differ significantly.</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-box" style="border-color:#4ade80;">
+      <div class="flow-title" style="color:#4ade80;">Combined Result</div>
+      <div class="flow-body"><b>Normal ECG + Normal Troponin</b> = very high negative predictive value (~95-100%) for clinically significant BCI. This combination allows safe exclusion without further workup.</div>
+    </div>
+  </div>
+
+  <!-- ECG DIAGRAMS -->
+  <div class="section">
+    <p class="section-title">📈 ECG Findings — Labelled Traces</p>
+
+    <div class="ecg-box">
+      <div class="ecg-title" style="color:#4ade80;">Normal Sinus Rhythm — Reference</div>
+      <svg viewBox="0 0 400 100" width="100%" style="max-width:400px;">
+        <line x1="0" y1="50" x2="400" y2="50" stroke="#1f2937" stroke-width="1"/>
+        <path d="M0,50 L60,50 L70,45 L80,50 L95,50 L100,20 L105,75 L112,50 L130,50 L145,35 L165,35 L180,50
+                 L240,50 L250,45 L260,50 L275,50 L280,20 L285,75 L292,50 L310,50 L325,35 L345,35 L360,50 L400,50"
+              fill="none" stroke="#4ade80" stroke-width="2"/>
+        <text x="100" y="14" font-size="9" fill="#86efac" text-anchor="middle" font-family="Courier New">R</text>
+        <text x="145" y="30" font-size="9" fill="#86efac" text-anchor="middle" font-family="Courier New">T</text>
+        <text x="70" y="42" font-size="8" fill="#6b7280" text-anchor="middle" font-family="Courier New">P</text>
+      </svg>
+      <div class="ecg-caption">Normal P-QRS-T. Regular rate, uniform QRS amplitude beat to beat.</div>
+    </div>
+
+    <div class="ecg-box">
+      <div class="ecg-title" style="color:#fbbf24;">RBBB — Right Bundle Branch Block</div>
+      <svg viewBox="0 0 400 100" width="100%" style="max-width:400px;">
+        <line x1="0" y1="50" x2="400" y2="50" stroke="#1f2937" stroke-width="1"/>
+        <path d="M0,50 L60,50 L70,45 L80,50 L95,50 L100,25 L104,45 L108,10 L112,45 L116,50 L130,50 L145,35 L165,35 L180,50
+                 L240,50 L250,45 L260,50 L275,50 L280,25 L284,45 L288,10 L292,45 L296,50 L310,50 L325,35 L345,35 L360,50 L400,50"
+              fill="none" stroke="#fbbf24" stroke-width="2"/>
+        <text x="108" y="6" font-size="9" fill="#fcd34d" text-anchor="middle" font-family="Courier New">M-shaped</text>
+        <text x="108" y="18" font-size="8" fill="#fcd34d" text-anchor="middle" font-family="Courier New">RSR' (V1)</text>
+      </svg>
+      <div class="ecg-caption"><b style="color:#fbbf24;">Most common significant conduction finding in BCI</b> — RV is the most anterior chamber, directly behind the sternum, most exposed to blunt force. Widened QRS with RSR' pattern (M-shaped) in V1.</div>
+    </div>
+
+    <div class="ecg-box">
+      <div class="ecg-title" style="color:#f87171;">Atrial Fibrillation</div>
+      <svg viewBox="0 0 400 100" width="100%" style="max-width:400px;">
+        <line x1="0" y1="50" x2="400" y2="50" stroke="#1f2937" stroke-width="1"/>
+        <path d="M0,52 Q10,48 20,52 Q30,49 40,51 L50,50 L58,45 L64,50 L75,50 L80,20 L85,75 L90,50 L105,50 L118,35 L135,35 L150,50
+                 Q160,47 170,51 Q180,48 190,52 L200,50 L208,45 L212,50 L222,50 L226,22 L231,73 L236,50 L250,50 L263,36 L278,36 L292,50
+                 Q302,49 312,52 L320,50 L328,44 L332,50 L342,50 L346,19 L351,76 L356,50 L370,50 L383,34 L400,50"
+              fill="none" stroke="#f87171" stroke-width="2"/>
+        <text x="10" y="42" font-size="7" fill="#fca5a5" font-family="Courier New">no P waves</text>
+        <text x="10" y="34" font-size="7" fill="#fca5a5" font-family="Courier New">fibrillatory baseline</text>
+      </svg>
+      <div class="ecg-caption">Irregularly irregular R-R intervals, absent discrete P waves, fibrillatory baseline. Second classic pathological BCI arrhythmia after RBBB.</div>
+    </div>
+
+    <div class="ecg-box">
+      <div class="ecg-title" style="color:#a78bfa;">Electrical Alternans (Tamponade — Not BCI Itself)</div>
+      <svg viewBox="0 0 400 100" width="100%" style="max-width:400px;">
+        <line x1="0" y1="50" x2="400" y2="50" stroke="#1f2937" stroke-width="1"/>
+        <path d="M0,50 L60,50 L70,47 L80,50 L95,50 L100,32 L105,62 L112,50 L130,50 L145,40 L165,40 L180,50
+                 L240,50 L250,45 L260,50 L275,50 L280,15 L285,82 L292,50 L310,50 L325,32 L345,32 L360,50 L400,50"
+              fill="none" stroke="#a78bfa" stroke-width="2"/>
+        <text x="100" y="26" font-size="8" fill="#c4b5fd" text-anchor="middle" font-family="Courier New">small R</text>
+        <text x="280" y="10" font-size="8" fill="#c4b5fd" text-anchor="middle" font-family="Courier New">tall R</text>
+      </svg>
+      <div class="ecg-caption"><b class="pink">Not a BCI finding</b> — this is a pericardial effusion/tamponade sign. QRS amplitude alternates beat-to-beat because the heart physically swings within a large effusion, changing its electrical axis relative to the recording electrodes. Include here only to distinguish from BCI's own findings.</div>
+    </div>
+  </div>
+
+  <!-- MONITORING DECISION -->
+  <div class="section">
+    <p class="section-title">🎯 Monitoring Decision</p>
+    <div class="decision-grid">
+      <div class="decision-col" style="border-color:#4ade80;">
+        <div class="decision-head" style="background:rgba(74,222,128,.12);color:#4ade80;">Normal ECG + Normal Trop</div>
+        <div class="decision-body">Safe to <b>discharge/de-escalate</b> without further cardiac monitoring.</div>
+      </div>
+      <div class="decision-col" style="border-color:#f87171;">
+        <div class="decision-head" style="background:rgba(248,113,113,.12);color:#f87171;">Either Abnormal</div>
+        <div class="decision-body">Admit for <b>continuous ECG monitoring 24–48 hours.</b> Significant arrhythmias almost always manifest in this window.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">After 24–48 hours without arrhythmia → safe to de-escalate monitoring. <b>Most common arrhythmia overall: sinus tachycardia</b> (often just physiological response to injury/pain, not itself diagnostic of BCI). <b>Most common pathological arrhythmias: RBBB and atrial fibrillation.</b></div>
+    </div>
+  </div>
+
+  <!-- CALLOUT -->
+  <div class="section">
+    <div class="callout">
+      <div class="callout-title">⚠ Examiner Traps</div>
+      <div class="callout-item"><span class="wrong">Troponin is the first screening test</span> → <span class="right">12-lead ECG is first-line; troponin is an adjunct</span></div>
+      <div class="callout-item"><span class="wrong">Sternal fracture = BCI</span> → <span class="right">Sternal/rib fractures are mechanism markers raising suspicion — not part of the BCI spectrum itself</span></div>
+      <div class="callout-item"><span class="wrong">Electrical alternans is a BCI finding</span> → <span class="right">It's a pericardial effusion/tamponade sign — separate entity</span></div>
+      <div class="callout-item"><span class="wrong">Commotio cordis is severe blunt injury</span> → <span class="right">It's a timing-dependent arrhythmia in a structurally NORMAL heart — mechanistically distinct from the injury severity spectrum</span></div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why is RBBB the classic conduction finding in BCI?</div>
+      <div class="pearl-a">The right ventricle is the most anterior cardiac chamber, sitting directly behind the sternum — making it the most exposed to blunt anterior chest force (e.g. steering wheel injury). This anatomical exposure explains why right-sided conduction pathway injury (RBBB) is disproportionately common compared to left-sided blocks.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What does a normal ECG and normal troponin at presentation tell you?</div>
+      <div class="pearl-a">Very high negative predictive value (~95-100%) for clinically significant BCI — this combination allows safe exclusion of BCI without echo or extended monitoring, per EAST guidelines.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: How is commotio cordis different from the rest of the BCI spectrum?</div>
+      <div class="pearl-a">It's not force/injury-dependent like contusion-to-rupture — it's timing-dependent. A relatively minor precordial impact during the vulnerable window of repolarisation (upslope of the T wave, ~15-30ms) triggers VF in an otherwise structurally normal heart. This is why young athletes hit by a ball/puck can arrest despite no structural cardiac damage.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    EAST PRACTICE MANAGEMENT GUIDELINES — BLUNT CARDIAC INJURY 2012<br>
+    ATLS 10TH ED · ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>

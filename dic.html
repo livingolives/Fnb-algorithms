@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIC | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#dc2626;border-color:#dc2626;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#dc2626;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.dred{color:#dc2626;} .red{color:#f87171;} .green{color:#4ade80;} .amber{color:#fbbf24;} .blue{color:#60a5fa;}
+
+.flow{margin-bottom:12px;}
+.flow-step{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.flow-box{flex:1;background:#14142a;border-radius:6px;padding:8px 10px;font-size:.63rem;color:#c5c9d6;line-height:1.4;border:1px solid #2d2d42;}
+.flow-box b{color:#f3f4f6;}
+.flow-arrow{color:#dc2626;font-size:1rem;flex-shrink:0;text-align:center;}
+
+.trigger-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.trigger-item{background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;border-left:3px solid #dc2626;}
+.trigger-title{font-size:.65rem;font-weight:900;color:#f3f4f6;margin-bottom:3px;}
+.trigger-body{font-size:.6rem;color:#a3a8b8;line-height:1.5;}
+
+.isth-table{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.isth-row{display:flex;border-bottom:1px solid #2d2d42;}
+.isth-row:last-child{border-bottom:none;}
+.isth-cell{flex:1;padding:8px 10px;font-size:.63rem;line-height:1.5;color:#c5c9d6;}
+.isth-cell.label{flex:.7;color:#6b7280;font-weight:900;font-size:.58rem;letter-spacing:.05em;text-transform:uppercase;background:#0a0a18;}
+.isth-head{display:flex;background:#0a0a18;}
+.isth-head .isth-cell{font-weight:900;text-transform:uppercase;font-size:.58rem;letter-spacing:.05em;color:#6b7280;}
+
+.vs-table{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.vs-row{display:flex;border-bottom:1px solid #2d2d42;}
+.vs-row:last-child{border-bottom:none;}
+.vs-cell{flex:1;padding:9px 12px;font-size:.62rem;line-height:1.5;color:#c5c9d6;}
+.vs-cell.label{flex:.6;color:#6b7280;font-weight:900;font-size:.58rem;letter-spacing:.05em;text-transform:uppercase;background:#0a0a18;}
+.vs-head{display:flex;background:#0a0a18;}
+.vs-head .vs-cell{font-weight:900;text-transform:uppercase;font-size:.58rem;letter-spacing:.05em;}
+
+.phenotype-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.phen-col{border-radius:10px;border:1px solid;overflow:hidden;}
+.phen-head{padding:10px 12px;font-size:.68rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;text-align:center;}
+.phen-body{background:#0a0a18;padding:10px 12px;font-size:.63rem;color:#c5c9d6;line-height:1.6;}
+
+.callout{background:rgba(248,113,113,.06);border:1px solid #f87171;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+
+.pearl{background:#14142a;border-left:3px solid #dc2626;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#dc2626;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="home-btn" href="index.html">☥ Home</a>
+  <div class="header">
+    <div class="icon">🩸</div>
+    <h1>Disseminated Intravascular Coagulation</h1>
+    <div class="sub">Pathophysiology · ISTH Score · vs ATC · Management</div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🔬 Trigger & Two Phenotypes</p>
+    <div class="card">
+      <div class="card-body">DIC is a <b>systemic activation of coagulation</b> triggered by widespread tissue factor exposure — sepsis, malignancy, obstetric catastrophe (amniotic fluid embolism, abruption), massive tissue trauma. Consumes platelets and clotting factors faster than they can be replaced — <b>"consumption coagulopathy."</b></div>
+    </div>
+    <div class="phenotype-grid">
+      <div class="phen-col" style="border-color:#f87171;">
+        <div class="phen-head" style="background:rgba(248,113,113,.12);color:#f87171;">Acute/Decompensated</div>
+        <div class="phen-body">Sepsis, major trauma. Rapid consumption → <b>bleeding phenotype</b> — oozing, purpura, haemorrhage. Platelets/fibrinogen fall faster than production can compensate.</div>
+      </div>
+      <div class="phen-col" style="border-color:#fbbf24;">
+        <div class="phen-head" style="background:rgba(251,191,36,.12);color:#fbbf24;">Chronic/Compensated</div>
+        <div class="phen-body">Malignancy, over weeks. Liver/marrow partially compensate → often <b>thrombotic phenotype</b> — DVT, arterial thrombi — rather than bleeding.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🧬 The Cascade — Why Procoagulant Becomes Bleeding</p>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-box">Trigger (sepsis/malignancy/obstetric) → release of tissue factor + inflammatory mediators</div></div>
+      <div class="flow-step" style="justify-content:center;"><span class="flow-arrow">↓</span></div>
+      <div class="flow-step"><div class="flow-box">Widespread thrombin generation → fibrinogen converted to fibrin throughout microvasculature</div></div>
+      <div class="flow-step" style="justify-content:center;"><span class="flow-arrow">↓</span></div>
+      <div class="flow-step"><div class="flow-box"><b>Microthrombi form</b> in small vessels — organ microcirculatory compromise</div></div>
+      <div class="flow-step" style="justify-content:center;"><span class="flow-arrow">↓</span></div>
+      <div class="flow-step"><div class="flow-box">Triggers <b>fibrinolysis</b> to clear microthrombi — plasmin activation</div></div>
+      <div class="flow-step" style="justify-content:center;"><span class="flow-arrow">↓</span></div>
+      <div class="flow-step"><div class="flow-box" style="border-color:#f87171;color:#fca5a5;"><b>Platelets and fibrinogen genuinely depleted</b> from true consumption → nothing left to clot at sites of actual injury → bleeding</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">📊 ISTH DIC Score — ≥5 = Overt DIC</p>
+    <div class="isth-table">
+      <div class="isth-head">
+        <div class="isth-cell label">Parameter</div>
+        <div class="isth-cell">Points</div>
+      </div>
+      <div class="isth-row">
+        <div class="isth-cell label">Platelet count</div>
+        <div class="isth-cell">&gt;100 = 0 · &lt;100 = 1 · &lt;50 = 2</div>
+      </div>
+      <div class="isth-row">
+        <div class="isth-cell label">D-dimer/FDP</div>
+        <div class="isth-cell">No increase = 0 · moderate = 2 · strong = 3</div>
+      </div>
+      <div class="isth-row">
+        <div class="isth-cell label">Prolonged PT</div>
+        <div class="isth-cell">&lt;3sec = 0 · 3–6sec = 1 · &gt;6sec = 2</div>
+      </div>
+      <div class="isth-row">
+        <div class="isth-cell label">Fibrinogen</div>
+        <div class="isth-cell">&gt;1g/L = 0 · &lt;1g/L = 1</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">⚖️ DIC vs ATC</p>
+    <div class="vs-table">
+      <div class="vs-head">
+        <div class="vs-cell label"> </div>
+        <div class="vs-cell" style="color:#dc2626;">DIC</div>
+        <div class="vs-cell" style="color:#60a5fa;">ATC</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Trigger</div>
+        <div class="vs-cell">Sepsis, malignancy, obstetric</div>
+        <div class="vs-cell">Hypoperfusion + tissue injury (Brohi)</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Timing</div>
+        <div class="vs-cell">Delayed — days into illness</div>
+        <div class="vs-cell">Immediate — present on arrival</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Thrombin generation</div>
+        <div class="vs-cell" style="color:#f87171;">Massively increased</div>
+        <div class="vs-cell" style="color:#60a5fa;">Reduced (aPC anticoagulant)</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Fibrinogen</div>
+        <div class="vs-cell">Actively consumed — genuinely depleted</div>
+        <div class="vs-cell">Spared early — clot fails to stabilise, not consumed</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Platelets</div>
+        <div class="vs-cell" style="color:#f87171;">Progressively falling — hallmark</div>
+        <div class="vs-cell">Often preserved initially</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">TEG pattern</div>
+        <div class="vs-cell">Variable — hypo OR hypercoagulable</div>
+        <div class="vs-cell">Hyperfibrinolysis (↑LY30) common early</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🎯 Management</p>
+    <div class="card">
+      <div class="card-body"><b class="dred">Treat the underlying trigger</b> — source control of sepsis, deliver placenta in obstetric catastrophe. Coagulopathy correction alone won't resolve DIC if the trigger persists.</div>
+    </div>
+    <div class="trigger-grid">
+      <div class="trigger-item">
+        <div class="trigger-title">Active Bleeding</div>
+        <div class="trigger-body">FFP, cryoprecipitate, platelets — targeted, not prophylactic. Guided by TEG/ROTEM and ISTH parameters.</div>
+      </div>
+      <div class="trigger-item">
+        <div class="trigger-title">Thrombotic Phenotype</div>
+        <div class="trigger-body">Heparin anticoagulation — controversial, generally reserved for chronic/thrombotic presentation, not the acute bleeding phenotype.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why does fibrinogen stay "preserved" early in ATC but not in DIC?</div>
+      <div class="pearl-a">ATC's aPC-driven pathway reduces thrombin generation — less fibrinogen converted to fibrin in the first place, so the precursor pool is spared early; bleeding comes from failure to stabilise what little clot forms (hyperfibrinolysis). DIC drives massively increased thrombin generation, actively converting and depleting the circulating fibrinogen pool through genuine consumption in widespread microthrombi.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: A trauma patient's coagulopathy doesn't correct despite blood products — when do you suspect DIC over ongoing ATC?</div>
+      <div class="pearl-a">Timing and trajectory — DIC typically emerges days into the illness (often with a secondary trigger like sepsis from a missed injury), with progressively falling platelets as the hallmark, rather than the immediate-on-arrival picture of ATC.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    TAYLOR ET AL — ISTH DIC SCORING, THROMB HAEMOST 2001<br>
+    LEVI & TEN CATE — DIC, NEJM 1999 · BROHI ET AL — ATC, J TRAUMA 2003<br>
+    ATLS 10TH ED · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diaphragmatic Injury | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#2dd4bf;border-color:#2dd4bf;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#2dd4bf;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.teal{color:#2dd4bf;} .red{color:#f87171;} .green{color:#4ade80;} .amber{color:#fbbf24;}
+
+/* Diagram box */
+.diagram-box{background:#0a0a18;border:1px solid #2d2d42;border-radius:10px;padding:18px;margin-bottom:12px;text-align:center;}
+.diagram-title{font-size:.6rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#2dd4bf;margin-bottom:14px;}
+.diagram-caption{font-size:.62rem;color:#9ca3af;line-height:1.6;margin-top:12px;text-align:left;}
+
+/* Side comparison */
+.side-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.side-col{border-radius:10px;border:1px solid;overflow:hidden;}
+.side-head{padding:10px 12px;font-size:.72rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;text-align:center;}
+.side-body{background:#0a0a18;padding:10px 12px;font-size:.63rem;color:#c5c9d6;line-height:1.6;}
+
+/* Signs grid */
+.sign-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px;}
+.sign-card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;border-left:4px solid;}
+.sign-head{padding:10px 14px;font-size:.7rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;}
+.sign-body{background:#0a0a18;padding:10px 14px;font-size:.65rem;color:#c5c9d6;line-height:1.6;}
+
+/* Pressure gradient flow */
+.pg-flow{margin-bottom:12px;}
+.pg-step{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.pg-box{flex:1;background:#14142a;border-radius:6px;padding:8px 10px;font-size:.63rem;color:#c5c9d6;line-height:1.4;border:1px solid #2d2d42;}
+.pg-box b{color:#f3f4f6;}
+.pg-arrow{color:#2dd4bf;font-size:1rem;flex-shrink:0;}
+
+/* Callout */
+.callout{background:rgba(248,113,113,.06);border:1px solid #f87171;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+.callout-item .wrong{color:#f87171;text-decoration:line-through;}
+.callout-item .right{color:#4ade80;}
+
+/* Pearl */
+.pearl{background:#14142a;border-left:3px solid #2dd4bf;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#2dd4bf;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="home-btn" href="index.html">☥ Home</a>
+
+  <div class="header">
+    <div class="icon">🫁</div>
+    <h1>Traumatic Diaphragmatic Injury</h1>
+    <div class="sub">Left vs Right · CT Signs · Delayed Presentation</div>
+  </div>
+
+  <!-- SIDE COMPARISON -->
+  <div class="section">
+    <p class="section-title">⚖️ Left vs Right — Which Side, and Why</p>
+    <div class="side-grid">
+      <div class="side-col" style="border-color:#2dd4bf;">
+        <div class="side-head" style="background:rgba(45,212,191,.12);color:#2dd4bf;">Left Side</div>
+        <div class="side-body">More commonly <b>diagnosed</b> — no solid organ buffer. Stomach/bowel herniate visibly into thorax, easy to spot on imaging (gastric bubble in chest, NG tube coiled above diaphragm).</div>
+      </div>
+      <div class="side-col" style="border-color:#fbbf24;">
+        <div class="side-head" style="background:rgba(251,191,36,.12);color:#fbbf24;">Right Side</div>
+        <div class="side-body"><b>Liver buffers/protects</b> — solid bulky organ often doesn't herniate as obviously, or the finding just looks like an elevated hemidiaphragm rather than a foreign structure in the chest. Likely <b>under-diagnosed</b>, not necessarily less common as an injury.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b class="teal">Precision point:</b> say "left-sided injury is more commonly <i>recognised/diagnosed</i>" — not definitively "more common." True incidence may be similar; the diagnostic visibility differs due to what's herniating.</div>
+    </div>
+  </div>
+
+  <!-- IMAGING SIGNS -->
+  <div class="section">
+    <p class="section-title">📷 Imaging Signs</p>
+    <div class="sign-grid">
+      <div class="sign-card" style="border-color:#4ade80;">
+        <div class="sign-head" style="background:rgba(74,222,128,.1);color:#4ade80;">NG/Ryles Tube in the Thorax</div>
+        <div class="sign-body">Most specific and easiest-to-spot sign — tube visibly coils or terminates above the diaphragm on CXR instead of in the expected abdominal position.</div>
+      </div>
+      <div class="sign-card" style="border-color:#fbbf24;">
+        <div class="sign-head" style="background:rgba(251,191,36,.1);color:#fbbf24;">Irregular Diaphragmatic Contour</div>
+        <div class="sign-body">Loss of the normal smooth diaphragmatic line — indistinct or interrupted border on CXR/CT.</div>
+      </div>
+      <div class="sign-card" style="border-color:#60a5fa;">
+        <div class="sign-head" style="background:rgba(96,165,250,.1);color:#60a5fa;">Focal Diaphragmatic Discontinuity</div>
+        <div class="sign-body">Visible gap in the diaphragmatic muscle on CT — direct visualisation of the defect itself.</div>
+      </div>
+      <div class="sign-card" style="border-color:#a78bfa;">
+        <div class="sign-head" style="background:rgba(167,139,250,.1);color:#a78bfa;">Unexplained Mediastinal Shift</div>
+        <div class="sign-body">Contralateral shift without an obvious pneumothorax explaining it — should raise suspicion for mass effect from herniated abdominal contents.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLLAR SIGN DIAGRAM -->
+  <div class="section">
+    <p class="section-title">🎯 Collar Sign & Dependent Viscera Sign</p>
+    <div class="diagram-box">
+      <div class="diagram-title">Collar Sign — Axial CT Cross-Section (Left Chest)</div>
+      <svg viewBox="0 0 300 300" width="100%" style="max-width:300px;">
+        <!-- Chest wall outline - circular/oval like axial CT -->
+        <ellipse cx="150" cy="150" rx="130" ry="115" fill="#0a0a18" stroke="#374151" stroke-width="2"/>
+        <text x="150" y="30" font-size="9" fill="#6b7280" text-anchor="middle" font-family="Courier New">ANTERIOR</text>
+        <text x="150" y="278" font-size="9" fill="#6b7280" text-anchor="middle" font-family="Courier New">POSTERIOR</text>
+        <text x="30" y="154" font-size="9" fill="#6b7280" text-anchor="middle" font-family="Courier New">R</text>
+        <text x="270" y="154" font-size="9" fill="#6b7280" text-anchor="middle" font-family="Courier New">L</text>
+
+        <!-- Ribs (small arcs around the edge) -->
+        <path d="M40 110 Q50 100 62 105" stroke="#4b5563" stroke-width="3" fill="none"/>
+        <path d="M40 150 Q52 145 64 148" stroke="#4b5563" stroke-width="3" fill="none"/>
+        <path d="M42 190 Q54 195 66 190" stroke="#4b5563" stroke-width="3" fill="none"/>
+        <path d="M260 110 Q250 100 238 105" stroke="#4b5563" stroke-width="3" fill="none"/>
+        <path d="M260 150 Q248 145 236 148" stroke="#4b5563" stroke-width="3" fill="none"/>
+        <path d="M258 190 Q246 195 234 190" stroke="#4b5563" stroke-width="3" fill="none"/>
+
+        <!-- Vertebral body posterior midline -->
+        <rect x="135" y="230" width="30" height="28" rx="4" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+        <text x="150" y="272" font-size="7" fill="#9ca3af" text-anchor="middle" font-family="Courier New">vertebra</text>
+
+        <!-- Right lung (normal, aerated) -->
+        <ellipse cx="95" cy="140" rx="45" ry="60" fill="#1e3a5f" opacity="0.4" stroke="#3b82f6" stroke-width="1"/>
+        <text x="95" y="140" font-size="8" fill="#93c5fd" text-anchor="middle" font-family="Courier New">right lung</text>
+        <text x="95" y="152" font-size="7.5" fill="#93c5fd" text-anchor="middle" font-family="Courier New">(normal)</text>
+
+        <!-- Left lung - compressed/collapsed by herniation -->
+        <path d="M210 90 Q235 100 238 130 Q235 155 220 160 Q205 150 205 120 Q205 100 210 90 Z" fill="#1e3a5f" opacity="0.3" stroke="#3b82f6" stroke-width="1"/>
+        <text x="222" y="112" font-size="7" fill="#93c5fd" text-anchor="middle" font-family="Courier New">L lung</text>
+        <text x="222" y="122" font-size="7" fill="#93c5fd" text-anchor="middle" font-family="Courier New">compressed</text>
+
+        <!-- Herniated stomach with collar/hourglass shape - THE KEY FINDING -->
+        <path d="M150 160
+                 C 130 165, 118 180, 122 200
+                 C 125 215, 140 225, 155 222
+                 C 148 210, 145 195, 150 188
+                 C 155 195, 158 210, 165 220
+                 C 178 220, 188 205, 183 190
+                 C 178 172, 165 162, 150 160 Z"
+              fill="#2dd4bf" opacity="0.4" stroke="#2dd4bf" stroke-width="2.5"/>
+
+        <!-- Constriction indicator -->
+        <line x1="120" y1="188" x2="180" y2="188" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="150" y="182" font-size="7" fill="#fca5a5" text-anchor="middle" font-family="Courier New">"collar" — waist</text>
+
+        <!-- Diaphragm remnant line -->
+        <path d="M100 200 Q125 195 150 200 Q175 195 200 200" stroke="#6b7280" stroke-width="2" stroke-dasharray="4,3" fill="none"/>
+        <text x="150" y="245" font-size="7.5" fill="#6b7280" text-anchor="middle" font-family="Courier New">diaphragm defect level</text>
+      </svg>
+      <div class="diagram-caption">Simplified axial CT-style cross-section. Herniated stomach passes through the diaphragmatic defect and is <b style="color:#2dd4bf;">pinched into an hourglass/collar shape</b> at the level of the tear — the classic collar sign. The left lung is visibly compressed by the herniated viscus.</div>
+    </div>
+
+    <div class="diagram-box">
+      <div class="diagram-title">Dependent Viscera Sign — Axial CT Comparison (Supine Patient)</div>
+      <svg viewBox="0 0 320 200" width="100%" style="max-width:320px;">
+        <text x="80" y="14" font-size="9" fill="#4ade80" text-anchor="middle" font-family="Courier New" font-weight="bold">NORMAL</text>
+        <text x="240" y="14" font-size="9" fill="#f87171" text-anchor="middle" font-family="Courier New" font-weight="bold">DIAPHRAGM RUPTURED</text>
+
+        <!-- NORMAL PANEL - axial cross section, oval chest -->
+        <ellipse cx="80" cy="105" rx="65" ry="58" fill="#0a0a18" stroke="#374151" stroke-width="1.5"/>
+        <text x="80" y="40" font-size="7" fill="#6b7280" text-anchor="middle" font-family="Courier New">ANTERIOR</text>
+        <text x="80" y="170" font-size="7" fill="#6b7280" text-anchor="middle" font-family="Courier New">POSTERIOR (table)</text>
+        <!-- ribs -->
+        <path d="M20 90 Q28 85 36 88" stroke="#4b5563" stroke-width="2" fill="none"/>
+        <path d="M20 110 Q28 108 36 109" stroke="#4b5563" stroke-width="2" fill="none"/>
+        <path d="M140 90 Q132 85 124 88" stroke="#4b5563" stroke-width="2" fill="none"/>
+        <path d="M140 110 Q132 108 124 109" stroke="#4b5563" stroke-width="2" fill="none"/>
+        <!-- vertebra posterior midline -->
+        <rect x="70" y="148" width="20" height="14" rx="3" fill="#374151" stroke="#6b7280" stroke-width="1"/>
+        <!-- stomach held anterior, gap behind it -->
+        <circle cx="80" cy="90" r="26" fill="#4ade80" opacity="0.35" stroke="#4ade80" stroke-width="2"/>
+        <text x="80" y="93" font-size="7.5" fill="#86efac" text-anchor="middle" font-family="Courier New">stomach</text>
+        <!-- fat plane / gap indicator -->
+        <line x1="80" y1="118" x2="80" y2="140" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="2,2"/>
+        <text x="80" y="135" font-size="6.5" fill="#93c5fd" text-anchor="middle" font-family="Courier New">gap/fat plane</text>
+        <text x="80" y="185" font-size="7" fill="#86efac" text-anchor="middle" font-family="Courier New">held anterior — space behind</text>
+
+        <!-- RUPTURED PANEL -->
+        <ellipse cx="240" cy="105" rx="65" ry="58" fill="#0a0a18" stroke="#374151" stroke-width="1.5"/>
+        <text x="240" y="40" font-size="7" fill="#6b7280" text-anchor="middle" font-family="Courier New">ANTERIOR</text>
+        <text x="240" y="170" font-size="7" fill="#6b7280" text-anchor="middle" font-family="Courier New">POSTERIOR (table)</text>
+        <path d="M180 90 Q188 85 196 88" stroke="#4b5563" stroke-width="2" fill="none"/>
+        <path d="M180 110 Q188 108 196 109" stroke="#4b5563" stroke-width="2" fill="none"/>
+        <path d="M300 90 Q292 85 284 88" stroke="#4b5563" stroke-width="2" fill="none"/>
+        <path d="M300 110 Q292 108 284 109" stroke="#4b5563" stroke-width="2" fill="none"/>
+        <rect x="230" y="148" width="20" height="14" rx="3" fill="#374151" stroke="#6b7280" stroke-width="1"/>
+        <!-- stomach sunk posteriorly touching vertebra/ribs -->
+        <circle cx="240" cy="140" r="26" fill="#f87171" opacity="0.4" stroke="#f87171" stroke-width="2"/>
+        <text x="240" y="143" font-size="7.5" fill="#fca5a5" text-anchor="middle" font-family="Courier New">stomach</text>
+        <!-- no gap - touching posterior wall -->
+        <text x="240" y="185" font-size="7" fill="#fca5a5" text-anchor="middle" font-family="Courier New">sunk posterior — touches ribs/vertebra</text>
+      </svg>
+      <div class="diagram-caption">
+        <b>True axial (transverse) CT slice — the plane this sign is actually evaluated on.</b> Patient supine. <b style="color:#4ade80;">Normal:</b> intact diaphragm holds the stomach anteriorly/medially — a visible fat plane or gap separates it from the posterior chest wall. <b style="color:#f87171;">Ruptured:</b> with no diaphragmatic support, gravity pulls the stomach straight down (posteriorly, since the patient is supine) until it rests directly against the posterior ribs/vertebra, obliterating that normal fat plane.
+      </div>
+    </div>
+  </div>
+
+  <!-- PRESSURE GRADIENT -->
+  <div class="section">
+    <p class="section-title">⏱ Why Herniation Is Often Delayed</p>
+    <div class="callout">
+      <div class="callout-title">⚠ Common Misconception</div>
+      <div class="callout-item"><span class="wrong">The lung physically blocks/stops the organ from herniating</span> → <span class="right">Herniation is driven by the pleuroperitoneal PRESSURE GRADIENT, not lung tissue acting as a barrier</span></div>
+    </div>
+    <div class="pg-flow">
+      <div class="pg-step">
+        <div class="pg-box"><b>At injury:</b> small tear may not immediately herniate if intra-abdominal pressure isn't significantly higher than intrathoracic pressure — tear sits sealed by adjacent organs/omentum</div>
+      </div>
+      <div class="pg-step" style="justify-content:center;"><span class="pg-arrow">↓ time passes — months to years</span></div>
+      <div class="pg-step">
+        <div class="pg-box"><b>Later event raises intra-abdominal pressure:</b> straining, coughing, ileus/bowel distension, pregnancy, abdominal surgery</div>
+      </div>
+      <div class="pg-step" style="justify-content:center;"><span class="pg-arrow">↓</span></div>
+      <div class="pg-step">
+        <div class="pg-box"><b>Pressure gradient tips:</b> intra-abdominal pressure now exceeds intrathoracic pressure sufficiently</div>
+      </div>
+      <div class="pg-step" style="justify-content:center;"><span class="pg-arrow">↓</span></div>
+      <div class="pg-step">
+        <div class="pg-box" style="border-color:#f87171;color:#fca5a5;"><b>Negative intrathoracic pressure of normal inspiration ACTIVELY SUCKS abdominal contents through the defect</b> — this is the true driving force</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">This mechanism is exactly why diaphragmatic injuries can present <b>months to years</b> after the original trauma — a missed small tear sits quiescent until a later physiological event tips the pressure balance and pulls viscera through.</div>
+    </div>
+  </div>
+
+  <!-- DELAYED PRESENTATION CONSEQUENCES -->
+  <div class="section">
+    <p class="section-title">🚨 Consequences If Missed</p>
+    <div class="card">
+      <div class="card-body">
+        <b>Respiratory:</b> herniated viscera compress lung → V/Q mismatch, hypoxia, atelectasis/consolidation.<br><br>
+        <b>Strangulation risk:</b> the defect can act like a hernia neck — herniated bowel can become incarcerated or strangulated, leading to bowel ischaemia/perforation within the chest — a surgical emergency with high mortality if not recognised.<br><br>
+        <b>Aspiration risk:</b> gastric herniation with obstruction increases aspiration risk.
+      </div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why is right-sided diaphragmatic injury harder to diagnose than left?</div>
+      <div class="pearl-a">The liver buffers the right side — it's a solid, bulky organ that doesn't produce the obvious "bowel/stomach in the chest" appearance seen with left-sided herniation. Right-sided injury may just look like an elevated hemidiaphragm, easily missed or misattributed.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What actually drives delayed herniation — is it the lung releasing its "hold" on the organ?</div>
+      <div class="pearl-a">No — the lung does not act as a barrier. Herniation is governed by the pleuroperitoneal pressure gradient. A later rise in intra-abdominal pressure (straining, ileus, pregnancy) combined with the negative intrathoracic pressure generated during normal inspiration actively draws abdominal contents through the defect over time.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Collar sign vs dependent viscera sign — what's the difference?</div>
+      <div class="pearl-a">Collar sign describes the SHAPE of the herniated viscus — pinched/hourglass at the level of the defect. Dependent viscera sign describes the POSITION of the organ — resting against the posterior chest wall due to loss of diaphragmatic support, rather than its normal anterior position. Different aspects of the same underlying pathology.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    SHANMUGANATHAN ET AL — CT SIGNS OF DIAPHRAGMATIC INJURY, RADIOLOGY 2000<br>
+    ATLS 10TH ED · ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>

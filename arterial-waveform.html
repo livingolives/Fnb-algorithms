@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arterial Waveform Physiology | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#818cf8;border-color:#818cf8;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#818cf8;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.indigo{color:#818cf8;} .red{color:#f87171;} .green{color:#4ade80;} .amber{color:#fbbf24;}
+
+.diagram-box{background:#0a0a18;border:1px solid #2d2d42;border-radius:10px;padding:18px;margin-bottom:12px;text-align:center;}
+.diagram-title{font-size:.6rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#818cf8;margin-bottom:14px;}
+.diagram-caption{font-size:.62rem;color:#9ca3af;line-height:1.6;margin-top:12px;text-align:left;}
+
+.component-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:12px;}
+.comp-item{background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;border-left:3px solid #818cf8;}
+.comp-title{font-size:.65rem;font-weight:900;color:#f3f4f6;margin-bottom:3px;}
+.comp-body{font-size:.62rem;color:#a3a8b8;line-height:1.5;}
+
+.shock-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px;}
+.shock-card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;border-left:4px solid;}
+.shock-head{padding:10px 14px;font-size:.7rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;}
+.shock-body{background:#0a0a18;padding:10px 14px;font-size:.65rem;color:#c5c9d6;line-height:1.6;}
+.shock-body b{color:#f3f4f6;}
+
+.pearl{background:#14142a;border-left:3px solid #818cf8;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#818cf8;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="home-btn" href="index.html">☥ Home</a>
+  <div class="header">
+    <div class="icon">📈</div>
+    <h1>Arterial Waveform Physiology</h1>
+    <div class="sub">Transducer Setup · Waveform Components · Shock-Specific Changes</div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">📈 Normal Waveform Anatomy</p>
+    <div class="diagram-box">
+      <div class="diagram-title">Normal Arterial Pressure Waveform</div>
+      <svg viewBox="0 0 380 180" width="100%" style="max-width:380px;">
+        <line x1="20" y1="150" x2="360" y2="150" stroke="#374151" stroke-width="1"/>
+        <line x1="20" y1="20" x2="20" y2="150" stroke="#374151" stroke-width="1"/>
+        <text x="10" y="35" font-size="8" fill="#6b7280" font-family="Courier New">SBP</text>
+        <text x="10" y="130" font-size="8" fill="#6b7280" font-family="Courier New">DBP</text>
+
+        <path d="M20,120 L45,118 L55,30 L70,55 L85,50 L100,65 L130,95 L160,110 L190,118 L220,120
+                 L245,118 L255,30 L270,55 L285,50 L300,65 L330,95 L360,110"
+              fill="none" stroke="#818cf8" stroke-width="2.5"/>
+
+        <circle cx="55" cy="30" r="3" fill="#4ade80"/>
+        <text x="55" y="18" font-size="8" fill="#86efac" text-anchor="middle" font-family="Courier New">Systolic upstroke</text>
+        <text x="55" y="8" font-size="7" fill="#6b7280" text-anchor="middle" font-family="Courier New">(dP/dt = contractility)</text>
+
+        <circle cx="85" cy="50" r="3" fill="#fbbf24"/>
+        <text x="95" y="45" font-size="7.5" fill="#fcd34d" font-family="Courier New">Dicrotic notch</text>
+        <text x="95" y="55" font-size="7" fill="#6b7280" font-family="Courier New">(aortic valve closure)</text>
+
+        <text x="160" y="140" font-size="7.5" fill="#9ca3af" text-anchor="middle" font-family="Courier New">Diastolic runoff</text>
+        <text x="160" y="150" font-size="7" fill="#6b7280" text-anchor="middle" font-family="Courier New">(SVR-dependent decay)</text>
+      </svg>
+      <div class="diagram-caption">Upstroke slope = contractility (dP/dt). Dicrotic notch position/height = vascular tone (high/close to peak = vasoconstricted; low/absent = vasodilated). Area under curve ≈ stroke volume (basis of pulse contour CO monitoring). Diastolic decay rate reflects SVR.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🔧 Transducer Setup — Physics</p>
+    <div class="component-grid">
+      <div class="comp-item">
+        <div class="comp-title">Zeroing</div>
+        <div class="comp-body">Transducer opened to air, zeroed to atmospheric pressure — removes atmospheric pressure from the measurement, so displayed value is pressure above atmospheric.</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-title">Levelling — Phlebostatic Axis</div>
+        <div class="comp-body">Transducer positioned at the level of the right atrium (4th ICS, mid-axillary line). Too high → falsely low reading. Too low → falsely high reading — each cm of height error ≈ 0.75 mmHg.</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-title">Square Wave (Flush) Test</div>
+        <div class="comp-body">Fast-flush the line, observe the return to baseline. <b>Optimally damped</b> = 1-2 oscillations before settling. <b>Underdamped</b> = many oscillations, overshoots (bubbles, stiff long tubing) → falsely high systolic. <b>Overdamped</b> = sluggish, no oscillation, rounded waveform (clot, kink, air) → falsely low systolic, narrowed pulse pressure.</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-title">Natural Frequency & Damping Coefficient</div>
+        <div class="comp-body">System natural frequency should be far above the frequency content of the arterial pulse to avoid resonance artifact. Short, stiff, bubble-free tubing minimises resonance and maximises fidelity.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🩸 Waveform Changes — Haemorrhagic vs Septic Shock</p>
+    <div class="shock-grid">
+      <div class="shock-card" style="border-color:#f87171;">
+        <div class="shock-head" style="background:rgba(248,113,113,.1);color:#f87171;">Haemorrhagic Shock</div>
+        <div class="shock-body">
+          <b>Narrow pulse pressure</b> — SBP falls, DBP relatively preserved/rises (compensatory vasoconstriction) → pulse pressure narrows.<br>
+          <b>Exaggerated respiratory swing</b> — large PPV on the arterial trace with ventilation, reflecting preload dependence (fluid responsive).<br>
+          <b>Low dicrotic notch height, close to peak</b> — high SVR from compensatory vasoconstriction.<br>
+          <b>Steep diastolic runoff initially masked by vasoconstriction,</b> becomes rapid as compensation fails.
+        </div>
+      </div>
+      <div class="shock-card" style="border-color:#4ade80;">
+        <div class="shock-head" style="background:rgba(74,222,128,.1);color:#4ade80;">Septic/Distributive Shock</div>
+        <div class="shock-body">
+          <b>Wide pulse pressure</b> — vasodilation drops DBP more than SBP (or SBP may even rise slightly with hyperdynamic CO) → pulse pressure widens.<br>
+          <b>Low/absent dicrotic notch</b> — low SVR, vasoplegia.<br>
+          <b>Rapid diastolic decay/runoff</b> — blood rapidly leaves the arterial tree due to low peripheral resistance.<br>
+          <b>PPV may be less reliable</b> — variable vascular tone and often reduced compliance confound interpretation.
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b class="indigo">Core distinguishing principle:</b> pulse pressure narrows in vasoconstricted states (haemorrhage) and widens in vasodilated states (sepsis) — because pulse pressure is primarily a function of stroke volume and arterial compliance/tone, not just SBP alone.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Underdamped vs overdamped trace — clinical consequence of each?</div>
+      <div class="pearl-a">Underdamped (bubbles, excess tubing) → falsely elevated systolic reading, overshoot artifacts — risk of inappropriately treating a "hypertension" that isn't real. Overdamped (clot, kink, air) → falsely low systolic, narrowed pulse pressure, rounded waveform — risk of missing true hypertension or overestimating hypotension severity.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why does pulse pressure narrow in haemorrhagic shock but widen in septic shock?</div>
+      <div class="pearl-a">Haemorrhage triggers compensatory vasoconstriction (↑SVR) which raises diastolic pressure relative to a falling systolic — narrowing the gap. Sepsis causes vasoplegia (↓SVR) which drops diastolic disproportionately, widening the gap — sometimes with a preserved or even elevated systolic from compensatory hyperdynamic cardiac output.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What does the dicrotic notch actually represent?</div>
+      <div class="pearl-a">Aortic valve closure — the brief pressure increase as retrograde flow closes the valve. Its height and position on the waveform reflect peripheral vascular resistance: high and close to the systolic peak in vasoconstricted states, low or nearly absent in vasodilated states.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    GARDNER — DIRECT BLOOD PRESSURE MEASUREMENT, ANESTHESIOLOGY 1981<br>
+    ATLS 10TH ED · ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+</div>
+</body>
+</html>

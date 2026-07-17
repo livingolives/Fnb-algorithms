@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DKA in the Trauma Patient | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#f59e0b;border-color:#f59e0b;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#f59e0b;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.amber{color:#f59e0b;} .red{color:#f87171;} .green{color:#4ade80;} .blue{color:#60a5fa;}
+
+.diag-table{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.diag-row{display:flex;border-bottom:1px solid #2d2d42;}
+.diag-row:last-child{border-bottom:none;}
+.diag-cell{flex:1;padding:8px 10px;font-size:.63rem;line-height:1.5;color:#c5c9d6;}
+.diag-cell.label{flex:.6;color:#6b7280;font-weight:900;font-size:.58rem;letter-spacing:.05em;text-transform:uppercase;background:#0a0a18;}
+.diag-head{display:flex;background:#0a0a18;}
+.diag-head .diag-cell{font-weight:900;text-transform:uppercase;font-size:.58rem;letter-spacing:.05em;color:#6b7280;}
+
+.ladder{margin-bottom:12px;}
+.rung{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;}
+.rung-badge{min-width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:900;flex-shrink:0;}
+.rung-content{flex:1;background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;}
+.rung-title{font-size:.67rem;font-weight:900;color:#f3f4f6;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em;}
+.rung-body{font-size:.66rem;color:#a3a8b8;line-height:1.6;}
+.rung-body b{color:#c5c9d6;}
+
+.callout{background:rgba(248,113,113,.06);border:1px solid #f87171;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+
+.pearl{background:#14142a;border-left:3px solid #f59e0b;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#f59e0b;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="home-btn" href="index.html">☥ Home</a>
+  <div class="header">
+    <div class="icon">🍬</div>
+    <h1>DKA in the Trauma Patient</h1>
+    <div class="sub">Diagnosis · Management · Trauma-Specific Complexity</div>
+  </div>
+
+  <div class="section">
+    <div class="card" style="border-color:#f59e0b;">
+      <div class="card-body"><b class="amber">Scenario:</b> 20yo with known/undiagnosed diabetes presents post-trauma with altered mentation, tachypnoea, dehydration. Could be DKA precipitated by the trauma (physiological stress), or a pre-existing DKA that caused the trauma (collapse → fall/RTA) — either direction is possible and changes your framing.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">📊 Diagnostic Criteria</p>
+    <div class="diag-table">
+      <div class="diag-head">
+        <div class="diag-cell label">Parameter</div>
+        <div class="diag-cell">Threshold</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-cell label">Glucose</div>
+        <div class="diag-cell">&gt;250 mg/dL (13.9 mmol/L) — can be lower if euglycaemic DKA (SGLT2 inhibitors, starvation, pregnancy)</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-cell label">pH</div>
+        <div class="diag-cell">&lt;7.3</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-cell label">Bicarbonate</div>
+        <div class="diag-cell">&lt;18 mmol/L</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-cell label">Ketones</div>
+        <div class="diag-cell">Positive serum/urine ketones, or β-hydroxybutyrate &gt;3 mmol/L</div>
+      </div>
+      <div class="diag-row">
+        <div class="diag-cell label">Anion gap</div>
+        <div class="diag-cell">Elevated — high AG metabolic acidosis (ketoacids are the unmeasured anion)</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b>Severity grading:</b> Mild (pH 7.25-7.3), Moderate (pH 7.0-7.24), Severe (pH &lt;7.0 or altered mental status/shock) — severity determines ICU vs ward-level management.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🎯 Management — Trauma-Adapted</p>
+    <div class="ladder">
+      <div class="rung">
+        <div class="rung-badge" style="background:rgba(96,165,250,.15);color:#60a5fa;border:1px solid #60a5fa;">1</div>
+        <div class="rung-content">
+          <div class="rung-title">Fluid Resuscitation First — Before Insulin</div>
+          <div class="rung-body">0.9% saline initially (isotonic), <b>1L in first hour</b> then reassess. <b>Trauma-specific conflict:</b> if concurrent haemorrhagic shock, prioritise blood products/MTP per your DCR protocols — DKA fluid resuscitation does not override haemorrhage control. Correct volume depletion before starting insulin — insulin alone without fluid can worsen hypotension (shifts fluid intracellularly) and precipitates cerebral oedema.</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-badge" style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid #fbbf24;">2</div>
+        <div class="rung-content">
+          <div class="rung-title">Potassium — Check Before Insulin</div>
+          <div class="rung-body">DKA patients are <b>total body K⁺ depleted</b> despite potentially normal/high serum K⁺ (acidosis shifts K⁺ extracellularly). <b>If K⁺ &lt;3.3 mmol/L → replace potassium BEFORE starting insulin</b> — insulin will drive K⁺ intracellularly and precipitate dangerous hypokalaemia/arrhythmia. If K⁺ 3.3-5.3, replace concurrently with insulin. If &gt;5.3, withhold K⁺ initially, monitor.</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-badge" style="background:rgba(74,222,128,.15);color:#4ade80;border:1px solid #4ade80;">3</div>
+        <div class="rung-content">
+          <div class="rung-title">Insulin — Fixed Rate IV Infusion</div>
+          <div class="rung-body"><b>0.1 units/kg/hr</b> IV infusion (not bolus — no evidence of benefit, may worsen hypokalaemia risk). Target glucose fall <b>50-70 mg/dL/hr.</b> When glucose &lt;250-300 mg/dL, add 5-10% dextrose to the fluid regimen and continue insulin (still needed to switch off ketogenesis, not just to lower glucose).</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-badge" style="background:rgba(167,139,250,.15);color:#a78bfa;border:1px solid #a78bfa;">4</div>
+        <div class="rung-content">
+          <div class="rung-title">Bicarbonate — Rarely Indicated</div>
+          <div class="rung-body">Only consider if pH &lt;6.9 with haemodynamic compromise. Routine bicarbonate use is <b>not recommended</b> — risk of paradoxical CNS acidosis, hypokalaemia, and (in children/adolescents) cerebral oedema.</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-badge" style="background:rgba(248,113,113,.15);color:#f87171;border:1px solid #f87171;">5</div>
+        <div class="rung-content">
+          <div class="rung-title">Monitor for Cerebral Oedema</div>
+          <div class="rung-body">Rare but devastating, more common in younger patients. Avoid rapid osmotic shifts — correct glucose and sodium gradually. Headache, altered consciousness, or new focal neurology during treatment → stop and reassess, consider mannitol/hypertonic saline if genuine cerebral oedema develops (same principle as your TBI management).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">⚠️ Trauma-Specific Complexity</p>
+    <div class="callout">
+      <div class="callout-title">Competing Priorities</div>
+      <div class="callout-item"><b>Haemorrhage control takes priority</b> — if the patient is also bleeding, DCR/MTP protocols run in parallel, not sequentially after DKA correction.</div>
+      <div class="callout-item"><b>Lactate interpretation confounded</b> — DKA causes an elevated anion gap independent of tissue hypoperfusion; use your Stewart/corrected AG approach to separate the ketoacid contribution from a genuine hypoperfusion-driven lactate rise.</div>
+      <div class="callout-item"><b>Altered mental status attribution</b> — is the GCS drop from DKA, TBI, or both? Don't anchor on one diagnosis; work up head injury independently per your TBI/C-spine protocols regardless of DKA severity.</div>
+      <div class="callout-item"><b>Surgical timing</b> — if surgery is needed, correct the acidosis and electrolytes as much as the clinical urgency allows first; DKA significantly increases perioperative risk (arrhythmia, hypotension on induction).</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why must you check potassium before starting insulin in DKA?</div>
+      <div class="pearl-a">DKA patients are total-body potassium depleted despite normal or even high serum levels (acidosis shifts K⁺ extracellularly). Insulin drives K⁺ rapidly intracellularly — starting insulin in a patient with K⁺ &lt;3.3 mmol/L can precipitate life-threatening hypokalaemia and arrhythmia. Replace K⁺ first if below this threshold.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Trauma patient is both haemorrhaging and in DKA — which takes priority?</div>
+      <div class="pearl-a">Haemorrhage control — activate MTP/DCR per standard trauma protocols. DKA fluid and insulin management runs alongside, not as a competing priority; permissive hypotension principles still apply for haemorrhage while correcting the metabolic derangement in parallel once major bleeding is controlled.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why avoid insulin bolus at initiation?</div>
+      <div class="pearl-a">No evidence of faster resolution compared to infusion alone, and a bolus risks a more precipitous glucose/osmolality drop — increasing cerebral oedema risk, particularly relevant in younger patients. Fixed-rate IV infusion (0.1 units/kg/hr) is standard.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    JOINT BRITISH DIABETES SOCIETIES — DKA MANAGEMENT GUIDELINE<br>
+    ADA STANDARDS OF CARE · ATLS 10TH ED · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+</div>
+</body>
+</html>

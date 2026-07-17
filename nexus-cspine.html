@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS & Canadian C-Spine Rule | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#60a5fa;border-color:#60a5fa;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#60a5fa;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.blue{color:#60a5fa;} .red{color:#f87171;} .green{color:#4ade80;} .amber{color:#fbbf24;}
+
+/* NEXUS criteria */
+.nexus-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:12px;}
+.nexus-item{display:flex;gap:12px;align-items:center;background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:10px 14px;}
+.nexus-num{min-width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:900;background:rgba(96,165,250,.15);color:#60a5fa;border:1px solid #60a5fa;flex-shrink:0;}
+.nexus-text{font-size:.7rem;color:#c5c9d6;}
+.nexus-text b{color:#f3f4f6;}
+
+/* Age not included callout */
+.age-callout{background:rgba(248,113,113,.08);border:2px solid #f87171;border-radius:10px;padding:14px 16px;margin-bottom:12px;text-align:center;}
+.age-callout-title{font-size:.7rem;font-weight:900;color:#f87171;letter-spacing:.08em;text-transform:uppercase;}
+
+/* Canadian rule steps */
+.step-flow{margin-bottom:12px;}
+.step-block{background:#14142a;border:2px solid;border-radius:10px;padding:14px;margin-bottom:10px;}
+.step-num-label{font-size:.6rem;font-weight:900;letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;}
+.step-list{margin-top:6px;}
+.step-list-item{font-size:.66rem;color:#c5c9d6;line-height:1.6;padding:3px 0;display:flex;gap:6px;}
+.step-arrow{text-align:center;font-size:1.2rem;color:#6b7280;margin:4px 0;}
+
+/* Comparison table */
+.vs-table{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.vs-row{display:flex;border-bottom:1px solid #2d2d42;}
+.vs-row:last-child{border-bottom:none;}
+.vs-cell{flex:1;padding:9px 12px;font-size:.65rem;line-height:1.5;color:#c5c9d6;}
+.vs-cell.label{flex:.7;color:#6b7280;font-weight:900;font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;background:#0a0a18;}
+.vs-head{display:flex;background:#0a0a18;}
+.vs-head .vs-cell{font-weight:900;text-transform:uppercase;font-size:.6rem;letter-spacing:.06em;}
+
+/* Worked example */
+.case-box{background:rgba(96,165,250,.06);border:2px solid #60a5fa;border-radius:10px;padding:16px;margin-bottom:12px;}
+.case-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#60a5fa;margin-bottom:10px;}
+.case-outcome{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.outcome-box{border-radius:8px;padding:10px;text-align:center;border:1px solid;}
+.outcome-label{font-size:.6rem;font-weight:900;text-transform:uppercase;margin-bottom:4px;}
+.outcome-result{font-size:.75rem;font-weight:900;}
+
+/* Callout */
+.callout{background:rgba(248,113,113,.06);border:1px solid #f87171;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+.callout-item .wrong{color:#f87171;text-decoration:line-through;}
+.callout-item .right{color:#4ade80;}
+
+/* Pearl */
+.pearl{background:#14142a;border-left:3px solid #60a5fa;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#60a5fa;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="home-btn" href="index.html">☥ Home</a>
+
+  <div class="header">
+    <div class="icon">🦴</div>
+    <h1>NEXUS & Canadian C-Spine Rule</h1>
+    <div class="sub">Clinical Clearance of the Cervical Spine</div>
+  </div>
+
+  <!-- NEXUS -->
+  <div class="section">
+    <p class="section-title">📋 NEXUS Criteria — All 5 Must Be Met to Clear</p>
+    <div class="nexus-grid">
+      <div class="nexus-item"><div class="nexus-num">1</div><div class="nexus-text"><b>No midline cervical tenderness</b></div></div>
+      <div class="nexus-item"><div class="nexus-num">2</div><div class="nexus-text"><b>No focal neurological deficit</b></div></div>
+      <div class="nexus-item"><div class="nexus-num">3</div><div class="nexus-text"><b>Normal level of alertness</b></div></div>
+      <div class="nexus-item"><div class="nexus-num">4</div><div class="nexus-text"><b>No intoxication</b></div></div>
+      <div class="nexus-item"><div class="nexus-num">5</div><div class="nexus-text"><b>No distracting injury</b> — a separate painful injury (long bone #, major laceration, burn) that would distract from reporting neck pain. NOT the crash mechanism itself.</div></div>
+    </div>
+    <div class="age-callout">
+      <div class="age-callout-title">⚠ Age is NOT a NEXUS criterion</div>
+      <div style="font-size:.65rem;color:#fca5a5;margin-top:6px;">The single most common exam confusion — age belongs to Canadian C-Spine Rule, not NEXUS.</div>
+    </div>
+    <div class="card">
+      <div class="card-body">If <b>ALL FIVE</b> criteria are met (i.e. none of the concerning features present) → <b class="green">clinically clear, no imaging needed.</b> Fail even ONE → imaging required.</div>
+    </div>
+  </div>
+
+  <!-- CANADIAN C-SPINE -->
+  <div class="section">
+    <p class="section-title">🍁 Canadian C-Spine Rule — Three-Step Decision Tree</p>
+
+    <div class="step-flow">
+      <div class="step-block" style="border-color:#f87171;">
+        <div class="step-num-label" style="color:#f87171;">Step 1 — High-Risk Factors (ANY one → image, stop here)</div>
+        <div class="step-list">
+          <div class="step-list-item">▸ Age ≥65</div>
+          <div class="step-list-item">▸ Dangerous mechanism (fall &gt;3ft/5 stairs, axial load, high-speed MVC, rollover, ejection, motorised recreational vehicle, bicycle collision)</div>
+          <div class="step-list-item">▸ Paraesthesias in extremities</div>
+        </div>
+      </div>
+      <div class="step-arrow">↓ none present</div>
+      <div class="step-block" style="border-color:#fbbf24;">
+        <div class="step-num-label" style="color:#fbbf24;">Step 2 — Low-Risk Factors (safety gate — allows ROM testing)</div>
+        <div class="step-list">
+          <div class="step-list-item">▸ Simple rear-end MVC</div>
+          <div class="step-list-item">▸ Sitting position in ED</div>
+          <div class="step-list-item">▸ Ambulatory at any time since injury</div>
+          <div class="step-list-item">▸ Delayed onset of neck pain</div>
+          <div class="step-list-item">▸ Absence of midline C-spine tenderness</div>
+        </div>
+        <div class="card" style="margin-top:8px;margin-bottom:0;">
+          <div class="card-body" style="font-size:.63rem;"><b>If ZERO present</b> → too many concerning features, unsafe to test movement → <span class="red">image directly, skip Step 3.</span></div>
+        </div>
+      </div>
+      <div class="step-arrow">↓ ≥1 present</div>
+      <div class="step-block" style="border-color:#4ade80;">
+        <div class="step-num-label" style="color:#4ade80;">Step 3 — Active Range of Motion Test</div>
+        <div class="step-list">
+          <div class="step-list-item">▸ Can patient actively rotate neck 45° LEFT and RIGHT?</div>
+          <div class="step-list-item"><span class="green">✓ Full, pain-free rotation</span> → clear clinically, no imaging</div>
+          <div class="step-list-item"><span class="red">✗ Restricted or painful</span> → image</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">⚠ Common Misunderstanding</div>
+      <div class="callout-item">Low-risk factors are <b>not</b> a clearance criterion themselves — they're a <b>safety gate</b> deciding whether it's safe to attempt the ROM test. "Sitting in ED" alone does NOT mean "no imaging" — it means "safe enough to now test neck rotation, and THAT result determines the imaging decision."</div>
+    </div>
+  </div>
+
+  <!-- COMPARISON -->
+  <div class="section">
+    <p class="section-title">⚖️ NEXUS vs Canadian C-Spine Rule</p>
+    <div class="vs-table">
+      <div class="vs-head">
+        <div class="vs-cell label"> </div>
+        <div class="vs-cell" style="color:#60a5fa;">NEXUS</div>
+        <div class="vs-cell" style="color:#fbbf24;">Canadian C-Spine</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Age factor?</div>
+        <div class="vs-cell" style="color:#f87171;">No</div>
+        <div class="vs-cell" style="color:#4ade80;">Yes — ≥65 mandates imaging</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Structure</div>
+        <div class="vs-cell">Simple checklist — all 5 met = clear</div>
+        <div class="vs-cell">3-step decision tree with ROM test</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Sensitivity</div>
+        <div class="vs-cell">Lower</div>
+        <div class="vs-cell" style="color:#4ade80;">Higher — fewer missed injuries</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-cell label">Specificity</div>
+        <div class="vs-cell" style="color:#4ade80;">Higher</div>
+        <div class="vs-cell">Lower — more unnecessary imaging</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKED EXAMPLE -->
+  <div class="section">
+    <p class="section-title">🎯 Worked Example — Where the Two Rules Diverge</p>
+    <div class="case-box">
+      <div class="case-title">70yo · Simple Fall · No Midline Tenderness · Alert · No Neuro Deficit · No Intoxication</div>
+      <div class="case-outcome">
+        <div class="outcome-box" style="border-color:#4ade80;">
+          <div class="outcome-label" style="color:#4ade80;">NEXUS</div>
+          <div class="outcome-result" style="color:#4ade80;">CLEARS</div>
+          <div style="font-size:.6rem;color:#9ca3af;margin-top:4px;">All 5 criteria met — age not assessed</div>
+        </div>
+        <div class="outcome-box" style="border-color:#f87171;">
+          <div class="outcome-label" style="color:#f87171;">Canadian C-Spine</div>
+          <div class="outcome-result" style="color:#f87171;">MUST IMAGE</div>
+          <div style="font-size:.6rem;color:#9ca3af;margin-top:4px;">Age ≥65 = automatic high-risk factor</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">This is <b>the</b> classic teaching contrast between the two rules — same patient, same exam findings, opposite outcomes depending which rule you apply. It exists specifically because age is excluded from NEXUS but is a hard trigger in Canadian C-Spine.</div>
+    </div>
+  </div>
+
+  <!-- OBTUNDED PATIENT -->
+  <div class="section">
+    <p class="section-title">🚨 Cannot Clinically Assess — Intubated/GCS Low</p>
+    <div class="card" style="border-color:#f87171;">
+      <div class="card-body">
+        Neither rule can be applied to a patient who cannot be examined — can't assess alertness, can't test ROM, can't reliably assess tenderness or neuro deficit.<br><br>
+        <b class="red">CT cervical spine</b> is the modality of choice — far higher sensitivity than plain X-ray series in the obtunded/intubated trauma patient, now standard of care over 3-view X-ray.<br><br>
+        Maintain <b>manual in-line stabilisation / hard collar</b> until CT reported clear. Clinical clearance can be reconsidered later once the patient is extubated/alert enough to be examined if CT was unavailable, but CT is the primary expected answer.
+      </div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Is age part of NEXUS criteria?</div>
+      <div class="pearl-a">No. This is the most common exam confusion. NEXUS has five criteria — midline tenderness, focal neuro deficit, alertness, intoxication, distracting injury — none involve age. Age ≥65 is a Canadian C-Spine Rule high-risk factor.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: A patient has one low-risk factor (ambulatory since injury) but you haven't tested ROM yet — can you clear them?</div>
+      <div class="pearl-a">Not yet. The low-risk factor only makes it safe to proceed to Step 3 (active ROM testing). Clearance depends on the outcome of that test — full pain-free rotation clears them, restricted/painful rotation means imaging.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why is Canadian C-Spine Rule considered more sensitive but less specific than NEXUS?</div>
+      <div class="pearl-a">It catches more true injuries (higher sensitivity) partly because age ≥65 alone triggers mandatory imaging regardless of clinical findings — but this also means more patients without actual injury get imaged unnecessarily (lower specificity) compared to NEXUS's pure symptom-based checklist.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    HOFFMAN ET AL — NEXUS, NEJM 2000 · STIELL ET AL — CANADIAN C-SPINE RULE, JAMA 2001<br>
+    ATLS 10TH ED · ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>

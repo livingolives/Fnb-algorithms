@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Macklin Effect | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#06b6d4;border-color:#06b6d4;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#06b6d4;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.cyan{color:#06b6d4;} .red{color:#f87171;} .green{color:#4ade80;}
+
+.flow{margin-bottom:12px;}
+.flow-step{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.flow-box{flex:1;background:#14142a;border-radius:6px;padding:8px 10px;font-size:.65rem;color:#c5c9d6;line-height:1.4;border:1px solid #2d2d42;}
+.flow-box b{color:#f3f4f6;}
+.flow-arrow{color:#06b6d4;font-size:1rem;text-align:center;}
+
+.callout{background:rgba(74,222,128,.06);border:1px solid #4ade80;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#4ade80;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+
+.pearl{background:#14142a;border-left:3px solid #06b6d4;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#06b6d4;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+  <a class="home-btn" href="index.html">☥ Home</a>
+  <div class="header">
+    <div class="icon">💨</div>
+    <h1>Macklin Effect</h1>
+    <div class="sub">Pneumomediastinum Without Airway/Oesophageal Rupture</div>
+  </div>
+
+  <div class="section">
+    <div class="card">
+      <div class="card-body">The <b class="cyan">Macklin effect</b> explains how <b>pneumomediastinum can occur after blunt chest trauma without any visible tracheobronchial or oesophageal tear</b> — a mechanism worth knowing because it prevents you from over-calling a major airway injury when the actual explanation is more benign.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🔬 Mechanism</p>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-box">Blunt chest trauma → sudden ↑ intra-alveolar pressure (Valsalva against a closed glottis, blast, or direct impact) relative to interstitial pressure</div></div>
+      <div class="flow-step" style="justify-content:center;"><span class="flow-arrow">↓</span></div>
+      <div class="flow-step"><div class="flow-box"><b>Alveolar rupture</b> at the base — air escapes into the bronchovascular sheath (perivascular interstitium)</div></div>
+      <div class="flow-step" style="justify-content:center;"><span class="flow-arrow">↓</span></div>
+      <div class="flow-step"><div class="flow-box">Air <b>dissects centrally along the bronchovascular sheath</b>, tracking toward the hilum — following the path of least resistance</div></div>
+      <div class="flow-step" style="justify-content:center;"><span class="flow-arrow">↓</span></div>
+      <div class="flow-step"><div class="flow-box" style="border-color:#06b6d4;color:#67e8f9;">Air reaches the <b>mediastinum</b> → pneumomediastinum, and can further track into the neck (subcutaneous emphysema) or retroperitoneum — <b>all without any macroscopic tear in the airway, lung, or oesophagus</b></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="callout">
+      <div class="callout-title">✓ Clinical Significance</div>
+      <div class="callout-item">Pneumomediastinum from the Macklin effect is typically a <b>benign, self-limiting</b> finding.</div>
+      <div class="callout-item">It does NOT necessarily indicate tracheobronchial rupture or oesophageal perforation — both of which are far more serious and require urgent intervention.</div>
+      <div class="callout-item">Recognising this mechanism prevents unnecessary invasive workup (bronchoscopy, oesophagoscopy) in a patient who has pneumomediastinum but no other signs of major airway/oesophageal injury.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">⚠️ When to Still Worry — Don't Anchor Purely on Macklin</p>
+    <div class="card">
+      <div class="card-body">
+        Macklin effect is a <b>diagnosis of exclusion</b> — still actively rule out true airway/oesophageal injury if:
+        <br><br>
+        • Large volume/rapidly progressive pneumomediastinum<br>
+        • Persistent large air leak from a chest drain despite lung re-expansion<br>
+        • Haemoptysis, dysphagia, subcutaneous emphysema out of proportion to injury<br>
+        • Mechanism strongly suggestive of direct tracheobronchial or oesophageal trauma (penetrating, severe deceleration)<br><br>
+        In these situations, proceed to <b>bronchoscopy/CT with contrast swallow</b> as indicated — don't dismiss everything as benign Macklin effect.
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: A blunt trauma patient has pneumomediastinum on CT with no visible airway tear — is this always reassuring?</div>
+      <div class="pearl-a">Usually yes if it fits the Macklin mechanism (alveolar rupture, air tracking along bronchovascular sheaths to the mediastinum) — but it's a diagnosis of exclusion. Persistent large air leak, worsening subcutaneous emphysema, haemoptysis, or dysphagia should still prompt bronchoscopy/oesophageal imaging to exclude true injury.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why does the air track toward the mediastinum specifically, rather than staying peripheral?</div>
+      <div class="pearl-a">Air follows the path of least resistance along the perivascular/peribronchial interstitial planes (bronchovascular sheath), which converge centrally toward the hilum and mediastinum — this anatomical convergence is what channels the air centrally rather than it simply diffusing outward.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    MACKLIN & MACKLIN — MALIGNANT INTERSTITIAL EMPHYSEMA, MEDICINE 1944<br>
+    ATLS 10TH ED · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+</div>
+</body>
+</html>

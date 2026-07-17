@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trauma Chest X-Ray Interpretation | FNB Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#f3f4f6;font-family:'Courier New',monospace;min-height:100vh;padding:20px 16px;}
+.container{width:100%;max-width:680px;margin:0 auto;}
+.home-btn{display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;font-size:.65rem;color:#c5c9d6;text-decoration:none;letter-spacing:.1em;border:1px solid #2d2d42;padding:6px 14px;border-radius:6px;transition:all .2s;}
+.home-btn:hover{color:#fbbf24;border-color:#fbbf24;}
+.header{text-align:center;padding:28px 0 20px;border-bottom:1px solid #2d2d42;margin-bottom:24px;}
+.header .icon{font-size:2.2rem;margin-bottom:8px;}
+.header h1{font-size:1.1rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#fbbf24;margin-bottom:4px;}
+.header .sub{font-size:.65rem;color:#9ca3af;letter-spacing:.2em;text-transform:uppercase;}
+.section{margin-bottom:20px;}
+.section-title{font-size:.6rem;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:#6b7280;margin-bottom:10px;padding-left:4px;}
+.card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.card-body{font-size:.75rem;color:#c5c9d6;line-height:1.7;}
+.card-body b{color:#f3f4f6;}
+.amber{color:#fbbf24;} .red{color:#f87171;} .green{color:#4ade80;} .blue{color:#60a5fa;}
+
+/* Systematic approach steps */
+.steps{margin-bottom:12px;}
+.step{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;}
+.step-num{min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;background:rgba(251,191,36,.12);border:1px solid #fbbf24;color:#fbbf24;flex-shrink:0;}
+.step-content{flex:1;background:#14142a;border:1px solid #2d2d42;border-radius:8px;padding:10px 12px;}
+.step-title{font-size:.67rem;font-weight:900;color:#f3f4f6;margin-bottom:3px;letter-spacing:.05em;text-transform:uppercase;}
+.step-body{font-size:.67rem;color:#a3a8b8;line-height:1.6;}
+.step-body b{color:#c5c9d6;}
+
+/* Diagram box */
+.diagram-box{background:#0a0a18;border:1px solid #2d2d42;border-radius:10px;padding:18px;margin-bottom:12px;text-align:center;}
+.diagram-title{font-size:.6rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#fbbf24;margin-bottom:14px;}
+.diagram-caption{font-size:.62rem;color:#9ca3af;line-height:1.6;margin-top:12px;text-align:left;}
+
+/* Findings grid */
+.finding-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px;}
+.finding-card{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;border-left:4px solid;}
+.finding-head{padding:10px 14px;font-size:.7rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;}
+.finding-body{background:#0a0a18;padding:10px 14px;font-size:.65rem;color:#c5c9d6;line-height:1.6;}
+.finding-body b{color:#f3f4f6;}
+
+/* Tube position table */
+.tube-table{background:#14142a;border:1px solid #2d2d42;border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.tube-row{display:flex;border-bottom:1px solid #2d2d42;}
+.tube-row:last-child{border-bottom:none;}
+.tube-cell{flex:1;padding:8px 10px;font-size:.62rem;line-height:1.5;color:#c5c9d6;}
+.tube-cell.label{flex:.6;color:#6b7280;font-weight:900;font-size:.58rem;letter-spacing:.05em;text-transform:uppercase;background:#0a0a18;}
+.tube-head{display:flex;background:#0a0a18;}
+.tube-head .tube-cell{font-weight:900;text-transform:uppercase;font-size:.58rem;letter-spacing:.05em;color:#6b7280;}
+
+/* Callout */
+.callout{background:rgba(248,113,113,.06);border:1px solid #f87171;border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.callout-title{font-size:.65rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#f87171;margin-bottom:8px;}
+.callout-item{font-size:.68rem;color:#d1d5db;line-height:1.7;padding:4px 0;}
+.callout-item b{color:#fff;}
+
+/* Pearl */
+.pearl{background:#14142a;border-left:3px solid #fbbf24;border-radius:0 8px 8px 0;padding:12px 15px;margin-bottom:8px;}
+.pearl-q{font-size:.67rem;color:#fbbf24;font-weight:900;letter-spacing:.05em;margin-bottom:4px;}
+.pearl-a{font-size:.71rem;color:#a3a8b8;line-height:1.6;}
+.pearl-a b{color:#c5c9d6;}
+
+.source{font-size:.58rem;color:#374151;letter-spacing:.1em;text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #1a1a30;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <a class="home-btn" href="index.html">☥ Home</a>
+
+  <div class="header">
+    <div class="icon">📷</div>
+    <h1>Trauma Chest X-Ray Interpretation</h1>
+    <div class="sub">Systematic Approach · ATLS 10th Edition</div>
+  </div>
+
+  <!-- CONTEXT -->
+  <div class="section">
+    <div class="card" style="border-color:#fbbf24;">
+      <div class="card-body">Trauma CXR is almost always a <b class="amber">supine AP portable film</b> — different appearance and limitations compared to an erect PA film. Mediastinal structures appear magnified, small pneumothoraces and effusions are harder to detect (fluid/air layers out posteriorly rather than forming an obvious meniscus/apical line), and rotation is common. Always interpret with this context in mind.</div>
+    </div>
+  </div>
+
+  <!-- SYSTEMATIC APPROACH -->
+  <div class="section">
+    <p class="section-title">📋 Systematic Approach</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Adequacy & Rotation</div>
+          <div class="step-body">Check patient ID, film quality/penetration. Assess rotation — medial ends of clavicles should be equidistant from the spinous processes. Rotation distorts mediastinal width assessment.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Airway & Tubes/Lines</div>
+          <div class="step-body">Trachea midline or deviated? ETT tip position, NG tube course, central line tip position — see table below.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Mediastinum</div>
+          <div class="step-body"><b>Widened mediastinum</b> (&gt;8cm at aortic knob on supine AP, or mediastinal:chest width ratio &gt;0.25) → suspect <b>traumatic aortic injury</b> — needs CT angiogram. Also check for pneumomediastinum (Macklin effect).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Pleural Spaces — Pneumothorax</div>
+          <div class="step-body">Look for visceral pleural line, absent lung markings peripherally. On supine film, air rises anteromedially/subpulmonic — look for <b>deep sulcus sign</b> (abnormally deep, lucent costophrenic angle) rather than a classic apical rim.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">Pleural Spaces — Haemothorax</div>
+          <div class="step-body">On supine film, blood layers out posteriorly first — produces diffuse hazy opacification of the hemithorax rather than an obvious meniscus. Can mask/mimic a lung contusion. Up to 1L can be present before an obvious meniscus appears on supine film.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <div class="step-title">Lung Fields</div>
+          <div class="step-body">Contusion (patchy, non-segmental opacity, doesn't respect fissures — distinguishes from pneumonia which does), collapse, foreign bodies.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-content">
+          <div class="step-title">Bones</div>
+          <div class="step-body">Rib fractures (note number/location — first/second rib fracture suggests high-energy trauma, associated great vessel injury), clavicle, scapula, sternum (best seen on lateral).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">8</div>
+        <div class="step-content">
+          <div class="step-title">Diaphragm & Subdiaphragmatic</div>
+          <div class="step-body">Elevated hemidiaphragm, NG tube coiling above diaphragm (diaphragmatic rupture — see dedicated page), free air under diaphragm (hollow viscus perforation).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">9</div>
+        <div class="step-content">
+          <div class="step-title">Soft Tissues</div>
+          <div class="step-body">Subcutaneous emphysema (surgical emphysema) — tracking air in soft tissue planes, suggests pneumothorax, tracheobronchial injury, or oesophageal rupture.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEEP SULCUS SIGN DIAGRAM -->
+  <div class="section">
+    <p class="section-title">🎯 Deep Sulcus Sign — Supine Pneumothorax</p>
+    <div class="diagram-box">
+      <div class="diagram-title">Supine AP Chest — Right Deep Sulcus Sign</div>
+      <svg viewBox="0 0 320 260" width="100%" style="max-width:300px;">
+        <!-- Chest outline -->
+        <path d="M60 20 Q160 5 260 20 L270 200 Q160 220 50 200 Z" fill="#0a0a18" stroke="#374151" stroke-width="1.5"/>
+
+        <!-- ribs -->
+        <path d="M65 50 Q160 40 255 50" stroke="#374151" stroke-width="1.5" fill="none"/>
+        <path d="M60 75 Q160 65 260 75" stroke="#374151" stroke-width="1.5" fill="none"/>
+        <path d="M56 100 Q160 92 264 100" stroke="#374151" stroke-width="1.5" fill="none"/>
+        <path d="M52 125 Q160 118 268 125" stroke="#374151" stroke-width="1.5" fill="none"/>
+        <path d="M50 150 Q160 145 270 150" stroke="#374151" stroke-width="1.5" fill="none"/>
+
+        <!-- Left lung markings normal -->
+        <g opacity="0.5" stroke="#4b5563" stroke-width="1">
+          <line x1="90" y1="60" x2="130" y2="90"/>
+          <line x1="85" y1="90" x2="125" y2="120"/>
+          <line x1="80" y1="120" x2="120" y2="150"/>
+          <line x1="95" y1="40" x2="140" y2="70"/>
+        </g>
+        <text x="110" y="30" font-size="8" fill="#9ca3af" text-anchor="middle" font-family="Courier New">Left — normal</text>
+
+        <!-- Right side - deep sulcus -->
+        <text x="210" y="30" font-size="8" fill="#fca5a5" text-anchor="middle" font-family="Courier New">Right — pneumothorax</text>
+
+        <!-- Normal costophrenic angle depth marker (left) -->
+        <path d="M60 175 Q75 195 100 200" stroke="#4ade80" stroke-width="2" fill="none"/>
+        <text x="75" y="215" font-size="7" fill="#86efac" text-anchor="middle" font-family="Courier New">normal shallow</text>
+        <text x="75" y="224" font-size="7" fill="#86efac" text-anchor="middle" font-family="Courier New">costophrenic angle</text>
+
+        <!-- Deep sulcus on right - exaggerated lucent angle -->
+        <path d="M270 155 Q255 210 210 205" stroke="#f87171" stroke-width="2.5" fill="none"/>
+        <ellipse cx="240" cy="185" rx="28" ry="22" fill="#000" opacity="0.4" stroke="#f87171" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <text x="240" y="240" font-size="7" fill="#fca5a5" text-anchor="middle" font-family="Courier New">deep, lucent sulcus —</text>
+        <text x="240" y="249" font-size="7" fill="#fca5a5" text-anchor="middle" font-family="Courier New">air tracks lateral/subpulmonic recess</text>
+
+        <!-- No lung markings on affected side lower zone -->
+        <text x="215" y="165" font-size="7" fill="#f87171" font-family="Courier New">absent markings</text>
+      </svg>
+      <div class="diagram-caption">On a <b>supine</b> film, free air doesn't rise to the apex like on an erect film — it can collect in two distinct locations, producing two different signs. <b style="color:#fca5a5;">Anteromedial air</b> outlines the cardiac border/mediastinum (sharp pericardial edge, medial lucent stripe) — a separate finding. The <b style="color:#fca5a5;">deep sulcus sign</b> specifically results from air tracking into the <b>lateral and subpulmonic costophrenic recess</b>, which runs obliquely downward and backward — as air collects here it pushes the diaphragm down laterally, producing the abnormally deep, lucent "V" seen on the affected side, rather than the classic apical rim seen erect. Easily missed if you're only looking for the "textbook" erect-film appearance.</div>
+    </div>
+  </div>
+
+  <!-- WIDENED MEDIASTINUM -->
+  <div class="section">
+    <p class="section-title">⚠️ Widened Mediastinum — Aortic Injury</p>
+    <div class="card">
+      <div class="card-body">
+        <b class="red">&gt;8cm at the level of the aortic knob</b> on a supine AP film (or mediastinal-width:chest-width ratio &gt;0.25) → suspicious for <b>traumatic aortic injury</b> (usually at the ligamentum arteriosum/isthmus).<br><br>
+        <b>Other CXR signs supporting aortic injury:</b>
+      </div>
+    </div>
+    <div class="finding-grid">
+      <div class="finding-card" style="border-color:#f87171;">
+        <div class="finding-head" style="background:rgba(248,113,113,.1);color:#f87171;">Apical Pleural Cap</div>
+        <div class="finding-body">Blood tracking over the lung apex — left-sided cap most specific.</div>
+      </div>
+      <div class="finding-card" style="border-color:#f87171;">
+        <div class="finding-head" style="background:rgba(248,113,113,.1);color:#f87171;">Depressed Left Main Bronchus</div>
+        <div class="finding-body">Displaced &gt;40° below horizontal by mediastinal haematoma.</div>
+      </div>
+      <div class="finding-card" style="border-color:#f87171;">
+        <div class="finding-head" style="background:rgba(248,113,113,.1);color:#f87171;">NG Tube Deviation</div>
+        <div class="finding-body">Oesophagus/NG tube pushed to the right by haematoma.</div>
+      </div>
+      <div class="finding-card" style="border-color:#f87171;">
+        <div class="finding-head" style="background:rgba(248,113,113,.1);color:#f87171;">Loss of Aortopulmonary Window</div>
+        <div class="finding-body">Normally clear space obliterated by haematoma.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body"><b>CXR is a screening tool only</b> — any suspicious finding mandates <b>CT angiogram</b> for definitive diagnosis. A normal mediastinal width does NOT exclude aortic injury reliably enough to skip CT if clinical suspicion is high (deceleration mechanism).</div>
+    </div>
+  </div>
+
+  <!-- TUBE/LINE POSITIONS -->
+  <div class="section">
+    <p class="section-title">🔧 Tubes & Lines — Expected Position</p>
+    <div class="tube-table">
+      <div class="tube-head">
+        <div class="tube-cell label">Device</div>
+        <div class="tube-cell">Correct Position</div>
+      </div>
+      <div class="tube-row">
+        <div class="tube-cell label">ETT tip</div>
+        <div class="tube-cell">3–5cm above carina — too low risks right main bronchus intubation</div>
+      </div>
+      <div class="tube-row">
+        <div class="tube-cell label">NG/OG tube</div>
+        <div class="tube-cell">Tip below diaphragm, in stomach. Coiling ABOVE diaphragm = diaphragmatic rupture</div>
+      </div>
+      <div class="tube-row">
+        <div class="tube-cell label">Central line tip</div>
+        <div class="tube-cell">At cavoatrial junction — SVC, not in the right atrium</div>
+      </div>
+      <div class="tube-row">
+        <div class="tube-cell label">Chest drain</div>
+        <div class="tube-cell">All side holes within pleural cavity — check radiopaque line marker</div>
+      </div>
+      <div class="tube-row">
+        <div class="tube-cell label">Trachea</div>
+        <div class="tube-cell">Midline. Deviation AWAY from a pneumothorax suggests tension; deviation TOWARDS suggests collapse</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALLOUT -->
+  <div class="section">
+    <div class="callout">
+      <div class="callout-title">⚠ Examiner Traps</div>
+      <div class="callout-item"><b>Tension pneumothorax is a CLINICAL diagnosis</b> — do NOT wait for CXR to treat it. Needle/finger thoracostomy first if clinically suspected (tracheal shift, absent breath sounds, haemodynamic compromise), image only confirms afterward or in the stable patient.</div>
+      <div class="callout-item">Supine film haemothorax can layer out as diffuse haziness mimicking contusion — up to 1L of blood may not show an obvious meniscus.</div>
+      <div class="callout-item">Rib fracture numbers matter — 1st/2nd rib fracture implies high-energy transfer, raises suspicion for great vessel/brachial plexus injury even without direct visualisation of vascular injury.</div>
+    </div>
+  </div>
+
+  <!-- PEARLS -->
+  <div class="section">
+    <p class="section-title">🎯 Examiner Pearls</p>
+    <div class="pearl">
+      <div class="pearl-q">Q: Why does a pneumothorax look different on a supine trauma CXR compared to an erect film?</div>
+      <div class="pearl-a">On an erect film, free air rises to the apex, producing the classic visible pleural line/rim. Supine, air can collect anteromedially (outlining the cardiac border) or in the <b>lateral/subpulmonic costophrenic recess</b> — it's specifically this second location, as air pushes the obliquely-angled diaphragm down laterally, that produces the deep sulcus sign (abnormally lucent, deep costophrenic angle) rather than an apical rim. Missing this appearance is a common source of missed pneumothorax on trauma CXR.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: What mediastinal width on supine CXR raises suspicion for traumatic aortic injury, and what's your next step?</div>
+      <div class="pearl-a">&gt;8cm at the aortic knob, or mediastinal:chest width ratio &gt;0.25. CXR is only a screening tool — any suspicious finding, or high clinical suspicion from mechanism alone, mandates CT angiogram for definitive diagnosis. A normal CXR does not reliably exclude aortic injury.</div>
+    </div>
+    <div class="pearl">
+      <div class="pearl-q">Q: Should you wait for a CXR before treating suspected tension pneumothorax?</div>
+      <div class="pearl-a">No. Tension pneumothorax is a clinical diagnosis — tracheal deviation, absent breath sounds, hyperresonance, haemodynamic compromise. Treat immediately with needle or finger thoracostomy; imaging only confirms afterward or is used when the diagnosis is less clear in a stable patient.</div>
+    </div>
+  </div>
+
+  <div class="source">
+    ATLS 10TH EDITION — AMERICAN COLLEGE OF SURGEONS<br>
+    ESSENTIALS OF TRAUMA ANAESTHESIA · CORE CONCEPTS CRITICAL CARE 2026
+  </div>
+
+</div>
+</body>
+</html>
